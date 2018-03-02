@@ -1,5 +1,3 @@
-index.jade
-
 extends layout
 
 block content
@@ -7,7 +5,7 @@ block content
         div
             nav.navbar.navbar-inverse(role='navigation', style='padding-left:130px;')
                 ul.nav.navbar-nav
-                    li.active
+                    li
                         a(href='/')
                             | Home
                             span.sr-only (current)
@@ -19,11 +17,13 @@ block content
                         a(href='/other') Other
                     li
                         a(href='/login') Login
-                    li
+                    li.active
                         a(href='/search') Search
                     li
                         a(href='/accessibility') Accessibility
-        br
-        .jumbotron
-            p
-                | This is place to put content. You can put slider, short description about your website and place some links for navigation.
+
+
+            br
+            .jumbotron
+                p
+                    | This is place to put content. You can put slider, short description about your website and place some links for navigation.
