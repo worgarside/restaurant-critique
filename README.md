@@ -1,13 +1,23 @@
-# COM3504 - The Intelligent Web Assignment
+# *COM3504 - The Intelligent Web* Assignment
 
 ### Team Members:
 - Will Garside - worgarside@gmail.com
 - Greta Ramaneckaite - gramaneckaite1@sheffield.ac.uk
 - Rufus Cope - rcope2@sheffield.ac.uk
 
-### Objectives
+### Task List
+- [ ] Database creation 
 - [ ] Restaurant Object
-- [ ] Database
-- [ ] Search Function
-- [ ] Restaurant Page Update-able
-- [ ] (more to come...)
+- [ ] User creation/signup
+- [ ] Login management
+- [ ] Administrator privileges
+- [ ] Dynamic restaurant view page
+- [ ] Review input and structure
+- [ ] Restaurant search (keywords, tags, distance)
+- [ ] Map page
+- [ ] Progressive App/Responsive Design?
+- [ ] Camera integration
+- [ ] Basic pages (home, contact, about, accessibility)
+- [ ] Site navigation/UML model
+- [ ] 'Owner level' users & verification
+- [ ] Category page, categorisation of restaurants
