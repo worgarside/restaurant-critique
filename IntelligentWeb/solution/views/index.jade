@@ -1,5 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  p Hello World - #{title}
+  div
+    div
+      nav.navbar.navbar-inverse(role='navigation', style='padding-left:130px;')
+        ul.nav.navbar-nav
+          li.active
+            a(href='/')
+              | Home
+              span.sr-only (current)
+          li
+            a(href='/about') About us
+          li
+            a(href='/contact') Contact us
+          li
+            a(href='/other') Other
+    br
+    .jumbotron
+      p
+        | This is place to put content. You can put slider, short description about your website and place some links for navigation.
