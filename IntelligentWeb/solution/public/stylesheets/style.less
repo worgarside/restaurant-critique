@@ -1,5 +1,4 @@
 @index-head-height: 480;
-//@index-head-bg-image: "http://via.placeholder.com/1920x@{index-head-height}";
 @index-head-bg-image: "/images/index-head-bg-image.png";
 
 body {
@@ -18,28 +17,44 @@ h1, h2, h3, h4, h5, h6 {
   top: 0;
 }
 
-nav{
-  @nav-height: 60;
+nav {
+  @nav-height: 54;
   height: unit(@nav-height, px);
   margin-top: unit(-@nav-height, px);
-  //background-color: red;
   background: url(@index-head-bg-image) no-repeat bottom;
+}
+
+nav.navbar.navbar-expand-sm.sticky{
+  padding: 0;
 }
 
 li.nav-item{
   text-align: center;
 }
 
+ul.navbar-nav.mr-auto{
+  margin-left: 50px;
+}
 
-a.nav-link.nav-wide{
-  width: 180px;
+ul.navbar-nav{
+  margin-right: 50px;
+}
+
+
+a.nav-link{
   color: white;
-  font-weight: 900;
+  font-size: 14pt;
+  padding: 15px;
+  margin: 0 5px;
+  &.nav-wide{
+    width: 200px;
+  }
+  &.nav-thin{
+
+    width: 120px;
+  }
 }
 
-a.nav-link.nav-thin{
-  width: 90px;
-}
 
 // -------- Index Head -------- \\
 

@@ -15,20 +15,33 @@ h6 {
   top: 0;
 }
 nav {
-  height: 60px;
-  margin-top: -60px;
+  height: 54px;
+  margin-top: -54px;
   background: url("/images/index-head-bg-image.png") no-repeat bottom;
+}
+nav.navbar.navbar-expand-sm.sticky {
+  padding: 0;
 }
 li.nav-item {
   text-align: center;
 }
-a.nav-link.nav-wide {
-  width: 180px;
+ul.navbar-nav.mr-auto {
+  margin-left: 50px;
+}
+ul.navbar-nav {
+  margin-right: 50px;
+}
+a.nav-link {
   color: white;
-  font-weight: 900;
+  font-size: 14pt;
+  padding: 15px;
+  margin: 0 5px;
+}
+a.nav-link.nav-wide {
+  width: 200px;
 }
 a.nav-link.nav-thin {
-  width: 90px;
+  width: 120px;
 }
 #index-head {
   text-align: center;
