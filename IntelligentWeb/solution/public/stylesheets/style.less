@@ -21,49 +21,52 @@ nav {
   @nav-height: 54;
   height: unit(@nav-height, px);
   margin-top: unit(-@nav-height, px);
+  background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
 }
 
-nav.navbar.navbar-expand-sm.sticky{
+nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
+  margin-bottom: 100px;
 }
 
-li.nav-item{
+li.nav-item {
   text-align: center;
 }
 
-ul.navbar-nav.mr-auto{
+ul.navbar-nav.mr-auto {
   margin-left: 50px;
 }
 
-ul.navbar-nav{
+ul.navbar-nav {
   margin-right: 50px;
 }
 
-
-a.nav-link{
+a.nav-link {
   color: white;
   font-size: 14pt;
   padding: 15px;
   margin: 0 5px;
-  &.nav-wide{
+  &.nav-wide {
     width: 200px;
   }
-  &.nav-thin{
+  &.nav-thin {
 
     width: 120px;
   }
-}
 
+  &:hover {
+    font-weight: 900;
+  }
+}
 
 // -------- Index Head -------- \\
 
 #index-head {
   text-align: center;
-  background-size: cover;
-  background: url(@index-head-bg-image) center no-repeat;
-  width: 100%;
   height: unit(@index-head-height, px);
+  background-size: cover;
+  background: url(@index-head-bg-image) no-repeat bottom;
 }
 
 #index-search-form {
@@ -78,5 +81,36 @@ a.nav-link{
   button {
     width: 100px;
     height: 100%;
+  }
+}
+
+// -------- Footer -------- \\
+
+.vert-center-parent {
+  display: table;
+  width: 100%;
+}
+
+.vert-center-child {
+  display: table-cell;
+  vertical-align: middle;
+  width: 0.1%;
+  white-space: nowrap;
+  position: relative;
+}
+
+footer {
+  margin-top: 50px;
+  background-color: #222222;
+  text-align: center;
+  font-size: 12pt;
+  height: 75px;
+
+  a {
+    color: #d1d1d1;
+  }
+
+  li.list-inline-item:not(:first-child):before {
+    content: " | ";
   }
 }
