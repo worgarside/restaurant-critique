@@ -3,6 +3,7 @@ html(lang='en')
     head
         meta(charset='UTF-8')
         title Single page web app
+
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
         script window.jQuery || document.write('<script src="/scripts/jquery.min.js"><\/script>');
 
@@ -11,7 +12,6 @@ html(lang='en')
             if(typeof($.fn.modal) === 'undefined') {
                 document.write('<script src="/scripts/js/bootstrap.min.js"><\/script>')
             }
-
 
         link(href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
         div.hidden#bootstrapCssTest
@@ -22,5 +22,16 @@ html(lang='en')
                 }
             })
 
+        link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+        link(href='https://fonts.googleapis.com/css?family=Raleway|Roboto', rel='stylesheet')
     body
+        nav.navbar.navbar-expand-sm.bg-light
+            ul.navbar-nav
+                li.nav-item
+                    a.nav-link(href='/home') Link 1
+                li.nav-item
+                    a.nav-link(href='#') Link 2
+                li.nav-item
+                    a.nav-link(href='#') Link 3
+
         block content
