@@ -1,15 +1,67 @@
-@nice-blue: #5B83AD;
-@light-blue: @nice-blue + #111;
-@red: red;
+@index-head-height: 480;
+//@index-head-bg-image: "http://via.placeholder.com/1920x@{index-head-height}";
+@index-head-bg-image: "/images/index-head-bg-image.png";
 
-body{
+body {
   font-family: 'Raleway', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6{
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif;
 }
 
-.test-class {
-  color: @red;
+// -------- NavBar -------- \\
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+nav{
+  @nav-height: 60;
+  height: unit(@nav-height, px);
+  margin-top: unit(-@nav-height, px);
+  //background-color: red;
+  background: url(@index-head-bg-image) no-repeat bottom;
+}
+
+li.nav-item{
+  text-align: center;
+}
+
+
+a.nav-link.nav-wide{
+  width: 180px;
+  color: white;
+  font-weight: 900;
+}
+
+a.nav-link.nav-thin{
+  width: 90px;
+}
+
+// -------- Index Head -------- \\
+
+#index-head {
+  text-align: center;
+  background-size: cover;
+  background: url(@index-head-bg-image) center no-repeat;
+  width: 100%;
+  height: unit(@index-head-height, px);
+}
+
+#index-search-form {
+  @index-search-height: 40;
+  position: relative;
+  top: unit((@index-head-height - @index-search-height)/2, px);
+  height: unit(@index-search-height, px);
+  input {
+    width: 600px;
+    height: 100%;
+  }
+  button {
+    width: 100px;
+    height: 100%;
+  }
 }

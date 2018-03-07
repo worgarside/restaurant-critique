@@ -14,7 +14,7 @@ html(lang='en')
             }
 
         link(href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
-        div.hidden#bootstrapCssTest
+        .hidden#bootstrapCssTest
         script.
             $(function () {
                 if ($('#bootstrapCssTest').is(':visible')) {
@@ -22,16 +22,33 @@ html(lang='en')
                 }
             })
 
+        link(href='https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css', rel='stylesheet')
+        // TODO: Need a fallback to /node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css
         link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
         link(href='https://fonts.googleapis.com/css?family=Raleway|Roboto', rel='stylesheet')
     body
-        nav.navbar.navbar-expand-sm.bg-light
-            ul.navbar-nav
-                li.nav-item
-                    a.nav-link(href='/home') Link 1
-                li.nav-item
-                    a.nav-link(href='#') Link 2
-                li.nav-item
-                    a.nav-link(href='#') Link 3
+        block header
+            //- Purposefully empty, this allows the custom index header to be added in-page
+
+        block navbar
+            nav.navbar.navbar-expand-sm.sticky
+                ul.navbar-nav.mr-auto
+                    li.nav-item
+                        a.nav-link.nav-wide(href='#') Restaurants near Me
+                    li.nav-item
+                        a.nav-link.nav-wide(href='#') Write a Review
+                    li.nav-item.pull-right
+                        a.nav-link.nav-wide(href='#') Recommendations
+
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link.nav-thin(href="{{ url('/login') }}") Login
+                    li.nav-item
+                        a.nav-link.nav-thin(href="{{ url('/register') }}") Sign Up
+
+
 
         block content
+
+        block footer
+            p footer things are here

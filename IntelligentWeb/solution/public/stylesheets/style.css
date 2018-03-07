@@ -9,6 +9,44 @@ h5,
 h6 {
   font-family: 'Roboto', sans-serif;
 }
-.test-class {
-  color: red;
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+nav {
+  height: 60px;
+  margin-top: -60px;
+  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+}
+li.nav-item {
+  text-align: center;
+}
+a.nav-link.nav-wide {
+  width: 180px;
+  color: white;
+  font-weight: 900;
+}
+a.nav-link.nav-thin {
+  width: 90px;
+}
+#index-head {
+  text-align: center;
+  background-size: cover;
+  background: url("/images/index-head-bg-image.png") center no-repeat;
+  width: 100%;
+  height: 480px;
+}
+#index-search-form {
+  position: relative;
+  top: 220px;
+  height: 40px;
+}
+#index-search-form input {
+  width: 600px;
+  height: 100%;
+}
+#index-search-form button {
+  width: 100px;
+  height: 100%;
 }
