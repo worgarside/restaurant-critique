@@ -17,10 +17,12 @@ h6 {
 nav {
   height: 54px;
   margin-top: -54px;
+  background-size: cover;
   background: url("/images/index-head-bg-image.png") no-repeat bottom;
 }
 nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
+  margin-bottom: 100px;
 }
 li.nav-item {
   text-align: center;
@@ -43,16 +45,18 @@ a.nav-link.nav-wide {
 a.nav-link.nav-thin {
   width: 120px;
 }
+a.nav-link:hover {
+  font-weight: 900;
+}
 #index-head {
   text-align: center;
+  height: 360px;
   background-size: cover;
-  background: url("/images/index-head-bg-image.png") center no-repeat;
-  width: 100%;
-  height: 480px;
+  background: url("/images/index-head-bg-image.png") no-repeat bottom;
 }
 #index-search-form {
   position: relative;
-  top: 220px;
+  top: 160px;
   height: 40px;
 }
 #index-search-form input {
@@ -62,4 +66,28 @@ a.nav-link.nav-thin {
 #index-search-form button {
   width: 100px;
   height: 100%;
+}
+.vert-center-parent {
+  display: table;
+  width: 100%;
+}
+.vert-center-child {
+  display: table-cell;
+  vertical-align: middle;
+  width: 0.1%;
+  white-space: nowrap;
+  position: relative;
+}
+footer {
+  margin-top: 50px;
+  background-color: #222222;
+  text-align: center;
+  font-size: 12pt;
+  height: 75px;
+}
+footer a {
+  color: #d1d1d1;
+}
+footer li.list-inline-item:not(:first-child):before {
+  content: " | ";
 }
