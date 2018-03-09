@@ -1,8 +1,12 @@
 @index-head-height: 360;
-@index-head-bg-image: "/images/index-head-bg-image.png";
+//@index-head-bg-image: "/images/index-head-bg-image.png";
+@index-head-bg-image: "http://via.placeholder.com/1920x1080";
+@nav-thin-width: 120;
+@nav-wide-width: 200;
 
 body {
   font-family: 'Raleway', sans-serif;
+  background-color: #f7f7f7;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -22,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 nav {
-  @nav-height: 54;
+  @nav-height: 58;
   height: unit(@nav-height, px);
   margin-top: unit(-@nav-height, px);
   background-size: cover;
@@ -46,22 +50,76 @@ ul.navbar-nav {
   margin-right: 50px;
 }
 
-a.nav-link {
+a.nav-link, a.nav-link.nav-thin#btn-login {
   color: white;
   font-size: 14pt;
   padding: 15px;
-  margin: 0 5px;
   &.nav-wide {
-    width: 200px;
+    width: unit(@nav-wide-width, px);
   }
   &.nav-thin {
-
-    width: 120px;
+    width: unit(@nav-thin-width, px);
   }
 
   &:hover {
     font-weight: 900;
+    cursor: pointer;
   }
+}
+
+// -------- Login Form -------- \\
+
+@form-width: 400;
+@arrow-height: 20px;
+@form-border-width: 5px;
+@form-border-color: blue;
+@form-bg-color: red;
+
+#login-form {
+  background-color: @form-bg-color;
+  width: unit(@form-width, px);
+  position: absolute;
+  z-index: 100000;
+  margin-top: unit(-@arrow-height, px);
+  border: @form-border-width solid @form-border-color;
+  border-radius: 10px;
+}
+
+#login-form:after, #login-form:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+// Arrow
+#login-form:after {
+  border: unit(@arrow-height, px) solid transparent;
+  border-bottom-color: @form-bg-color;
+  margin-left: unit(-@arrow-height, px);
+}
+
+// Border for arrow
+#login-form:before {
+  border: unit(@arrow-height + @form-border-width, px) solid transparent;
+  border-bottom-color: @form-border-color;
+  margin-left: unit(-(@arrow-height + @form-border-width), px);
+}
+
+.login-form-input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.login-form-btn {
+  padding: 5px;
+  margin: 10px 0;
+  cursor: pointer;
 }
 
 // -------- Index Head -------- \\

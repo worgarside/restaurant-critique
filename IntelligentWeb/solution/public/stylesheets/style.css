@@ -1,5 +1,6 @@
 body {
   font-family: 'Raleway', sans-serif;
+  background-color: #f7f7f7;
 }
 h1,
 h2,
@@ -18,10 +19,10 @@ h6 {
   top: 0;
 }
 nav {
-  height: 54px;
-  margin-top: -54px;
+  height: 58px;
+  margin-top: -58px;
   background-size: cover;
-  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+  background: url("http://via.placeholder.com/1920x1080") no-repeat bottom;
 }
 nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
@@ -36,26 +37,70 @@ ul.navbar-nav.mr-auto {
 ul.navbar-nav {
   margin-right: 50px;
 }
-a.nav-link {
+a.nav-link,
+a.nav-link.nav-thin#btn-login {
   color: white;
   font-size: 14pt;
   padding: 15px;
-  margin: 0 5px;
 }
-a.nav-link.nav-wide {
+a.nav-link.nav-wide,
+a.nav-link.nav-thin#btn-login.nav-wide {
   width: 200px;
 }
-a.nav-link.nav-thin {
+a.nav-link.nav-thin,
+a.nav-link.nav-thin#btn-login.nav-thin {
   width: 120px;
 }
-a.nav-link:hover {
+a.nav-link:hover,
+a.nav-link.nav-thin#btn-login:hover {
   font-weight: 900;
+  cursor: pointer;
+}
+#login-form {
+  background-color: red;
+  width: 400px;
+  position: absolute;
+  z-index: 100000;
+  margin-top: -20px;
+  border: 5px solid blue;
+  border-radius: 10px;
+}
+#login-form:after,
+#login-form:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+#login-form:after {
+  border: 20px solid transparent;
+  border-bottom-color: red;
+  margin-left: -20px;
+}
+#login-form:before {
+  border: 25px solid transparent;
+  border-bottom-color: blue;
+  margin-left: -25px;
+}
+.login-form-input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 10px;
+}
+.login-form-btn {
+  padding: 5px;
+  margin: 10px 0;
+  cursor: pointer;
 }
 #index-head {
   text-align: center;
   height: 360px;
   background-size: cover;
-  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+  background: url("http://via.placeholder.com/1920x1080") no-repeat bottom;
 }
 #index-search-form {
   position: relative;

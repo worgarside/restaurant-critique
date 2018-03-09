@@ -42,11 +42,21 @@ html(lang='en')
 
                 ul.navbar-nav
                     li.nav-item
-                        a.nav-link.nav-thin(href="{{ url('/login') }}") Login
+                        a.nav-link.nav-thin#btn-login Login
                     li.nav-item
                         a.nav-link.nav-thin(href="{{ url('/register') }}") Sign Up
 
-
+            #login-form(style='display: none;')
+                .container
+                    .row
+                        .col
+                            input.login-form-input(type='text', placeholder='Enter Username', name='username', required='')
+                    .row
+                        .col
+                            input.login-form-input(type='password', placeholder='Enter Password', name='password', required='')
+                    .row
+                        .col
+                            button.login-form-btn(type='submit') Login
 
         block content
 
@@ -65,3 +75,6 @@ html(lang='en')
                     .col-md-3.vert-center-parent
                             .vert-center-child
                                 p &copy; Restaurant Critique 2018. All Rights Reserved.
+
+        block scripts
+            script(type='text/javascript', src='/javascripts/layout.js')
