@@ -3,8 +3,8 @@ console.log('Loaded layout.js');
 $(document).ready(function () {
     var form = $('#login-form');
     var btn = $('#btn-login');
-    var btn_left = btn.position()['left'];
     var btn_width = btn.outerWidth(true);
+    var btn_left = btn.position()['left'];
     var btn_right = btn_left + btn_width;
     var form_width = form.outerWidth(true);
 

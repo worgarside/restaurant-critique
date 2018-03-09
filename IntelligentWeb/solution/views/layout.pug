@@ -2,7 +2,6 @@ doctype html
 html(lang='en')
     head
         meta(charset='UTF-8')
-        title Single page web app
 
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
         script window.jQuery || document.write('<script src="/scripts/jquery.min.js"><\/script>');
@@ -28,6 +27,7 @@ html(lang='en')
         link(href='https://fonts.googleapis.com/css?family=Raleway|Roboto', rel='stylesheet')
     body
         block header
+            #index-head-small
             //- Purposefully empty, this allows the custom index header to be added in-page
 
         block navbar
@@ -44,16 +44,16 @@ html(lang='en')
                     li.nav-item
                         a.nav-link.nav-thin#btn-login Login
                     li.nav-item
-                        a.nav-link.nav-thin(href="{{ url('/register') }}") Sign Up
+                        a.nav-link.nav-thin(href='/signup') Sign Up
 
             #login-form(style='display: none;')
                 .container
                     .row
                         .col
-                            input.login-form-input(type='text', placeholder='Enter Username', name='username', required='')
+                            input.login-form-input(type='text', placeholder='Enter Username', name='username', required)
                     .row
                         .col
-                            input.login-form-input(type='password', placeholder='Enter Password', name='password', required='')
+                            input.login-form-input(type='password', placeholder='Enter Password', name='password', required)
                     .row
                         .col
                             button.login-form-btn(type='submit') Login

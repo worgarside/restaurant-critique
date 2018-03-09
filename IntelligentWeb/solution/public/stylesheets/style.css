@@ -22,11 +22,10 @@ nav {
   height: 58px;
   margin-top: -58px;
   background-size: cover;
-  background: url("http://via.placeholder.com/1920x1080") no-repeat bottom;
+  background: url("/images/index-head-bg-image.png") no-repeat bottom;
 }
 nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
-  margin-bottom: 100px;
 }
 li.nav-item {
   text-align: center;
@@ -61,7 +60,7 @@ a.nav-link.nav-thin#btn-login:hover {
   width: 400px;
   position: absolute;
   z-index: 100000;
-  margin-top: -20px;
+  margin-top: 20px;
   border: 5px solid blue;
   border-radius: 10px;
 }
@@ -100,7 +99,10 @@ a.nav-link.nav-thin#btn-login:hover {
   text-align: center;
   height: 360px;
   background-size: cover;
-  background: url("http://via.placeholder.com/1920x1080") no-repeat bottom;
+  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+}
+#index-head-small {
+  height: 58px;
 }
 #index-search-form {
   position: relative;

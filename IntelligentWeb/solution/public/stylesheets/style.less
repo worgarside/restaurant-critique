@@ -1,8 +1,9 @@
 @index-head-height: 360;
-//@index-head-bg-image: "/images/index-head-bg-image.png";
-@index-head-bg-image: "http://via.placeholder.com/1920x1080";
+@index-head-bg-image: "/images/index-head-bg-image.png";
+//@index-head-bg-image: "http://via.placeholder.com/1920x1080";
 @nav-thin-width: 120;
 @nav-wide-width: 200;
+@navbar-height: 58;
 
 body {
   font-family: 'Raleway', sans-serif;
@@ -26,16 +27,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 nav {
-  @nav-height: 58;
-  height: unit(@nav-height, px);
-  margin-top: unit(-@nav-height, px);
+  height: unit(@navbar-height, px);
+  margin-top: unit(-@navbar-height, px);
   background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
 }
 
 nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
-  margin-bottom: 100px;
 }
 
 li.nav-item {
@@ -80,7 +79,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   width: unit(@form-width, px);
   position: absolute;
   z-index: 100000;
-  margin-top: unit(-@arrow-height, px);
+  margin-top: unit(@arrow-height, px);
   border: @form-border-width solid @form-border-color;
   border-radius: 10px;
 }
@@ -129,6 +128,10 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   height: unit(@index-head-height, px);
   background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
+
+  &-small {
+    height: unit(@navbar-height, px);
+  }
 }
 
 #index-search-form {
