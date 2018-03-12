@@ -24,7 +24,7 @@ input[type="number"] {
 #index-head {
   height: 360px;
   background-size: cover;
-  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+  background: url("/images/BG1.jpg") no-repeat bottom;
 }
 #index-search-form {
   position: relative;
@@ -52,7 +52,7 @@ nav {
   height: 58px;
   margin-top: -58px;
   background-size: cover;
-  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+  background: url("/images/BG1.jpg") no-repeat bottom;
 }
 nav.navbar.navbar-expand-sm.sticky {
   padding: 0;
