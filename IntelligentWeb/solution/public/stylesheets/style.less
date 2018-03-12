@@ -61,9 +61,13 @@ input[type="number"] {
 }
 
 #index-head {
+  width: 100%;
   height: unit(@index-head-height, px);
-  background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #index-search-form {
@@ -96,8 +100,11 @@ nav {
   z-index: 1000;
   height: unit(@navbar-height, px);
   margin-top: unit(-@navbar-height, px);
-  background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 nav.navbar.navbar-expand-sm.sticky {

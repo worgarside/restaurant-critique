@@ -21,3 +21,14 @@
 - [ ] Site navigation/UML model
 - [ ] 'Owner level' users & verification
 - [ ] Category page, categorisation of restaurants
+
+### Installation & Running
+
+To install the app, `cd` into the `solution` directory. Then run these commands in order:
+```
+npm install
+mongod --dbpath  ./database
+node bin/www
+```
+
+Alternatively, replace `mongod` with the absolute path to *mongod.exe*

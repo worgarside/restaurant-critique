@@ -1,3 +1,5 @@
-REM start "" http://localhost:3000
+mongod --dbpath "./database"
+
+start "" http://localhost:3000
 
 node bin/www
