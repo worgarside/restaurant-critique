@@ -1,29 +1,15 @@
-index.jade
-
 extends layout
 
 block content
-    div
-        div
-            nav.navbar.navbar-inverse(role='navigation', style='padding-left:130px;')
-                ul.nav.navbar-nav
-                    li
-                        a(href='/')
-                            | Home
-                            span.sr-only (current)
-                    li
-                        a(href='/about') About us
-                    li
-                        a(href='/contact') Contact us
-                    li
-                        a(href='/other') Other
-                    li
-                        a(href='/login') Login
-                    li
-                        a(href='/search') Search
-                    li.active
-                        a(href='/accessibility') Accessibility
-        br
-        .jumbotron
-            p
-                | This is place to put content. You can put slider, short description about your website and place some links for navigation.
+    br
+    .container
+        .row
+            .col-md-12
+                h1 Accessibility
+                p.accessibility-text
+                    | Restaurant Critique is determined to have its website available to everyone by removing blocks that don't allow some users to experience of our pages.
+                p.accessibility-text
+                    | We follow standard guidelines of good practice. The website allows the use of keyboard shortcuts.
+                h1 Having trouble accessing content?
+                p.accessibility-text
+                    | If you have trouble experiencing some of pages, please #[a(href='/contact') contact us].

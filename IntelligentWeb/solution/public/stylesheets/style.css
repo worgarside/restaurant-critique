@@ -201,3 +201,10 @@ footer .footer-right {
 .signup-help {
   cursor: pointer;
 }
+.index-image {
+  width: 350px;
+  height: 250px;
+}
+.index-intro {
+  text-align: center;
+}
