@@ -20,6 +20,6 @@
     "open-iconic": "^1.1.1",
     "popper.js": "^1.12.9",
     "pug": "^2.0.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "^2.4.5"
   }
 }
