@@ -27,3 +27,9 @@ $(document).mouseup(function (e) {
         form.fadeOut();
     }
 });
+
+$(document).keydown(function(e) {
+    if (e.keyCode === 27) { // escape key maps to keycode `27`
+        $('#login-form').fadeOut();
+    }
+})

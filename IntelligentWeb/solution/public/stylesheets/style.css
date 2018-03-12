@@ -1,5 +1,5 @@
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Lato', sans-serif;
   background-color: #f7f7f7;
 }
 h1,
@@ -13,12 +13,42 @@ h6 {
 .full-height {
   height: 100%;
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+#index-head {
+  height: 360px;
+  background-size: cover;
+  background: url("/images/index-head-bg-image.png") no-repeat bottom;
+}
+#index-search-form {
+  position: relative;
+  top: 160px;
+  height: 40px;
+}
+#index-search-form input {
+  width: 600px;
+  height: 100%;
+}
+#index-search-form button {
+  width: 100px;
+  height: 100%;
+}
+#non-index-head {
+  height: 58px;
+}
 .sticky {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
 }
 nav {
+  z-index: 1000;
   height: 58px;
   margin-top: -58px;
   background-size: cover;
@@ -56,11 +86,12 @@ a.nav-link.nav-thin#btn-login:hover {
   cursor: pointer;
 }
 #login-form {
+  text-align: center;
   background-color: red;
   width: 400px;
   position: absolute;
   z-index: 100000;
-  margin-top: 20px;
+  margin-top: 21px;
   border: 5px solid blue;
   border-radius: 10px;
 }
@@ -76,46 +107,17 @@ a.nav-link.nav-thin#btn-login:hover {
   pointer-events: none;
 }
 #login-form:after {
-  border: 20px solid transparent;
+  border: 21px solid transparent;
   border-bottom-color: red;
-  margin-left: -20px;
+  margin-left: -21px;
 }
 #login-form:before {
-  border: 25px solid transparent;
+  border: 26px solid transparent;
   border-bottom-color: blue;
-  margin-left: -25px;
+  margin-left: -26px;
 }
 .login-form-input {
-  width: 100%;
-  padding: 5px;
-  margin-top: 10px;
-}
-.login-form-btn {
-  padding: 5px;
-  margin: 10px 0;
-  cursor: pointer;
-}
-#index-head {
-  text-align: center;
-  height: 360px;
-  background-size: cover;
-  background: url("/images/index-head-bg-image.png") no-repeat bottom;
-}
-#index-head-small {
-  height: 58px;
-}
-#index-search-form {
-  position: relative;
-  top: 160px;
-  height: 40px;
-}
-#index-search-form input {
-  width: 600px;
-  height: 100%;
-}
-#index-search-form button {
-  width: 100px;
-  height: 100%;
+  margin-top: 15px;
 }
 .vert-center-parent {
   display: table;
@@ -159,4 +161,19 @@ footer .footer-left {
 }
 footer .footer-right {
   width: 20%;
+}
+#display-picture {
+  object-fit: cover;
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  display: block;
+  padding: 1px;
+  border: solid 1px #000000;
+}
+#display-picture-upload {
+  display: none;
+}
+.signup-help {
+  cursor: pointer;
 }

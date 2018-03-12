@@ -6,7 +6,7 @@
 @navbar-height: 58;
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Lato', sans-serif;
   background-color: #f7f7f7;
 }
 
@@ -18,7 +18,44 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+// -------- Index Head -------- \\
+
+#index-head {
+  height: unit(@index-head-height, px);
+  background-size: cover;
+  background: url(@index-head-bg-image) no-repeat bottom;
+}
+
+#index-search-form {
+  @index-search-height: 40;
+  position: relative;
+  top: unit((@index-head-height - @index-search-height)/2, px);
+  height: unit(@index-search-height, px);
+  input {
+    width: 600px;
+    height: 100%;
+  }
+  button {
+    width: 100px;
+    height: 100%;
+  }
+}
+
 // -------- NavBar -------- \\
+
+#non-index-head {
+  height: unit(@navbar-height, px);
+}
 
 .sticky {
   position: -webkit-sticky;
@@ -27,6 +64,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 nav {
+  z-index: 1000;
   height: unit(@navbar-height, px);
   margin-top: unit(-@navbar-height, px);
   background-size: cover;
@@ -69,12 +107,13 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 // -------- Login Form -------- \\
 
 @form-width: 400;
-@arrow-height: 20px;
+@arrow-height: 21px;
 @form-border-width: 5px;
 @form-border-color: blue;
 @form-bg-color: red;
 
 #login-form {
+  text-align: center;
   background-color: @form-bg-color;
   width: unit(@form-width, px);
   position: absolute;
@@ -110,44 +149,14 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 }
 
 .login-form-input {
-  width: 100%;
-  padding: 5px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
-.login-form-btn {
-  padding: 5px;
-  margin: 10px 0;
-  cursor: pointer;
-}
-
-// -------- Index Head -------- \\
-
-#index-head {
-  text-align: center;
-  height: unit(@index-head-height, px);
-  background-size: cover;
-  background: url(@index-head-bg-image) no-repeat bottom;
-
-  &-small {
-    height: unit(@navbar-height, px);
-  }
-}
-
-#index-search-form {
-  @index-search-height: 40;
-  position: relative;
-  top: unit((@index-head-height - @index-search-height)/2, px);
-  height: unit(@index-search-height, px);
-  input {
-    width: 600px;
-    height: 100%;
-  }
-  button {
-    width: 100px;
-    height: 100%;
-  }
-}
+//.login-form-btn {
+//  padding: 5px;
+//  margin: 10px auto;
+//  cursor: pointer;
+//}
 
 // -------- Footer -------- \\
 
@@ -207,5 +216,23 @@ footer {
     //margin-left: 20%;
     width: 20%;
   }
+}
 
+// -------- Signup -------- \\
+
+#display-picture {
+  object-fit: cover;
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  display: block;
+  padding: 1px;
+  border: solid 1px #000000;
+  &-upload {
+    display: none;
+  }
+}
+
+.signup-help{
+  cursor: pointer;
 }

@@ -1,0 +1,175 @@
+extends layout
+
+block content
+    br
+    .container
+        .row
+            .col
+                h1 Create an Account
+                br
+        .row
+            .col-md-10
+                form
+                    .form-row
+                        .form-group.col-md-6
+                            input#forename.form-control(type='text', name='forename', placeholder='First name', required, autocomplete='given-name')
+                        .form-group.col-md-6
+                            input#surname.form-control(type='text', name='surname', placeholder='Surname', required, autocomplete='family-name')
+                    .form-row
+                        .form-group.col-md-6
+                            .form-row
+                                .form-group.col
+                                    input#email.form-control(type='text', name='email', placeholder='Email Address', required, autocomplete='email')
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
+                            .form-row
+                                .form-group.col
+                                    input#phone.form-control(type='number', name='phone', placeholder='Mobile Number', autocomplete='tel-national')
+                                    //small We'll never share your personal details with third parties
+                            .form-row
+                                .form-group.col-md-10
+                                    select#age.form-control(name='age')
+                                        option(value='', disabled, selected) Age
+                                        option(value='6') 65+
+                                        option(value='5') 50 - 64
+                                        option(value='4') 35 - 49
+                                        option(value='3') 25 - 34
+                                        option(value='2') 18 - 24
+                                        option(value='1') 17 and under
+                                        option(value='0') Prefer not to say
+                                .form-group.col-md-2
+                                    .vert-center-parent
+                                        .vert-center-child.text-center
+                                            span.signup-help.oi.oi-question-mark(aria-hidden='true',
+                                            title='This helps us find better recommendations for you')
+                            .form-row
+                                .form-group.col-md-10
+                                    select.form-control(name='county', autocomplete='address-level1')
+                                        option(value='', disabled, selected) County
+                                        optgroup(label='England')
+                                            option Bedfordshire
+                                            option Berkshire
+                                            option Bristol
+                                            option Buckinghamshire
+                                            option Cambridgeshire
+                                            option Cheshire
+                                            option City of London
+                                            option Cornwall
+                                            option Cumbria
+                                            option Derbyshire
+                                            option Devon
+                                            option Dorset
+                                            option Durham
+                                            option East Yorkshire
+                                            option East Sussex
+                                            option Essex
+                                            option Gloucestershire
+                                            option Greater London
+                                            option Greater Manchester
+                                            option Hampshire
+                                            option Herefordshire
+                                            option Hertfordshire
+                                            option Isle of Wight
+                                            option Kent
+                                            option Lancashire
+                                            option Leicestershire
+                                            option Lincolnshire
+                                            option Merseyside
+                                            option Norfolk
+                                            option North Yorkshire
+                                            option Northamptonshire
+                                            option Northumberland
+                                            option Nottinghamshire
+                                            option Oxfordshire
+                                            option Rutland
+                                            option Shropshire
+                                            option Somerset
+                                            option South Yorkshire
+                                            option Staffordshire
+                                            option Suffolk
+                                            option Surrey
+                                            option Tyne and Wear
+                                            option Warwickshire
+                                            option West Midlands
+                                            option West Sussex
+                                            option West Yorkshire
+                                            option Wiltshire
+                                            option Worcestershire
+                                        optgroup(label='Wales')
+                                            option Anglesey
+                                            option Brecknockshire
+                                            option Caernarfonshire
+                                            option Carmarthenshire
+                                            option Cardiganshire
+                                            option Denbighshire
+                                            option Flintshire
+                                            option Glamorgan
+                                            option Merioneth
+                                            option Monmouthshire
+                                            option Montgomeryshire
+                                            option Pembrokeshire
+                                            option Radnorshire
+                                        optgroup(label='Scotland')
+                                            option Aberdeenshire
+                                            option Angus
+                                            option Argyllshire
+                                            option Ayrshire
+                                            option Banffshire
+                                            option Berwickshire
+                                            option Buteshire
+                                            option Cromartyshire
+                                            option Caithness
+                                            option Clackmannanshire
+                                            option Dumfriesshire
+                                            option Dunbartonshire
+                                            option East Lothian
+                                            option Fife
+                                            option Inverness-shire
+                                            option Kincardineshire
+                                            option Kinross
+                                            option Kirkcudbrightshire
+                                            option Lanarkshire
+                                            option Midlothian
+                                            option Morayshire
+                                            option Nairnshire
+                                            option Orkney
+                                            option Peeblesshire
+                                            option Perthshire
+                                            option Renfrewshire
+                                            option Ross-shire
+                                            option Roxburghshire
+                                            option Selkirkshire
+                                            option Shetland
+                                            option Stirlingshire
+                                            option Sutherland
+                                            option West Lothian
+                                            option Wigtownshire
+                                        optgroup(label='Northern Ireland')
+                                            option Antrim
+                                            option Armagh
+                                            option Down
+                                            option Fermanagh
+                                            option Londonderry
+                                            option Tyrone
+                                .form-group.col-md-2
+                                    .vert-center-parent
+                                        .vert-center-child.text-center
+                                            span.signup-help.oi.oi-question-mark(aria-hidden='true',
+                                            title='This helps us find better recommendations for you')
+
+                        .form-group.col-md-6
+                            .form-row
+                                .form-group.offset-md-1
+                                    // TODO: use media capture to add PP
+                                    label(for='display-picture') Display Picture
+                                    img#display-picture(src='/scripts/svg/person.svg')
+                                    input#display-picture-upload(type='file', name='profile-picture', accept="image/*")
+                    .form-row
+                        .form-group.col
+                            .float-right
+                                button.btn(onclick="console.log('Sign Up Button');") Sign Up
+
+
+
+    script(type='text/javascript', src='/javascripts/signup.js')
