@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/')));
+app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 

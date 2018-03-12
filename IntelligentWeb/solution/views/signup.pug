@@ -9,7 +9,7 @@ block content
                 br
         .row
             .col-md-10
-                form
+                form(action='/index', method='post')
                     .form-row
                         .form-group.col-md-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name', required, autocomplete='given-name')

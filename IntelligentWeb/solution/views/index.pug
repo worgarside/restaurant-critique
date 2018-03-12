@@ -2,111 +2,34 @@ extends layout
 
 block header
     #index-head
-        .container
-            .row
+        .container.vert-center-parent
+            .row.vert-center-child
                 .col-md-12
-                    form(action='#')#index-search-form
-                        input(type='text', placeholder='Placeholder...', name='search')
-                        button(type='submit')
-                            span.oi.oi-magnifying-glass(aria-hidden='true')
+
+                    form#index-search-form
+                        #main-logo
+                        .input-group#index-search-group
+                            .input-group-prepend
+                                select.btn
+                                    option(value='', selected) Quick Filter
+                                    optgroup(label='Cuisine')
+                                        option Italian
+                                        option Asian
+                                        option French
+                                        option American
+                                        option British
+                                    optgroup(label='Price Range')
+                                        option £
+                                        option ££
+                                        option £££
+                            input.form-control.no-border(type='text', placeholder='Place', aria-label='Text input with dropdown button')
+                            .input-group-append
+                                button.btn
+                                    span.oi.oi-magnifying-glass(aria-hidden='true')
 
 block content
     br
-    h1 Heading
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-    p.test-class
-        | This is the index page
-
+    .container
+        .row
+            .col
+                h1 Heading

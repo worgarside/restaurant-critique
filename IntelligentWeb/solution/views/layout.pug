@@ -6,9 +6,12 @@ html(lang='en')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
         script window.jQuery || document.write('<script src="/scripts/jquery.min.js"><\/script>');
 
+        script(src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.js")
+        //script(type="application/javascript" src="/scripts/popper.js")
+
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
         script.
-            if(typeof($.fn.modal) === 'undefined') {
+            if (typeof($.fn.modal) === 'undefined') {
                 document.write('<script src="/scripts/js/bootstrap.min.js"><\/script>')
             }
 
@@ -23,6 +26,7 @@ html(lang='en')
 
         link(href='https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css', rel='stylesheet')
         // TODO: Need a fallback to /node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css
+
         link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
         link(href='https://fonts.googleapis.com/css?family=Lato|Roboto', rel='stylesheet')
     body
@@ -33,7 +37,10 @@ html(lang='en')
         block navbar
             nav.navbar.navbar-expand-sm.sticky
                 ul.navbar-nav.mr-auto
-                    li.nav-item
+                    li
+                        a#nav-logo(href='/')
+                            img(src="/images/logo-square-white.png")
+                    li.nav-item#first-nav-item
                         a.nav-link.nav-wide(href='#') Restaurants near Me
                     li.nav-item
                         a.nav-link.nav-wide(href='#') Write a Review
@@ -65,17 +72,17 @@ html(lang='en')
             footer.container-fluid
                 .row.full-height
                     .offset-md-3.col-md-3.vert-center-parent
-                            .vert-center-child
-                                ul.list-inline
-                                    li.list-inline-item
-                                        a(href="/about") About
-                                    li.list-inline-item
-                                        a(href="/contact") Contact Us
-                                    li.list-inline-item
-                                        a(href="/accessibility") Accessibility
+                        .vert-center-child
+                            ul.list-inline
+                                li.list-inline-item
+                                    a(href="/about") About
+                                li.list-inline-item
+                                    a(href="/contact") Contact Us
+                                li.list-inline-item
+                                    a(href="/accessibility") Accessibility
                     .col-md-3.vert-center-parent
-                            .vert-center-child
-                                p &copy; Restaurant Critique 2018. All Rights Reserved.
+                        .vert-center-child
+                            p &copy; Restaurant Critique 2018. All Rights Reserved.
 
         block scripts
             script(type='text/javascript', src='/javascripts/layout.js')
