@@ -39,7 +39,8 @@ mongoClient.connect(function(err, mongoClient) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
+
+app.use(favicon(path.join(__dirname,'public/images/favicon.ico')));
 app.use(logger('dev'));
 app.use(parser.json());
 app.use(parser.urlencoded({extended: false}));
