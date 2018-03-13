@@ -147,19 +147,109 @@ mongoClient.connect(function (err, mongoClient) {
         } );
 
 
-        dbo.createCollection("users", function(err, res) {
-            if (err) throw err;
-            console.log("Collection created!");
-        });
-        dbo.createCollection("reviews", function(err, res) {
-            if (err) throw err;
-            console.log("Collection created!");
-        });
+        dbo.createCollection( "users", {
+            validator: { $jsonSchema: {
+                bsonType: "object",
+                required: [ "email", "password", "privilege_level", "forename", "surname" ],
+                properties: {
+                    email: {
+                        bsonType: "string",
+                        description: "must be a string and is required and is unique"
+                    },
+                    password: {
+                        bsonType : "string",
+                        description: "must be a string and is required"
+                    },
+                    privilege_level: {
+                        bsonType : "int",
+                        description: "must be a int and is required"
+                    },
+                    forename: {
+                        bsonType : "string",
+                        description: "must be a string and is required"
+                    },
+                    surname: {
+                        bsonType : "string",
+                        description: "must be a string and is required"
+                    },
+                    age: {
+                        bsonType : "int",
+                        description: "must be a int"
+                    },
+                    county: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    reviews: {
+                        bsonType : "array",
+                        description: "must be a array"
+                    },
+                    user_picture: {
+                        bsonType : "string",
+                        description: "string path to profile picture"
+                    },
+                    user_rating: {
+                        bsonType : "double",
+                        description: "must be a double"
+                    }
+                }
+            } },
+            validationAction: "error"
+        } );
 
-        dbo.createCollection("categories", function(err, res) {
-            if (err) throw err;
-            console.log("Collection created!");
-        });
+
+        dbo.createCollection( "reviews", {
+            validator: { $jsonSchema: {
+                bsonType: "object",
+                required: [ "title", "author", "datetime", "restaurant_rating" ],
+                properties: {
+                    title: {
+                        bsonType: "string",
+                        description: "must be a string and is required"
+                    },
+                    body: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    author: {
+                        bsonType : "int",
+                        description: "must be a int and is required"
+                    },
+                    datetime: {
+                        bsonType : "timestamp",
+                        description: "must be a timestamp and is required"
+                    },
+                    images: {
+                        bsonType : "array",
+                        description: "must be a array"
+                    },
+                    restaurant_rating: {
+                        bsonType : "int",
+                        description: "must be a int and is required"
+                    },
+                    review_rating: {
+                        bsonType : "int",
+                        description: "must be a int"
+                    }
+                }
+            } },
+            validationAction: "error"
+        } );
+
+
+        dbo.createCollection( "categories", {
+            validator: { $jsonSchema: {
+                bsonType: "object",
+                required: [ "name" ],
+                properties: {
+                    name: {
+                        bsonType: "string",
+                        description: "must be a string and is required"
+                    }
+                }
+            } },
+            validationAction: "error"
+        } );
 
         var restaurant1 = { name: "Aslan's", suburb:"Devonshire Quarter", address1: "187 West Street", address2: "Something",
             city: "Sheffield", postcode: "S1 4EW", latitude: 34.44, longitude: 344.44, category: [1], reviews: [1],
