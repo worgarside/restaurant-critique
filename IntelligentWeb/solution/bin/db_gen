@@ -216,7 +216,7 @@ mongoClient.connect(function (err, mongoClient) {
                         description: "must be a int and is required"
                     },
                     datetime: {
-                        bsonType : "timestamp",
+                        bsonType : "date",
                         description: "must be a timestamp and is required"
                     },
                     images: {
@@ -258,7 +258,33 @@ mongoClient.connect(function (err, mongoClient) {
             takeout: true, parking: false, alcohol: true, wifi: false, outdoor_seating: false, reservations: false,
             owner: "Will Garside", owner_message: "text me bbz"};
 
+        var user1 = { email: "worgarside@gmail.com", password: "simple", privilege_level: 1, forename: "William",
+            surname: "Garside", age: 7, county:"Cheshire"};
+
+        var review1 = { title: "Aslan's Sucks",  author: 1, datetime: new Date("2012-07-14T01:00:00+01:00"), restaurant_rating: 7};
+
+        var category1 = { name: "Fast Food"};
+
+
         dbo.collection("restaurants").insertOne(restaurant1, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            console.log(err);
+        });
+
+        dbo.collection("users").insertOne(user1, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            console.log(err);
+        });
+
+        dbo.collection("reviews").insertOne(review1, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            console.log(err);
+        });
+
+        dbo.collection("categories").insertOne(category1, function(err, res) {
             if (err) throw err;
             console.log("1 document inserted");
             console.log(err);
