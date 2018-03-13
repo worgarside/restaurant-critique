@@ -25,6 +25,11 @@ mongoClient.connect(function (err, mongoClient) {
         process.exit(1);
     } else {
         console.log("Connection established to", url);
+        var dbo = mongoClient.db("restaurant_critique");
+        dbo.createCollection("users", function(err, res) {
+            if (err) throw err;
+            console.log("Collection created!");
+        });
     }
 });
 

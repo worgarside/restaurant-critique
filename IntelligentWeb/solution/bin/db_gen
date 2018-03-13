@@ -1,0 +1,177 @@
+var debug = require('debug')('code:server');
+var http = require('http');
+
+// -------- Middleware -------- \\
+
+var mongoClientObject = require('mongodb').MongoClient;
+var server = require('mongodb').Server;
+
+
+// -------- Database -------- \\
+
+var mongoHost = 'localHost';
+var mongoPort = 27017;
+
+var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
+var url = "mongodb://localhost:27017/";
+
+
+mongoClient.connect(function (err, mongoClient) {
+    if (!mongoClient) {
+        console.error("Error! Database connection failed.");
+        process.exit(1);
+    } else {
+        console.log("Connection established to", url);
+        var dbo = mongoClient.db("restaurant_critique");
+
+        dbo.createCollection( "restaurants", {
+            validator: { $jsonSchema: {
+                bsonType: "object",
+                required: [ "name", "address1", "city", "category" ,"published" ],
+                properties: {
+                    name: {
+                        bsonType: "string",
+                        description: "must be a string and is required"
+                    },
+                    suburb: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    address1: {
+                        bsonType : "string",
+                        description: "must be a string and is required"
+                    },
+                    address2: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    city: {
+                        bsonType : "string",
+                        description: "must be a string and is required"
+                    },
+                    postcode: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    latitude: {
+                        bsonType : "double",
+                        description: "must be a double"
+                    },
+                    longitude: {
+                        bsonType : "double",
+                        description: "must be a double"
+                    },
+                    category: {
+                        bsonType : "array",
+                        description: "array of categories and is required"
+                    },
+                    reviews: {
+                        bsonType : "array",
+                        description: "string array"
+                    },
+                    images: {
+                        bsonType : "array",
+                        description: "string array"
+                    },
+                    average_rating: {
+                        bsonType : "double",
+                        description: "must be a double"
+                    },
+                    orice_range: {
+                        bsonType : "double",
+                        description: "must be a double"
+                    },
+                    menu_path: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    description: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    opening_times: {
+                        bsonType : "array",
+                        description: "must be a array"
+                    },
+                    url: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    phone: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    published: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    delivery: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    takeout: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    parking: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    alcohol: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    wifi: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    outdoor_seating: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    reservations: {
+                        bsonType : "bool",
+                        description: "must be a boolean"
+                    },
+                    owner: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    },
+                    owner_message: {
+                        bsonType : "string",
+                        description: "must be a string"
+                    }
+                }
+            } },
+            validationAction: "error"
+        } );
+
+
+        dbo.createCollection("users", function(err, res) {
+            if (err) throw err;
+            console.log("Collection created!");
+        });
+        dbo.createCollection("reviews", function(err, res) {
+            if (err) throw err;
+            console.log("Collection created!");
+        });
+
+        dbo.createCollection("categories", function(err, res) {
+            if (err) throw err;
+            console.log("Collection created!");
+        });
+
+        var restaurant1 = { name: "Aslan's", suburb:"Devonshire Quarter", address1: "187 West Street", address2: "Something",
+            city: "Sheffield", postcode: "S1 4EW", latitude: 34.44, longitude: 344.44, category: [1], reviews: [1],
+            images: ["here","there"], avg_rating: 1, price_range: 1, menu_path: "here", description: "bit of a shit hole",
+            opening_times: [[22,33],[22,33],[22,33]], url: "url", phone: "01144345634", published: true, delivery: false,
+            takeout: true, parking: false, alcohol: true, wifi: false, outdoor_seating: false, reservations: false,
+            owner: "Will Garside", owner_message: "text me bbz"};
+
+        dbo.collection("restaurants").insertOne(restaurant1, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            console.log(err);
+        });
+    }
+});
