@@ -6,7 +6,6 @@ var http = require('http');
 var mongoClientObject = require('mongodb').MongoClient;
 var server = require('mongodb').Server;
 
-
 // -------- Database -------- \\
 
 var mongoHost = 'localHost';
@@ -291,3 +290,4 @@ mongoClient.connect(function (err, mongoClient) {
         });
     }
 });
+
