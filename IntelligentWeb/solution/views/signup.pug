@@ -9,7 +9,7 @@ block content
                 br
         .row
             .col-md-10.offset-md-1
-                form(action='/index', method='post')
+                form(action='/signup/add_user', method='post')
                     .form-row
                         .form-group.col-md-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name', required, autocomplete='given-name')
@@ -167,6 +167,6 @@ block content
                     .form-row
                         .form-group.col
                             .float-right
-                                button.btn(onclick="console.log('Sign Up Button');") Sign Up
+                                input.btn(type='submit')
 
     script(type='text/javascript', src='/javascripts/signup.js')

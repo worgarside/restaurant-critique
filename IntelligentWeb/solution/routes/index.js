@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var title = 'Restaurant Critique';
-var bodyParser = require('body-parser');
+const express = require('express');
+const router = express.Router();
+const title = 'Restaurant Critique';
+const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({extended: true}));
 
 /* GET home page. */
@@ -27,17 +27,6 @@ router.get('/about', function (req, res, next) {
 
 router.get('/accessibility', function (req, res, next) {
     res.render('accessibility', {title: title});
-});
-
-router.post('/login', function (req, res) {
-    console.log('This is here');
-    var username = req.body.username;
-    console.log(username);
-    if (username === 'Paulo') {
-        res.render('welcome', {title: 'Paulo'});
-    } else {
-        res.render('index', {title: 'COM3504', login_is_correct: false});
-    }
 });
 
 module.exports = router;

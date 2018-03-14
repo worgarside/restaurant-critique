@@ -5,37 +5,8 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const mongoClientObject = require('mongodb').MongoClient;
-const assert = require('assert');
 const bodyParser = require('body-parser');
 const app = express();
-
-// -------- Database -------- \\
-
-var url = "mongodb://localhost:27017/";
-const dbName = "restaurant_critique";
-var db;
-
-mongoClientObject.connect(url, function (err, client) {
-    assert.equal(null, err);
-
-    if (err) return console.log(err);
-    if (!client) {
-        console.error("Error! Database connection failed.");
-        process.exit(1);
-    } else {
-        console.log("Connection established to", url);
-        db = client.db(dbName);
-    }
-});
-
-//EXAMPLE ADD CATEGORY TO DB
-app.use('/insertation', function () {
-    db.collection("categories").insertOne({name: "Fast Food"}, function (err, res) {
-        if (err) return console.log(err);
-    });
-});
-
 
 // -------- View Engine -------- \\
 
@@ -57,11 +28,12 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-icon
 // -------- Routes -------- \\
 
 var index = require('./routes/index');
+var signup = require('./routes/signup');
 var users = require('./routes/users');
 
 app.use('/', index);
+app.use('/signup', signup);
 app.use('/users', users);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
