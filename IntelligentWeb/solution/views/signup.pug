@@ -9,7 +9,7 @@ block content
                 br
         .row
             .col-md-10.offset-md-1
-                form(action='/signup/add_user', method='post')
+                form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-md-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name', required, autocomplete='given-name')
