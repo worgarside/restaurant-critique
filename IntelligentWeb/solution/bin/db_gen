@@ -1,25 +1,19 @@
 // -------- Middleware -------- \\
 
-var mongoClientObject = require('mongodb').MongoClient;
-var server = require('mongodb').Server;
+const mongoClientObject = require('mongodb').MongoClient;
+const assert = require('assert');
 
 // -------- Database -------- \\
 
-var mongoHost = 'localHost';
-var mongoPort = 27017;
+const url = 'mongodb://localhost:27017';
+const dbName = "restaurant_critique";
 
-var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
-var url = "mongodb://" + mongoHost + ":" + mongoPort + "/";
-
-mongoClient.connect(function (err, mongoClient) {
-    if (!mongoClient) {
-        console.error("Error! Database connection failed.");
-        process.exit(1);
-    }
+mongoClientObject.connect(url, function (err, client) {
+    assert.equal(null, err);
+    const db = client.db(dbName);
     console.log("Connection established to", url);
-    var dbo = mongoClient.db("restaurant_critique");
 
-    dbo.createCollection("restaurants", {
+    db.createCollection("restaurants", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -73,7 +67,7 @@ mongoClient.connect(function (err, mongoClient) {
                         bsonType: "double",
                         description: "must be a double"
                     },
-                    orice_range: {
+                    price_range: {
                         bsonType: "double",
                         description: "must be a double"
                     },
@@ -143,8 +137,7 @@ mongoClient.connect(function (err, mongoClient) {
         validationAction: "error"
     });
 
-
-    dbo.createCollection("users", {
+    db.createCollection("users", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -197,7 +190,7 @@ mongoClient.connect(function (err, mongoClient) {
     });
 
 
-    dbo.createCollection("reviews", {
+    db.createCollection("reviews", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -237,7 +230,7 @@ mongoClient.connect(function (err, mongoClient) {
         validationAction: "error"
     });
 
-    dbo.createCollection("categories", {
+    db.createCollection("categories", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",

@@ -1,32 +1,66 @@
 // -------- Middleware -------- \\
 
-var mongoClientObject = require("mongodb").MongoClient;
-var server = require("mongodb").Server;
+const mongoClientObject = require('mongodb').MongoClient;
+const assert = require('assert');
 
 // -------- Database -------- \\
 
-var mongoHost = "localHost";
-var mongoPort = 27017;
-var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
+const url = 'mongodb://localhost:27017';
+const dbName = "restaurant_critique";
 
-mongoClient.connect(function () {
-    var dbo = mongoClient.db("restaurant_critique");
+mongoClientObject.connect(url, function (err, client) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+
+    const db = client.db(dbName);
 
     var categories = [
         {
             name: "Fast Food"
         }, {
-            name: "Number Two"
+            name: "Italian"
+        }, {
+            name: "French"
+        }, {
+            name: "Spanish"
+        }, {
+            name: "British"
+        }, {
+            name: "Chicken"
         }
     ];
 
     var users = [
         {
-            email: "worgarside@gmail.com", password: "simple", privilege_level: 1, forename: "William",
-            surname: "Garside", age: 7, county: "Cheshire"
+            email: "copeyrufus@gmail.com",
+            password: "Caddy1",
+            privilege_level: 1,
+            forename: "Rufus",
+            surname: "Cope",
+            age: 2,
+            county: "Shropshire"
+        },
+        {
+            email: "greta.veronika@gmail.com",
+            password: "Vodka2",
+            privilege_level: 1,
+            forename: "Greta",
+            surname: "Ramaneckaite",
+            age: 2,
+            county: "South Yorkshire"
+        },
+        {
+            email: "worgarside@gmail.com",
+            password: "Passw3rd",
+            privilege_level: 1,
+            forename: "Will",
+            surname: "Garside",
+            age: 2,
+            county: "Cheshire"
         }
     ];
 
+    // TODO: get category tag ids from database and apply to category array - RC
     var restaurants = [
         {
             name: "Aslan's Kebab",
@@ -35,63 +69,79 @@ mongoClient.connect(function () {
             address2: "West Street",
             city: "Sheffield",
             postcode: "S1 4EW",
-            latitude: 34.44,
-            longitude: 344.44,
-            category: [1],
-            // images: ["here", "there"],
-            avg_rating: 1,
             price_range: 1,
-            menu_path: "here",
-            description: "bit of a shit hole",
-            opening_times: [[22, 33], [22, 33], [22, 33]],
+            description: "Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards",
+            opening_times: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
             phone: "01144345634",
             published: true,
             delivery: false,
             takeout: true,
             parking: false,
-            alcohol: true,
             wifi: false,
             outdoor_seating: false,
-            reservations: false,
-            owner: "Will Garside",
-            owner_message: "text me bbz"
+            reservations: false
+        },
+        {
+            name: "Nando's",
+            suburb: "Devonshire Quarter",
+            address1: "Royal Plaza Development",
+            address2: "West Street",
+            city: "Sheffield",
+            postcode: "S1 4EZ",
+            price_range: 2,
+            description: "Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.",
+            opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+            phone: "01142780044",
+            url: "https://www.nandos.co.uk",
+            published: true,
+            delivery: true,
+            takeout: true,
+            parking: false,
+            wifi: false,
+            alcohol: true,
+            outdoor_seating: false,
+            reservations: true
+        },
+        {
+            name: "Gourmet Burger Kitchen",
+            suburb: "The Moor Quarter",
+            address1: "Unit 8",
+            address2: "24 The Moor",
+            city: "Sheffield",
+            postcode: "S1 4PA",
+            price_range: 3,
+            description: "Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.",
+            opening_times: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
+            phone: "0114 275 5154",
+            url: "https://www.gbk.co.uk",
+            published: true,
+            delivery: true,
+            takeout: true,
+            parking: false,
+            wifi: false,
+            outdoor_seating: false,
+            reservations: true
         }
     ];
 
     var reviews = [
         {
             title: "Aslan's Sucks",
-            author: 1,
+            //author: TODO get author id from db - RC
             datetime: new Date("2012-07-14T01:00:00+01:00"),
             restaurant_rating: 7
         }
     ];
 
-    dbo.collection("categories").insertMany(categories, function (err) {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-    });
+    try {
+        db.collection("categories").insertMany(categories);
+        db.collection("users").insertMany(users);
+        db.collection("restaurants").insertMany(restaurants);
+        db.collection("reviews").insertMany(reviews);
+    } catch (e) {
+        console.log(e);
+    }
 
-    dbo.collection("categories").insertMany(users, function (err) {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-    });
-
-    dbo.collection("categories").insertMany(restaurants, function (err) {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-    });
-
-    dbo.collection("categories").insertMany(reviews, function (err) {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-    });
+    console.log("DB populated successfully");
+    client.close();
 });

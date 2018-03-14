@@ -1,0 +1,1 @@
+node bin/db_populate
