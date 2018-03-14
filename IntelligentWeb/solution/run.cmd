@@ -1,5 +1,5 @@
-mongod --dbpath "./database"
+start "" "Compile Less.ahk"
 
-start "" http://localhost:3000
+REM start "" http://localhost:3000
 
 node bin/www

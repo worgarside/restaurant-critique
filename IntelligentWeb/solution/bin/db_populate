@@ -1,0 +1,97 @@
+// -------- Middleware -------- \\
+
+var mongoClientObject = require("mongodb").MongoClient;
+var server = require("mongodb").Server;
+
+// -------- Database -------- \\
+
+var mongoHost = "localHost";
+var mongoPort = 27017;
+var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
+
+mongoClient.connect(function () {
+    var dbo = mongoClient.db("restaurant_critique");
+
+    var categories = [
+        {
+            name: "Fast Food"
+        }, {
+            name: "Number Two"
+        }
+    ];
+
+    var users = [
+        {
+            email: "worgarside@gmail.com", password: "simple", privilege_level: 1, forename: "William",
+            surname: "Garside", age: 7, county: "Cheshire"
+        }
+    ];
+
+    var restaurants = [
+        {
+            name: "Aslan's Kebab",
+            suburb: "Devonshire Quarter",
+            address1: "187",
+            address2: "West Street",
+            city: "Sheffield",
+            postcode: "S1 4EW",
+            latitude: 34.44,
+            longitude: 344.44,
+            category: [1],
+            // images: ["here", "there"],
+            avg_rating: 1,
+            price_range: 1,
+            menu_path: "here",
+            description: "bit of a shit hole",
+            opening_times: [[22, 33], [22, 33], [22, 33]],
+            phone: "01144345634",
+            published: true,
+            delivery: false,
+            takeout: true,
+            parking: false,
+            alcohol: true,
+            wifi: false,
+            outdoor_seating: false,
+            reservations: false,
+            owner: "Will Garside",
+            owner_message: "text me bbz"
+        }
+    ];
+
+    var reviews = [
+        {
+            title: "Aslan's Sucks",
+            author: 1,
+            datetime: new Date("2012-07-14T01:00:00+01:00"),
+            restaurant_rating: 7
+        }
+    ];
+
+    dbo.collection("categories").insertMany(categories, function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
+
+    dbo.collection("categories").insertMany(users, function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
+
+    dbo.collection("categories").insertMany(restaurants, function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
+
+    dbo.collection("categories").insertMany(reviews, function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+    });
+});
