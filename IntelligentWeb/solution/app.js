@@ -19,14 +19,30 @@ var mongoPort = 27017;
 var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
 var url = "mongodb://localhost:27017/";
 
+// Create database object
+var dbo;
+
 mongoClient.connect(function (err, mongoClient) {
+    if (err) return console.log(err);
     if (!mongoClient) {
         console.error("Error! Database connection failed.");
         process.exit(1);
     } else {
         console.log("Connection established to", url);
+        dbo = mongoClient.db("restaurant_critique");
     }
 });
+
+//EXAMPLE ADD CATEGORY TO DB
+app.use('/insertation', function(req, res) {
+    dbo.collection("categories").insertOne({ name: "Fast Food"}, function(err, res) {
+        if (err) return console.log(err);
+    });
+});
+
+
+
+
 
 // -------- View Engine -------- \\
 
