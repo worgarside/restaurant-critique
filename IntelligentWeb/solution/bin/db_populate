@@ -10,9 +10,8 @@ const dbName = "restaurant_critique";
 
 mongoClientObject.connect(url, function (err, client) {
     assert.equal(null, err);
-    console.log("Connected successfully to server");
-
     const db = client.db(dbName);
+    console.log("Connection established to", url);
 
     var categories = [
         {
@@ -135,8 +134,23 @@ mongoClientObject.connect(url, function (err, client) {
 
     try {
         db.collection("categories").insertMany(categories);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
         db.collection("users").insertMany(users);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
         db.collection("restaurants").insertMany(restaurants);
+    } catch (e) {
+        console.log(e);
+    }
+
+    try {
         db.collection("reviews").insertMany(reviews);
     } catch (e) {
         console.log(e);

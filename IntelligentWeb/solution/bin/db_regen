@@ -245,4 +245,8 @@ mongoClientObject.connect(url, function (err, client) {
         },
         validationAction: "error"
     });
+
+
+    console.log("DB regenerated successfully");
+    // client.close();    // errors out for some reason??
 });

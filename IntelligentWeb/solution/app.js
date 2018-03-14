@@ -1,47 +1,40 @@
 // -------- Middleware -------- \\
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var mongoClientObject = require('mongodb').MongoClient;
-var server = require('mongodb').Server;
-var bodyParser = require('body-parser');
-
-var app = express();
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const mongoClientObject = require('mongodb').MongoClient;
+const assert = require('assert');
+const bodyParser = require('body-parser');
+const app = express();
 
 // -------- Database -------- \\
 
-var mongoHost = 'localHost';
-var mongoPort = 27017;
-
-var mongoClient = new mongoClientObject(new server(mongoHost, mongoPort));
 var url = "mongodb://localhost:27017/";
+const dbName = "restaurant_critique";
+var db;
 
-// Create database object
-var dbo;
+mongoClientObject.connect(url, function (err, client) {
+    assert.equal(null, err);
 
-mongoClient.connect(function (err, mongoClient) {
     if (err) return console.log(err);
-    if (!mongoClient) {
+    if (!client) {
         console.error("Error! Database connection failed.");
         process.exit(1);
     } else {
         console.log("Connection established to", url);
-        dbo = mongoClient.db("restaurant_critique");
+        db = client.db(dbName);
     }
 });
 
 //EXAMPLE ADD CATEGORY TO DB
-app.use('/insertation', function(req, res) {
-    dbo.collection("categories").insertOne({ name: "Fast Food"}, function(err, res) {
+app.use('/insertation', function () {
+    db.collection("categories").insertOne({name: "Fast Food"}, function (err, res) {
         if (err) return console.log(err);
     });
 });
-
-
-
 
 
 // -------- View Engine -------- \\

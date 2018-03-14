@@ -29,7 +29,7 @@ router.get('/accessibility', function (req, res, next) {
     res.render('accessibility', {title: title});
 });
 
-router.post('/index', function (req, res) {
+router.post('/login', function (req, res) {
     console.log('This is here');
     var username = req.body.username;
     console.log(username);

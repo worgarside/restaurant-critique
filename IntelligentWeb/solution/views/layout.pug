@@ -26,7 +26,7 @@ html(lang='en')
             })
 
         link(href='https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css', rel='stylesheet')
-        // TODO: Need a fallback to /node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css
+        // TODO: Need a fallback to /node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css - WG
 
         link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
         link(href='https://fonts.googleapis.com/css?family=Lato|Roboto', rel='stylesheet')
@@ -56,7 +56,7 @@ html(lang='en')
 
             #login-form(style='display: none;')
                 .container
-                    form
+                    form(method="POST")
                         .form-row
                             .form-group.col
                                 input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
