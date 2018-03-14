@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({storage: storage}).single('displayPicture');
+var upload = multer({storage: storage});
 
 
 router.use(bodyParser.urlencoded({extended: true}));
@@ -34,7 +34,7 @@ mongoClientObject.connect(url, function (err, client) {
 });
 
 
-router.post('/add_user', function (req, res) {
+router.post('/add_user', upload.single('displayPicture'), function (req, res) {
     var userForename = req.body.forename;
     var userSurname = req.body.surname;
     var userEmail = req.body.email;
@@ -42,10 +42,6 @@ router.post('/add_user', function (req, res) {
     var userPhone = req.body.phone;
     var userAge = req.body.age;
     var userCounty = req.body.county;
-
-    upload(req, res, function (err) {
-        if (err) throw err;
-    });
 
     var new_user = {
         forename: userForename,
