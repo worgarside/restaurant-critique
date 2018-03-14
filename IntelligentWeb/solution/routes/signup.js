@@ -3,7 +3,22 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoClientObject = require('mongodb').MongoClient;
 const assert = require('assert');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './uploads');
+    },
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+
+var upload = multer({storage: storage}).single('myFile');
+
+
 router.use(bodyParser.urlencoded({extended: true}));
+
 
 // -------- Database -------- \\
 
@@ -24,15 +39,59 @@ mongoClientObject.connect(url, function (err, client) {
     }
 });
 
+router.post('/add_user', function (req, res, next) {
 
-router.post('/add_user', function (req, res) {
-    console.log('This is here');
-    var username = req.body.forename;
-    console.log(username);
-    res.render('index', {title: 'COM3504'});
-    db.collection("categories").insertOne({name: username}, function (err, res) {
-        if (err) return console.log(err);
+    console.log("\n\n#########################################");
+    console.log(req.body);
+    console.log("-----------------------------------------");
+    console.log(req.file);
+    console.log(req.files);
+    console.log("#########################################\n\n");
+
+    upload(req, res, function (err) {
+        if (err) {
+            return res.end("Error uploading");
+        }
+        // res.end("Success");
+        console.log("AMAZING WELL DONE");
     });
+
+    res.redirect('/')
 });
+
+
+// router.post('/add_user', function (req, res) {
+//     var userForename = req.body.forename;
+//     var userSurname = req.body.surname;
+//     var userEmail = req.body.email;
+//     var userPassword = req.body.password;
+//     var userPhone = req.body.phone;
+//     var userAge = req.body.age;
+//     var userCounty = req.body.county;
+//
+//     console.log("\n\n#########################################");
+//     console.log(req.files);
+//     console.log("-----------------------------------------");
+//     console.log(req.file);
+//     console.log("#########################################\n\n");
+//
+//
+//
+//     var new_user = {
+//         forename: userForename,
+//         surname: userSurname,
+//         email: userEmail,
+//         password: userPassword,
+//         phone: userPhone,
+//         age: userAge,
+//         county: userCounty,
+//         privilege_level: 1
+//     };
+//
+//     db.collection("users").insertOne(new_user, function (err, res) {
+//         if (err) return console.log(err);
+//     });
+//     res.redirect('/')
+// });
 
 module.exports = router;
