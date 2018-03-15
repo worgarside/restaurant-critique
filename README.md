@@ -6,7 +6,7 @@
 - Rufus Cope - rcope2@sheffield.ac.uk
 
 ### Task List
-- [ ] Database creation 
+- [x] Database creation 
 - [ ] Restaurant Object
 - [ ] User creation/signup
 - [ ] Login management

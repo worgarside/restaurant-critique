@@ -1,0 +1,4 @@
+
+C:\Users\Will\Documents\Projects\Active\restaurant-critique\IntelligentWeb\solution>node bin/db_populate 
+Connection established to mongodb://localhost:27017
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? Terminate batch job (Y/N)? 
