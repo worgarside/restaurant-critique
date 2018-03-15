@@ -6,6 +6,19 @@ const assert = require('assert');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
+// -------- Google maps -------- \\
+var googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia'
+});
+
+googleMapsClient.geocode({
+    address: 'SY4 5PP'
+}, function(err, response) {
+    if (!err) {
+        console.log(response.json.results);
+    }
+});
+
 
 // -------- Database -------- \\
 
@@ -22,14 +35,28 @@ mongoClientObject.connect(url, function (err, client) {
 
 
 router.post('/add_restaurant', function (req, res) {
+
+    var googleMapsClient = require('@google/maps').createClient({
+        key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
+    });
+    var resLatitude
+    var resLongitude
+
+    googleMapsClient.geocode({
+        address: 'SY4 5PP'
+    }, function(err, response) {
+        if (!err) {
+            resLatitude = response.json.results[0].geometry.location.lat;
+            resLongitude = response.json.results[0].geometry.location.lng;
+        }
+    });
+
     var resName = req.body.name;
     var resSuburb = req.body.suburb;
     var resAddress1 = req.body.address1;
     var resAddress2 = req.body.address2;
     var resCity = req.body.city;
     var resPostcode = req.body.postcode;
-    var resLatitude = 11111111111.2222; //CONNECT TO GOOGLE MAPS
-    var resLongitude = 22222222222.33333; //CONNECT TO GOOGLE MAPS
     var resPrice_range = req.body.price_range;
     var resDescription = req.body.description;
     var resOpening_times = [0,0,0,0,0]; // SOME COMPLICATED MATHS

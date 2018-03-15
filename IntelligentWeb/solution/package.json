@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@google/maps": "^0.4.5",
     "angular": "^1.6.9",
     "body-parser": "~1.18.2",
     "bootstrap": "^4.0.0",
