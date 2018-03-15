@@ -15,28 +15,24 @@ mongoClientObject.connect(url, function (err, client) {
     db.categories = db.collection("categories");
     db.restaurants = db.collection("restaurants");
     db.reviews = db.collection("reviews");
-
     console.log("Connection established to", url);
 
+    var promises = [];
+
     var categories = [
-        {
-            name: "Fast Food"
-        }, {
-            name: "Italian"
-        }, {
-            name: "French"
-        }, {
-            name: "Spanish"
-        }, {
-            name: "British"
-        }, {
-            name: "Chicken"
-        }
+        {_id: "FastFood", name: "Fast Food"},
+        {_id: "Chicken", name: "Chicken"},
+        {_id: "Inexpensive", name: "Inexpensive"},
+        {_id: "Convenient", name: "Convenient"},
+        {_id: "Portugese", name: "Portugese"},
+        {_id: "Spicy", name: "Spicy"},
+        {_id: "Burgers", name: "Burgers"},
+        {_id: "Casual", name: "Casual"}
     ];
 
     var users = [
         {
-            email: "copeyrufus@gmail.com",
+            _id: "copeyrufus@gmail.com",
             password: "Caddy1",
             privilege_level: 1,
             forename: "Rufus",
@@ -45,7 +41,7 @@ mongoClientObject.connect(url, function (err, client) {
             county: "Shropshire"
         },
         {
-            email: "greta.veronika@gmail.com",
+            _id: "greta.veronika@gmail.com",
             password: "Vodka2",
             privilege_level: 1,
             forename: "Greta",
@@ -54,7 +50,7 @@ mongoClientObject.connect(url, function (err, client) {
             county: "South Yorkshire"
         },
         {
-            email: "worgarside@gmail.com",
+            _id: "worgarside@gmail.com",
             password: "Passw3rd",
             privilege_level: 1,
             forename: "Will",
@@ -64,7 +60,16 @@ mongoClientObject.connect(url, function (err, client) {
         }
     ];
 
-    // TODO: get category tag ids from database and apply to category array - RC
+    var reviews = [
+        {
+            title: "Aslan's Sucks",
+            body: "I got food poisoning here, don't eat the turkey burgers",
+            author: "greta.veronika@gmail.com",
+            datetime: new Date(Date.now()),
+            restaurant_rating: 7
+        }
+    ];
+
     var restaurants = [
         {
             name: "Aslan's Kebab",
@@ -83,7 +88,8 @@ mongoClientObject.connect(url, function (err, client) {
             parking: false,
             wifi: false,
             outdoor_seating: false,
-            reservations: false
+            reservations: false,
+            category: ["FastFood", "Chicken", "Convenient", "Inexpensive"]
         },
         {
             name: "Nando's",
@@ -104,7 +110,8 @@ mongoClientObject.connect(url, function (err, client) {
             wifi: false,
             alcohol: true,
             outdoor_seating: false,
-            reservations: true
+            reservations: true,
+            category: ["Chicken", "Portugese", "Spicy", "Burgers", "Casual"]
         },
         {
             name: "Gourmet Burger Kitchen",
@@ -124,34 +131,19 @@ mongoClientObject.connect(url, function (err, client) {
             parking: false,
             wifi: false,
             outdoor_seating: false,
-            reservations: true
+            reservations: true,
+            category: ["Spicy", "Burgers", "Casual"]
         }
     ];
 
-    var id_list = [];
+    promises.push(db.restaurants.insertMany(restaurants));
+    promises.push(db.reviews.insertMany(reviews));
+    promises.push(db.categories.insertMany(categories));
+    promises.push(db.users.insertMany(users));
 
-    db.collection("users").find({}).toArray(function (err, results) {
-        if (err) throw err;
-        for (var i = 0; i < results.length; i++) {
-            id_list.push(results[i]['_id']);
-        }
+    Promise.all(promises).then(function () {
+        console.log("Test data inserted");
+        client.close();
     });
-
-    var reviews = [
-        {
-            title: "Aslan's Sucks2",
-            body: "I got food poisoning here, don't eat the turkey burgers",
-            author: id_list[0],
-            datetime: new Date(Date.now()),
-            restaurant_rating: 7
-        }
-    ];
-
-    db.categories.insertMany(categories);
-    db.users.insertMany(users);
-    db.restaurants.insertMany(restaurants);
-    db.reviews.insertMany(reviews);
-
-    console.log("DB populated successfully");
-    client.close();
 });
+
