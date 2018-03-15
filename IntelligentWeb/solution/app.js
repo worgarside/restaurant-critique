@@ -29,10 +29,12 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-icon
 
 var index = require('./routes/index');
 var signup = require('./routes/signup');
+var restaurantNew = require('./routes/restaurant_new');
 var users = require('./routes/users');
 
 app.use('/', index);
 app.use('/signup', signup);
+app.use('/restaurant/new', restaurantNew);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

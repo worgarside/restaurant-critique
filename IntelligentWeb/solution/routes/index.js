@@ -30,7 +30,7 @@ router.get('/accessibility', function (req, res, next) {
 });
 
 router.get('/restaurant/new', function (req, res, next) {
-    res.render('newrestaurant', {title: title});
+    res.render('restaurant_new', {title: title});
 });
 
 module.exports = router;
