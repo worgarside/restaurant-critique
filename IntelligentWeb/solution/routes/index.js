@@ -29,4 +29,8 @@ router.get('/accessibility', function (req, res, next) {
     res.render('accessibility', {title: title});
 });
 
+router.get('/restaurant/new', function (req, res, next) {
+    res.render('newrestaurant', {title: title});
+});
+
 module.exports = router;

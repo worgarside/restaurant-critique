@@ -216,3 +216,6 @@ footer .footer-right {
 .oi-space {
   margin-right: 10px;
 }
+.form-group.col-md-4.no-margin {
+  margin: 0px;
+}

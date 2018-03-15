@@ -1,0 +1,129 @@
+extends layout
+
+block content
+    #{features = ["Parking", "WiFi", "Takeout", "Outdoor Seating", "Reservations", "Alcohol", "Delivery"]}
+    #{weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
+    br
+    .container
+        .row
+            .col
+                h1 Add a Restaurant
+                br
+        .row
+            .col-md-10.offset-md-1
+                form(action='/signup/add_user', method='post', enctype="multipart/form-data")
+                    .form-row
+                        .form-group.col-md-6
+                            .form-row
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='restaurant', placeholder='Restaurant Name', required )
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='suburb', placeholder='Suburb', required )
+                            .form-row
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='address1', placeholder='Address Line 1', required )
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='city', placeholder='City', required )
+                            .form-row
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='address2', placeholder='Address Line 2' )
+                                .form-group.col-md-6
+                                    input.form-control(type='text', name='postcode', placeholder='Postcode', required )
+                            .form-row
+                                .form-group.col-md-12
+                                    select#category.form-control(name='category')
+                                        option(value='', disabled, selected) Price Range
+                                        option(value='3') ££££ - Expensive
+                                        option(value='2') £££ - Above Average
+                                        option(value='1') ££ - Average
+                                        option(value='0') £ - Inexpensive
+
+
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='text', name='category', placeholder='Category', required )
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='text', name='website', placeholder='Restaurant Website' )
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='text', name='menu', placeholder='Menu Link' )
+                            .form-row
+                                .form-group.col
+                                    textarea.form-control(type='text', name='description', placeholder='Describe the Restaurant', rows=3 )
+
+                            .form-row
+                                .form-group.col-md-12
+                                    select#category.form-control(name='category')
+                                        option(value='', disabled, selected) Category
+                                        option(value='6') Fast Food
+                                        option(value='5') Italian
+                                        option(value='4') Nandos
+                                        option(value='3') Mexican
+                                        option(value='2') Malaysian
+                                        option(value='1') Fishy Fingers
+                                        option(value='0') Other
+
+                            .form-row
+                                .form-group.col-md-4.no-margin
+                                    .form-group.col
+                                .form-group.col-md-4.no-margin
+                                    .form-group.col
+                                        p Yes
+                                .form-group.col-md-4.no-margin
+                                    .form-group.col
+                                        p No
+
+
+                            - for (var i = 0; i < features.length; ++i) {
+                                .form-row
+                                    .form-group.col-md-4.no-margin
+                                        p #{features[i]}
+                                    .form-group.col-md-4.no-margin
+                                        .form-check.form-check-inline
+                                            input.form-check-input(type="radio", name=`${features[i].toLowerCase()}`, value="true")
+                                    .form-group.col-md-4.no-margin
+                                        .form-check.form-check-inline
+                                            input.form-check-input(type="radio", name=`${features[i].toLowerCase()}`, value="false")
+                            - }
+
+
+                        .form-group.col-md-6
+                            .form-row
+                                .form-group.offset-md-1
+                                    label(for='display-picture') Restaurant Picture
+                                    img#display-picture(src='/scripts/svg/home.svg')
+                                    input#display-picture-upload(type='file', name='displayPicture', accept="image/*")
+
+
+                            .form-row
+                                .form-group.col-md-12
+                                    p.text-center Opening Times
+                            .form-row
+                                .form-group.col-md-4
+                                .form-group.col-md-4.no-margin
+                                    .form-group.col
+                                        p.text-center Opening
+                                .form-group.col-md-4.no-margin
+                                    .form-group.col
+                                        p.text-center Closing
+
+                            - for (var i = 0; i < weekdays.length; ++i) {
+                                .form-row
+                                    .form-group.col-md-4.no-margin
+                                        .form-group.col
+                                            p.text-center #{weekdays[i]}
+                                    .form-group.col-md-4.no-margin
+                                        .form-group.col
+                                            input.form-control(type='time', name=`${weekdays[i].toLowerCase()}-open` )
+                                    .form-group.col-md-4.no-margin
+                                        .form-group.col
+                                            input.form-control(type='time', name=`${weekdays[i].toLowerCase()}-close` )
+                            - }
+
+                    .form-row
+                        .form-group.col
+                            .float-right
+                                input.btn(type='submit')
+
+    script(type='text/javascript', src='/javascripts/signup.js')
