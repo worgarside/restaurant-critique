@@ -16,7 +16,7 @@ block content
                         .form-group.col-md-6
                             .form-row
                                 .form-group.col-md-6
-                                    input.form-control(type='text', name='restaurant', placeholder='Restaurant Name', required )
+                                    input.form-control(type='text', name='name', placeholder='Restaurant Name', required )
                                 .form-group.col-md-6
                                     input.form-control(type='text', name='suburb', placeholder='Suburb', required )
                             .form-row
@@ -31,17 +31,13 @@ block content
                                     input.form-control(type='text', name='postcode', placeholder='Postcode', required )
                             .form-row
                                 .form-group.col-md-12
-                                    select#category.form-control(name='category')
+                                    select#pricerange.form-control(name='price_range')
                                         option(value='', disabled, selected) Price Range
                                         option(value='3') ££££ - Expensive
                                         option(value='2') £££ - Above Average
                                         option(value='1') ££ - Average
                                         option(value='0') £ - Inexpensive
 
-
-                            .form-row
-                                .form-group.col
-                                    input.form-control(type='text', name='category', placeholder='Category', required )
                             .form-row
                                 .form-group.col
                                     input.form-control(type='text', name='website', placeholder='Restaurant Website' )
@@ -54,7 +50,7 @@ block content
 
                             .form-row
                                 .form-group.col-md-12
-                                    select#category.form-control(name='category')
+                                    select#category.form-control(name='category', required)
                                         option(value='', disabled, selected) Category
                                         option(value='6') Fast Food
                                         option(value='5') Italian
