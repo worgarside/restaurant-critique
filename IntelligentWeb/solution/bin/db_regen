@@ -13,7 +13,21 @@ mongoClientObject.connect(url, function (err, client) {
     const db = client.db(dbName);
     console.log("Connection established to", url);
 
-    db.createCollection("restaurants", {
+    var dropPromises = [];
+
+    dropPromises.push(db.collection("users").drop());
+    dropPromises.push(db.collection("categories").drop());
+    dropPromises.push(db.collection("restaurants").drop());
+    dropPromises.push(db.collection("reviews").drop());
+
+    Promise.all(dropPromises).then(function () {
+        createCollections(db, client);
+    });
+});
+
+function createCollections(db, client) {
+    var creationPromises = [];
+    creationPromises.push(db.createCollection("restaurants", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -135,9 +149,9 @@ mongoClientObject.connect(url, function (err, client) {
             }
         },
         validationAction: "error"
-    });
+    }));
 
-    db.createCollection("users", {
+    creationPromises.push(db.createCollection("users", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -171,22 +185,22 @@ mongoClientObject.connect(url, function (err, client) {
                         bsonType: "array",
                         description: "must be a array"
                     },
-                    user_picture: {
+                    display_img_filename: {
                         bsonType: "string",
                         description: "string path to profile picture"
                     },
                     user_rating: {
-                        bsonType: "double",
+                        bsonType: "int",
                         description: "must be a double"
                     }
                 }
             }
         },
         validationAction: "error"
-    });
+    }));
 
 
-    db.createCollection("reviews", {
+    creationPromises.push(db.createCollection("reviews", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -224,9 +238,9 @@ mongoClientObject.connect(url, function (err, client) {
             }
         },
         validationAction: "error"
-    });
+    }));
 
-    db.createCollection("categories", {
+    creationPromises.push(db.createCollection("categories", {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -240,9 +254,16 @@ mongoClientObject.connect(url, function (err, client) {
             }
         },
         validationAction: "error"
-    });
+    }));
 
+    Promise.all(creationPromises)
+        .then(function () {
+            console.log("DB regenerated successfully");
+            client.close();
+        })
+        .catch(function () {
+            console.log("Failed");
+            client.close();
+        });
 
-    console.log("DB regenerated successfully");
-    // client.close();    // errors out for some reason??
-});
+}

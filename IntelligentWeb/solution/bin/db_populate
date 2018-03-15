@@ -38,7 +38,10 @@ mongoClientObject.connect(url, function (err, client) {
             forename: "Rufus",
             surname: "Cope",
             age: 2,
-            county: "Shropshire"
+            county: "Shropshire",
+            display_img_filename: "copeyrufus-gmail-com",
+            // reviews: [],
+            user_rating: 0
         },
         {
             _id: "greta.veronika@gmail.com",
@@ -47,7 +50,10 @@ mongoClientObject.connect(url, function (err, client) {
             forename: "Greta",
             surname: "Ramaneckaite",
             age: 2,
-            county: "South Yorkshire"
+            county: "South Yorkshire",
+            display_img_filename: "greta-veronika-gmail-com",
+            reviews: [],
+            user_rating: 0
         },
         {
             _id: "worgarside@gmail.com",
@@ -56,7 +62,10 @@ mongoClientObject.connect(url, function (err, client) {
             forename: "Will",
             surname: "Garside",
             age: 2,
-            county: "Cheshire"
+            county: "Cheshire",
+            display_img_filename: "worgarside-gmail-com",
+            reviews: [],
+            user_rating: 0
         }
     ];
 
@@ -141,9 +150,14 @@ mongoClientObject.connect(url, function (err, client) {
     promises.push(db.categories.insertMany(categories));
     promises.push(db.users.insertMany(users));
 
-    Promise.all(promises).then(function () {
-        console.log("Test data inserted");
-        client.close();
-    });
+    Promise.all(promises)
+        .then(function () {
+            console.log("Test data inserted");
+            client.close();
+        })
+        .catch(function () {
+            console.log("Failed");
+            client.close();
+        });
 });
 
