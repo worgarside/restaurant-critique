@@ -11,6 +11,11 @@ const dbName = "restaurant_critique";
 mongoClientObject.connect(url, function (err, client) {
     assert.equal(null, err);
     const db = client.db(dbName);
+    db.users = db.collection("users");
+    db.categories = db.collection("categories");
+    db.restaurants = db.collection("restaurants");
+    db.reviews = db.collection("reviews");
+
     console.log("Connection established to", url);
 
     var categories = [
@@ -123,38 +128,29 @@ mongoClientObject.connect(url, function (err, client) {
         }
     ];
 
+    var id_list = [];
+
+    db.collection("users").find({}).toArray(function (err, results) {
+        if (err) throw err;
+        for (var i = 0; i < results.length; i++) {
+            id_list.push(results[i]['_id']);
+        }
+    });
+
     var reviews = [
         {
-            title: "Aslan's Sucks",
-            //author: TODO get author id from db - RC
-            datetime: new Date("2012-07-14T01:00:00+01:00"),
+            title: "Aslan's Sucks2",
+            body: "I got food poisoning here, don't eat the turkey burgers",
+            author: id_list[0],
+            datetime: new Date(Date.now()),
             restaurant_rating: 7
         }
     ];
 
-    try {
-        db.collection("categories").insertMany(categories);
-    } catch (e) {
-        console.log(e);
-    }
-
-    try {
-        db.collection("users").insertMany(users);
-    } catch (e) {
-        console.log(e);
-    }
-
-    try {
-        db.collection("restaurants").insertMany(restaurants);
-    } catch (e) {
-        console.log(e);
-    }
-
-    try {
-        db.collection("reviews").insertMany(reviews);
-    } catch (e) {
-        console.log(e);
-    }
+    db.categories.insertMany(categories);
+    db.users.insertMany(users);
+    db.restaurants.insertMany(restaurants);
+    db.reviews.insertMany(reviews);
 
     console.log("DB populated successfully");
     client.close();

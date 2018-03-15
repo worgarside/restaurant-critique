@@ -68,8 +68,8 @@ mongoClientObject.connect(url, function (err, client) {
                         description: "must be a double"
                     },
                     price_range: {
-                        bsonType: "double",
-                        description: "must be a double"
+                        bsonType: "int",
+                        description: "must be an int"
                     },
                     menu_path: {
                         bsonType: "string",
@@ -205,8 +205,8 @@ mongoClientObject.connect(url, function (err, client) {
                         description: "must be a string"
                     },
                     author: {
-                        bsonType: "int",
-                        description: "must be a int and is required"
+                        bsonType: "string",
+                        description: "must be a string and is required"
                     },
                     datetime: {
                         bsonType: "date",
