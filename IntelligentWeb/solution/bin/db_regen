@@ -20,9 +20,15 @@ mongoClientObject.connect(url, function (err, client) {
     dropPromises.push(db.collection("restaurants").drop());
     dropPromises.push(db.collection("reviews").drop());
 
-    Promise.all(dropPromises).then(function () {
-        createCollections(db, client);
-    });
+    process.stdout.write("Clearing database... ");
+    Promise.all(dropPromises)
+        .then(function () {
+            createCollections(db, client);
+        })
+        .catch(function () {
+            console.log("(collections not found, continuing)");
+            createCollections(db, client);
+        })
 });
 
 function createCollections(db, client) {
@@ -256,6 +262,7 @@ function createCollections(db, client) {
         validationAction: "error"
     }));
 
+    console.log("Generating new Collections");
     Promise.all(creationPromises)
         .then(function () {
             console.log("DB regenerated successfully");
