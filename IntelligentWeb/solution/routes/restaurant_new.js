@@ -20,7 +20,6 @@ var upload = multer({storage: storage});
 
 router.use(bodyParser.urlencoded({extended: true}));
 
-
 // ---------------- Database ---------------- \\
 
 var url = "mongodb://localhost:27017/";
@@ -35,58 +34,94 @@ mongoClientObject.connect(url, function (err, client) {
 });
 
 router.post('/add_restaurant', upload.single('displayPicture'), function (req, res) {
+
+    var postcode = req.body.postcode;
+
+    var googleMaps = require('@google/maps').createClient({
+        key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
+    });
+
+    var gmapsPromise = new Promise(function (resolve, reject) {
+        googleMaps.geocode({
+            address: postcode
+        }, function (err, response) {
+            if (err) {
+                console.log("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nError: " + err);
+                reject();
+            } else {
+                resolve(response.json.results[0].geometry.location);
+            }
+        })
+    });
+
+    gmapsPromise.then(function (location) {
+        submitRestaurant(postcode, location, req.body)
+    }).catch(function (error) {
+        console.log('Error: ' + error);
+    });
+
+    res.redirect('/')
+});
+
+function submitRestaurant(postcode, location, body) {
+    /**
+     * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
+         monClose:int, tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int,
+         restaurantName: string, priceRange: string, outdoorseating: int}} body,
+     */
+
     var openingTimes = [
-        [req.body.monOpen, req.body.monClose],
-        [req.body.tueOpen, req.body.tueClose],
-        [req.body.wedOpen, req.body.wedClose],
-        [req.body.thuOpen, req.body.thuClose],
-        [req.body.friOpen, req.body.friClose],
-        [req.body.satOpen, req.body.satClose],
-        [req.body.sunOpen, req.body.sunClose]
+        [body.monOpen, body.monClose],
+        [body.tueOpen, body.tueClose],
+        [body.wedOpen, body.wedClose],
+        [body.thuOpen, body.thuClose],
+        [body.friOpen, body.friClose],
+        [body.satOpen, body.satClose],
+        [body.sunOpen, body.sunClose]
     ];
 
+    var latitude = location.lat;
+    var longitude = location.lng;
+
     var newRestaurant = {
-        name: req.body.restaurantName,
-        address1: req.body.address1,
-        address2: req.body.address2,
-        city: req.body.city,
-        postcode: req.body.postcode,
-        url: req.body.url,
-        phone: req.body.phone,
-        menu: req.body.menu,
+        name: body.restaurantName,
+        address1: body.address1,
+        address2: body.address2,
+        city: body.city,
+        postcode: postcode,
+        url: body.url,
+        phone: body.phone,
+        menu: body.menu,
         opening_times: openingTimes,
-        description: req.body.description,
-        price_range: parseInt(req.body.priceRange),
-        category: [req.body.category],
+        description: body.description,
+        price_range: parseInt(body.priceRange),
+        category: [body.category],
 
-        parking: req.body.parking === 1,
-        wifi: req.body.wifi === 1,
-        takeout :req.body.takeout === 1,
-        delivery:req.body.delivery === 1,
-        outdoor_seating: req.body.outdoorseating === 1,
-        reservations: req.body.reservations === 1,
-        alcohol:req.body.alcohol === 1,
+        parking: body.parking === 1,
+        wifi: body.wifi === 1,
+        takeout: body.takeout === 1,
+        delivery: body.delivery === 1,
+        outdoor_seating: body.outdoorseating === 1,
+        reservations: body.reservations === 1,
+        alcohol: body.alcohol === 1,
 
-        latitude: 4.20,
-        longitude: 6.9,
+        latitude: latitude,
+        longitude: longitude,
 
         published: true
     };
 
-    console.log("\n\n#################################################\n\n");
-    console.log(newRestaurant);
-    console.log("\n\n#################################################\n\n");
+    // console.log("\n\n############################################\n\n");
+    // console.log(newRestaurant);
+    // console.log("\n\n############################################\n\n");
 
-    Promise.all([db.collection("restaurants").insertOne(newRestaurant, function (err) {
-        if (err) return console.log(err);
-    })])
-        .then(function () {
-            console.log("Restaurant added to collection")
-        })
-        .catch(function () {
-            console.log("Restaurant failed to add to collection")
-        });
-    res.redirect('/')
-});
+    var insertionPromise = db.collection("restaurants").insertOne(newRestaurant);
+
+    insertionPromise.then(function () {
+        console.log("Restaurant added to collection")
+    }).catch(function () {
+        console.log("Restaurant failed to add to collection")
+    });
+}
 
 module.exports = router;
