@@ -7,6 +7,18 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
+const mongoose = require('mongoose');
+
+// -------- Database -------- \\
+
+const url = 'mongodb://localhost:27017';
+const dbName = "restaurant_critique";
+
+mongoose.connect(url + "/" + dbName).then(function () {
+    console.log("Successfully connected to " + url + "/" + dbName)
+}).catch(function (err) {
+    console.log("Failed to connect to DB: " + err)
+});
 
 // -------- View Engine -------- \\
 

@@ -1,273 +1,54 @@
 // -------- Middleware -------- \\
 
-const mongoClientObject = require('mongodb').MongoClient;
-const assert = require('assert');
+const mongoose = require('mongoose');
+require('../app/models/user');
+require('../app/models/category');
+require('../app/models/restaurant');
+require('../app/models/review');
+var DatabasePopulation = require('../app/db_populate');
 
 // -------- Database -------- \\
 
 const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
-mongoClientObject.connect(url, function (err, client) {
-    assert.equal(null, err);
-    const db = client.db(dbName);
-    console.log("Connection established to", url);
+mongoose.connect(url + "/" + dbName).then(function () {
+    console.log("Successfully connected to " + url + "/" + dbName);
+    initialiseDatabase();
+}).catch(function (err) {
+    console.log("Failed to connect to DB: " + err);
+    process.exit(1);
+});
+
+function initialiseDatabase() {
+    const collections = ["users", "categories", "restaurants", "reviews"];
+
+    var conn = mongoose.connection;
+    const db = conn.db;
 
     var dropPromises = [];
 
-    dropPromises.push(db.collection("users").drop());
-    dropPromises.push(db.collection("categories").drop());
-    dropPromises.push(db.collection("restaurants").drop());
-    dropPromises.push(db.collection("reviews").drop());
+    for (var i = 0; i < collections.length; i++) {
+        dropPromises.push(db.dropCollection(collections[i]));
+    }
 
-    process.stdout.write("Clearing database..");
+    var insertPromises = [];
+
+    // noinspection NodeModulesDependencies
     Promise.all(dropPromises)
         .then(function () {
-            console.log("!");
-            createCollections(db, client);
+            DatabasePopulation.populateFunction(insertPromises);
+            // noinspection NodeModulesDependencies
+            Promise.all(insertPromises).catch().then(function () {
+                conn.close()
+            });
         })
         .catch(function () {
-            console.log(". (collections not found, continuing)");
-            createCollections(db, client);
-        })
-});
-
-function createCollections(db, client) {
-    var creationPromises = [];
-    creationPromises.push(db.createCollection("restaurants", {
-        validator: {
-            $jsonSchema: {
-                bsonType: "object",
-                required: ["name", "address1", "city", "published"],
-                properties: {
-                    name: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    address1: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    address2: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    city: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    postcode: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    latitude: {
-                        bsonType: "double",
-                        description: "must be a double"
-                    },
-                    longitude: {
-                        bsonType: "double",
-                        description: "must be a double"
-                    },
-                    category: {
-                        bsonType: "array",
-                        description: "array of categories and is required"
-                    },
-                    reviews: {
-                        bsonType: "array",
-                        description: "string array"
-                    },
-                    images: {
-                        bsonType: "array",
-                        description: "string array"
-                    },
-                    average_rating: {
-                        bsonType: "double",
-                        description: "must be a double"
-                    },
-                    price_range: {
-                        bsonType: "int",
-                        description: "must be an int"
-                    },
-                    menu_path: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    description: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    opening_times: {
-                        bsonType: "array",
-                        description: "must be a array"
-                    },
-                    url: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    phone: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    published: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    delivery: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    takeout: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    parking: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    alcohol: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    wifi: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    outdoor_seating: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    reservations: {
-                        bsonType: "bool",
-                        description: "must be a boolean"
-                    },
-                    owner: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    owner_message: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    }
-                }
-            }
-        },
-        validationAction: "error"
-    }));
-
-    creationPromises.push(db.createCollection("users", {
-        validator: {
-            $jsonSchema: {
-                bsonType: "object",
-                required: ["password", "privilege_level", "forename", "surname"],
-                properties: {
-                    password: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    privilege_level: {
-                        bsonType: "int",
-                        description: "must be a int and is required"
-                    },
-                    forename: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    surname: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    age: {
-                        bsonType: "int",
-                        description: "must be a int"
-                    },
-                    county: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    reviews: {
-                        bsonType: "array",
-                        description: "must be a array"
-                    },
-                    display_img_filename: {
-                        bsonType: "string",
-                        description: "string path to profile picture"
-                    },
-                    user_rating: {
-                        bsonType: "int",
-                        description: "must be a double"
-                    }
-                }
-            }
-        },
-        validationAction: "error"
-    }));
-
-
-    creationPromises.push(db.createCollection("reviews", {
-        validator: {
-            $jsonSchema: {
-                bsonType: "object",
-                required: ["title", "author", "datetime", "restaurant_rating"],
-                properties: {
-                    title: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    body: {
-                        bsonType: "string",
-                        description: "must be a string"
-                    },
-                    author: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    },
-                    datetime: {
-                        bsonType: "date",
-                        description: "must be a timestamp and is required"
-                    },
-                    images: {
-                        bsonType: "array",
-                        description: "must be a array"
-                    },
-                    restaurant_rating: {
-                        bsonType: "int",
-                        description: "must be a int and is required"
-                    },
-                    review_rating: {
-                        bsonType: "int",
-                        description: "must be a int"
-                    }
-                }
-            }
-        },
-        validationAction: "error"
-    }));
-
-    creationPromises.push(db.createCollection("categories", {
-        validator: {
-            $jsonSchema: {
-                bsonType: "object",
-                required: ["name"],
-                properties: {
-                    name: {
-                        bsonType: "string",
-                        description: "must be a string and is required"
-                    }
-                }
-            }
-        },
-        validationAction: "error"
-    }));
-
-    console.log("Generating new Collections");
-    Promise.all(creationPromises)
-        .then(function () {
-            console.log("DB regenerated successfully");
-            client.close();
-        })
-        .catch(function () {
-            console.log("Failed");
-            client.close();
+            DatabasePopulation.populateFunction(insertPromises);
+            // noinspection NodeModulesDependencies
+            Promise.all(insertPromises).catch().then(function () {
+                conn.close()
+            });
         });
-
 }
+

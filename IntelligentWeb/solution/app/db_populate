@@ -1,0 +1,155 @@
+// -------- Middleware -------- \\
+
+var mongoose = require('mongoose'),
+    User = mongoose.model('User'),
+    Category = mongoose.model('Category'),
+    Restaurant = mongoose.model('Restaurant'),
+    Review = mongoose.model('Review');
+
+// -------- Database -------- \\
+
+var populateFunction = function populateDatabase(insertPromises) {
+    populateUsers(insertPromises);
+    populateCategories(insertPromises);
+    populateRestaurants(insertPromises);
+    populateReviews(insertPromises);
+};
+
+function populateUsers(insertPromises) {
+    insertPromises.push(new User({
+        _id: "copeyrufus@gmail.com",
+        password: "Caddy1",
+        privilege_level: 1,
+        forename: "Rufus",
+        surname: "Cope",
+        age: 2,
+        county: "Shropshire",
+        display_img_filename: "copeyrufus-gmail-com",
+        reviews: [],
+        user_rating: 0
+    }).save());
+
+    insertPromises.push(new User({
+        _id: "greta.veronika@gmail.com",
+        password: "Vodka2",
+        privilege_level: 1,
+        forename: "Greta",
+        surname: "Ramaneckaite",
+        age: 2,
+        county: "South Yorkshire",
+        display_img_filename: "greta-veronika-gmail-com",
+        reviews: [],
+        user_rating: 0
+    }).save());
+
+    insertPromises.push(new User({
+        _id: "worgarside@gmail.com",
+        password: "Passw3rd",
+        privilege_level: 1,
+        forename: "Will",
+        surname: "Garside",
+        age: 2,
+        county: "Cheshire",
+        display_img_filename: "worgarside-gmail-com",
+        reviews: [],
+        user_rating: 0
+    }).save());
+
+}
+
+function populateCategories(insertPromises) {
+    var categories = [
+        {_id: "FastFood", name: "Fast Food"},
+        {_id: "Chicken", name: "Chicken"},
+        {_id: "Inexpensive", name: "Inexpensive"},
+        {_id: "Convenient", name: "Convenient"},
+        {_id: "Portuguese", name: "Portuguese"},
+        {_id: "Spicy", name: "Spicy"},
+        {_id: "Burgers", name: "Burgers"},
+        {_id: "Casual", name: "Casual"}
+    ];
+
+    for (var i = 0; i < categories.length; i++) {
+        insertPromises.push(new Category(categories[i]).save());
+    }
+}
+
+function populateRestaurants(insertPromises) {
+    insertPromises.push(new Restaurant({
+        name: "Aslan's Kebab",
+        suburb: "Devonshire Quarter",
+        address1: "187",
+        address2: "West Street",
+        city: "Sheffield",
+        postcode: "S1 4EW",
+        price_range: 1,
+        description: "Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards",
+        opening_times: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
+        phone: "01144345634",
+        published: true,
+        delivery: false,
+        takeout: true,
+        parking: false,
+        wifi: false,
+        outdoor_seating: false,
+        reservations: false,
+        category: ["FastFood", "Chicken", "Convenient", "Inexpensive"]
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        name: "Nando's",
+        suburb: "Devonshire Quarter",
+        address1: "Royal Plaza Development",
+        address2: "West Street",
+        city: "Sheffield",
+        postcode: "S1 4EZ",
+        price_range: 2,
+        description: "Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.",
+        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        phone: "01142780044",
+        url: "https://www.nandos.co.uk",
+        published: true,
+        delivery: true,
+        takeout: true,
+        parking: false,
+        wifi: false,
+        alcohol: true,
+        outdoor_seating: false,
+        reservations: true,
+        category: ["Chicken", "Portuguese", "Spicy", "Burgers", "Casual"]
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        name: "Gourmet Burger Kitchen",
+        suburb: "The Moor Quarter",
+        address1: "Unit 8",
+        address2: "24 The Moor",
+        city: "Sheffield",
+        postcode: "S1 4PA",
+        price_range: 3,
+        description: "Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.",
+        opening_times: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
+        phone: "0114 275 5154",
+        url: "https://www.gbk.co.uk",
+        published: true,
+        delivery: true,
+        takeout: true,
+        parking: false,
+        wifi: false,
+        outdoor_seating: false,
+        reservations: true,
+        category: ["Spicy", "Burgers", "Casual"]
+    }).save());
+}
+
+function populateReviews(insertPromises) {
+    insertPromises.push(new Review({
+        title: "Aslan's Sucks",
+        body: "I got food poisoning here, don't eat the turkey burgers",
+        author: "greta.veronika@gmail.com",
+        datetime: new Date(Date.now()),
+        restaurant_rating: 7
+    }).save());
+}
+
+exports.populateFunction = populateFunction;
