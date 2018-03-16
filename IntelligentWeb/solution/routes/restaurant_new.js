@@ -1,11 +1,14 @@
+// ---------------- Middleware ---------------- \\
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const mongoClientObject = require('mongodb').MongoClient;
-const assert = require('assert');
-var multer = require('multer');
+const mongoose = require('mongoose');
+const multer = require('multer');
 
-var storage = multer.diskStorage({
+const Restaurant = mongoose.model('Restaurant');
+router.use(bodyParser.urlencoded({extended: true}));
+const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, './public/images/restaurant');
     },
@@ -16,22 +19,9 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({storage: storage});
+const upload = multer({storage: storage});
 
-router.use(bodyParser.urlencoded({extended: true}));
-
-// ---------------- Database ---------------- \\
-
-var url = "mongodb://localhost:27017/";
-const dbName = "restaurant_critique";
-var db;
-
-mongoClientObject.connect(url, function (err, client) {
-    assert.equal(null, err);
-
-    console.log("Connection established to", url);
-    db = client.db(dbName);
-});
+// ---------------- POST Method ---------------- \\
 
 router.post('/add_restaurant', upload.single('displayPicture'), function (req, res) {
 
@@ -83,7 +73,7 @@ function submitRestaurant(postcode, location, body) {
     var latitude = location.lat;
     var longitude = location.lng;
 
-    var newRestaurant = {
+    var insertionPromise = new Restaurant({
         name: body.restaurantName,
         address1: body.address1,
         address2: body.address2,
@@ -109,18 +99,16 @@ function submitRestaurant(postcode, location, body) {
         longitude: longitude,
 
         published: true
-    };
+    }).save();
 
     // console.log("\n\n############################################\n\n");
     // console.log(newRestaurant);
     // console.log("\n\n############################################\n\n");
 
-    var insertionPromise = db.collection("restaurants").insertOne(newRestaurant);
-
     insertionPromise.then(function () {
         console.log("Restaurant added to collection")
-    }).catch(function () {
-        console.log("Restaurant failed to add to collection")
+    }).catch(function (err) {
+        console.log("Restaurant failed to add to collection: " + err)
     });
 }
 

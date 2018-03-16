@@ -1,11 +1,14 @@
+// ---------------- Middleware ---------------- \\
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const mongoClientObject = require('mongodb').MongoClient;
-const assert = require('assert');
-var multer = require('multer');
+const mongoose = require('mongoose');
+const multer = require('multer');
 
-var storage = multer.diskStorage({
+const User = mongoose.model('User');
+router.use(bodyParser.urlencoded({extended: true}));
+const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, './public/images/displayPictures');
     },
@@ -16,22 +19,9 @@ var storage = multer.diskStorage({
     }
 });
 
-var upload = multer({storage: storage});
+const upload = multer({storage: storage});
 
-router.use(bodyParser.urlencoded({extended: true}));
-
-// -------- Database -------- \\
-
-var url = "mongodb://localhost:27017/";
-const dbName = "restaurant_critique";
-var db, client;
-
-mongoClientObject.connect(url, function (err, client) {
-    assert.equal(null, err);
-
-    console.log("Connection established to", url);
-    db = client.db(dbName);
-});
+// ---------------- POST Method ---------------- \\
 
 router.post('/add_user', upload.single('displayPicture'), function (req, res) {
     var userForename = req.body.forename;
@@ -45,7 +35,7 @@ router.post('/add_user', upload.single('displayPicture'), function (req, res) {
     var re = /(?:\.([^.]+))?$/;
     var extension = "." + re.exec(req.file.originalname)[1];
 
-    var new_user = {
+    var insertionPromise = new User({
         _id: userEmail,
         forename: userForename,
         surname: userSurname,
@@ -55,15 +45,14 @@ router.post('/add_user', upload.single('displayPicture'), function (req, res) {
         county: userCounty,
         privilege_level: 1,
         display_img_filename: req.body.email.replace(/[^a-zA-Z]/g, "-") + extension
-    };
+    }).save();
 
-    var userPromise = db.collection("users").insertOne(new_user, function (err) {
-        if (err) return console.log(err);
+    insertionPromise.then(function () {
+        console.log("User added to collection")
+    }).catch(function (err) {
+        console.log("User failed to add to collection: " + err)
     });
 
-    Promise.all([userPromise]).then(function () {
-        // TODO: client.close()
-    });
     res.redirect('/')
 });
 

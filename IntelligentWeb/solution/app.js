@@ -11,6 +11,11 @@ const mongoose = require('mongoose');
 
 // -------- Database -------- \\
 
+require('./app/models/user');
+require('./app/models/category');
+require('./app/models/restaurant');
+require('./app/models/review');
+
 const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 

@@ -1,5 +1,5 @@
 ﻿#SingleInstance ignore
 
 ^0::
-	Run, comp.cmd
+	Run, public\stylesheets\compile.cmd
 Return
