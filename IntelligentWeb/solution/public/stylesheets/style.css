@@ -1,6 +1,6 @@
 body {
   font-family: 'Lato', sans-serif;
-  background-color: #f7f7f7;
+  background-color: #fdfdfd;
 }
 h1,
 h2,
@@ -13,8 +13,11 @@ h6 {
 .full-height {
   height: 100%;
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input.no-spinner[type="number"]::-webkit-outer-spin-button,
+input.no-spinner[type="number"]::-webkit-inner-spin-button,
+input.no-spinner[type="time"]::-webkit-outer-spin-button,
+input.no-spinner[type="time"]::-webkit-inner-spin-button,
+input.no-spinner[type="time"]::-webkit-clear-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -216,6 +219,15 @@ footer .footer-right {
 .oi-space {
   margin-right: 10px;
 }
-.form-group.col-md-4.no-margin {
-  margin: 0px;
+input.form-control.opening-times[type="time"] {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+button.btn.btn-default#add-times {
+  width: 100%;
+}
+#restaurant-map {
+  width: 100%;
+  margin-bottom: 30px;
 }

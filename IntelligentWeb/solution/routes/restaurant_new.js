@@ -3,11 +3,25 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoClientObject = require('mongodb').MongoClient;
 const assert = require('assert');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './public/images/restaurant');
+    },
+    filename: function (req, file, callback) {
+        var re = /(?:\.([^.]+))?$/;
+        var extension = "." + re.exec(file.originalname)[1];
+        callback(null, req.body.restaurantName.replace(/[^a-zA-Z]/g, "-") + extension);
+    }
+});
+
+var upload = multer({storage: storage});
 
 router.use(bodyParser.urlencoded({extended: true}));
 
 
-// -------- Database -------- \\
+// ---------------- Database ---------------- \\
 
 var url = "mongodb://localhost:27017/";
 const dbName = "restaurant_critique";
@@ -20,68 +34,58 @@ mongoClientObject.connect(url, function (err, client) {
     db = client.db(dbName);
 });
 
+router.post('/add_restaurant', upload.single('displayPicture'), function (req, res) {
+    var openingTimes = [
+        [req.body.monOpen, req.body.monClose],
+        [req.body.tueOpen, req.body.tueClose],
+        [req.body.wedOpen, req.body.wedClose],
+        [req.body.thuOpen, req.body.thuClose],
+        [req.body.friOpen, req.body.friClose],
+        [req.body.satOpen, req.body.satClose],
+        [req.body.sunOpen, req.body.sunClose]
+    ];
 
-router.post('/add_restaurant', function (req, res) {
-    var resName = req.body.name;
-    var resSuburb = req.body.suburb;
-    var resAddress1 = req.body.address1;
-    var resAddress2 = req.body.address2;
-    var resCity = req.body.city;
-    var resPostcode = req.body.postcode;
-    var resLatitude = 11111111111.2222; //CONNECT TO GOOGLE MAPS
-    var resLongitude = 22222222222.33333; //CONNECT TO GOOGLE MAPS
-    var resPrice_range = req.body.price_range;
-    var resDescription = req.body.description;
-    var resOpening_times = [0,0,0,0,0]; // SOME COMPLICATED MATHS
-    var resPhone = req.body.phone;
-    var resPublished = true;
-    var resDelivery = req.body.delivery;
-    var resTakeout = req.body.takeout;
-    var resParking = req.body.parking;
-    var resWifi = req.body.wifi;
-    var resOutdoor_seating = req.body.outdoor_seating;
-    var resReservations = req.body.reservations;
-    var resCategory = req.body.category;
-    var resImages = req.body.images;
-    var resAverage_rating = 1.0000000001;
-    var resMenu = req.body.menu;
-    var resURL = req.body.url;
-    var resAlcohol = req.body.wifi;
+    var newRestaurant = {
+        name: req.body.restaurantName,
+        address1: req.body.address1,
+        address2: req.body.address2,
+        city: req.body.city,
+        postcode: req.body.postcode,
+        url: req.body.url,
+        phone: req.body.phone,
+        menu: req.body.menu,
+        opening_times: openingTimes,
+        description: req.body.description,
+        price_range: parseInt(req.body.priceRange),
+        category: [req.body.category],
 
+        parking: req.body.parking === 1,
+        wifi: req.body.wifi === 1,
+        takeout :req.body.takeout === 1,
+        delivery:req.body.delivery === 1,
+        outdoor_seating: req.body.outdoorseating === 1,
+        reservations: req.body.reservations === 1,
+        alcohol:req.body.alcohol === 1,
 
-    var new_restaurant = {
-        name: resName,
-        suburb: resSuburb,
-        address1: resAddress1,
-        address2: resAddress2,
-        city: resCity,
-        postcode: resPostcode,
-        latitude:resLatitude,
-        longitude:resLongitude,
-        price_range: resPrice_range,
-        description: resDescription,
-        opening_times: resOpening_times,
-        phone: resPhone,
-        published: resPublished,
-        delivery: resDelivery,
-        takeout: resTakeout,
-        parking: resParking,
-        wifi: resWifi,
-        outdoor_seating: resOutdoor_seating,
-        reservations: resReservations,
-        category: resCategory,
-        images: resImages,
-        average_rating: resAverage_rating,
-        menu: resMenu,
-        url: resURL,
-        alcohol: resAlcohol
+        latitude: 4.20,
+        longitude: 6.9,
+
+        published: true
     };
-    console.log("this is a restaurant");
-    console.log(new_restaurant);
 
-    db.collection("restaurants").insertOne(new_restaurant, function (err, res) {
+    console.log("\n\n#################################################\n\n");
+    console.log(newRestaurant);
+    console.log("\n\n#################################################\n\n");
+
+    Promise.all([db.collection("restaurants").insertOne(newRestaurant, function (err) {
         if (err) return console.log(err);
-    });
+    })])
+        .then(function () {
+            console.log("Restaurant added to collection")
+        })
+        .catch(function () {
+            console.log("Restaurant failed to add to collection")
+        });
     res.redirect('/')
 });
 
