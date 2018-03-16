@@ -24,7 +24,7 @@ mongoClientObject.connect(url, function (err, client) {
         {_id: "Chicken", name: "Chicken"},
         {_id: "Inexpensive", name: "Inexpensive"},
         {_id: "Convenient", name: "Convenient"},
-        {_id: "Portugese", name: "Portugese"},
+        {_id: "Portuguese", name: "Portuguese"},
         {_id: "Spicy", name: "Spicy"},
         {_id: "Burgers", name: "Burgers"},
         {_id: "Casual", name: "Casual"}

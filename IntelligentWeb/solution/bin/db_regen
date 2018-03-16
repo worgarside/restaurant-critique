@@ -20,13 +20,14 @@ mongoClientObject.connect(url, function (err, client) {
     dropPromises.push(db.collection("restaurants").drop());
     dropPromises.push(db.collection("reviews").drop());
 
-    process.stdout.write("Clearing database... ");
+    process.stdout.write("Clearing database..");
     Promise.all(dropPromises)
         .then(function () {
+            console.log("!");
             createCollections(db, client);
         })
         .catch(function () {
-            console.log("(collections not found, continuing)");
+            console.log(". (collections not found, continuing)");
             createCollections(db, client);
         })
 });
@@ -37,15 +38,11 @@ function createCollections(db, client) {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
-                required: ["name", "address1", "city", "category", "published"],
+                required: ["name", "address1", "city", "published"],
                 properties: {
                     name: {
                         bsonType: "string",
                         description: "must be a string and is required"
-                    },
-                    suburb: {
-                        bsonType: "string",
-                        description: "must be a string"
                     },
                     address1: {
                         bsonType: "string",
