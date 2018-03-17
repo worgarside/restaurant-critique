@@ -42,11 +42,17 @@ function initialiseDatabase() {
         });
 }
 
-function populateCollections(conn){
+function populateCollections(conn) {
     var insertPromises = [];
     console.log("Populating collections");
     DatabasePopulation.populateFunction(insertPromises);
-    Promise.all(insertPromises).catch().then(function () {
-        conn.close().catch(function(){console.log("Unable to close connection");})
-    });
+    Promise.all(insertPromises)
+        .catch(function (err) {
+            console.log("Error on population: " + err)
+        })
+        .then(function () {
+            conn.close().catch(function () {
+                console.log("Unable to close connection");
+            })
+        });
 }

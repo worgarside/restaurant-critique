@@ -9,11 +9,12 @@ UserSchema = Schema({
     privilege_level: {type: Number, required: true},
     forename: {type: String, required: true},
     surname: {type: String, required: true},
-    ageCategory: Number,
+    ageCategory: {type: Number, min:0, max: 6},
     county: String,
     reviews: Array,
     display_img_filename: {type: String, unique: true},
-    user_rating: Number
+    user_rating: Number,
+    restaurants: Array
 });
 
 UserSchema.virtual('username').get(function () {

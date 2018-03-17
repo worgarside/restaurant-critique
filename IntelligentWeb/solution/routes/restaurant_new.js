@@ -79,14 +79,15 @@ function submitRestaurant(postcode, location, body) {
         address2: body.address2,
         city: body.city,
         postcode: postcode,
+        latitude: latitude,
+        longitude: longitude,
         url: body.url,
-        phone: body.phone,
         menu: body.menu,
+        phone: body.phone,
         opening_times: openingTimes,
         description: body.description,
         price_range: parseInt(body.priceRange),
         category: [body.category],
-
         parking: body.parking === 1,
         wifi: body.wifi === 1,
         takeout: body.takeout === 1,
@@ -94,16 +95,24 @@ function submitRestaurant(postcode, location, body) {
         outdoor_seating: body.outdoorseating === 1,
         reservations: body.reservations === 1,
         alcohol: body.alcohol === 1,
-
-        latitude: latitude,
-        longitude: longitude,
-
+        owner_id: null,
+        owner_message: null,
+        reviews: [],
+        average_rating: [],
         published: true
     }).save();
 
     // console.log("\n\n############################################\n\n");
     // console.log(newRestaurant);
     // console.log("\n\n############################################\n\n");
+
+    /*
+        FOR ADDING A NEW REVIEW
+        const dateFormat = require('dateformat');
+        var now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
+
+        USE AS IMAGE FILENAME
+     */
 
     insertionPromise.then(function () {
         console.log("Restaurant added to collection")

@@ -1,11 +1,16 @@
-var users, restaurants, reviews, categories;
-users = restaurants = reviews = categories = [];
+const dateFormat = require('dateformat');
+var now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
+console.log(now);
 
-users.push("user1");
 
-console.log(users);
-
-console.log(reviews);
+// var users, restaurants, reviews, categories;
+// users = restaurants = reviews = categories = [];
+//
+// users.push("user1");
+//
+// console.log(users);
+//
+// console.log(reviews);
 
 // function addToList(test_list){
 //     test_list.push('thing1');

@@ -1,4 +1,4 @@
-// ================ Middleware ================ \\
+// -------- Middleware -------- \\
 
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
     Restaurant = mongoose.model('Restaurant'),
     Review = mongoose.model('Review');
 
-// ================ Database ================ \\
+// -------- Database -------- \\
 
 var populateFunction = function populateDatabase(insertPromises) {
     populateUsers(insertPromises);
@@ -23,10 +23,10 @@ function populateUsers(insertPromises) {
         privilege_level: 1,
         forename: "Rufus",
         surname: "Cope",
-        age: 2,
+        ageCategory: 2,
         county: "Shropshire",
-        display_img_filename: "copeyrufus-gmail-com",
         reviews: [],
+        display_img_filename: "copeyrufus-gmail-com",
         user_rating: 0
     }).save());
 
@@ -37,11 +37,12 @@ function populateUsers(insertPromises) {
         privilege_level: 1,
         forename: "Greta",
         surname: "Ramaneckaite",
-        age: 2,
+        ageCategory: 2,
         county: "South Yorkshire",
-        display_img_filename: "greta-veronika-gmail-com",
         reviews: [],
-        user_rating: 0
+        display_img_filename: "greta-veronika-gmail-com",
+        user_rating: 0,
+        restaurants: []
     }).save());
 
     insertPromises.push(new User({
@@ -51,25 +52,40 @@ function populateUsers(insertPromises) {
         privilege_level: 1,
         forename: "Will",
         surname: "Garside",
-        age: 2,
+        ageCategory: 2,
         county: "Cheshire",
-        display_img_filename: "worgarside-gmail-com",
         reviews: [],
-        user_rating: 0
+        display_img_filename: "worgarside-gmail-com",
+        user_rating: 0,
+        restaurants: []
     }).save());
 
+    insertPromises.push(new User({
+        _id: "aslan@chicken-shop.com",
+        email: "aslan@chicken-shop.com",
+        password: "Asl4n",
+        privilege_level: 1,
+        forename: "Aslan",
+        surname: "Chicken",
+        age: 2,
+        county: "South Yorkshire",
+        reviews: [],
+        display_img_filename: "aslan-chicken-shop-com",
+        user_rating: 0,
+        restaurants: ["5aad8b2e6fb09e3a54ea366b"]
+    }).save());
 }
 
 function populateCategories(insertPromises) {
     var categories = [
-        {_id: "FastFood", name: "Fast Food"},
-        {_id: "Chicken", name: "Chicken"},
-        {_id: "Inexpensive", name: "Inexpensive"},
-        {_id: "Convenient", name: "Convenient"},
-        {_id: "Portuguese", name: "Portuguese"},
-        {_id: "Spicy", name: "Spicy"},
-        {_id: "Burgers", name: "Burgers"},
-        {_id: "Casual", name: "Casual"}
+        {name: "Fast Food"},
+        {name: "Chicken"},
+        {name: "Inexpensive"},
+        {name: "Convenient"},
+        {name: "Portuguese"},
+        {name: "Spicy"},
+        {name: "Burgers"},
+        {name: "Casual"}
     ];
 
     for (var i = 0; i < categories.length; i++) {
@@ -79,79 +95,132 @@ function populateCategories(insertPromises) {
 
 function populateRestaurants(insertPromises) {
     insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId("5aad8b2e6fb09e3a54ea366b"),
         name: "Aslan's Kebab",
-        suburb: "Devonshire Quarter",
         address1: "187",
         address2: "West Street",
         city: "Sheffield",
         postcode: "S1 4EW",
-        price_range: 1,
-        description: "Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards",
-        opening_times: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
+        latitude: 53.380002,
+        longitude: -1.480078,
+        // url: null,
+        // menu: null,
         phone: "01144345634",
-        published: true,
-        delivery: false,
-        takeout: true,
+        opening_times: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
+        description: "Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards",
+        price_range: 1,
+        category: ["FastFood", "Chicken", "Convenient", "Inexpensive"],
         parking: false,
         wifi: false,
+        takeout: true,
+        delivery: false,
         outdoor_seating: false,
         reservations: false,
-        category: ["FastFood", "Chicken", "Convenient", "Inexpensive"]
+        alcohol: false,
+        owner_id: "aslan@chicken-shop.com",
+        owner_message: "Please come and buy my chicken, I don't want to close again!",
+        reviews: ["5aad98377888995220605d10", "5aad98377888995220605d0f"],
+        average_rating: null,
+        published: true
     }).save());
 
     insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId("5aad8b2e6fb09e3a54ea366c"),
         name: "Nando's",
-        suburb: "Devonshire Quarter",
         address1: "Royal Plaza Development",
         address2: "West Street",
         city: "Sheffield",
         postcode: "S1 4EZ",
-        price_range: 2,
-        description: "Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.",
-        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
-        phone: "01142780044",
+        latitude: 53.380494,
+        longitude: -1.477221,
         url: "https://www.nandos.co.uk",
-        published: true,
-        delivery: true,
-        takeout: true,
+        menu: "https://www.nandos.co.uk/food/menu",
+        phone: "01142780044",
+        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        description: "Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.",
+        price_range: 2,
+        category: ["Chicken", "Portuguese", "Spicy", "Burgers", "Casual"],
         parking: false,
         wifi: false,
-        alcohol: true,
+        takeout: true,
+        delivery: true,
         outdoor_seating: false,
         reservations: true,
-        category: ["Chicken", "Portuguese", "Spicy", "Burgers", "Casual"]
+        alcohol: true,
+        // owner_id: null,
+        // owner_message: null,
+        reviews: [],
+        // average_rating: null,
+        published: true
     }).save());
 
     insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId("5aad8b2e6fb09e3a54ea366d"),
         name: "Gourmet Burger Kitchen",
-        suburb: "The Moor Quarter",
         address1: "Unit 8",
         address2: "24 The Moor",
         city: "Sheffield",
         postcode: "S1 4PA",
-        price_range: 3,
-        description: "Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.",
-        opening_times: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
-        phone: "0114 275 5154",
+        latitude: 53.377303,
+        longitude: -1.473198,
         url: "https://www.gbk.co.uk",
-        published: true,
-        delivery: true,
-        takeout: true,
+        menu: "https://www.gbk.co.uk/menu",
+        phone: "0114 275 5154",
+        opening_times: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
+        description: "Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.",
+        price_range: 3,
+        category: ["Spicy", "Burgers", "Casual"],
         parking: false,
         wifi: false,
+        takeout: true,
+        delivery: true,
         outdoor_seating: false,
         reservations: true,
-        category: ["Spicy", "Burgers", "Casual"]
+        alcohol: true,
+        // owner_id: null,
+        // owner_message: null,
+        reviews: ["5aad98377888995220605d11"],
+        // average_rating: null,
+        published: true
     }).save());
 }
 
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId("5aad98377888995220605d0f"),
+        restaurant_id: "5aad8b2e6fb09e3a54ea366b",
         title: "Aslan's Sucks",
         body: "I got food poisoning here, don't eat the turkey burgers",
-        author: "greta.veronika@gmail.com",
+        author_id: "greta.veronika@gmail.com",
         datetime: new Date(Date.now()),
-        restaurant_rating: 7
+        images: ["2018-03-17-22-25-18", "2018-03-17-22-26-11"],
+        restaurant_rating: 1,
+        review_rating: 0
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId("5aad98377888995220605d10"),
+        restaurant_id: "5aad8b2e6fb09e3a54ea366b",
+        title: "Greatest Kebab of All Time!!!",
+        body: "This is, without doubt, the GOAT when it comes to kebabs. Even Adnan's doesn't \
+         stand up to the might that is ASLAN'S KEBAB HOUSE!!!",
+        author_id: "copeyrufus@gmail.com",
+        datetime: new Date(Date.now()),
+        images: ["2018-03-17-22-31-42"],
+        restaurant_rating: 5,
+        review_rating: 0
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId("5aad98377888995220605d11"),
+        restaurant_id: "5aad8b2e6fb09e3a54ea366d",
+        title: "Great burger place, gives me tiny hands",
+        body: "The burgers are so big the make my hands feel tiny, phenomenal milkshakes, decent prices - what's not to like?",
+        author_id: "worgarside@gmail.com",
+        datetime: new Date(Date.now()),
+        images: ["2018-03-17-22-34-51"],
+        restaurant_rating: 4,
+        review_rating: 0
     }).save());
 }
 
