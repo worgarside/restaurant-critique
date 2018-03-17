@@ -12,21 +12,26 @@ block content
                 form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-md-6
-                            input#forename.form-control(type='text', name='forename', placeholder='First name', required, autocomplete='given-name')
+                            input#forename.form-control(type='text', name='forename', placeholder='First name',
+                            required, autocomplete='given-name')
                         .form-group.col-md-6
-                            input#surname.form-control(type='text', name='surname', placeholder='Surname', required, autocomplete='family-name')
+                            input#surname.form-control(type='text', name='surname', placeholder='Surname', required,
+                            autocomplete='family-name')
                     .form-row
                         .form-group.col-md-6
                             .form-row
                                 .form-group.col
-                                    input#email.form-control(type='text', name='email', placeholder='Email Address', required, autocomplete='email')
-                            .form-row
-                                .form-group.col
-                                    input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
-                            .form-row
-                                .form-group.col
-                                    input#phone.form-control.no-spinner(type='number', name='phone', placeholder='Mobile Number', autocomplete='tel-national')
+                                    input#email.form-control(type='text', name='email', placeholder='Email Address',
+                                    required, autocomplete='email')
                                     //small We'll never share your personal details with third parties
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='password', placeholder='Password', name='password',
+                                    required, autocomplete='current-password')
+                            .form-row
+                                .form-group.col
+                                    input.form-control(type='password', placeholder='Confirm your password',
+                                    name='passwordConfirm', required, autocomplete='none')
                             .form-row
                                 .form-group.col-md-10
                                     select#age.form-control(name='age')

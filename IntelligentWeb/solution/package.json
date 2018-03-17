@@ -8,6 +8,7 @@
   "dependencies": {
     "@google/maps": "^0.4.5",
     "angular": "^1.6.9",
+    "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
     "bootstrap": "^4.0.0",
     "cookie-parser": "~1.4.3",
@@ -23,6 +24,7 @@
     "open-iconic": "^1.1.1",
     "popper.js": "^1.14.1",
     "pug": "^2.0.1",
-    "serve-favicon": "^2.4.5"
+    "serve-favicon": "^2.4.5",
+    "update": "^0.7.4"
   }
 }

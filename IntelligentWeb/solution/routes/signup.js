@@ -24,28 +24,23 @@ const upload = multer({storage: storage});
 // ---------------- POST Method ---------------- \\
 
 router.post('/add_user', upload.single('displayPicture'), function (req, res) {
-    var userForename = req.body.forename;
-    var userSurname = req.body.surname;
-    var userEmail = req.body.email;
-    var userPassword = req.body.password;
-    var userPhone = req.body.phone;
-    var userAge = req.body.age;
-    var userCounty = req.body.county;
-
     var re = /(?:\.([^.]+))?$/;
-    var extension = "." + re.exec(req.file.originalname)[1];
+    var imgExtension = "." + re.exec(req.file.originalname)[1];
+
+    // passwordConfirm: req.body.passwordConfirm,
 
     var insertionPromise = new User({
-        _id: userEmail,
-        forename: userForename,
-        surname: userSurname,
-        password: userPassword,
-        phone: userPhone,
-        age: userAge,
-        county: userCounty,
+        _id: req.body.email,
+        forename: req.body.forename,
+        surname: req.body.surname,
+        password: req.body.password,
+        age: req.body.age,
+        county: req.body.county,
         privilege_level: 1,
-        display_img_filename: req.body.email.replace(/[^a-zA-Z]/g, "-") + extension
+        display_img_filename: req.body.email.replace(/[^a-zA-Z]/g, "-") + imgExtension
     }).save();
+
+    
 
     insertionPromise.then(function () {
         console.log("User added to collection")

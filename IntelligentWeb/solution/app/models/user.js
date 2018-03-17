@@ -1,4 +1,6 @@
-var mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
 
 UserSchema = Schema({
     _id: {type: String},
@@ -15,6 +17,17 @@ UserSchema = Schema({
 
 UserSchema.virtual('email').get(function () {
     return this._id;
+});
+
+UserSchema.pre('save', function (next) {
+    var user = this;
+    bcrypt.hash(user.password, 10, function (err, hash){
+        if (err) {
+            return next(err);
+        }
+        user.password = hash;
+        next();
+    })
 });
 
 mongoose.model('User', UserSchema);
