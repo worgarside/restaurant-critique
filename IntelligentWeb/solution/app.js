@@ -8,8 +8,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-// -------- Database -------- \\
+// ---------------- Database ---------------- \\
 
 require('./app/models/user');
 require('./app/models/category');
@@ -25,7 +27,7 @@ mongoose.connect(url + "/" + dbName).then(function () {
     console.log("Failed to connect to DB: " + err)
 });
 
-// -------- View Engine -------- \\
+// ---------------- View Engine ---------------- \\
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -35,24 +37,30 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 
-// -------- Routes -------- \\
+// ---------------- Routes ---------------- \\
 
 var index = require('./routes/index');
 var signup = require('./routes/signup');
 var restaurantNew = require('./routes/restaurant_new');
-var users = require('./routes/users');
 
 app.use('/', index);
 app.use('/signup', signup);
 app.use('/restaurant/new', restaurantNew);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -71,5 +79,12 @@ app.use(function (err, req, res) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+// ---------------- Passport ---------------- \\
+
+var Account = require('./app/models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 module.exports = app;

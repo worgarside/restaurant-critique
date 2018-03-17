@@ -1,49 +1,60 @@
 extends layout
 
-block header
-    #index-head
-        .container.vert-center-parent
-            .row.vert-center-child
-                .col-md-12
-
-                    form#index-search-form
-                        #main-logo
-                        .input-group#index-search-group
-                            .input-group-prepend
-                                select.btn
-                                    option(value='', selected) Quick Filter
-                                    optgroup(label='Cuisine')
-                                        option Italian
-                                        option Asian
-                                        option French
-                                        option American
-                                        option British
-                                    optgroup(label='Price Range')
-                                        option £
-                                        option ££
-                                        option £££
-                            input.form-control.no-border(type='text', placeholder='Search by Cuisine, Keyword, Location, ...', aria-label='Text input with dropdown button')
-                            .input-group-append
-                                button.btn
-                                    span.oi.oi-magnifying-glass(aria-hidden='true')
-
 block content
-    br
-    .container
-        .row
-            .col-md-4
-                h5.text-center
-                    span.oi.oi-check.oi-space(aria-hidden='true')
-                    | Find the best restaurants
-                img.index-image.img-thumbnail(src="/images/site/sheffield-centre-scaled.jpg" alt="Sheffield centre")
-            //    TODO: Scale images to be the same ratio, then fit the CSS to that ratio to avoid stretching - GR
-            .col-md-4
-                h5.text-center
-                    span.oi.oi-thumb-up.oi-space(aria-hidden='true')
-                    | Contribute your reviews
-                img.index-image.img-thumbnail(src="/images/site/rate-restaurant-scaled.jpg" alt="")
-            .col-md-4
-                h5.text-center
-                    span.oi.oi-magnifying-glass.oi-space(aria-hidden='true')
-                    | Search by cuisine type
-                img.index-image.img-thumbnail(src='/images/site/cuisine-search-scaled.jpg' alt='Pizza')
+
+    if (!user)
+        a(href="/login") Login
+        br
+        a(href="/register") Register
+    if (user)
+        p You are currently logged in as #{user.username}
+        a(href="/logout") Logout
+
+    //block header
+    //    #index-head
+    //        .container.vert-center-parent
+    //            .row.vert-center-child
+    //                .col-md-12
+    //
+    //                    form#index-search-form
+    //                        #main-logo
+    //                        .input-group#index-search-group
+    //                            .input-group-prepend
+    //                                select.btn
+    //                                    option(value='', selected) Quick Filter
+    //                                    optgroup(label='Cuisine')
+    //                                        option Italian
+    //                                        option Asian
+    //                                        option French
+    //                                        option American
+    //                                        option British
+    //                                    optgroup(label='Price Range')
+    //                                        option £
+    //                                        option ££
+    //                                        option £££
+    //                            input.form-control.no-border(type='text', placeholder='Search by Cuisine, Keyword, Location, ...', aria-label='Text input with dropdown button')
+    //                            .input-group-append
+    //                                button.btn
+    //                                    span.oi.oi-magnifying-glass(aria-hidden='true')
+
+
+    //block content
+        //br
+        //.container
+        //    .row
+        //        .col-md-4
+        //            h5.text-center
+        //                span.oi.oi-check.oi-space(aria-hidden='true')
+        //                | Find the best restaurants
+        //            img.index-image.img-thumbnail(src="/images/site/sheffield-centre-scaled.jpg" alt="Sheffield centre")
+        //        //    TODO: Scale images to be the same ratio, then fit the CSS to that ratio to avoid stretching - GR
+        //        .col-md-4
+        //            h5.text-center
+        //                span.oi.oi-thumb-up.oi-space(aria-hidden='true')
+        //                | Contribute your reviews
+        //            img.index-image.img-thumbnail(src="/images/site/rate-restaurant-scaled.jpg" alt="")
+        //        .col-md-4
+        //            h5.text-center
+        //                span.oi.oi-magnifying-glass.oi-space(aria-hidden='true')
+        //                | Search by cuisine type
+        //            img.index-image.img-thumbnail(src='/images/site/cuisine-search-scaled.jpg' alt='Pizza')
