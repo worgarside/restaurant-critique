@@ -18,6 +18,7 @@ var populateFunction = function populateDatabase(insertPromises) {
 function populateUsers(insertPromises) {
     insertPromises.push(new User({
         _id: "copeyrufus@gmail.com",
+        email: "copeyrufus@gmail.com",
         password: "Caddy1",
         privilege_level: 1,
         forename: "Rufus",
@@ -31,6 +32,7 @@ function populateUsers(insertPromises) {
 
     insertPromises.push(new User({
         _id: "greta.veronika@gmail.com",
+        email: "greta.veronika@gmail.com",
         password: "Vodka2",
         privilege_level: 1,
         forename: "Greta",
@@ -44,6 +46,7 @@ function populateUsers(insertPromises) {
 
     insertPromises.push(new User({
         _id: "worgarside@gmail.com",
+        email: "worgarside@gmail.com",
         password: "Passw3rd",
         privilege_level: 1,
         forename: "Will",

@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const flash    = require('connect-flash');
 
 require('./config/passport')(passport);
 
@@ -23,7 +24,7 @@ const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
 mongoose.connect(url + "/" + dbName).then(function () {
-    console.log("Successfully connected to " + url + "/" + dbName)
+    console.log("Connected to " + url + "/" + dbName)
 }).catch(function (err) {
     console.log("Failed to connect to DB: " + err)
 });
@@ -43,6 +44,7 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));

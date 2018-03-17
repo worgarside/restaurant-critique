@@ -48,15 +48,19 @@ html(lang='en')
                     li.nav-item
                         a.nav-link.nav-wide(href='#') Recommendations
 
-                ul.navbar-nav
-                    li.nav-item
-                        a.nav-link.nav-thin#btn-login Login
-                    li.nav-item
-                        a.nav-link.nav-thin(href='/signup') Sign Up
+                ul.navbar-nav.row
+                    if (!user)
+                        li.nav-item
+                            a.nav-link.nav-thin#btn-login Login
+                        li.nav-item
+                            a.nav-link.nav-thin(href='/signup') Sign Up
+                    else
+                        li.nav-item
+                            a.nav-link.nav-thin(href='/logout') Logout
 
             #login-form(style='display: none;')
                 .container
-                    form(method="POST")
+                    form(method="post", action='/login')
                         .form-row
                             .form-group.col
                                 input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')

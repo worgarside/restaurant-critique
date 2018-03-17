@@ -13,20 +13,25 @@ module.exports = function (passport) {
         function (req, email, password, done) {
             process.nextTick(function () {
                 User.findOne({'email': email}, function (err, user) {
-                    if (err)
+                    if (err) {
+                        console.log("Error1: " + err);
                         return done(err);
+                    }
 
-                    if (!user)
+                    if (!user) {
+                        console.log("Error2 - user = " + user);
                         return done(null, false, req.flash('loginMessage', 'No user found.'));
+                    }
 
-                    if (!user.validPassword(password))
+                    if (!user.validPassword(password)) {
+                        console.log("Invalid password");
                         return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                    }
 
-                    else
-                        return done(null, user);
+                    console.log("User verified, logging in");
+                    return done(null, user);
                 });
             });
-
         }));
 
     passport.use('signup-local', new LocalStrategy({
@@ -38,8 +43,10 @@ module.exports = function (passport) {
             process.nextTick(function () {
                 if (!req.user) {
                     User.findOne({'email': email}, function (err, user) {
-                        if (err)
-                            console.log(err);//return done(err);
+                        if (err){
+                            console.log(err);
+                            return done(err);
+                        }
 
                         if (user) {
                             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
@@ -67,7 +74,6 @@ module.exports = function (passport) {
                                 return done(null, newUser);
                             });
                         }
-
                     });
                 } else {
                     return done(null, req.user);
@@ -84,7 +90,5 @@ module.exports = function (passport) {
             done(err, user);
         });
     });
-
-
-}
+};
 

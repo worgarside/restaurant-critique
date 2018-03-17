@@ -16,9 +16,9 @@ UserSchema = Schema({
     user_rating: Number
 });
 
-// UserSchema.virtual('email').get(function () {
-//     return this._id;
-// });
+UserSchema.virtual('username').get(function () {
+    return this.email;
+});
 
 UserSchema.pre('save', function (next) {
     var user = this;
