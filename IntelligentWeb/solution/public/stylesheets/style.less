@@ -22,7 +22,7 @@ input.no-spinner[type="number"]::-webkit-outer-spin-button,
 input.no-spinner[type="number"]::-webkit-inner-spin-button,
 input.no-spinner[type="time"]::-webkit-outer-spin-button,
 input.no-spinner[type="time"]::-webkit-inner-spin-button,
-input.no-spinner[type="time"]::-webkit-clear-button{
+input.no-spinner[type="time"]::-webkit-clear-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -30,8 +30,6 @@ input.no-spinner[type="time"]::-webkit-clear-button{
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
-
 
 .vert-center-parent {
   display: table;
@@ -148,11 +146,17 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   height: unit(@navbar-height, px);
   width: unit(@navbar-height, px);
   position: absolute;
-  display: none;
   padding: 5px;
+  &-anim {
+    height: unit(@navbar-height, px);
+    width: unit(@navbar-height, px);
+    position: absolute;
+    padding: 5px;
+    display: none;
+  }
 }
 
-#nav-logo img {
+#nav-logo-anim img, #nav-logo img {
   max-width: 100%;
   max-height: 100%;
 }
@@ -277,7 +281,7 @@ footer {
   height: 200px;
 }
 
-.oi-space{
+.oi-space {
   margin-right: 10px;
 }
 
@@ -290,11 +294,11 @@ input.form-control.opening-times[type="time"] {
   padding-right: 0;
 }
 
-button.btn.btn-default#add-times{
+button.btn.btn-default#add-times {
   width: 100%;
 }
 
-#restaurant-map{
+#restaurant-map {
   width: 100%;
   margin-bottom: 30px;
 }

@@ -8,8 +8,8 @@
 ### Task List
 - [x] Database creation 
 - [ ] Restaurant Object
-- [ ] User creation/signup
-- [ ] Login management
+- [x] User creation/signup
+- [x] Login management
 - [ ] Administrator privileges
 - [ ] Dynamic restaurant view page
 - [ ] Review input and structure

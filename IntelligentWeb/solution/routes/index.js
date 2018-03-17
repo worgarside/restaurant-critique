@@ -11,31 +11,31 @@ router.use(bodyParser.urlencoded({extended: true}));
 // ================ GET Statements ================ \\
 
 router.get('/', function (req, res) {
-    res.render('index', {title: title, user: req.user});
+    res.render('index', {title: title, user: req.user, animateLogo: true});
 });
 
 router.get('/contact', function (req, res) {
-    res.render('contact', {title: title});
+    res.render('contact', {title: title, user: req.user});
 });
 
 router.get('/signup', function (req, res) {
-    res.render('signup', {title: title});
+    res.render('signup', {title: title, user: req.user});
 });
 
 router.get('/search', function (req, res) {
-    res.render('search', {title: title});
+    res.render('search', {title: title, user: req.user});
 });
 
 router.get('/about', function (req, res) {
-    res.render('about', {title: title});
+    res.render('about', {title: title, user: req.user});
 });
 
 router.get('/accessibility', function (req, res) {
-    res.render('accessibility', {title: title});
+    res.render('accessibility', {title: title, user: req.user});
 });
 
 router.get('/restaurant/new', function (req, res) {
-    res.render('restaurant_new', {title: title});
+    res.render('restaurant_new', {title: title, user: req.user});
 });
 
 router.get('/logout', function (req, res) {

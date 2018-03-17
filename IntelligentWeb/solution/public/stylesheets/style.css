@@ -124,9 +124,16 @@ a.nav-link.nav-thin#btn-login:hover {
   height: 58px;
   width: 58px;
   position: absolute;
-  display: none;
   padding: 5px;
 }
+#nav-logo-anim {
+  height: 58px;
+  width: 58px;
+  position: absolute;
+  padding: 5px;
+  display: none;
+}
+#nav-logo-anim img,
 #nav-logo img {
   max-width: 100%;
   max-height: 100%;
