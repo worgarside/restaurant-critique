@@ -32,8 +32,6 @@ UserSchema.methods.validPassword = function (password) {
 
 function generateHash(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
-
-
+}
 
 module.exports = mongoose.model('User', UserSchema);

@@ -1,3 +1,5 @@
+// ================ Middleware ================ \\
+
 const express = require('express');
 const router = express.Router();
 const title = 'Restaurant Critique';
@@ -6,7 +8,8 @@ const passport = require('passport');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
-/* GET home page. */
+// ================ GET Statements ================ \\
+
 router.get('/', function (req, res) {
     res.render('index', {title: title, user: req.user});
 });
@@ -35,6 +38,13 @@ router.get('/restaurant/new', function (req, res) {
     res.render('restaurant_new', {title: title});
 });
 
+router.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+// ================ POST Statements ================ \\
+
 router.post('/login', function (req, res, next) {
     passport.authenticate('login-local', function (err, user) {
         if (err) {
@@ -51,11 +61,6 @@ router.post('/login', function (req, res, next) {
             return res.redirect('/');
         });
     })(req, res, next);
-});
-
-router.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
 });
 
 module.exports = router;

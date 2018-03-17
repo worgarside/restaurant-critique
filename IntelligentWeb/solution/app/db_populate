@@ -1,4 +1,4 @@
-// -------- Middleware -------- \\
+// ================ Middleware ================ \\
 
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
     Restaurant = mongoose.model('Restaurant'),
     Review = mongoose.model('Review');
 
-// -------- Database -------- \\
+// ================ Database ================ \\
 
 var populateFunction = function populateDatabase(insertPromises) {
     populateUsers(insertPromises);

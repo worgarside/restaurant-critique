@@ -1,4 +1,4 @@
-// ---------------- Middleware ---------------- \\
+// ================ Middleware ================ \\
 
 const express = require('express');
 const path = require('path');
@@ -13,7 +13,7 @@ const flash    = require('connect-flash');
 
 require('./config/passport')(passport);
 
-// ---------------- Database ---------------- \\
+// ================ Database ================ \\
 
 require('./app/models/user');
 require('./app/models/category');
@@ -29,7 +29,7 @@ mongoose.connect(url + "/" + dbName).then(function () {
     console.log("Failed to connect to DB: " + err)
 });
 
-// ---------------- View Engine ---------------- \\
+// ================ View Engine ================ \\
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -49,13 +49,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 
-// ---------------- Routes ---------------- \\
+// ================ Routes ================ \\
 
 var index = require('./routes/index');
 var signup = require('./routes/signup');

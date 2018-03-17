@@ -1,4 +1,4 @@
-// -------- Middleware -------- \\
+// ================ Middleware ================ \\
 
 const mongoose = require('mongoose');
 require('../app/models/user');
@@ -7,13 +7,13 @@ require('../app/models/restaurant');
 require('../app/models/review');
 var DatabasePopulation = require('../app/db_populate');
 
-// -------- Database -------- \\
+// ================ Database ================ \\
 
 const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
 mongoose.connect(url + "/" + dbName).then(function () {
-    console.log("Successfully connected to " + url + "/" + dbName);
+    console.log("Connected to " + url + "/" + dbName);
     initialiseDatabase();
 }).catch(function (err) {
     console.log("Failed to connect to DB: " + err);
@@ -28,27 +28,25 @@ function initialiseDatabase() {
 
     var dropPromises = [];
 
+    console.log("Dropping database");
     for (var i = 0; i < collections.length; i++) {
         dropPromises.push(db.dropCollection(collections[i]));
     }
 
-    var insertPromises = [];
-
-    // noinspection NodeModulesDependencies
     Promise.all(dropPromises)
         .then(function () {
-            DatabasePopulation.populateFunction(insertPromises);
-            // noinspection NodeModulesDependencies
-            Promise.all(insertPromises).catch().then(function () {
-                conn.close()
-            });
+            populateCollections(conn);
         })
         .catch(function () {
-            DatabasePopulation.populateFunction(insertPromises);
-            // noinspection NodeModulesDependencies
-            Promise.all(insertPromises).catch().then(function () {
-                conn.close()
-            });
+            populateCollections(conn);
         });
 }
 
+function populateCollections(conn){
+    var insertPromises = [];
+    console.log("Populating collections");
+    DatabasePopulation.populateFunction(insertPromises);
+    Promise.all(insertPromises).catch().then(function () {
+        conn.close().catch(function(){console.log("Unable to close connection");})
+    });
+}

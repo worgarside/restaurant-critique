@@ -1,4 +1,4 @@
-// ---------------- Middleware ---------------- \\
+// ================ Middleware ================ \\
 
 const express = require('express');
 const router = express.Router();
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
-// ---------------- POST Method ---------------- \\
+// ================ POST Method ================ \\
 
 router.post('/add_restaurant', upload.single('displayPicture'), function (req, res) {
 

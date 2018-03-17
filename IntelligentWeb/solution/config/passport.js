@@ -1,7 +1,9 @@
-// ---------------- Middleware ---------------- \\
+// ================ Middleware ================ \\
 
 const LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
+
+// ================ Passport ================ \\
 
 module.exports = function (passport) {
 
