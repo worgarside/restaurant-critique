@@ -1,4 +1,4 @@
-// -------- Middleware -------- \\
+// ---------------- Middleware ---------------- \\
 
 const express = require('express');
 const path = require('path');
@@ -9,7 +9,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+
+require('./config/passport')(passport);
 
 // ---------------- Database ---------------- \\
 
@@ -33,7 +34,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(favicon(path.join(__dirname, 'public/images/favicon.ico')));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -80,11 +81,5 @@ app.use(function (err, req, res) {
     res.render('error');
 });
 
-// ---------------- Passport ---------------- \\
-
-var Account = require('./app/models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
 
 module.exports = app;
