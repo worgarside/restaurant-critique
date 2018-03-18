@@ -24,9 +24,10 @@ const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
 mongoose.connect(url + "/" + dbName).then(function () {
-    console.log("Connected to " + url + "/" + dbName)
+    console.log("Connected to " + url + "/" + dbName);
 }).catch(function (err) {
-    console.log("Failed to connect to DB: " + err)
+    console.log("Failed to connect to DB: " + err);
+    process.exit(1);
 });
 
 // ================ View Engine ================ \\
@@ -59,12 +60,15 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-icon
 var index = require('./routes/index');
 var signup = require('./routes/signup');
 var restaurantNew = require('./routes/restaurant_new');
+var restaurantsNearby = require('./routes/restaurants_nearby');
 
 app.use('/', index);
 app.use('/signup', signup);
 app.use('/restaurant/new', restaurantNew);
+app.use('/restaurants-nearby', restaurantsNearby);
 
 // catch 404 and forward to error handler
+// TODO: create a real 404 page
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;

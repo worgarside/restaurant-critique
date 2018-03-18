@@ -5,7 +5,6 @@ $(function() {
 // ----------- Login Form ----------- \\
 
 function setLoginFormPosition(){
-    console.log(userLoggedIn);
     if (!userLoggedIn){
         var form = $('#login-form');
         var btn = $('#btn-login');

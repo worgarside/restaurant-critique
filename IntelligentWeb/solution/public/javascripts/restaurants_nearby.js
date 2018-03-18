@@ -8,7 +8,7 @@ $(function () {
 });
 
 function getUserLocation() {
-    console.log("Tell me where you are");
+    // console.log("Tell me where you are");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(createMap);
     } else {
@@ -20,7 +20,7 @@ function createMap(position) {
     lat = position.coords.latitude;
     lng = position.coords.longitude;
     var currentLocation = {lat: lat, lng: lng};
-    console.log("Create the map @ " + currentLocation.lat + ", " + currentLocation.lng);
+    // console.log("Create the map @ " + currentLocation.lat + ", " + currentLocation.lng);
     var map = new google.maps.Map($('#nearby-map')[0], {
         zoom: 14,
         center: currentLocation
@@ -54,8 +54,33 @@ function createMap(position) {
 }
 
 function updateList() {
-    console.log(lat);
-    console.log(lng);
+    // console.log(lat);
+    // console.log(lng);
+
+    var coordinates = JSON.stringify({lat: lat, lng:lng});
+    console.log(coordinates);
+
+    $.ajax({
+        url: '/restaurants-nearby',
+        data: coordinates,
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            // no need to JSON parse the result, as we are using
+            // dataType:json, so JQuery knows it and unpacks the
+            // object for us before returning it
+            // var ret = dataR;
+
+            // in order to have the object printed by alert
+            // we need to JSON stringify the object
+            console.log(dataR);
+            $('#results')[0].innerHTML = JSON.stringify(dataR);
+        },
+        error: function (xhr, status, error) {
+            alert('Error: ' + error.message);
+        }
+    });
 
     // Restaurant.aggregate([{
     //         "$geoNear": {
