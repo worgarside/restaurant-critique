@@ -38,8 +38,8 @@ router.get('/restaurant/new', function (req, res) {
     res.render('restaurant_new', {title: title, user: req.user});
 });
 
-router.get('/nearby', function (req, res) {
-    res.render('restaurant_new', {title: title, user: req.user});
+router.get('/restaurants-nearby', function (req, res) {
+    res.render('restaurants_nearby', {title: title, user: req.user});
 });
 
 router.get('/logout', function (req, res) {

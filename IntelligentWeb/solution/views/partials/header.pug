@@ -1,0 +1,46 @@
+block header
+    #non-index-head
+    //- Purposefully empty, this allows the custom index header to be added in-page
+
+block navbar
+    nav.navbar.navbar-expand-sm.sticky
+        ul.navbar-nav.mr-auto
+            if animateLogo
+                li
+                    a#nav-logo-anim(href='/')
+                        img(src="/images/site/logo-square-white.png")
+                li.nav-item#first-nav-item
+                    a.nav-link.nav-wide(href='/restaurants-nearby') Restaurants near Me
+            else
+                li
+                    a#nav-logo(href='/')
+                        img(src="/images/site/logo-square-white.png")
+                li.nav-item(style='margin-left: 60px;')
+                    a.nav-link.nav-wide(href='/restaurants-nearby') Restaurants near Me
+            li.nav-item
+                a.nav-link.nav-wide(href='#') Write a Review
+            li.nav-item
+                a.nav-link.nav-wide(href='#') Recommendations
+
+        ul.navbar-nav.row
+            if (!user)
+                li.nav-item
+                    a.nav-link.nav-thin#btn-login Login
+                li.nav-item
+                    a.nav-link.nav-thin(href='/signup') Sign Up
+            else
+                li.nav-item
+                    a.nav-link.nav-thin(href='/logout') Logout
+
+    #login-form(style='display: none;')
+        .container
+            form(method="post", action='/login')
+                .form-row
+                    .form-group.col
+                        input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
+                .form-row
+                    .form-group.col
+                        input.login-form-input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
+                .form-row
+                    .form-group.col
+                        button.btn.login-form-btn(onclick="console.log('Log In Button');") Log In

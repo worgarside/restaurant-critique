@@ -9,6 +9,7 @@ h4,
 h5,
 h6 {
   font-family: 'Roboto', sans-serif;
+  font-weight: 300;
 }
 .full-height {
   height: 100%;
@@ -237,4 +238,9 @@ button.btn.btn-default#add-times {
 #restaurant-map {
   width: 100%;
   margin-bottom: 30px;
+}
+#nearby-map {
+  height: 400px;
+  width: 80%;
+  margin: 0 auto;
 }

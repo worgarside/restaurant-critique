@@ -1,3 +1,22 @@
-extends layout
+extends partials/layout
 
 block content
+    br
+    .container
+        .row
+            .col
+                h1 Find Restaurants Near You
+        .row
+            .col
+                #nearby-map
+        .row
+            .col
+                button#updateList(onclick="updateList();") Refresh
+        .row
+            .col
+                include partials/restaurant_preview
+
+                block restaurantPreview
+
+    script(type='text/javascript', src = '/javascripts/restaurants_nearby.js')
+    script(async, defer, src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
