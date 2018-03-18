@@ -35,10 +35,18 @@ function initialiseDatabase() {
 
     Promise.all(dropPromises)
         .then(function () {
-            populateCollections(conn);
+            db.collection('restaurants').createIndex({location: "2dsphere"}).catch(function(){
+                console.log('Index failed');
+            }).then(function(){
+                populateCollections(conn);
+            });
         })
         .catch(function () {
-            populateCollections(conn);
+            db.collection('restaurants').createIndex({location: "2dsphere"}).catch(function(){
+                console.log('Index failed');
+            }).then(function(){
+                populateCollections(conn);
+            });
         });
 }
 

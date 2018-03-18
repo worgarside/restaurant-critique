@@ -57,7 +57,7 @@ function updateList() {
     // console.log(lat);
     // console.log(lng);
 
-    var coordinates = JSON.stringify({lat: lat, lng:lng});
+    var coordinates = JSON.stringify({lat: lat, lng: lng});
     console.log(coordinates);
 
     $.ajax({
@@ -66,41 +66,15 @@ function updateList() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         type: 'POST',
-        success: function (dataR) {
-            // no need to JSON parse the result, as we are using
-            // dataType:json, so JQuery knows it and unpacks the
-            // object for us before returning it
-            // var ret = dataR;
-
-            // in order to have the object printed by alert
-            // we need to JSON stringify the object
+        success: [function callback (dataR) {
+            // callback1 - can use an array of CBs and iterate through
             console.log(dataR);
             $('#results')[0].innerHTML = JSON.stringify(dataR);
-        },
+        }],
         error: function (xhr, status, error) {
             alert('Error: ' + error.message);
         }
     });
-
-    // Restaurant.aggregate([{
-    //         "$geoNear": {
-    //             "near": {
-    //                 "type": "Point",
-    //                 "coordinates": [-1.4960387, 53.386666]
-    //             },
-    //             "distanceField":
-    //                 "distance",
-    //             "spherical":
-    //                 true,
-    //             "maxDistance":
-    //                 10000
-    //         }
-    //     }],
-    //
-    //     function (err, results) {
-    //         console.log(results);
-    //     }
-    // );
 }
 
 // Placeholder function to stop GMaps error on load
