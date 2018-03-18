@@ -1,3 +1,6 @@
+// const mongoose = require('mongoose');
+// const Restaurant = mongoose.model('Restaurant');
+
 var lat, lng;
 
 $(function () {
@@ -53,9 +56,31 @@ function createMap(position) {
 function updateList() {
     console.log(lat);
     console.log(lng);
+
+    // Restaurant.aggregate([{
+    //         "$geoNear": {
+    //             "near": {
+    //                 "type": "Point",
+    //                 "coordinates": [-1.4960387, 53.386666]
+    //             },
+    //             "distanceField":
+    //                 "distance",
+    //             "spherical":
+    //                 true,
+    //             "maxDistance":
+    //                 10000
+    //         }
+    //     }],
+    //
+    //     function (err, results) {
+    //         console.log(results);
+    //     }
+    // );
 }
 
 // Placeholder function to stop GMaps error on load
 function initMap() {
     console.log("Map loaded");
 }
+
+

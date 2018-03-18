@@ -1,4 +1,5 @@
 extends partials/layout
+include partials/restaurant_preview
 
 block content
     br
@@ -14,9 +15,7 @@ block content
                 button#updateList(onclick="updateList();") Refresh
         .row
             .col
-                include partials/restaurant_preview
-
-                block restaurantPreview
+                +restaurantPreview("A Restaurant's Name")
 
     script(type='text/javascript', src = '/javascripts/restaurants_nearby.js')
     script(async, defer, src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

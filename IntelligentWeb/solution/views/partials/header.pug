@@ -24,23 +24,26 @@ block navbar
 
         ul.navbar-nav.row
             if (!user)
+                script var userLoggedIn = false // TODO: could do with passing req.user to js directly
                 li.nav-item
                     a.nav-link.nav-thin#btn-login Login
                 li.nav-item
                     a.nav-link.nav-thin(href='/signup') Sign Up
             else
+                script var userLoggedIn = true
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 
-    #login-form(style='display: none;')
-        .container
-            form(method="post", action='/login')
-                .form-row
-                    .form-group.col
-                        input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
-                .form-row
-                    .form-group.col
-                        input.login-form-input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
-                .form-row
-                    .form-group.col
-                        button.btn.login-form-btn(onclick="console.log('Log In Button');") Log In
+    if (!user)
+        #login-form(style='display: none;')
+            .container
+                form(method="post", action='/login')
+                    .form-row
+                        .form-group.col
+                            input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
+                    .form-row
+                        .form-group.col
+                            input.login-form-input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
+                    .form-row
+                        .form-group.col
+                            button.btn.login-form-btn Log In

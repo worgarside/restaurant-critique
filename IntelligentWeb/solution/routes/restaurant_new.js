@@ -73,7 +73,7 @@ function submitRestaurant(postcode, location, body) {
     var latitude = location.lat;
     var longitude = location.lng;
 
-    var insertionPromise = new Restaurant({
+    new Restaurant({
         name: body.restaurantName,
         address1: body.address1,
         address2: body.address2,
@@ -100,7 +100,11 @@ function submitRestaurant(postcode, location, body) {
         reviews: [],
         average_rating: [],
         published: true
-    }).save();
+    }).save().then(function () {
+        console.log("Restaurant added to collection")
+    }).catch(function (err) {
+        console.log("Restaurant failed to add to collection: " + err)
+    });
 
     // console.log("\n\n############################################\n\n");
     // console.log(newRestaurant);
@@ -113,12 +117,6 @@ function submitRestaurant(postcode, location, body) {
 
         USE AS IMAGE FILENAME
      */
-
-    insertionPromise.then(function () {
-        console.log("Restaurant added to collection")
-    }).catch(function (err) {
-        console.log("Restaurant failed to add to collection: " + err)
-    });
 }
 
 module.exports = router;
