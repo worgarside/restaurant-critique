@@ -24,6 +24,7 @@ const upload = multer({storage: storage});
 // ================ POST Method ================ \\
 
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
+    console.log("Geocoding postcode...");
 
     const postcode = req.body.postcode;
 
@@ -32,6 +33,7 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     });
 
     let gmapsPromise = new Promise((resolve, reject) => {
+        console.log('searching');
         googleMaps.geocode({
             address: postcode
         }, (err, response) => {
@@ -39,21 +41,39 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
                 console.log(`Geocode Error: ${err}`);
                 reject();
             } else {
-                resolve(response.json.results[0].geometry.location);
+                const locationData = response.json.results[0].geometry.location;
+                console.log(`Coordinates found: ${locationData}`);
+                resolve(locationData);
             }
         })
     });
 
-    gmapsPromise.then((location) => {
-        submitRestaurant(postcode, location, req.body)
-    }).catch((err) => {
-        console.log(`Error: ${err}`);
+
+    // Create a promise that rejects in <ms> milliseconds
+    let timeoutPromise = new Promise((resolve, reject) => {
+        let timer = setTimeout(() => {
+            clearTimeout(timer);
+            reject('Geocode request timed out.')
+        }, 10000)
     });
+
+    Promise.race([gmapsPromise, timeoutPromise])
+        .then((location) => {
+            submitRestaurant(postcode, location, req.body);
+            console.log(location);
+        })
+        .catch((err) => {
+            console.log(`Error: ${err} Submitting location @ (0, 0)`);
+            submitRestaurant(postcode, { lat: 0.000000001, lng: 0.000000001 }, req.body)
+            // TODO: find out why you can't submit 0 as a number to MongoDB?!
+        });
+
 
     res.redirect('/')
 });
 
 function submitRestaurant(postcode, location, body) {
+    console.log("Submitting restaurant");
     /**
      * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
          monClose:int, tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int,
@@ -70,17 +90,14 @@ function submitRestaurant(postcode, location, body) {
         [body.sunOpen, body.sunClose]
     ];
 
-    const latitude = location.lat;
-    const longitude = location.lng;
-
     new Restaurant({
         name: body.restaurantName,
         address1: body.address1,
         address2: body.address2,
         city: body.city,
         postcode: postcode,
-        latitude: latitude,
-        longitude: longitude,
+        latitude: location.lat,
+        longitude: location.lng,
         url: body.url,
         menu: body.menu,
         phone: body.phone,
@@ -98,7 +115,7 @@ function submitRestaurant(postcode, location, body) {
         owner_id: null,
         owner_message: null,
         reviews: [],
-        average_rating: [],
+        average_rating: null,
         published: true
     }).save().then(() => {
         console.log("Restaurant added to collection")

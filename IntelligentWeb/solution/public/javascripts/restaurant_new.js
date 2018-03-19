@@ -26,6 +26,12 @@ $(function () {
     });
 });
 
+// Forces time input to resolve just before submission
+$("#add-times").mouseenter(() => {
+    $("#opening-time").blur();
+    $("#closing-time").blur();
+});
+
 function addTimes() {
     const openTimeString = $("#opening-time").val();
     const closeTimeString = $("#closing-time").val();
