@@ -37,7 +37,7 @@ RestaurantSchema = Schema({
 //     return [this.latitude, this.longitude];
 // });
 
-RestaurantSchema.pre('save', (next) => {
+RestaurantSchema.pre('save', function (next) {
     const restaurant = this;
 
     restaurant.location = {

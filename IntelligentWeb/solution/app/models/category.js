@@ -5,7 +5,7 @@ CategorySchema = Schema({
     name: {type: String, required: true, unique: true}
 });
 
-CategorySchema.pre('save', (next) => {
+CategorySchema.pre('save', function (next) {
     const category = this;
     category._id = this.name.replace(/[^a-zA-Z0-9]/g, "");
     next();

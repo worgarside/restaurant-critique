@@ -17,17 +17,17 @@ UserSchema = Schema({
     restaurants: Array
 });
 
-UserSchema.virtual('username').get(() => {
+UserSchema.virtual('username').get(function () {
     return this.email;
 });
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function (next) {
     const user = this;
     user.password = generateHash(user.password);
     next();
 });
 
-UserSchema.methods.validPassword = (password) => {
+UserSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
