@@ -1,25 +1,29 @@
 @index-head-height: 360;
-@index-head-bg-image: "/images/index-head-bg-image.png";
-//@index-head-bg-image: "http://via.placeholder.com/1920x1080";
+@index-head-bg-image: "/images/site/index-head-bg-image.png";
+@index-head-bg-image: "/images/site/BG1.jpg";
 @nav-thin-width: 120;
 @nav-wide-width: 200;
 @navbar-height: 58;
 
 body {
   font-family: 'Lato', sans-serif;
-  background-color: #f7f7f7;
+  background-color: #fdfdfd;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif;
+  font-weight: 300;
 }
 
 .full-height {
   height: 100%;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input.no-spinner[type="number"]::-webkit-outer-spin-button,
+input.no-spinner[type="number"]::-webkit-inner-spin-button,
+input.no-spinner[type="time"]::-webkit-outer-spin-button,
+input.no-spinner[type="time"]::-webkit-inner-spin-button,
+input.no-spinner[type="time"]::-webkit-clear-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -28,30 +32,62 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-// -------- Index Head -------- \\
+.vert-center-parent {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.vert-center-child {
+  display: table-cell;
+  vertical-align: middle;
+  width: 0.1%;
+  white-space: nowrap;
+  position: relative;
+}
+
+.no-border, .no-border:focus {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+// ================ Index Head ================ \\
+
+#main-logo {
+  width: 400px;
+  background: url('/images/site/logo-wide-white.png');
+  background-size: cover;
+  height: unit(400*(150/1080), px);
+  margin: 0 auto 10px auto;
+}
 
 #index-head {
+  width: 100%;
   height: unit(@index-head-height, px);
-  background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #index-search-form {
-  @index-search-height: 40;
-  position: relative;
-  top: unit((@index-head-height - @index-search-height)/2, px);
-  height: unit(@index-search-height, px);
-  input {
-    width: 600px;
-    height: 100%;
-  }
-  button {
+  margin-top: unit(-@navbar-height/2, px);
+  text-align: center;
+}
+
+.input-group#index-search-group {
+  width: 800px;
+  height: 40px;
+  margin: 0 auto;
+  button.btn {
     width: 100px;
-    height: 100%;
   }
 }
 
-// -------- NavBar -------- \\
+// ================ NavBar ================ \\
 
 #non-index-head {
   height: unit(@navbar-height, px);
@@ -67,8 +103,11 @@ nav {
   z-index: 1000;
   height: unit(@navbar-height, px);
   margin-top: unit(-@navbar-height, px);
-  background-size: cover;
   background: url(@index-head-bg-image) no-repeat bottom;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 nav.navbar.navbar-expand-sm.sticky {
@@ -104,10 +143,29 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   }
 }
 
-// -------- Login Form -------- \\
+#nav-logo {
+  height: unit(@navbar-height, px);
+  width: unit(@navbar-height, px);
+  position: absolute;
+  padding: 5px;
+  &-anim {
+    height: unit(@navbar-height, px);
+    width: unit(@navbar-height, px);
+    position: absolute;
+    padding: 5px;
+    display: none;
+  }
+}
+
+#nav-logo-anim img, #nav-logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+// ================ Login Form ================ \\
 
 @form-width: 400;
-@arrow-height: 21px;
+@arrow-height: 20px;
 @form-border-width: 5px;
 @form-border-color: blue;
 @form-bg-color: red;
@@ -152,27 +210,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   margin-top: 15px;
 }
 
-//.login-form-btn {
-//  padding: 5px;
-//  margin: 10px auto;
-//  cursor: pointer;
-//}
-
-// -------- Footer -------- \\
-
-.vert-center-parent {
-  display: table;
-  width: 100%;
-  height: 100%;
-}
-
-.vert-center-child {
-  display: table-cell;
-  vertical-align: middle;
-  width: 0.1%;
-  white-space: nowrap;
-  position: relative;
-}
+// ================ Footer ================ \\
 
 footer {
   @footer-color: #d1d1d1;
@@ -213,12 +251,11 @@ footer {
   }
 
   .footer-right {
-    //margin-left: 20%;
     width: 20%;
   }
 }
 
-// -------- Signup -------- \\
+// ================ Signup ================ \\
 
 #display-picture {
   object-fit: cover;
@@ -233,17 +270,45 @@ footer {
   }
 }
 
-.signup-help{
+.signup-help {
   cursor: pointer;
+  text-underline: #222222;
 }
 
-// -------- Index -------- \\
+// ================ Index ================ \\
 
 .index-image {
-  width: 350px;
-  height: 250px;
+  width: 100%;
+  height: 200px;
 }
 
-.index-intro {
+.oi-space {
+  margin-right: 10px;
+}
+
+// ================ New Restaurant ================ \\
+
+input.form-control.opening-times[type="time"] {
   text-align: center;
+  //letter-spacing: 1px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+button.btn.btn-default#add-times {
+  width: 100%;
+}
+
+#restaurant-map {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+// ================ Restaurants Nearby ================ \\
+
+
+#nearby-map {
+  height: 400px;
+  width: 80%;
+  margin: 0 auto;
 }

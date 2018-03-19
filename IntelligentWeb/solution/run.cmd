@@ -1,3 +1,5 @@
-REM start "" http://localhost:3000
+start "" "Compile Less.ahk"
 
-node bin/www
+start "" http://localhost:3000
+
+nodemon

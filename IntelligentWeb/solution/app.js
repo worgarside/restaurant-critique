@@ -1,38 +1,74 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+// ================ Middleware ================ \\
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const app = express();
+const mongoose = require('mongoose');
+const passport = require('passport');
+const flash    = require('connect-flash');
 
-var app = express();
+require('./config/passport')(passport);
 
-// view engine setup
+// ================ Database ================ \\
+
+require('./app/models/user');
+require('./app/models/category');
+require('./app/models/restaurant');
+require('./app/models/review');
+
+const url = 'mongodb://localhost:27017';
+const dbName = "restaurant_critique";
+
+mongoose.connect(url + "/" + dbName).then(function () {
+    console.log("Connected to " + url + "/" + dbName);
+}).catch(function (err) {
+    console.log("Failed to connect to DB: " + err);
+    process.exit(1);
+});
+
+// ================ View Engine ================ \\
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(favicon(path.join(__dirname, 'public/images/favicon.ico')));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/')));
+app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 
+// ================ Routes ================ \\
 
-
-
+var index = require('./routes/index');
+var signup = require('./routes/signup');
+var restaurantNew = require('./routes/restaurant_new');
+var restaurantsNearby = require('./routes/restaurants_nearby');
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/signup', signup);
+app.use('/restaurant/new', restaurantNew);
+app.use('/restaurants-nearby', restaurantsNearby);
 
 // catch 404 and forward to error handler
+// TODO: create a real 404 page
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
@@ -49,5 +85,6 @@ app.use(function (err, req, res) {
     res.status(err.status || 500);
     res.render('error');
 });
+
 
 module.exports = app;
