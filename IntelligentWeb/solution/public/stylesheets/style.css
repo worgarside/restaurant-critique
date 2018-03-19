@@ -232,7 +232,7 @@ input.form-control.opening-times[type="time"] {
   padding-left: 0;
   padding-right: 0;
 }
-buttoan.btn.btn-default#add-times {
+button.btn.btn-default#add-times {
   width: 100%;
 }
 #restaurant-map {

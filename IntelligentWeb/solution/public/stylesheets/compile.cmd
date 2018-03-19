@@ -1,1 +1,1 @@
-lessc style.less style.css
+lessc public/stylesheets/style.less public/stylesheets/style.css
