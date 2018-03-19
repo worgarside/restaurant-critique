@@ -225,7 +225,7 @@ function populateRestaurants(insertPromises) {
         url: "www.siam-teppanyaki.co.uk/",
         // menu: null,
         phone: "01244403222",
-        opening_times: [[720, 1350], [1020, 1380], [720, 900, 1020, 1380], [720, 900, 1020, 1380], [720, 900, 1020, 1380], [720, 1380], [720, 1410]],
+        opening_times: [[720, 1350], [1020, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1410]],
         description: "Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.",
         price_range: 3,
         category: ["Japanese", "Chicken"],

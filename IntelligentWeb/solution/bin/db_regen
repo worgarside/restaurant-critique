@@ -34,25 +34,20 @@ function initialiseDatabase() {
     }
 
     Promise.all(dropPromises)
-        .then(function () {
-            db.collection('restaurants').createIndex({location: "2dsphere"}).catch(function(){
-                console.log('Index failed');
-            }).then(function(){
-                populateCollections(conn);
-            });
-        })
-        .catch(function () {
-            db.collection('restaurants').createIndex({location: "2dsphere"}).catch(function(){
-                console.log('Index failed');
-            }).then(function(){
-                populateCollections(conn);
-            });
+        .catch(function(err){
+            console.log('Error dropping collections: ' + err)
+        }).then(function () {
+        db.collection('restaurants').createIndex({location: '2dsphere'}).catch(function () {
+            console.log('Index failed');
+        }).then(function () {
+            populateCollections(conn);
         });
+    });
 }
 
 function populateCollections(conn) {
     var insertPromises = [];
-    console.log("Populating collections");
+    console.log('Populating collections');
     DatabasePopulation.populateFunction(insertPromises);
     Promise.all(insertPromises)
         .catch(function (err) {

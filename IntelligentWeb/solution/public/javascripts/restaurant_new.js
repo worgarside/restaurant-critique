@@ -1,5 +1,31 @@
 console.log('Loaded restaurant_new.js');
 
+$(function () {
+    $('#opening-time').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        maxTime: '23:30',
+        defaultTime: '09',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: false,
+        scrollbar: false
+    });
+
+    $('#closing-time').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        maxTime: '23:30',
+        defaultTime: '23',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: false,
+        scrollbar: false
+    });
+});
+
 function addTimes() {
     var openTimeString = $("#opening-time").val();
     var closeTimeString = $("#closing-time").val();

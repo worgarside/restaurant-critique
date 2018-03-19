@@ -18,7 +18,9 @@ input.no-spinner[type="number"]::-webkit-outer-spin-button,
 input.no-spinner[type="number"]::-webkit-inner-spin-button,
 input.no-spinner[type="time"]::-webkit-outer-spin-button,
 input.no-spinner[type="time"]::-webkit-inner-spin-button,
-input.no-spinner[type="time"]::-webkit-clear-button {
+input.no-spinner[type="time"]::-webkit-clear-button,
+input.no-spinner[type="time"]::-webkit-search-cancel-button {
+  display: none;
   -webkit-appearance: none;
   margin: 0;
 }
@@ -227,8 +229,10 @@ footer .footer-right {
 .oi-space {
   margin-right: 10px;
 }
-input.form-control.opening-times[type="time"] {
+#opening-time,
+#closing-time {
   text-align: center;
+  text-align: -moz-center;
   padding-left: 0;
   padding-right: 0;
 }

@@ -70,9 +70,11 @@ app.use('/restaurants-nearby', restaurantsNearby);
 // catch 404 and forward to error handler
 // TODO: create a real 404 page
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    res.render('error');
+
+    // var err = new Error('Not Found');
+    // err.status = 404;
+    next();
 });
 
 // error handler
