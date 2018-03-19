@@ -9,7 +9,7 @@ UserSchema = Schema({
     privilege_level: {type: Number, required: true},
     forename: {type: String, required: true},
     surname: {type: String, required: true},
-    ageCategory: {type: Number, min:0, max: 6},
+    ageCategory: {type: Number, min: 0, max: 6},
     county: String,
     reviews: Array,
     display_img_filename: {type: String, unique: true},
@@ -17,17 +17,17 @@ UserSchema = Schema({
     restaurants: Array
 });
 
-UserSchema.virtual('username').get(function () {
+UserSchema.virtual('username').get(() => {
     return this.email;
 });
 
-UserSchema.pre('save', function (next) {
-    var user = this;
+UserSchema.pre('save', (next) => {
+    const user = this;
     user.password = generateHash(user.password);
     next();
 });
 
-UserSchema.methods.validPassword = function (password) {
+UserSchema.methods.validPassword = (password) => {
     return bcrypt.compareSync(password, this.password);
 };
 

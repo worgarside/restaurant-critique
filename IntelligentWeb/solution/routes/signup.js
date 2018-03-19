@@ -10,12 +10,12 @@ const passport = require('passport');
 const User = mongoose.model('User');
 router.use(bodyParser.urlencoded({extended: true}));
 const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
+    destination: (req, file, callback) => {
         callback(null, './public/images/displayPictures');
     },
-    filename: function (req, file, callback) {
-        var re = /(?:\.([^.]+))?$/;
-        var extension = "." + re.exec(file.originalname)[1];
+    filename: (req, file, callback) => {
+        const re = /(?:\.([^.]+))?$/;
+        const extension = "." + re.exec(file.originalname)[1];
         callback(null, req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + extension);
     }
 });

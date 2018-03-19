@@ -1,7 +1,7 @@
 // ================ Middleware ================ \\
 
 const LocalStrategy = require('passport-local').Strategy;
-var User = require('../app/models/user');
+const User = require('../app/models/user');
 
 // ================ Passport ================ \\
 
@@ -12,9 +12,9 @@ module.exports = function (passport) {
             passwordField: 'password',
             passReqToCallback: true
         },
-        function (req, email, password, done) {
-            process.nextTick(function () {
-                User.findOne({'email': email}, function (err, user) {
+        (req, email, password, done) => {
+            process.nextTick(() => {
+                User.findOne({'email': email}, (err, user) => {
                     if (err) {
                         console.log("Error1: " + err);
                         return done(err);
@@ -41,11 +41,11 @@ module.exports = function (passport) {
             passwordField: 'password',
             passReqToCallback: true
         },
-        function (req, email, password, done) {
-            process.nextTick(function () {
+        (req, email, password, done) => {
+            process.nextTick(() => {
                 if (!req.user) {
-                    User.findOne({'email': email}, function (err, user) {
-                        if (err){
+                    User.findOne({'email': email}, (err, user) => {
+                        if (err) {
                             console.log(err);
                             return done(err);
                         }
@@ -53,10 +53,10 @@ module.exports = function (passport) {
                         if (user) {
                             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                         } else {
-                            var re = /(?:\.([^.]+))?$/;
-                            var imgExtension = "." + re.exec(req.file.originalname)[1];
+                            const re = /(?:\.([^.]+))?$/;
+                            const imgExtension = "." + re.exec(req.file.originalname)[1];
 
-                            var newUser = new User();
+                            const newUser = new User();
 
                             newUser._id = email.toLowerCase();
                             newUser.email = email.toLowerCase();
@@ -72,7 +72,7 @@ module.exports = function (passport) {
                             newUser.user_rating = 0;
                             newUser.restaurants = [];
 
-                            newUser.save(function (err) {
+                            newUser.save((err) => {
                                 if (err)
                                     return done(err);
 
@@ -86,12 +86,12 @@ module.exports = function (passport) {
             });
         }));
 
-    passport.serializeUser(function (user, done) {
+    passport.serializeUser((user, done) => {
         done(null, user.id);
     });
 
-    passport.deserializeUser(function (id, done) {
-        User.findById(id, function (err, user) {
+    passport.deserializeUser((id, done) => {
+        User.findById(id, (err, user) => {
             done(err, user);
         });
     });

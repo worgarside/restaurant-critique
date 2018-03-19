@@ -1,16 +1,14 @@
-$(function() {
+$(() => {
     checkNavPos();
 });
 
 // ----------- Logo ----------- \\
 
 function checkNavPos() {
-    var elementOffset = $('.navbar').offset().top;
-    var topOfWindow = $(window).scrollTop();
-    var distance = (elementOffset - topOfWindow);
-    var showLogo;
-
-    showLogo = distance < 1;
+    const elementOffset = $('.navbar').offset().top;
+    const topOfWindow = $(window).scrollTop();
+    const distance = (elementOffset - topOfWindow);
+    const showLogo = distance < 1;
 
     if (showLogo) {
         $("#first-nav-item").stop().animate({'margin-left': '60px'});
@@ -22,7 +20,7 @@ function checkNavPos() {
 }
 
 // if the image in the window of browser when scrolling the page, show that image
-$(window).scroll(function () {
+$(window).scroll(() => {
     checkNavPos();
 });
 

@@ -3,13 +3,13 @@
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
-const flash    = require('connect-flash');
+const flash = require('connect-flash');
 
 require('./config/passport')(passport);
 
@@ -23,12 +23,14 @@ require('./app/models/review');
 const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
-mongoose.connect(url + "/" + dbName).then(function () {
-    console.log("Connected to " + url + "/" + dbName);
-}).catch(function (err) {
-    console.log("Failed to connect to DB: " + err);
-    process.exit(1);
-});
+mongoose.connect(url + "/" + dbName)
+    .then(() => {
+        console.log("Connected to " + url + "/" + dbName);
+    })
+    .catch((err) => {
+        console.log("Failed to connect to DB: " + err);
+        process.exit(1);
+    });
 
 // ================ View Engine ================ \\
 
@@ -57,10 +59,10 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-icon
 
 // ================ Routes ================ \\
 
-var index = require('./routes/index');
-var signup = require('./routes/signup');
-var restaurantNew = require('./routes/restaurant_new');
-var restaurantsNearby = require('./routes/restaurants_nearby');
+const index = require('./routes/index');
+const signup = require('./routes/signup');
+const restaurantNew = require('./routes/restaurant_new');
+const restaurantsNearby = require('./routes/restaurants_nearby');
 
 app.use('/', index);
 app.use('/signup', signup);
@@ -68,15 +70,12 @@ app.use('/restaurant/new', restaurantNew);
 app.use('/restaurants-nearby', restaurantsNearby);
 
 // catch 404 and forward to error handler
-// TODO: create a real 404 page
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use((req, res) => {
+    res.render('error');
 });
 
 // error handler
-app.use(function (err, req, res) {
+app.use((err, req, res) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

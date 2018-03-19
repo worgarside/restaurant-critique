@@ -11,10 +11,11 @@ router.use(bodyParser.urlencoded({extended: true}));
 // ================ POST Method ================ \\
 
 //AJAX POSTs to '/restaurants-nearby', so relatively '/'
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
     console.log('Aggregating restaurants');
 
-    var pageNum = 0;
+    // TODO: pass this in with pagination
+    const pageNum = 0;
 
     Restaurant.aggregate([{
             "$geoNear": {
@@ -30,27 +31,26 @@ router.post('/', function (req, res) {
             {"$skip": pageNum * 10},
             {"$limit": 10}
         ],
-        function (err, shapes) {
+        (err, restaurants) => {
             if (err) throw err;
-            //console.log( shapes );
+            //console.log( restaurants );
 
-            shapes = shapes.map(function (x) {
+            restaurants = restaurants.map((x) => {
                 delete x.dis;
                 return new Restaurant(x);
             });
 
-            Restaurant.populate(shapes, {path: "info"}, function (err, docs) {
+            // TODO: figure out what population is and handle promise
+            Restaurant.populate(restaurants, {path: "info"}, (err, docs) => {
                 if (err) throw err;
                 console.log(JSON.stringify(docs, undefined, 4));
             });
         }
-    ).then(function () {
+    ).then(() => {
         res.send(JSON.stringify({lat: req.body.lat, lng: req.body.lng})); //TODO change this!!!
-    }).catch(function (err) {
+    }).catch((err) => {
         console.log('Restaurant aggregation failed: ' + err);
     });
-
-
 });
 
 module.exports = router;

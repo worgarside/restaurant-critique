@@ -1,8 +1,8 @@
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-app.post('/contact', function (req, res) {
+app.post('/contact', (req, res) => {
 
-    var transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: 'worgarside.dev@gmail.com',
@@ -10,19 +10,20 @@ app.post('/contact', function (req, res) {
         }
     });
 
-    var mailOptions = {
+    const mailOptions = {
         from: req.body.email,
         to: 'worgarside.dev@gmail.com\'',
         subject: 'help',
         text: req.body.message
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
         } else {
             console.log('Email sent: ' + info.response);
         }
     });
+});
 
-})
+// TODO: is this file necessary?

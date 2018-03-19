@@ -1,9 +1,9 @@
 const dateFormat = require('dateformat');
-var now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
+const now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
 console.log(now);
 
 
-// var users, restaurants, reviews, categories;
+// const users, restaurants, reviews, categories;
 // users = restaurants = reviews = categories = [];
 //
 // users.push("user1");
@@ -17,7 +17,7 @@ console.log(now);
 //     test_list.push('thing2');
 // }
 //
-// var test_list = [];
+// const test_list = [];
 // test_list.push('thing');
 // test_list.push('thing0');
 // console.log(test_list);
@@ -42,7 +42,7 @@ console.log(now);
 //
 //
 //
-// var categories = [
+// const categories = [
 //     {_id: "FastFood", name: "Fast Food"},
 //     {_id: "Chicken", name: "Chicken"},
 //     {_id: "Inexpensive", name: "Inexpensive"},
