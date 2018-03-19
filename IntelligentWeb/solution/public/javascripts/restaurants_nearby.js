@@ -17,7 +17,7 @@ function createMap(position) {
     lat = position.coords.latitude;
     lng = position.coords.longitude;
     const currentLocation = {lat: lat, lng: lng};
-    // console.log("Create the map @ " + currentLocation.lat + ", " + currentLocation.lng);
+    console.log(`Create the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
 
     const map = new google.maps.Map($('#nearby-map')[0], {
         zoom: 14,
@@ -53,7 +53,7 @@ function updateList() {
             $('#results')[0].innerHTML = JSON.stringify(dataR);
         }],
         error: (xhr, status, error) => {
-            alert('Error: ' + error.message);
+            alert(`Error: ${error.message}`);
         }
     });
 }

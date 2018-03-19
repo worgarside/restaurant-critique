@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, callback) => {
         const re = /(?:\.([^.]+))?$/;
-        const extension = "." + re.exec(file.originalname)[1];
+        const extension = `.${re.exec(file.originalname)[1]}`;
         callback(null, req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + extension);
     }
 });

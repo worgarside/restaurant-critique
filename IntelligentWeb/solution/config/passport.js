@@ -16,12 +16,12 @@ module.exports = function (passport) {
             process.nextTick(() => {
                 User.findOne({'email': email}, (err, user) => {
                     if (err) {
-                        console.log("Error1: " + err);
+                        console.log(`Error1: ${err}`);
                         return done(err);
                     }
 
                     if (!user) {
-                        console.log("Error2 - user = " + user);
+                        console.log(`Error2 user = ${user}`);
                         return done(null, false, req.flash('loginMessage', 'No user found.'));
                     }
 
@@ -54,7 +54,7 @@ module.exports = function (passport) {
                             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                         } else {
                             const re = /(?:\.([^.]+))?$/;
-                            const imgExtension = "." + re.exec(req.file.originalname)[1];
+                            const imgExtension = `.${re.exec(req.file.originalname)[1]}`;
 
                             const newUser = new User();
 

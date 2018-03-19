@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, callback) => {
         const re = /(?:\.([^.]+))?$/;
-        const extension = "." + re.exec(file.originalname)[1];
+        const extension = `.${re.exec(file.originalname)[1]}`;
         callback(null, req.body.restaurantName.replace(/[^a-zA-Z]/g, "-") + extension);
     }
 });
@@ -36,7 +36,7 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
             address: postcode
         }, (err, response) => {
             if (err) {
-                console.log("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nError: " + err);
+                console.log(`Geocode Error: ${err}`);
                 reject();
             } else {
                 resolve(response.json.results[0].geometry.location);
@@ -46,8 +46,8 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
     gmapsPromise.then((location) => {
         submitRestaurant(postcode, location, req.body)
-    }).catch((error) => {
-        console.log('Error: ' + error);
+    }).catch((err) => {
+        console.log(`Error: ${err}`);
     });
 
     res.redirect('/')
@@ -103,7 +103,7 @@ function submitRestaurant(postcode, location, body) {
     }).save().then(() => {
         console.log("Restaurant added to collection")
     }).catch((err) => {
-        console.log("Restaurant failed to add to collection: " + err)
+        console.log(`Restaurant failed to add to collection: ${err}`)
     });
 
     // console.log("\n\n############################################\n\n");

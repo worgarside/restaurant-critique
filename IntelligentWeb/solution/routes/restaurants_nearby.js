@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
     ).then(() => {
         res.send(JSON.stringify({lat: req.body.lat, lng: req.body.lng})); //TODO change this!!!
     }).catch((err) => {
-        console.log('Restaurant aggregation failed: ' + err);
+        console.log(`Restaurant aggregation failed: ${err}`);
     });
 });
 

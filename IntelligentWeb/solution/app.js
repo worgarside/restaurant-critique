@@ -23,12 +23,12 @@ require('./app/models/review');
 const url = 'mongodb://localhost:27017';
 const dbName = "restaurant_critique";
 
-mongoose.connect(url + "/" + dbName)
+mongoose.connect(`${url}/${dbName}`)
     .then(() => {
-        console.log("Connected to " + url + "/" + dbName);
+        console.log(`Connected to ${url}/${dbName}`);
     })
     .catch((err) => {
-        console.log("Failed to connect to DB: " + err);
+        console.log(`Failed to connect to DB: ${err}`);
         process.exit(1);
     });
 
