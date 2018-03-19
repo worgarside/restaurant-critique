@@ -9,7 +9,7 @@ UserSchema = Schema({
     privilege_level: {type: Number, required: true},
     forename: {type: String, required: true},
     surname: {type: String, required: true},
-    ageCategory: {type: Number, min:0, max: 6},
+    ageCategory: {type: Number, min: 0, max: 6},
     county: String,
     reviews: Array,
     display_img_filename: {type: String, unique: true},
@@ -22,7 +22,7 @@ UserSchema.virtual('username').get(function () {
 });
 
 UserSchema.pre('save', function (next) {
-    var user = this;
+    const user = this;
     user.password = generateHash(user.password);
     next();
 });

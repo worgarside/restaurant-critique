@@ -3,8 +3,12 @@ extends partials/layout
 block content
     br
     .container
-        .row
-            .col-md-12
-                h1 Contact Us
-                p
-                    | +44 0114 innit
+        .col-md-12
+            form(action="/contact" method="POST")
+                label(for='contact-name') Your Name
+                    input#contact-name(type='text', name='name', placeholder='Your name...' required)
+                label(for='contact-email') Your Email
+                    input#contact-email(type='text', name='email', placeholder='Your email...' required)
+                label(for='contact-message') Message
+                    textarea#contact-message(name='message', placeholder='Message', style='height:200px' required)
+                    input(type='submit', value='Submit')

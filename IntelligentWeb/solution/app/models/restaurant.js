@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose'), Schema = mongoose.Schema;
 
 RestaurantSchema = Schema({
     name: {type: String, required: true, index: true},
@@ -38,7 +38,7 @@ RestaurantSchema = Schema({
 // });
 
 RestaurantSchema.pre('save', function (next) {
-    var restaurant = this;
+    const restaurant = this;
 
     restaurant.location = {
         "type": "Point",

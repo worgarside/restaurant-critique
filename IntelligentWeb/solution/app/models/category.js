@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose'), Schema = mongoose.Schema;
 
 CategorySchema = Schema({
     _id: {type: String},
@@ -6,7 +6,7 @@ CategorySchema = Schema({
 });
 
 CategorySchema.pre('save', function (next) {
-    var category = this;
+    const category = this;
     category._id = this.name.replace(/[^a-zA-Z0-9]/g, "");
     next();
 });

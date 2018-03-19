@@ -10,47 +10,47 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ GET Statements ================ \\
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
     res.render('index', {title: title, user: req.user, animateLogo: true});
 });
 
-router.get('/contact', function (req, res) {
+router.get('/contact', (req, res) => {
     res.render('contact', {title: title, user: req.user});
 });
 
-router.get('/signup', function (req, res) {
+router.get('/signup', (req, res) => {
     res.render('signup', {title: title, user: req.user});
 });
 
-router.get('/search', function (req, res) {
+router.get('/search', (req, res) => {
     res.render('search', {title: title, user: req.user});
 });
 
-router.get('/about', function (req, res) {
+router.get('/about', (req, res) => {
     res.render('about', {title: title, user: req.user});
 });
 
-router.get('/accessibility', function (req, res) {
+router.get('/accessibility', (req, res) => {
     res.render('accessibility', {title: title, user: req.user});
 });
 
-router.get('/restaurant/new', function (req, res) {
+router.get('/restaurant/new',  (req, res)=> {
     res.render('restaurant_new', {title: title, user: req.user});
 });
 
-router.get('/restaurants-nearby', function (req, res) {
+router.get('/restaurants-nearby',  (req, res)=> {
     res.render('restaurants_nearby', {title: title, user: req.user});
 });
 
-router.get('/logout', function (req, res) {
+router.get('/logout',  (req, res)=> {
     req.logout();
     res.redirect('/');
 });
 
 // ================ POST Statements ================ \\
 
-router.post('/login', function (req, res, next) {
-    passport.authenticate('login-local', function (err, user) {
+router.post('/login', (req, res, next) =>{
+    passport.authenticate('login-local',  (err, user)=> {
         if (err) {
             console.log(err);
             next();
@@ -58,7 +58,7 @@ router.post('/login', function (req, res, next) {
         if (!user) {
             return res.redirect('/');
         }
-        req.logIn(user, function (err) {
+        req.logIn(user,  (err) =>{
             if (err) {
                 return next(err);
             }

@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose'), Schema = mongoose.Schema;
 
 ReviewSchema = Schema({
     restaurant_id: {type: String, required: true},

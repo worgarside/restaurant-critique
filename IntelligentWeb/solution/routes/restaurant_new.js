@@ -9,12 +9,12 @@ const multer = require('multer');
 const Restaurant = mongoose.model('Restaurant');
 router.use(bodyParser.urlencoded({extended: true}));
 const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
+    destination: (req, file, callback) => {
         callback(null, './public/images/restaurant');
     },
-    filename: function (req, file, callback) {
-        var re = /(?:\.([^.]+))?$/;
-        var extension = "." + re.exec(file.originalname)[1];
+    filename: (req, file, callback) => {
+        const re = /(?:\.([^.]+))?$/;
+        const extension = "." + re.exec(file.originalname)[1];
         callback(null, req.body.restaurantName.replace(/[^a-zA-Z]/g, "-") + extension);
     }
 });
@@ -23,18 +23,18 @@ const upload = multer({storage: storage});
 
 // ================ POST Method ================ \\
 
-router.post('/add_restaurant', upload.single('displayPicture'), function (req, res) {
+router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
-    var postcode = req.body.postcode;
+    const postcode = req.body.postcode;
 
-    var googleMaps = require('@google/maps').createClient({
+    const googleMaps = require('@google/maps').createClient({
         key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
     });
 
-    var gmapsPromise = new Promise(function (resolve, reject) {
+    let gmapsPromise = new Promise((resolve, reject) => {
         googleMaps.geocode({
             address: postcode
-        }, function (err, response) {
+        }, (err, response) => {
             if (err) {
                 console.log("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nError: " + err);
                 reject();
@@ -44,9 +44,9 @@ router.post('/add_restaurant', upload.single('displayPicture'), function (req, r
         })
     });
 
-    gmapsPromise.then(function (location) {
+    gmapsPromise.then((location) => {
         submitRestaurant(postcode, location, req.body)
-    }).catch(function (error) {
+    }).catch((error) => {
         console.log('Error: ' + error);
     });
 
@@ -60,7 +60,7 @@ function submitRestaurant(postcode, location, body) {
          restaurantName: string, priceRange: string, outdoorseating: int}} body,
      */
 
-    var openingTimes = [
+    const openingTimes = [
         [body.monOpen, body.monClose],
         [body.tueOpen, body.tueClose],
         [body.wedOpen, body.wedClose],
@@ -70,8 +70,8 @@ function submitRestaurant(postcode, location, body) {
         [body.sunOpen, body.sunClose]
     ];
 
-    var latitude = location.lat;
-    var longitude = location.lng;
+    const latitude = location.lat;
+    const longitude = location.lng;
 
     new Restaurant({
         name: body.restaurantName,
@@ -100,9 +100,9 @@ function submitRestaurant(postcode, location, body) {
         reviews: [],
         average_rating: [],
         published: true
-    }).save().then(function () {
+    }).save().then(() => {
         console.log("Restaurant added to collection")
-    }).catch(function (err) {
+    }).catch((err) => {
         console.log("Restaurant failed to add to collection: " + err)
     });
 

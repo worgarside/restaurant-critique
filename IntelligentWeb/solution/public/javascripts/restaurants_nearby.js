@@ -1,9 +1,6 @@
-// const mongoose = require('mongoose');
-// const Restaurant = mongoose.model('Restaurant');
+let lat, lng;
 
-var lat, lng;
-
-$(function () {
+$(() => {
     getUserLocation();
 });
 
@@ -12,53 +9,37 @@ function getUserLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(createMap);
     } else {
-        // fallback to user postcode
+        // TODO: fallback to user postcode
     }
 }
 
 function createMap(position) {
     lat = position.coords.latitude;
     lng = position.coords.longitude;
-    var currentLocation = {lat: lat, lng: lng};
+    const currentLocation = {lat: lat, lng: lng};
     // console.log("Create the map @ " + currentLocation.lat + ", " + currentLocation.lng);
-    var map = new google.maps.Map($('#nearby-map')[0], {
+
+    const map = new google.maps.Map($('#nearby-map')[0], {
         zoom: 14,
         center: currentLocation
     });
 
-    var marker = new google.maps.Marker({
+    const marker = new google.maps.Marker({
         map: map,
         draggable: true,
         animation: google.maps.Animation.DROP,
         position: currentLocation
     });
 
-    google.maps.event.addListener(marker, 'dragend', function callback() {
+    google.maps.event.addListener(marker, 'dragend', () => {
         lat = marker.getPosition().lat();
         lng = marker.getPosition().lng();
-        // geocodePosition(marker.getPosition());
     });
-
-    function geocodePosition(pos) {
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({latLng: pos}, function callback(results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    console.log(results[0].formatted_address);
-                }
-                else {
-                    console.log('Error');
-                }
-            }
-        );
-    }
 }
 
+// noinspection JSUnusedGlobalSymbols [IntelliJ]
 function updateList() {
-    // console.log(lat);
-    // console.log(lng);
-
-    var coordinates = JSON.stringify({lat: lat, lng: lng});
-    console.log(coordinates);
+    let coordinates = JSON.stringify({lat: lat, lng: lng});
 
     $.ajax({
         url: '/restaurants-nearby',
@@ -66,18 +47,19 @@ function updateList() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         type: 'POST',
-        success: [function callback (dataR) {
+        success: [(dataR) => {
             // callback1 - can use an array of CBs and iterate through
             console.log(dataR);
             $('#results')[0].innerHTML = JSON.stringify(dataR);
         }],
-        error: function (xhr, status, error) {
+        error: (xhr, status, error) => {
             alert('Error: ' + error.message);
         }
     });
 }
 
 // Placeholder function to stop GMaps error on load
+// noinspection JSUnusedGlobalSymbols [IntelliJ]
 function initMap() {
     console.log("Map loaded");
 }
