@@ -6,7 +6,7 @@ ReviewSchema = Schema({
     body: {type: String, required: true},
     author_id: {type: String, required: true},
     datetime: {type: Date, required: true},
-    images: Array,
+    images: [String],
     restaurant_rating: {type: Number, min:0, max: 5, required: true},
     review_rating: Number,
     updated_at: Date

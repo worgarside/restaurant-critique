@@ -1,7 +1,43 @@
 let lat, lng;
-
+// noinspection JSJQueryEfficiency
 $(() => {
     getUserLocation();
+
+    const btnNext = $('#button-next');
+    const btnPrev = $('#button-prev');
+
+    $('.img-slides').first().addClass('current');
+    $('.img-slides').hide();
+    $('.current').show();
+
+    // noinspection JSJQueryEfficiency
+    btnNext.click(() => {
+        $('.current').removeClass('current').addClass('previous');
+        if ($('.previous').is(':last-child')) {
+            $('.img-slides').first().addClass('current');
+        }
+        else {
+            $('.previous').next().addClass('current');
+        }
+        $('.previous').removeClass('previous');
+        $('.img-slides').fadeOut();
+        $('.current').fadeIn();
+    });
+
+    btnPrev.click(() => {
+        console.log('prev');
+        $('.current').removeClass('current').addClass('previous');
+        if ($('.previous').is(':first-child')) {
+            $('.img-slides').last().addClass('current');
+        }
+        else {
+            $('.previous').prev().addClass('current');
+        }
+        $('.previous').removeClass('previous');
+        $('.img-slides').fadeOut();
+        $('.current').fadeIn();
+    });
+
 });
 
 function getUserLocation() {
@@ -41,27 +77,36 @@ function createMap(position) {
 function updateList() {
     let coordinates = JSON.stringify({lat: lat, lng: lng});
 
+    // noinspection JSUnusedGlobalSymbols
     $.ajax({
         url: '/restaurants-nearby',
         data: coordinates,
         contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
         type: 'POST',
-        success: [(dataR) => {
+        success: (result) => {
             // callback1 - can use an array of CBs and iterate through
-            console.log(dataR);
-            $('#results')[0].innerHTML = JSON.stringify(dataR);
-        }],
-        error: (xhr, status, error) => {
-            alert(`Error: ${error.message}`);
+            console.log(result);
+            processData(result);
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
         }
     });
 }
 
-// Placeholder function to stop GMaps error on load
-// noinspection JSUnusedGlobalSymbols [IntelliJ]
-function initMap() {
-    console.log("Map loaded");
+function processData(results) {
+    $('#restaurant-list')[0].innerHTML = null;
+    for (let result of results) {
+        // result = JSON.stringify(result);
+
+        let newElement = document.createElement('div');
+
+        newElement.innerHTML = getRestaurantDiv(result);
+
+        $('#restaurant-list')[0].appendChild(newElement);
+    }
 }
 
-
+function getRestaurantDiv(restaurant) {
+    return `<p>${restaurant.images}</p>`
+}

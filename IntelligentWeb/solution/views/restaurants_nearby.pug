@@ -1,5 +1,4 @@
 extends partials/layout
-include partials/restaurant_preview
 
 block content
     br
@@ -15,8 +14,38 @@ block content
                 button#updateList(onclick="updateList();") Refresh
         .row
             .col
-                p#results
-                +restaurantPreview("A Restaurant's Name")
+                #restaurant-list
+                    .container.nearby-restaurant
+                        .row
+                            .col
+                                .vert-center-parent
+                                    a.restaurant-title.d-inline(href='#') The Siam Thai and Teppanyaki
+                                    .vert-center-child
+                                        img.restaurant-stars(src="images/site/blank-stars.png")
+                        .row
+                            .col-7
+                                p.restaurant-description Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.
+                            .col-4.offset-1
+                                #slideshow-wrapper
+                                    #slideshow
+                                        img.img-slides(src="images/displayPictures/aslan-chicken-shop-com.jpg")
+                                        img.img-slides(src="images/displayPictures/copeyrufus-gmail-com.jpg")
+                                        img.img-slides(src="images/displayPictures/greta-veronika-gmail-com.jpg")
+                                        img.img-slides(src="images/displayPictures/worgarside-gmail-com.jpg")
+                                br
+                                #button-prev
+                                    span.oi.oi-check.oi-chevron-left(aria-hidden='true')
 
+                                #button-next
+                                    span.oi.oi-check.oi-chevron-right(aria-hidden='true')
+
+
+
+                                //img(src="images/restaurants/5aad98377888995220605d12/2018-03-20 20-08-00.jpg")
+
+    script.
+        function initMap() {
+            console.log("Map loaded");
+        }
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
     script(type='text/javascript', src = '/javascripts/restaurants_nearby.js')
-    script(async, defer, src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

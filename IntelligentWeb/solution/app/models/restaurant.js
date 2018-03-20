@@ -1,4 +1,5 @@
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
+const fs = require('fs');
 
 RestaurantSchema = Schema({
     name: {type: String, required: true, index: true},
@@ -29,6 +30,7 @@ RestaurantSchema = Schema({
     owner_id: {type: String, trim: true},
     owner_message: {type: String, trim: true},
     reviews: [String],
+    images: [String],
     average_rating: {type: Number, min: 0, max: 5},
     published: {type: Boolean, required: true},
     updated_at: Date
@@ -46,6 +48,14 @@ RestaurantSchema.pre('save', function (next) {
         };
     }
     this.updated_at = Date.now();
+
+    const imageDir = `./public/images/restaurants/${this._id}`;
+
+    if (!fs.existsSync(imageDir)){
+        fs.mkdirSync(imageDir);
+        fs.closeSync(fs.openSync(`${imageDir}/.keep`, 'w'));
+    }
+
     next();
 });
 

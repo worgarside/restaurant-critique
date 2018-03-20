@@ -248,3 +248,75 @@ button.btn.btn-default#add-times {
   width: 80%;
   margin: 0 auto;
 }
+.nearby-restaurant {
+  width: 80%;
+}
+.nearby-restaurant:after {
+  margin: 0 -5%;
+  content: ' ';
+  display: block;
+  border: 2px solid #d0d0d0;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.restaurant-title {
+  font-size: 22pt;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: #2b2b2b;
+}
+.restaurant-title:hover {
+  text-decoration: none;
+  color: #6d6d6d;
+}
+.restaurant-stars {
+  height: 18pt;
+}
+.restaurant-stars img {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+#slideshow-wrapper {
+  padding: 10px;
+  width: 100%;
+  height: 180px;
+}
+#slideshow {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+img.img-slides {
+  width: 100%;
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  bottom: -100%;
+  margin: auto;
+}
+#button-prev,
+#button-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 10px;
+  margin-top: -34px;
+  color: white;
+  transition: 0.6s ease;
+  border-radius: 3px;
+}
+#button-next {
+  right: 14px;
+}
+#button-prev:hover,
+#button-next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}

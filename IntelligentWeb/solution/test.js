@@ -1,69 +1,220 @@
-let x = "undefined";
-
-if (x){
-    console.log('yes');
-    console.log(x);
-}else{
-    console.log('no');
-    console.log(x);
-}
-
-
-
-// const dateFormat = require('dateformat');
-// const now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
-// console.log(now);
-//
-//
-// // const users, restaurants, reviews, categories;
-// // users = restaurants = reviews = categories = [];
-// //
-// // users.push("user1");
-// //
-// // console.log(users);
-// //
-// // console.log(reviews);
-//
-// // function addToList(test_list){
-// //     test_list.push('thing1');
-// //     test_list.push('thing2');
-// // }
-// //
-// // const test_list = [];
-// // test_list.push('thing');
-// // test_list.push('thing0');
-// // console.log(test_list);
-// //
-// // addToList(test_list);
-// //
-// // console.log(test_list);
-// //
-// // test_list.pop();
-// //
-// // test_list['help me'] = 'yes';
-// //
-// // console.log(test_list);
-// //
-// //
-// //
-// // test_str = "Fast Food";
-// //
-// // test_str.replace(/[^a-zA-Z]/g, "-");
-// //
-// // console.log(test_str);
-// //
-// //
-// //
-// // const categories = [
-// //     {_id: "FastFood", name: "Fast Food"},
-// //     {_id: "Chicken", name: "Chicken"},
-// //     {_id: "Inexpensive", name: "Inexpensive"},
-// //     {_id: "Convenient", name: "Convenient"},
-// //     {_id: "Portugese", name: "Portugese"},
-// //     {_id: "Spicy", name: "Spicy"},
-// //     {_id: "Burgers", name: "Burgers"},
-// //     {_id: "Casual", name: "Casual"}
-// // ];
-// //
-// //
-// // console.log(categories[0]);
+let test = [
+    {
+        "_id": "5aad8b2e6fb09e3a54ea366b",
+        "location":
+            {"type": "Point", "coordinates": [-1.480078, 53.380002]},
+        "latitude": 53.380002,
+        "longitude": -1.480078,
+        "opening_times": [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
+        "category": ["FastFood", "Chicken", "Convenient", "Inexpensive"],
+        "reviews": ["5aad98377888995220605d10", "5aad98377888995220605d0f"],
+        "images": [],
+        "name": "Aslan'sKebab",
+        "address1": "187",
+        "address2": "West Street",
+        "city": "Sheffield",
+        "postcode": "S1 4EW",
+        "phone": "01144345634",
+        "description": "Local kebab house with mixed reviews. A favourite with students and peoplewith low hygiene standards",
+        "price_range": 1,
+        "parking": false,
+        "wifi": false,
+        "takeout": true,
+        "delivery": false,
+        "outdoor_seating": false,
+        "reservations": false,
+        "alcohol": false,
+        "owner_id": "aslan@chicken-shop.com",
+        "owner_message": "Please come and buy my chicken, I don't want to close again!",
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.987Z",
+        "__v": 0,
+        "distance": 1293.5865760840645
+    }, {
+        "_id": "5aad8b2e6fb09e3a54ea366c",
+        "location": {"type": "Point", "coordinates": [-1.477221, 53.380494]},
+        "latitude": 53.380494,
+        "longitude": -1.477221,
+        "opening_times": [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        "category": ["Chicken", "Portuguese", "Spicy", "Burgers", "Casual", "Vegetarian"],
+        "reviews": [],
+        "images": [],
+        "name": "Nando's",
+        "address1": "Royal Plaza Development",
+        "address2": "West Street",
+        "city": "Sheffield",
+        "postcode": "S1 4EZ",
+        "url": "https://www.nandos.co.uk",
+        "menu": "https://www.nandos.co.uk/food/menu",
+        "phone": "01142780044",
+        "description": "Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.",
+        "price_range": 2,
+        "parking": false,
+        "wifi": false,
+        "takeout": true,
+        "delivery": true,
+        "outdoor_seating": false,
+        "reservations": true,
+        "alcohol": true,
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.987Z",
+        "__v": 0,
+        "distance": 1425.879841499018
+    }, {
+        "_id": "5aad8b2e6fb09e3a54ea366d",
+        "location": {"type": "Point", "coordinates": [-1.473198, 53.377303]},
+        "latitude": 53.377303,
+        "longitude": -1.473198,
+        "opening_times": [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
+        "category": ["Spicy", "Burgers", "Casual", "Vegetarian"],
+        "reviews": ["5aad98377888995220605d11"],
+        "images": [],
+        "name": "Gourmet Burger Kitchen",
+        "address1": "Unit 8",
+        "address2": "24 The Moor",
+        "city": "Sheffield",
+        "postcode": "S1 4PA",
+        "url": "https://www.gbk.co.uk",
+        "menu": "https://www.gbk.co.uk/menu",
+        "phone": "0114 275 5154",
+        "description": "Chain restaurant with classic wooden decor, servinggourmet British beef, chicken or veggie burgers.",
+        "price_range": 3,
+        "parking": false,
+        "wifi": false,
+        "takeout": true,
+        "delivery": true,
+        "outdoor_seating": false,
+        "reservations": true,
+        "alcohol": true,
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.988Z",
+        "__v": 0,
+        "distance": 1840.225459777671
+    }, {
+        "_id": "5ab1677c521e5430fc7d2496",
+        "location": {"type": "Point", "coordinates": [-1.5217238, 53.3478805]},
+        "latitude": 53.3478805,
+        "longitude": -1.5217238,
+        "opening_times": [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        "category": ["Premium", "Steakhouse"],
+        "reviews": [],
+        "images": [],
+        "name": "Miller & Carter",
+        "address1": "345",
+        "address2": "Ecclesall Rd S",
+        "city": "Sheffield",
+        "postcode": "S11 9PW",
+        "url": "www.millerandcarter.co.uk/",
+        "menu": "www.millerandcarter.co.uk/food",
+        "phone": "01142362735",
+        "price_range": 5,
+        "owner_message": "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.991Z",
+        "__v": 0,
+        "distance": 4642.405962158538
+    }, {
+        "_id": "5ab1677c521e5430fc7d2493",
+        "location": {"type": "Point", "coordinates": [-1.412663, 53.414766]},
+        "latitude": 53.414766,
+        "longitude": -1.412663,
+        "opening_times": [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1380], [660, 1380]],
+        "category": ["Spicy", "Casual", "Japanese", "Vegetarian"],
+        "reviews": [],
+        "images": [],
+        "name": "Wagamama",
+        "address1": "12",
+        "address2": "Meadowhall Centre",
+        "city": "Sheffield",
+        "postcode": "S9 1EP",
+        "url": "www.wagamama.com/restaurants/sheffield-meadowhall",
+        "menu": "www.wagamama.com/our-menu",
+        "phone": "01142568033",
+        "description": "Asian-inspired & Japanese chain restaurantwhere dishes are whisked to long communal tables.",
+        "price_range": 3,
+        "parking": true,
+        "wifi": true,
+        "takeout": true,
+        "delivery": false,
+        "outdoor_seating": false,
+        "reservations": false,
+        "alcohol": true,
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.989Z",
+        "__v": 0,
+        "distance": 6356.565902599166
+    }, {
+        "_id": "5ab1677c521e5430fc7d2497",
+        "location": {"type": "Point", "coordinates": [-2.236922, 53.484547]},
+        "latitude": 53.484547,
+        "longitude": -2.236922,
+        "opening_times": [[1020, 1320], [1020, 1320], [1020, 1320], [1020, 1320], [720, 1380], [720, 1380], [720, 1320]],
+        "category": ["Burgers", "Casual", "Vegetarian"],
+        "reviews": [],
+        "images": [],
+        "name": "Almost Famous",
+        "address1": "100-102",
+        "address2": "High Street",
+        "city": "Manchester",
+        "postcode": "M4 1HP",
+        "url": "www.almostfamousburgers.com",
+        "phone": "01612449422",
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.993Z",
+        "__v": 0,
+        "distance": 50325.503397558794
+    }, {
+        "_id": "5ab1677c521e5430fc7d2495",
+        "location": {"type": "Point", "coordinates": [-2.249153, 53.479377]},
+        "latitude": 53.479377,
+        "longitude": -2.249153,
+        "opening_times": [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1380], [720, 1260]],
+        "category": ["Burgers", "Spicy", "StudentDiscount", "Casual", "Vegetarian"],
+        "reviews": [],
+        "images": [],
+        "name": "Handmade Burger Co.",
+        "address1": "The Old Courthouse, 184",
+        "address2": "Deansgate",
+        "city": "Manchester",
+        "postcode": "M3 3WB",
+        "url": "www.handmadeburger.co.uk",
+        "menu": "www.handmadeburger.co.uk/menu/",
+        "phone": "01618320708",
+        "description": "Chain serving specialist burgers on sourdough orbrioche buns and hand-mixed milkshakes.",
+        "price_range": 3,
+        "parking": false,
+        "wifi": true,
+        "reservations": true,
+        "alcohol": true,
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.990Z",
+        "__v": 0,
+        "distance": 51001.063600847956
+    }, {
+        "_id": "5ab1677c521e5430fc7d2494",
+        "location": {"type": "Point", "coordinates": [-2.881447, 53.193437]},
+        "latitude": 53.193437,
+        "longitude": -2.881447,
+        "opening_times": [[720, 1350], [1020, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1410]],
+        "category": ["Japanese", "Chicken", "Vegetarian"],
+        "reviews": [],
+        "images": [],
+        "name": "Siam Thai and Teppanyaki",
+        "address1": "32",
+        "address2": "City Road",
+        "city": "Chester",
+        "postcode": "CH1 3AE",
+        "url": "www.siam-teppanyaki.co.uk/",
+        "phone": "01244403222",
+        "description": "Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.",
+        "price_range": 3,
+        "parking": true,
+        "takeout": true,
+        "outdoor_seating": false,
+        "reservations": true,
+        "alcohol": true,
+        "published": true,
+        "updated_at": "2018-03-20T22:44:18.990Z",
+        "__v": 0,
+        "distance": 94662.94484578002
+    }]

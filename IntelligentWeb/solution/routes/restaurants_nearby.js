@@ -4,18 +4,22 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const fs = require('fs');
 const Restaurant = mongoose.model('Restaurant');
 router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
+let foundRestaurants = [];
+
 //AJAX POSTs to '/restaurants-nearby', so relatively '/'
 router.post('/', (req, res) => {
-    console.log('Aggregating restaurants');
 
     // TODO: pass this in with pagination
     const pageNum = 0;
+    const restaurantsPerPage = 10;
+
+    console.log("Looking up restaurant distances");
 
     Restaurant.aggregate([{
             "$geoNear": {
@@ -24,33 +28,49 @@ router.post('/', (req, res) => {
                     "coordinates": [req.body.lng, req.body.lat]
                 },
                 "spherical": true,
-                "distanceField": "dis"
+                "distanceField": "distance"
                 // "maxDistance": 10000
             }
         },
-            {"$skip": pageNum * 10},
-            {"$limit": 10}
-        ],
-        (err, restaurants) => {
-            if (err) throw err;
-            //console.log( restaurants );
-
-            restaurants = restaurants.map((x) => {
-                delete x.dis;
-                return new Restaurant(x);
-            });
-
-            // TODO: figure out what population is and handle promise
-            Restaurant.populate(restaurants, {path: "info"}, (err, docs) => {
-                if (err) throw err;
-                console.log(JSON.stringify(docs, undefined, 4));
-            });
+            {"$skip": pageNum * restaurantsPerPage},
+            {"$limit": restaurantsPerPage}
+        ], (err, restaurants) => {
+            if (err) {
+                console.log(`Error: ${err}`);
+            }
+            if (restaurants.length > 0) {
+                console.log(`Returning: ${restaurants.length}`);
+                foundRestaurants = restaurants;
+            } else {
+                console.log(`Error: restaurants is ${restaurants}`);
+            }
         }
-    ).then(() => {
-        res.send(JSON.stringify({lat: req.body.lat, lng: req.body.lng})); //TODO change this!!!
-    }).catch((err) => {
-        console.log(`Restaurant aggregation failed: ${err}`);
-    });
+    )
+        .then(() => returnRestaurantList(res))
+        .catch((err) => {
+            console.log(`Restaurant aggregation failed: ${err}`);
+        });
 });
+
+function returnRestaurantList(res) {
+
+    console.log("Returning restaurant list");
+    let returnList = [];
+    console.log(`Returned: ${foundRestaurants.length}`);
+
+    for (let restaurant of foundRestaurants) {
+        const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
+        const keepPosition = files.indexOf(".keep");
+        files.splice(keepPosition, 1);
+
+        const tempRestaurant = new Restaurant(restaurant);
+        tempRestaurant.images = files;
+        returnList.push(tempRestaurant)
+    }
+
+    res.send(returnList);
+    return undefined; // forces promise to run synchronously - DO NOT REMOVE
+}
+
 
 module.exports = router;
