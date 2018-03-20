@@ -1,9 +1,11 @@
-let x = 100;
+let x = "undefined";
 
-if (y){
+if (x){
     console.log('yes');
+    console.log(x);
 }else{
     console.log('no');
+    console.log(x);
 }
 
 

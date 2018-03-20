@@ -14,7 +14,8 @@ UserSchema = Schema({
     reviews: Array,
     display_img_filename: {type: String, unique: true},
     user_rating: Number,
-    restaurants: Array
+    restaurants: Array,
+    updated_at: Date
 });
 
 UserSchema.virtual('username').get(function () {
@@ -22,8 +23,8 @@ UserSchema.virtual('username').get(function () {
 });
 
 UserSchema.pre('save', function (next) {
-    const user = this;
-    user.password = generateHash(user.password);
+    this.password = generateHash(this.password);
+    this.updated_at = Date.now();
     next();
 });
 

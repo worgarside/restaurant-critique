@@ -8,7 +8,13 @@ ReviewSchema = Schema({
     datetime: {type: Date, required: true},
     images: Array,
     restaurant_rating: {type: Number, min:0, max: 5, required: true},
-    review_rating: Number
+    review_rating: Number,
+    updated_at: Date
+});
+
+ReviewSchema.pre('save', function (next) {
+    this.updated_at = Date.now();
+    next();
 });
 
 mongoose.model('Review', ReviewSchema);

@@ -10,8 +10,8 @@ RestaurantSchema = Schema({
         type: {type: String},
         coordinates: [Number]
     },
-    latitude: {type: Number, min: -90, max: 90},
-    longitude: {type: Number, min: -180, max: 180},
+    latitude: {type: Number, min: -90, max: 90, default: 90},
+    longitude: {type: Number, min: -180, max: 180, default: 180},
     url: {type: String, trim: true},
     menu: {type: String, trim: true},
     phone: {type: String, trim: true},
@@ -30,7 +30,8 @@ RestaurantSchema = Schema({
     owner_message: {type: String, trim: true},
     reviews: [String],
     average_rating: {type: Number, min: 0, max: 5},
-    published: {type: Boolean, required: true}
+    published: {type: Boolean, required: true},
+    updated_at: Date
 });
 
 // RestaurantSchema.virtual('location').get(function () {
@@ -38,15 +39,13 @@ RestaurantSchema = Schema({
 // });
 
 RestaurantSchema.pre('save', function (next) {
-    const restaurant = this;
-
-    if ((restaurant.latitude) && (restaurant.longitude)) {
-        restaurant.location = {
+    if ((this.latitude) && (this.longitude)) {
+        this.location = {
             "type": "Point",
             "coordinates": [this.longitude, this.latitude] // long THEN lat, according to geoJSON standards
         };
     }
-
+    this.updated_at = Date.now();
     next();
 });
 

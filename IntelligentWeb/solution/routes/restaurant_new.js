@@ -33,7 +33,6 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     });
 
     let gmapsPromise = new Promise((resolve, reject) => {
-        console.log('searching');
         googleMaps.geocode({
             address: postcode
         }, (err, response) => {
@@ -42,14 +41,11 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
                 reject();
             } else {
                 const locationData = response.json.results[0].geometry.location;
-                console.log(`Coordinates found: ${locationData}`);
                 resolve(locationData);
             }
         })
     });
 
-
-    // Create a promise that rejects in <ms> milliseconds
     let timeoutPromise = new Promise((resolve, reject) => {
         let timer = setTimeout(() => {
             clearTimeout(timer);
@@ -60,24 +56,20 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     Promise.race([gmapsPromise, timeoutPromise])
         .then((location) => {
             submitRestaurant(postcode, location, req.body);
-            console.log(location);
         })
         .catch((err) => {
-            console.log(`Error: ${err} Submitting location @ (0, 0)`);
-            submitRestaurant(postcode, { lat: 0.000000001, lng: 0.000000001 }, req.body)
-            // TODO: find out why you can't submit 0 as a number to MongoDB?!
+            console.log(`Error: ${err} Submitting null location`);
+            submitRestaurant(postcode, null, req.body);
         });
-
 
     res.redirect('/')
 });
 
 function submitRestaurant(postcode, location, body) {
-    console.log("Submitting restaurant");
     /**
      * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
          monClose:int, tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int,
-         restaurantName: string, priceRange: string, outdoorseating: int}} body,
+         restaurantName: string, priceRange: string, outdoorseating: string}} body,
      */
 
     const openingTimes = [
@@ -90,42 +82,90 @@ function submitRestaurant(postcode, location, body) {
         [body.sunOpen, body.sunClose]
     ];
 
+    let lat, lng, priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol;
+
+    if (location) {
+        lat = location.lat;
+        lng = location.lng;
+    }
+
+    if (body.priceRange) {
+        priceRange = parseInt(body.priceRange);
+    }
+
+    // TODO: find a way of condensing these for loops
+
+    if (body.parking === '0'){
+        parking = false
+    } else if (body.parking === '1'){
+        parking = true
+    }
+
+    if (body.wifi === '0'){
+        wifi = false
+    } else if (body.wifi === '1'){
+        wifi = true
+    }
+
+    if (body.takeout === '0'){
+        takeout = false
+    } else if (body.takeout === '1'){
+        takeout = true
+    }
+
+    if (body.delivery === '0'){
+        delivery = false
+    } else if (body.delivery === '1'){
+        delivery = true
+    }
+
+    if (body.outdoorseating === '0'){
+        outdoorseating = false
+    } else if (body.outdoorseating === '1'){
+        outdoorseating = true
+    }
+
+    if (body.reservations === '0'){
+        reservations = false
+    } else if (body.reservations === '1'){
+        reservations = true
+    }
+
+    if (body.alcohol === '0'){
+        alcohol = false
+    } else if (body.alcohol === '1'){
+        alcohol = true
+    }
+
     new Restaurant({
         name: body.restaurantName,
         address1: body.address1,
         address2: body.address2,
         city: body.city,
         postcode: postcode,
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: lat,
+        longitude: lng,
         url: body.url,
         menu: body.menu,
         phone: body.phone,
         opening_times: openingTimes,
         description: body.description,
-        price_range: parseInt(body.priceRange),
+        price_range: priceRange,
         category: [body.category],
-        parking: body.parking === 1,
-        wifi: body.wifi === 1,
-        takeout: body.takeout === 1,
-        delivery: body.delivery === 1,
-        outdoor_seating: body.outdoorseating === 1,
-        reservations: body.reservations === 1,
-        alcohol: body.alcohol === 1,
-        owner_id: null,
-        owner_message: null,
+        parking: parking,
+        wifi: wifi,
+        takeout: takeout,
+        delivery: delivery,
+        outdoor_seating: outdoorseating,
+        reservations: reservations,
+        alcohol: alcohol,
         reviews: [],
-        average_rating: null,
         published: true
     }).save().then(() => {
         console.log("Restaurant added to collection")
     }).catch((err) => {
         console.log(`Restaurant failed to add to collection: ${err}`)
     });
-
-    // console.log("\n\n############################################\n\n");
-    // console.log(newRestaurant);
-    // console.log("\n\n############################################\n\n");
 
     /*
         FOR ADDING A NEW REVIEW
