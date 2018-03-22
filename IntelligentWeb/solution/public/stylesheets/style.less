@@ -44,7 +44,7 @@ input[type="number"] {
   display: table-cell;
   vertical-align: middle;
   width: 0.1%;
-  white-space: nowrap;
+  //white-space: nowrap;
   position: relative;
 }
 
@@ -309,9 +309,9 @@ button.btn.btn-default#add-times {
 // ================ Restaurants Nearby ================ \\
 
 #nearby-map {
-  height: 400px;
-  width: 80%;
-  margin: 0 auto;
+  height: 850px;
+  width: 95%;
+  //margin-left: -5%;
 }
 
 .nearby-restaurant {
@@ -331,48 +331,78 @@ button.btn.btn-default#add-times {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
 }
 
-.restaurant-title {
-  font-size: 22pt;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-  color: #2b2b2b;
-  &:hover {
-    text-decoration: none;
+.restaurant {
+  &-title {
+    font-size: 22pt;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #2b2b2b;
+    &:hover {
+      text-decoration: none;
+      color: #6d6d6d;
+    }
+  }
+
+  &-stars {
+    span {
+      font-size: 15pt;
+      margin-right: 5px;
+      color: #2b2b2b;
+    }
+  }
+
+  &-address {
+    font-size: 14pt;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    margin-bottom: 0;
+  }
+
+  &-category {
+    font-size: 10pt;
     color: #6d6d6d;
+    background: #e6e6e6;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 15px 5px;
+    padding: 2px 5px;
   }
-}
 
-.restaurant-stars {
-  height: 18pt;
-
-  img {
+  &-description {
     width: 100%;
-    height: 100%;
-    vertical-align: middle;
+    color: #2b2b2b;
+    margin-bottom: 4px;
   }
 }
 
-#slideshow-wrapper {
+.slideshow-wrapper {
   padding: 10px 0 10px 10px;
   width: 240px;
   height: 180px;
 }
 
-#slideshow {
+.slideshow {
   width: 100%;
   height: 100%;
   position: relative;
   overflow: hidden;
 }
 
-img.img-slides {
+img.img-slides-0, img.img-slides-1, img.img-slides-2, img.img-slides-3, img.img-slides-4,
+img.img-slides-5, img.img-slides-6, img.img-slides-7, img.img-slides-8, img.img-slides-9 {
   width: 100%;
   position: absolute;
-  top:-100%; left:0; right: 0; bottom:-100%;
+  top: -100%;
+  left: 0;
+  right: 0;
+  bottom: -100%;
   margin: auto;
 }
 
-#button-prev, #button-next {
+#button-prev-0, #button-next-0, #button-prev-1, #button-next-1, #button-prev-2, #button-next-2,
+#button-prev-3, #button-next-3, #button-prev-4, #button-next-4, #button-prev-5, #button-next-5,
+#button-prev-6, #button-next-6, #button-prev-7, #button-next-7, #button-prev-8, #button-next-8,
+#button-prev-9, #button-next-9 {
   cursor: pointer;
   position: absolute;
   top: 50%;
@@ -383,10 +413,22 @@ img.img-slides {
   transition: 0.3s ease;
 }
 
-#button-next {
+#button-next-0, #button-next-1, #button-next-2, #button-next-3, #button-next-4,
+#button-next-5, #button-next-6, #button-next-7, #button-next-8, #button-next-9 {
   right: 15px;
 }
 
-#button-prev:hover, #button-next:hover {
-  background-color: rgba(0,0,0,0.8);
+#button-prev-0:hover, #button-next-0:hover, #button-prev-1:hover, #button-next-1:hover,
+#button-prev-2:hover, #button-next-2:hover, #button-prev-3:hover, #button-next-3:hover,
+#button-prev-4:hover, #button-next-4:hover, #button-prev-5:hover, #button-next-5:hover,
+#button-prev-6:hover, #button-next-6:hover, #button-prev-7:hover, #button-next-7:hover,
+#button-prev-8:hover, #button-next-8:hover, #button-prev-9:hover, #button-next-9:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.restaurant-rating {
+  width: 130px;
+  height: 24px;
+  background: url("/images/site/blank-stars.png");
+  background-size: contain;
 }

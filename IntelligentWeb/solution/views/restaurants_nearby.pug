@@ -15,31 +15,51 @@ block content
         .row
             .col
                 #restaurant-list
-                    .container.nearby-restaurant
-                        .row
-                            .col
-                                .vert-center-parent
-                                    a.restaurant-title.d-inline(href='#') The Siam Thai and Teppanyaki
-                                    .vert-center-child
-                                        img.restaurant-stars(src="images/site/blank-stars.png")
-                        .row
-                            .col-7
-                                p.restaurant-description Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.
-                            .col-4.offset-1
-                                .float-right
-                                    #slideshow-wrapper
-                                        #slideshow
-                                            img.img-slides(src="images/displayPictures/greta-veronika-gmail-com.jpg")
-                                            img.img-slides(src="images/displayPictures/aslan-chicken-shop-com.jpg")
-                                            img.img-slides(src="images/displayPictures/copeyrufus-gmail-com.jpg")
-                                            img.img-slides(src="images/displayPictures/worgarside-gmail-com.jpg")
-                                        #button-prev
-                                            span.oi.oi-check.oi-chevron-left(aria-hidden='true')
-                                        #button-next
-                                            span.oi.oi-check.oi-chevron-right(aria-hidden='true')
-
+                    //.container.nearby-restaurant
+                    //    .row
+                    //        .col-8
+                    //            .vert-center-parent
+                    //                .vert-center-child
+                    //                    .row
+                    //                        .col
+                    //                            a.restaurant-title.d-inline(href='#') The Siam Thai and Teppanyaki
+                    //                            .restaurant-stars
+                    //                                span.oi.oi-check.oi-star(aria-hidden='true', style="color: orange;")
+                    //                                span.oi.oi-check.oi-star(aria-hidden='true', style="color: orange;")
+                    //                                span.oi.oi-check.oi-star(aria-hidden='true', style="color: orange;")
+                    //                                span.oi.oi-check.oi-star(aria-hidden='true', style="color: orange;")
+                    //                                span.oi.oi-check.oi-star(aria-hidden='true')
+                    //                    .row
+                    //                        .col
+                    //                            p.restaurant-address 32, City Road, Chester, CH1 3AE
+                    //                    .row
+                    //                        .col(style="margin: -5px")
+                    //                            p.restaurant-category Japanese
+                    //                            p.restaurant-category Chicken
+                    //                            p.restaurant-category Vegetarian
+                    //                            p.restaurant-category Family Friendly
+                    //                    .row
+                    //                        .col
+                    //                            p.restaurant-description Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.
+                    //        .col-4
+                    //            .vert-center-parent
+                    //                .vert-center-child
+                    //                    .row
+                    //                        .col
+                    //                            .float-right
+                    //                                .slideshow-wrapper
+                    //                                    .slideshow
+                    //                                        img.img-slides-1(src="images/displayPictures/greta-veronika-gmail-com.jpg")
+                    //                                        img.img-slides-1(src="images/displayPictures/aslan-chicken-shop-com.jpg")
+                    //                                        img.img-slides-1(src="images/displayPictures/copeyrufus-gmail-com.jpg")
+                    //                                        img.img-slides-1(src="images/restaurants/5ab1677c521e5430fc7d2494/2018-03-20 20-09-01.jpg")
+                    //                                    #button-prev-1
+                    //                                        span.oi.oi-check.oi-chevron-left(aria-hidden='true')
+                    //                                    #button-next-1
+                    //                                        span.oi.oi-check.oi-chevron-right(aria-hidden='true')
     script.
         function initMap() {
+            console.log("Loaded GMaps JS");
         }
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
     script(type='text/javascript', src = '/javascripts/restaurants_nearby.js')

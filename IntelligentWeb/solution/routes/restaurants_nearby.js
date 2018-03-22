@@ -38,39 +38,39 @@ router.post('/', (req, res) => {
             if (err) {
                 console.log(`Error: ${err}`);
             }
-            if (restaurants.length > 0) {
-                console.log(`Returning: ${restaurants.length}`);
-                foundRestaurants = restaurants;
-            } else {
+            // TODO: make this nicer
+            if (restaurants === undefined) {
                 console.log(`Error: restaurants is ${restaurants}`);
+            } else {
+                if (restaurants.length > 0) {
+                    console.log(`Returning: ${restaurants.length}`);
+                    foundRestaurants = restaurants;
+                } else {
+                    console.log(`Error: restaurants is ${restaurants}`);
+                }
             }
         }
-    )
-        .then(() => returnRestaurantList(res))
-        .catch((err) => {
-            console.log(`Restaurant aggregation failed: ${err}`);
-        });
+    ).then(() => {
+        console.log("Returning restaurant list");
+        let returnList = [];
+        console.log(`Returned: ${foundRestaurants.length}`);
+
+        for (let restaurant of foundRestaurants) {
+            const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
+            const keepPosition = files.indexOf(".keep");
+            files.splice(keepPosition, 1);
+
+            const tempRestaurant = new Restaurant(restaurant);
+            tempRestaurant.images = files;
+            returnList.push(tempRestaurant)
+        }
+
+        res.send(returnList);
+        return undefined; // forces promise to run synchronously - DO NOT REMOVE
+    }).catch((err) => {
+        console.log(`Restaurant aggregation failed: ${err}`);
+    });
 });
-
-function returnRestaurantList(res) {
-
-    console.log("Returning restaurant list");
-    let returnList = [];
-    console.log(`Returned: ${foundRestaurants.length}`);
-
-    for (let restaurant of foundRestaurants) {
-        const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-        const keepPosition = files.indexOf(".keep");
-        files.splice(keepPosition, 1);
-
-        const tempRestaurant = new Restaurant(restaurant);
-        tempRestaurant.images = files;
-        returnList.push(tempRestaurant)
-    }
-
-    res.send(returnList);
-    return undefined; // forces promise to run synchronously - DO NOT REMOVE
-}
 
 
 module.exports = router;

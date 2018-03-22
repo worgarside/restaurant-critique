@@ -138,7 +138,7 @@ function populateRestaurants(insertPromises) {
         owner_id: "aslan@chicken-shop.com",
         owner_message: "Please come and buy my chicken, I don't want to close again!",
         reviews: ["5aad98377888995220605d10", "5aad98377888995220605d0f"],
-        average_rating: undefined,
+        average_rating: 3,
         published: true
     }).save());
 
@@ -198,7 +198,7 @@ function populateRestaurants(insertPromises) {
         owner_id: undefined,
         owner_message: undefined,
         reviews: ["5aad98377888995220605d11"],
-        average_rating: undefined,
+        average_rating: 4,
         published: true
     }).save());
 
@@ -258,7 +258,7 @@ function populateRestaurants(insertPromises) {
         owner_id: undefined,
         owner_message: undefined,
         reviews: [],
-        average_rating: undefined,
+        average_rating: 5,
         published: true
     }).save());
 

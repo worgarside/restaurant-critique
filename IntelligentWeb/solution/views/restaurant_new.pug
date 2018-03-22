@@ -131,7 +131,7 @@ block content
                             //            p.text-center Closing
 
 
-                    .opening-times-body(hidden=false)
+                    .opening-times-body(hidden=true)
                         each day in daysOfWeek
                             input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                             input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)

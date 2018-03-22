@@ -3,6 +3,7 @@ const fs = require('fs');
 
 RestaurantSchema = Schema({
     name: {type: String, required: true, index: true},
+    wholeAddress: String,
     address1: {type: String, required: true},
     address2: {type: String, trim: true},
     city: {type: String, trim: true},
@@ -36,8 +37,8 @@ RestaurantSchema = Schema({
     updated_at: Date
 });
 
-// RestaurantSchema.virtual('location').get(function () {
-//     return [this.latitude, this.longitude];
+// RestaurantSchema.virtual('address').get(function () {
+//     return  ;
 // });
 
 RestaurantSchema.pre('save', function (next) {
@@ -55,6 +56,8 @@ RestaurantSchema.pre('save', function (next) {
         fs.mkdirSync(imageDir);
         fs.closeSync(fs.openSync(`${imageDir}/.keep`, 'w'));
     }
+
+    this.wholeAddress = `${this.address1}, ${this.address2}, ${this.city}, ${this.postcode}`;
 
     next();
 });
