@@ -19,9 +19,19 @@ router.post('/', (req, res) => {
     const pageNum = 0;
     const restaurantsPerPage = 10;
 
-    console.log("Looking up restaurant distances");
+    aggregateRestaurants(req, pageNum, restaurantsPerPage)
+        .then(() => {
+        returnRestaurantList(res)
+    })
+        .catch((err) => {
+        console.log(`Restaurant aggregation failed: ${err}`);
+    });
+});
 
-    Restaurant.aggregate([{
+function aggregateRestaurants(req, pageNum, restaurantsPerPage){
+    console.log("\nLooking up restaurant distances");
+
+    return Restaurant.aggregate([{
             "$geoNear": {
                 "near": {
                     "type": "Point",
@@ -50,27 +60,23 @@ router.post('/', (req, res) => {
                 }
             }
         }
-    ).then(() => {
-        console.log("Returning restaurant list");
-        let returnList = [];
-        console.log(`Returned: ${foundRestaurants.length}`);
+    );
+}
 
-        for (let restaurant of foundRestaurants) {
-            const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-            const keepPosition = files.indexOf(".keep");
-            files.splice(keepPosition, 1);
+function returnRestaurantList(res){
+    let returnList = [];
+    console.log(`Returned: ${foundRestaurants.length}`);
 
-            const tempRestaurant = new Restaurant(restaurant);
-            tempRestaurant.images = files;
-            returnList.push(tempRestaurant)
-        }
+    for (let restaurant of foundRestaurants) {
+        const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
+        const keepPosition = files.indexOf(".keep");
+        files.splice(keepPosition, 1);
 
-        res.send(returnList);
-        return undefined; // forces promise to run synchronously - DO NOT REMOVE
-    }).catch((err) => {
-        console.log(`Restaurant aggregation failed: ${err}`);
-    });
-});
+        const tempRestaurant = new Restaurant(restaurant);
+        tempRestaurant.images = files;
+        returnList.push(tempRestaurant)
+    }
 
-
+    res.send(returnList);
+}
 module.exports = router;

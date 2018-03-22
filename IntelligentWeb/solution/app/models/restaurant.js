@@ -20,7 +20,7 @@ RestaurantSchema = Schema({
     opening_times: Array,
     description: {type: String, trim: true},
     price_range: Number,
-    category: [String],
+    categories: {type: [String], default: []}, //TODO: turn this into type: [Category] so we can display the name, not the ID
     parking: Boolean,
     wifi: Boolean,
     takeout: Boolean,
@@ -30,8 +30,8 @@ RestaurantSchema = Schema({
     alcohol: Boolean,
     owner_id: {type: String, trim: true},
     owner_message: {type: String, trim: true},
-    reviews: [String],
-    images: [String],
+    reviews: {type: [String], default: []},
+    images: {type: [String], default: []},
     average_rating: {type: Number, min: 0, max: 5},
     published: {type: Boolean, required: true},
     updated_at: Date

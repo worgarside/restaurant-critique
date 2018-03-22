@@ -151,7 +151,7 @@ function submitRestaurant(postcode, location, body) {
         opening_times: openingTimes,
         description: body.description,
         price_range: priceRange,
-        category: [body.category],
+        categories: [body.category],
         parking: parking,
         wifi: wifi,
         takeout: takeout,
@@ -159,8 +159,7 @@ function submitRestaurant(postcode, location, body) {
         outdoor_seating: outdoorseating,
         reservations: reservations,
         alcohol: alcohol,
-        reviews: [],
-        published: true
+        published: true //TODO: add published flag
     }).save().then(() => {
         console.log("Restaurant added to collection")
     }).catch((err) => {
