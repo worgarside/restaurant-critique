@@ -29,9 +29,10 @@ if (!userLoggedIn) {
         .mousedown((e) => {
             const form = $('#login-form');
             const btn = $('#btn-login');
+            const loginWarning = $('#login-warning');
 
             // check mouse loc isn't form, button or descendant of form
-            if (!form.is(e.target) && !btn.is(e.target) && form.has(e.target).length === 0) {
+            if (!form.is(e.target) && !btn.is(e.target) && !loginWarning.is(e.target) && form.has(e.target).length === 0) {
                 form.fadeOut();
             }
 

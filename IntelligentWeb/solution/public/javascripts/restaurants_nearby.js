@@ -1,16 +1,41 @@
-let lat, lng, map;
+let lat, lng, map, userMarker;
 
 $(() => {
     $('#nearby-map').hover(
         () => {
-            expandMap();
+            $('#nearby-map').removeClass('map-shrink');
         }, () => {
-            shrinkMap();
+            $('#nearby-map').addClass('map-shrink');
         }
     );
+
+    if (!userLoggedIn) {
+        $('#login-warning').click(() => {
+            $('#btn-login').click();
+        });
+    } else {
+        $('#restaurant-overlay').css('display', 'block');
+    }
 });
 
-// function getUserLocation() {    const options = {        enableHighAccuracy: true,        timeout: 10000        // maximumAge: 0    };    navigator.geolocation.getCurrentPosition(createMap, navigatorFallback, options);}
+function allowLocation(allowed) {
+    if (allowed) {
+        const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+
+            userMarker.setPosition(new google.maps.LatLng(lat, lng));
+            console.log('Geolocation succeeded!');
+            updateList();
+        }, () => {
+            console.log('Geolocation failed :(');
+        }, options)
+    }
+
+    $('#restaurant-overlay').css('display', 'none');
+}
 
 function initMap() {
     const geocoder = new google.maps.Geocoder();
@@ -29,28 +54,44 @@ function createMap() {
     const currentLocation = {lat: lat, lng: lng};
     console.log(`Creating the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
 
-    map = new google.maps.Map($('#nearby-map')[0], {
-        zoom: 14,
-        center: currentLocation
-    });
+    if (userLoggedIn) {
+        map = new google.maps.Map($('#nearby-map')[0], {
+            zoom: 14,
+            center: currentLocation,
+        });
 
-    const marker = new google.maps.Marker({
-        map: map,
-        draggable: true,
-        animation: google.maps.Animation.DROP,
-        position: currentLocation
-    });
+        userMarker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            position: currentLocation
+        });
 
-    google.maps.event.addListener(marker, 'dragend', () => {
-        lat = marker.getPosition().lat();
-        lng = marker.getPosition().lng();
-        updateList();
-    });
+        google.maps.event.addListener(userMarker, 'dragend', () => {
+            lat = userMarker.getPosition().lat();
+            lng = userMarker.getPosition().lng();
+            updateList();
+        });
+    } else {
+        map = new google.maps.Map($('#nearby-map')[0], {
+            zoom: 14,
+            center: currentLocation,
+            draggable: false
+        });
 
+        userMarker = new google.maps.Marker({
+            map: map,
+            animation: google.maps.Animation.DROP,
+            position: currentLocation
+        });
+
+        google.maps.event.addListener(userMarker, 'click', () => {
+            $('#btn-login').click();
+        });
+    }
     updateList();
 }
 
-// noinspection JSUnusedGlobalSymbols [IntelliJ]
 function updateList() {
     const coordinates = JSON.stringify({lat: lat, lng: lng});
     console.log(`Sending ${coordinates} to AJAX POST`);
@@ -92,17 +133,6 @@ function processData(results) {
         });
     }
     console.log('HTML Updated\n');
-    shrinkMap();
-}
-
-function shrinkMap() {
-    console.log('shrink');
-    $('#nearby-map').addClass('map-shrink');
-}
-
-function expandMap() {
-    console.log('shrink');
-    $('#nearby-map').removeClass('map-shrink');
 }
 
 function getRestaurantDiv(restaurant, index) {

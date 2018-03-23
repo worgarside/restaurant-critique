@@ -1,21 +1,38 @@
 extends partials/layout
 
 block content
-    if (user)
-        script const postcode = `#{user.postcode}`
+    #restaurant-overlay
+        .vert-center-parent
+            .vert-center-child
+                #restaurant-overlay-confirmation
+                    h5 To give you the most accurate results, allow us to access your current location
+                    button.btn.btn-danger(type='button', onclick='allowLocation(false);') No thanks
+                    button.btn.btn-success(type='button', onclick='allowLocation(true);') Sure!
 
-    br
+
+    if (!user)
+        script const postcode = 'S1 2JA';
+        br
+        .container
+            .row
+                .col
+                    h1 Find Restaurants Near You
+                    h3#login-warning Login for personalised results and an interactive map!
+    else
+        script const postcode = `#{user.postcode}`;
+        br
+        .container
+            .row
+                .col
+                    h1 Find Restaurants Near You
+                    h5 Drag the marker on the map to change the search area!
     .container
-        .row
-            .col
-                h1 Find Restaurants Near You
-                p Drag the marker on the map to change the search area!
         .row
             .col
                 #nearby-map.map-shrink
         .row
             .col
-                h2.restaurant-result-header Your nearest restaurants
+                h2#restaurant-result-header Your nearest restaurants
                 #restaurant-list
 
     script(type='text/javascript', src='/javascripts/restaurants_nearby.js')
