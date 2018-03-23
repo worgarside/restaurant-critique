@@ -176,7 +176,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   text-align: center;
   background-color: @form-bg-color;
   width: unit(@form-width, px);
-  position: absolute;
+  position: fixed;
   z-index: 100000;
   margin-top: unit(@arrow-height, px);
   border: @form-border-width solid @form-border-color;
@@ -215,7 +215,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 // ================ Footer ================ \\
 
 footer {
-  @footer-color: #d1d1d1;
+  @footer-color: #c9c9c9;
   margin-top: 50px;
   background-color: #222222;
   text-align: center;
@@ -224,6 +224,11 @@ footer {
 
   a {
     color: @footer-color;
+
+    &:hover {
+      text-decoration: none;
+      color: #ffffff;
+    }
   }
 
   p {

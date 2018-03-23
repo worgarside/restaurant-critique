@@ -1,6 +1,6 @@
 console.log('Loaded restaurant_new.js');
 
-$(function () {
+$(() => {
     $('#opening-time').timepicker({
         timeFormat: 'HH:mm',
         interval: 30,

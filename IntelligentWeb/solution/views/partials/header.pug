@@ -23,14 +23,15 @@ block navbar
                 a.nav-link.nav-wide(href='/restaurant/new') Recommendations
 
         ul.navbar-nav.row
+            // TODO: could do with passing req.user to js directly
             if (!user)
-                script var userLoggedIn = false // TODO: could do with passing req.user to js directly
+                script const userLoggedIn = false
                 li.nav-item
                     a.nav-link.nav-thin#btn-login Login
                 li.nav-item
                     a.nav-link.nav-thin(href='/signup') Sign Up
             else
-                script var userLoggedIn = true
+                script const userLoggedIn = true
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 

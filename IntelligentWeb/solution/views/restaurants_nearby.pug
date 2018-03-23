@@ -1,6 +1,9 @@
 extends partials/layout
 
 block content
+    if (user)
+        const postcode = `#{user.postcode}`
+
     br
     .container
         .row
@@ -15,9 +18,6 @@ block content
         .row
             .col
                 #restaurant-list
-    script.
-        function initMap() {
-            console.log("Loaded GMaps JS");
-        }
-    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
-    script(type='text/javascript', src = '/javascripts/restaurants_nearby.js')
+
+    script(type='text/javascript', src='/javascripts/restaurants_nearby.js')
+    script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

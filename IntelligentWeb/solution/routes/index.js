@@ -34,23 +34,23 @@ router.get('/accessibility', (req, res) => {
     res.render('accessibility', {title: title, user: req.user});
 });
 
-router.get('/restaurant/new',  (req, res)=> {
+router.get('/restaurant/new', (req, res) => {
     res.render('restaurant_new', {title: title, user: req.user});
 });
 
-router.get('/restaurants-nearby',  (req, res)=> {
+router.get('/restaurants-nearby', (req, res) => {
     res.render('restaurants_nearby', {title: title, user: req.user});
 });
 
-router.get('/logout',  (req, res)=> {
+router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
 });
 
 // ================ POST Statements ================ \\
 
-router.post('/login', (req, res, next) =>{
-    passport.authenticate('login-local',  (err, user)=> {
+router.post('/login', (req, res, next) => {
+    passport.authenticate('login-local', (err, user) => {
         if (err) {
             console.log(err);
             next();
@@ -58,7 +58,7 @@ router.post('/login', (req, res, next) =>{
         if (!user) {
             return res.redirect('/');
         }
-        req.logIn(user,  (err) =>{
+        req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }

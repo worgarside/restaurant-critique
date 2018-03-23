@@ -1,11 +1,18 @@
 $(() => {
-    setLoginFormPosition();
+    if (!userLoggedIn) {
+        setLoginFormPosition();
+    }
 });
 
 // ----------- Login Form ----------- \\
 
-function setLoginFormPosition() {
-    if (!userLoggedIn) {
+
+$('#btn-login').on('click', () => {
+    $('#login-form').fadeToggle();
+});
+
+if (!userLoggedIn) {
+    function setLoginFormPosition() {
         const form = $('#login-form');
         const btn = $('#btn-login');
         const btn_width = btn.outerWidth(true);
@@ -17,30 +24,25 @@ function setLoginFormPosition() {
 
         form.css({right: form_right});
     }
+
+    $(document)
+        .mouseup((e) => {
+            const form = $('#login-form');
+            const btn = $('#btn-login');
+
+            // check mouse loc isn't form, button or descendant of form
+            if (!form.is(e.target) && !btn.is(e.target) && form.has(e.target).length === 0) {
+                form.fadeOut();
+            }
+
+        })
+        .keydown((e) => {
+            if (!userLoggedIn) {
+                if (e.keyCode === 27) { // escape key maps to keycode `27`
+                    $('#login-form').fadeOut();
+                }
+            }
+        });
 }
-
-$('#btn-login').on('click', () => {
-    $('#login-form').fadeToggle();
-});
-
-$(document).mouseup((e) => {
-    if (!userLoggedIn) {
-        const form = $('#login-form');
-        const btn = $('#btn-login');
-
-        // check mouse loc isn't form, button or descendant of form
-        if (!form.is(e.target) && !btn.is(e.target) && form.has(e.target).length === 0) {
-            form.fadeOut();
-        }
-    }
-});
-
-$(document).keydown((e) => {
-    if (!userLoggedIn) {
-        if (e.keyCode === 27) { // escape key maps to keycode `27`
-            $('#login-form').fadeOut();
-        }
-    }
-});
 
 console.log('Loaded layout.js');

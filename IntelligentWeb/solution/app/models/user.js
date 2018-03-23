@@ -10,7 +10,7 @@ UserSchema = Schema({
     forename: {type: String, required: true},
     surname: {type: String, required: true},
     ageCategory: {type: Number, min: 0, max: 6},
-    county: String,
+    postcode: String,
     reviews: Array,
     display_img_filename: {type: String, unique: true},
     user_rating: Number,

@@ -144,7 +144,7 @@ a.nav-link.nav-thin#btn-login:hover {
   text-align: center;
   background-color: red;
   width: 400px;
-  position: absolute;
+  position: fixed;
   z-index: 100000;
   margin-top: 20px;
   border: 5px solid blue;
@@ -182,10 +182,14 @@ footer {
   height: 75px;
 }
 footer a {
-  color: #d1d1d1;
+  color: #c9c9c9;
+}
+footer a:hover {
+  text-decoration: none;
+  color: #ffffff;
 }
 footer p {
-  color: #d1d1d1;
+  color: #c9c9c9;
 }
 footer ul,
 footer p {
@@ -195,7 +199,7 @@ footer ul li.list-inline-item:not(:last-child) {
   margin-right: 0;
 }
 footer ul li.list-inline-item:not(:first-child):before {
-  color: #d1d1d1;
+  color: #c9c9c9;
   content: "|";
   margin: 0 15px;
 }

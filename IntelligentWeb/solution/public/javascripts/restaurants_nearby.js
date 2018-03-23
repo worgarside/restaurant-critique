@@ -1,8 +1,5 @@
 let lat, lng, map;
 // noinspection JSJQueryEfficiency
-$(() => {
-    getUserLocation();
-});
 
 function getUserLocation() {
     const options = {
@@ -25,12 +22,23 @@ function navigatorFallback() {
     createMap({coords: {latitude: 52, longitude: 0}})
 }
 
-function createMap(position) {
-    console.log("Creating the map");
-    lat = position.coords.latitude;
-    lng = position.coords.longitude;
+function initMap() {
+    const address = 'SY14 8JU';
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address': address}, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            lat = results[0].geometry.location.lat();
+            lng = results[0].geometry.location.lng();
+            createMap();
+        } else {
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+    });
+}
+
+function createMap(){
     const currentLocation = {lat: lat, lng: lng};
-    console.log(`@ ${currentLocation.lat}, ${currentLocation.lng}`);
+    console.log(`Creating the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
 
     map = new google.maps.Map($('#nearby-map')[0], {
         zoom: 14,
@@ -52,9 +60,9 @@ function createMap(position) {
 
 // noinspection JSUnusedGlobalSymbols [IntelliJ]
 function updateList() {
-    let coordinates = JSON.stringify({lat: lat, lng: lng});
+    const coordinates = JSON.stringify({lat: lat, lng: lng});
+    console.log(`Coords: ${coordinates}`);
 
-    // noinspection JSUnusedGlobalSymbols
     $.ajax({
         url: '/restaurants-nearby',
         data: coordinates,
@@ -74,11 +82,14 @@ function processData(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
-    // for (let result of results) {
+    let header = document.createElement('div');
+    header.innerHTML = `<h2>Results</h2>`;
+    restaurantListDOM.appendChild(header);
+
     for (const [index, value] of results.entries()) {
-        let newElement = document.createElement('div');
-        newElement.innerHTML = getRestaurantDiv(value, index);
-        restaurantListDOM.appendChild(newElement);
+        let restaurantContainer = document.createElement('div');
+        restaurantContainer.innerHTML = getRestaurantDiv(value, index);
+        restaurantListDOM.appendChild(restaurantContainer);
         initSlideshow(index);
 
         new google.maps.Marker({
@@ -99,7 +110,7 @@ function getRestaurantDiv(restaurant, index) {
                                <div class="col"><a href="#" class="restaurant-title d-inline">${restaurant.name}</a>
     `;
 
-    let htmlStars = ''; //TODO: try stars at half size font immediately following restaurant name
+    let htmlStars = '';
 
     if (restaurant.average_rating) {
         const starRating = Math.round(restaurant.average_rating);
