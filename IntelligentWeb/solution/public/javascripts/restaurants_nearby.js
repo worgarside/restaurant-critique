@@ -199,7 +199,7 @@ function getRestaurantDiv(restaurant, index) {
       </div>
       <div class="row">
           <div class="col">
-              <p class="restaurant-address">${restaurant.wholeAddress}</p>
+              <p class="restaurant-address">${restaurant.address.formattedAddress}</p>
           </div>
       </div>
     `;

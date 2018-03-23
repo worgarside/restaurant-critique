@@ -95,54 +95,56 @@ function submitRestaurant(postcode, location, body) {
 
     // TODO: find a way of condensing these for loops
 
-    if (body.parking === '0'){
+    if (body.parking === '0') {
         parking = false
-    } else if (body.parking === '1'){
+    } else if (body.parking === '1') {
         parking = true
     }
 
-    if (body.wifi === '0'){
+    if (body.wifi === '0') {
         wifi = false
-    } else if (body.wifi === '1'){
+    } else if (body.wifi === '1') {
         wifi = true
     }
 
-    if (body.takeout === '0'){
+    if (body.takeout === '0') {
         takeout = false
-    } else if (body.takeout === '1'){
+    } else if (body.takeout === '1') {
         takeout = true
     }
 
-    if (body.delivery === '0'){
+    if (body.delivery === '0') {
         delivery = false
-    } else if (body.delivery === '1'){
+    } else if (body.delivery === '1') {
         delivery = true
     }
 
-    if (body.outdoorseating === '0'){
+    if (body.outdoorseating === '0') {
         outdoorseating = false
-    } else if (body.outdoorseating === '1'){
+    } else if (body.outdoorseating === '1') {
         outdoorseating = true
     }
 
-    if (body.reservations === '0'){
+    if (body.reservations === '0') {
         reservations = false
-    } else if (body.reservations === '1'){
+    } else if (body.reservations === '1') {
         reservations = true
     }
 
-    if (body.alcohol === '0'){
+    if (body.alcohol === '0') {
         alcohol = false
-    } else if (body.alcohol === '1'){
+    } else if (body.alcohol === '1') {
         alcohol = true
     }
 
     new Restaurant({
         name: body.restaurantName,
-        address1: body.address1,
-        address2: body.address2,
-        city: body.city,
-        postcode: postcode,
+        address: {
+            line1: body.address1,
+            line2: body.address2,
+            city: body.city,
+            postcode: postcode
+        },
         latitude: lat,
         longitude: lng,
         url: body.url,
@@ -152,13 +154,15 @@ function submitRestaurant(postcode, location, body) {
         description: body.description,
         price_range: priceRange,
         categories: [body.category],
-        parking: parking,
-        wifi: wifi,
-        takeout: takeout,
-        delivery: delivery,
-        outdoor_seating: outdoorseating,
-        reservations: reservations,
-        alcohol: alcohol,
+        features: {
+            parking: parking,
+            wifi: wifi,
+            takeout: takeout,
+            delivery: delivery,
+            outdoor_seating: outdoorseating,
+            reservations: reservations,
+            alcohol: alcohol
+        },
         published: true //TODO: add published flag
     }).save().then(() => {
         console.log("Restaurant added to collection")

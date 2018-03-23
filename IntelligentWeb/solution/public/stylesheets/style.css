@@ -381,9 +381,3 @@ button.btn.btn-default#add-times {
 .slideshow-next:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
-.restaurant-rating {
-  width: 130px;
-  height: 24px;
-  background: url("/images/site/blank-stars.png");
-  background-size: contain;
-}
