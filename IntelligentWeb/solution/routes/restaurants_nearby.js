@@ -6,56 +6,64 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const Restaurant = mongoose.model('Restaurant');
+const async = require('async');
 router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
+let returnList;
+
 //AJAX POSTs to '/restaurants-nearby', so relatively '/'
 router.post('/', (req, res) => {
-
+    console.log(`POST received ${JSON.stringify(req.body)}`);
     // TODO: pass this in with pagination??
     const pageNum = 0;
     const restaurantsPerPage = 10;
+    returnList = [];
 
-    Restaurant.aggregate([{
-        "$geoNear": {
-            "near": {
-                "type": "Point",
-                "coordinates": [req.body.lng, req.body.lat]
-            },
-            "spherical": true,
-            "distanceField": "distance"
-            // "maxDistance": 10000
-        }
-    },
-        {"$skip": pageNum * restaurantsPerPage},
-        {"$limit": restaurantsPerPage}
-    ], (err, restaurants) => {
-        if (err) {
-            console.log(`Error: ${err}`);
-        }
+    const point = {
+        type: "Point",
+        coordinates: [req.body.lng, req.body.lat]
+    };
 
-        if (restaurants.length > 0) {
-            let returnList = [];
-            console.log(`Returning: ${restaurants.length}`);
-
-            for (let restaurant of restaurants) {
+    const restaurantPromise = Restaurant.aggregate(
+        [
+            {
+                "$geoNear": {
+                    "near": point,
+                    "spherical": true,
+                    "distanceField": "distance"
+                    // "maxDistance": 10000
+                }
+            }
+        ], (err, restaurants) => {
+            if (err) {
+                console.log(`Error: ${err}`);
+            }
+            async.map(restaurants, (restaurant) => {
                 const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-                const keepPosition = files.indexOf(".keep");
-                files.splice(keepPosition, 1);
-
                 const tempRestaurant = new Restaurant(restaurant);
                 tempRestaurant.images = files;
                 returnList.push(tempRestaurant)
-            }
+            });
+
+            console.log(`Returning: ${restaurants.length}`);
 
             res.send(returnList);
-        } else {
-            console.log(`Error: restaurants is ${restaurants}`);
-        }
-    }).catch((err) => {
-        console.log(`Restaurant aggregation failed: ${err}`);
-    });
+
+        });
+
+    restaurantPromise
+        .then(() => {
+            console.log(`Returned ${returnList.length}`);
+        })
+        .catch((err) => {
+            console.log(`Restaurant aggregation failed: ${err}`);
+        });
 });
+
+function callback(){
+    console.log('cb');
+}
 
 module.exports = router;

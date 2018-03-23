@@ -2,7 +2,7 @@ extends partials/layout
 
 block content
     if (user)
-        const postcode = `#{user.postcode}`
+        script const postcode = `#{user.postcode}`
 
     br
     .container
@@ -14,10 +14,7 @@ block content
                 #nearby-map
         .row
             .col
-                button#updateList(onclick="updateList();") Refresh
-        .row
-            .col
                 #restaurant-list
 
     script(type='text/javascript', src='/javascripts/restaurants_nearby.js')
-    script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

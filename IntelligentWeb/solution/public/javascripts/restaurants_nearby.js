@@ -1,31 +1,10 @@
 let lat, lng, map;
-// noinspection JSJQueryEfficiency
 
-function getUserLocation() {
-    const options = {
-        enableHighAccuracy: true,
-        timeout: 10000
-        // maximumAge: 0
-    };
-
-    console.log("Tell me where you are");
-    navigator.geolocation.getCurrentPosition(createMap, navigatorFallback, options);
-}
-
-function navigatorFallback() {
-    console.log("Please tell me where you are :(");
-    // TODO: fallback to postcode/send request for navigator
-    /*
-    TODO: actually, use postcode first then have a button to ask user to give their currentLoc -
-    this will stop locating violation and also solve navigator on localhost bug
-    */
-    createMap({coords: {latitude: 52, longitude: 0}})
-}
+// function getUserLocation() {    const options = {        enableHighAccuracy: true,        timeout: 10000        // maximumAge: 0    };    navigator.geolocation.getCurrentPosition(createMap, navigatorFallback, options);}
 
 function initMap() {
-    const address = 'SY14 8JU';
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address': address}, (results, status) => {
+    geocoder.geocode({'address': postcode}, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
             lat = results[0].geometry.location.lat();
             lng = results[0].geometry.location.lng();
@@ -55,13 +34,16 @@ function createMap(){
     google.maps.event.addListener(marker, 'dragend', () => {
         lat = marker.getPosition().lat();
         lng = marker.getPosition().lng();
+        updateList();
     });
+
+    updateList();
 }
 
 // noinspection JSUnusedGlobalSymbols [IntelliJ]
 function updateList() {
     const coordinates = JSON.stringify({lat: lat, lng: lng});
-    console.log(`Coords: ${coordinates}`);
+    console.log(`Sending ${coordinates} to AJAX POST`);
 
     $.ajax({
         url: '/restaurants-nearby',
@@ -69,7 +51,7 @@ function updateList() {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (result) => {
-            console.log(result);
+            console.log('AJAX Succeeded');
             processData(result);
         },
         error: (err) => {
@@ -97,6 +79,7 @@ function processData(results) {
             position: {lat: value.latitude, lng: value.longitude}
         });
     }
+    console.log('HTML Updated\n');
 }
 
 function getRestaurantDiv(restaurant, index) {
@@ -156,8 +139,6 @@ function getRestaurantDiv(restaurant, index) {
         </div>
     `;
 
-    console.log(restaurant);
-
     let htmlDescription = '';
 
     if (restaurant.description) {
@@ -186,7 +167,9 @@ function getRestaurantDiv(restaurant, index) {
 
     if (restaurant.images.length > 0) {
         for (const image of restaurant.images) {
-            htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+            if (image !== '.keep'){
+                htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+            }
         }
     }
 
@@ -205,16 +188,7 @@ function getRestaurantDiv(restaurant, index) {
 
     htmlSlideshow += "</div>";
 
-    const htmlEnd = `
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    `;
+    const htmlEnd = `</div></div></div></div></div></div></div></div>`;
 
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }

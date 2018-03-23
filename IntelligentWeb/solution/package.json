@@ -8,6 +8,7 @@
   "dependencies": {
     "@google/maps": "^0.4.5",
     "angular": "^1.6.9",
+    "async": "^2.6.0",
     "bcrypt": "^1.0.3",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",

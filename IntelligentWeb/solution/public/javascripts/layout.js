@@ -26,7 +26,7 @@ if (!userLoggedIn) {
     }
 
     $(document)
-        .mouseup((e) => {
+        .mousedown((e) => {
             const form = $('#login-form');
             const btn = $('#btn-login');
 
