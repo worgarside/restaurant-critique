@@ -26,6 +26,7 @@ function allowLocation(allowed) {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
 
+            map.setCenter({lat: lat, lng: lng});
             userMarker.setPosition(new google.maps.LatLng(lat, lng));
             console.log('Geolocation succeeded!');
             updateList();
@@ -115,21 +116,48 @@ function processData(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
-    for (const [index, value] of results.entries()) {
+    const icon = {
+        url: '/images/site/gmaps-custom-pin-small.png',
+        scaledSize: new google.maps.Size(25, 42)
+    };
+
+    for (const [index, restaurant] of results.entries()) {
         let restaurantContainer = document.createElement('div');
-        restaurantContainer.innerHTML = getRestaurantDiv(value, index);
+        restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
         restaurantListDOM.appendChild(restaurantContainer);
         initSlideshow(index);
 
-        const icon = {
-            url: '/images/site/gmaps-custom-pin-small.png',
-            scaledSize: new google.maps.Size(25, 42)
-        };
+        console.log(restaurant);
 
-        new google.maps.Marker({
+        const contentString = `
+            <div class="container" id="info-${index}" style="max-width: 400px;">
+                <div class="row">
+                    <div class="col">
+                        <h5 style="font-weight: 400;" class="d-inline">${restaurant.name}</h5>
+                        <p style="font-weight: 400;" class="d-inline">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p>
+                        <p style="margin-bottom: 0;">${restaurant.description}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="#">More info</a>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        const newMarker = new google.maps.Marker({
             map: map,
-            position: {lat: value.latitude, lng: value.longitude},
+            position: {lat: restaurant.latitude, lng: restaurant.longitude},
             icon: icon
+        });
+
+        newMarker.addListener('click', () => {
+            infoWindow.open(map, newMarker);
         });
     }
     console.log('HTML Updated\n');
@@ -137,7 +165,7 @@ function processData(results) {
 
 function getRestaurantDiv(restaurant, index) {
     const htmlStart = `
-        <div class="container nearby-restaurant">
+        <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
                 <div class="col-8">
                     <div class="vert-center-parent">
@@ -284,4 +312,17 @@ function initSlideshow(value) {
         $(`.slide-${value}`).fadeOut();
         $(`.current-${value}`).fadeIn();
     });
+}
+
+function scrollToRestaurant(index) {
+    $('#nearby-map').addClass('map-shrink');
+
+    // Wait for map to shrink
+    setTimeout(() => {
+        console.log(`this fucker ${index}`);
+        $('html, body').animate({
+            scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
+        }, 800, () => {
+        });
+    }, 250);
 }
