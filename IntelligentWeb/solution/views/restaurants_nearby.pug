@@ -9,11 +9,13 @@ block content
         .row
             .col
                 h1 Find Restaurants Near You
+                p Drag the marker on the map to change the search area!
         .row
             .col
-                #nearby-map
+                #nearby-map.map-shrink
         .row
             .col
+                h2.restaurant-result-header Your nearest restaurants
                 #restaurant-list
 
     script(type='text/javascript', src='/javascripts/restaurants_nearby.js')

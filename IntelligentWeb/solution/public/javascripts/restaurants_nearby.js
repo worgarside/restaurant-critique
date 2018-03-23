@@ -1,5 +1,15 @@
 let lat, lng, map;
 
+$(() => {
+    $('#nearby-map').hover(
+        () => {
+            expandMap();
+        }, () => {
+            shrinkMap();
+        }
+    );
+});
+
 // function getUserLocation() {    const options = {        enableHighAccuracy: true,        timeout: 10000        // maximumAge: 0    };    navigator.geolocation.getCurrentPosition(createMap, navigatorFallback, options);}
 
 function initMap() {
@@ -15,7 +25,7 @@ function initMap() {
     });
 }
 
-function createMap(){
+function createMap() {
     const currentLocation = {lat: lat, lng: lng};
     console.log(`Creating the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
 
@@ -64,22 +74,35 @@ function processData(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
-    let header = document.createElement('div');
-    header.innerHTML = `<h2>Results</h2>`;
-    restaurantListDOM.appendChild(header);
-
     for (const [index, value] of results.entries()) {
         let restaurantContainer = document.createElement('div');
         restaurantContainer.innerHTML = getRestaurantDiv(value, index);
         restaurantListDOM.appendChild(restaurantContainer);
         initSlideshow(index);
 
+        const icon = {
+            url: '/images/site/gmaps-custom-pin-small.png',
+            scaledSize: new google.maps.Size(25, 42)
+        };
+
         new google.maps.Marker({
             map: map,
-            position: {lat: value.latitude, lng: value.longitude}
+            position: {lat: value.latitude, lng: value.longitude},
+            icon: icon
         });
     }
     console.log('HTML Updated\n');
+    shrinkMap();
+}
+
+function shrinkMap() {
+    console.log('shrink');
+    $('#nearby-map').addClass('map-shrink');
+}
+
+function expandMap() {
+    console.log('shrink');
+    $('#nearby-map').removeClass('map-shrink');
 }
 
 function getRestaurantDiv(restaurant, index) {
@@ -165,17 +188,20 @@ function getRestaurantDiv(restaurant, index) {
                                     <div class="slideshow">
         `;
 
+    let imageCount = 0;
+
     if (restaurant.images.length > 0) {
         for (const image of restaurant.images) {
-            if (image !== '.keep'){
+            if (image !== '.keep') {
                 htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+                imageCount += 1;
             }
         }
     }
 
     htmlSlideshow += "</div>";
 
-    if (restaurant.images.length > 1) {
+    if (imageCount > 1) {
         htmlSlideshow += `
                 <div id="button-prev-${index}" class="slideshow-prev">
                     <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>

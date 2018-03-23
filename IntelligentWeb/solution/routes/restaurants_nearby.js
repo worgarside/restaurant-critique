@@ -16,11 +16,8 @@ let returnList;
 //AJAX POSTs to '/restaurants-nearby', so relatively '/'
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);
-    // TODO: pass this in with pagination??
-    const pageNum = 0;
-    const restaurantsPerPage = 10;
-    returnList = [];
 
+    returnList = [];
     const point = {
         type: "Point",
         coordinates: [req.body.lng, req.body.lat]
@@ -40,6 +37,7 @@ router.post('/', (req, res) => {
             if (err) {
                 console.log(`Error: ${err}`);
             }
+
             async.map(restaurants, (restaurant) => {
                 const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
                 const tempRestaurant = new Restaurant(restaurant);
@@ -48,9 +46,7 @@ router.post('/', (req, res) => {
             });
 
             console.log(`Returning: ${restaurants.length}`);
-
             res.send(returnList);
-
         });
 
     restaurantPromise
@@ -61,9 +57,5 @@ router.post('/', (req, res) => {
             console.log(`Restaurant aggregation failed: ${err}`);
         });
 });
-
-function callback(){
-    console.log('cb');
-}
 
 module.exports = router;
