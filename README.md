@@ -27,8 +27,9 @@
 To install the app, `cd` into the `solution` directory. Then run these commands in order:
 ```
 npm install
-mongod --dbpath  "./database"
-node bin/www
+mongod --dbpath  "./database"     / OR /     initdb
+initdb     / OR /     node bin/db_regen
+nodemon     / OR /     run
 ```
 
 Alternatively, replace `mongod` with the absolute path to *mongod.exe*
