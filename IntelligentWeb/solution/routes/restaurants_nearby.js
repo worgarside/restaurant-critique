@@ -29,8 +29,8 @@ router.post('/', (req, res) => {
                 "$geoNear": {
                     "near": point,
                     "spherical": true,
-                    "distanceField": "distance"
-                    // "maxDistance": 10000
+                    "distanceField": "distance",
+                    "maxDistance": 10000
                 }
             }
         ], (err, restaurants) => {
@@ -39,10 +39,8 @@ router.post('/', (req, res) => {
             }
 
             async.map(restaurants, (restaurant) => {
-                const files = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-                const tempRestaurant = new Restaurant(restaurant);
-                tempRestaurant.images = files;
-                returnList.push(tempRestaurant)
+                restaurant.images = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
+                returnList.push(restaurant)
             });
 
             console.log(`Returning: ${restaurants.length}`);

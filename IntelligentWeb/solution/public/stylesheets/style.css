@@ -142,12 +142,12 @@ a.nav-link.nav-thin#btn-login:hover {
 }
 #login-form {
   text-align: center;
-  background-color: red;
+  background-color: #ffffff;
   width: 400px;
   position: fixed;
   z-index: 100000;
   margin-top: 20px;
-  border: 5px solid blue;
+  border: 5px solid #58001b;
   border-radius: 10px;
 }
 #login-form:after,
@@ -163,12 +163,12 @@ a.nav-link.nav-thin#btn-login:hover {
 }
 #login-form:after {
   border: 20px solid transparent;
-  border-bottom-color: red;
+  border-bottom-color: #ffffff;
   margin-left: -20px;
 }
 #login-form:before {
   border: 25px solid transparent;
-  border-bottom-color: blue;
+  border-bottom-color: #58001b;
   margin-left: -25px;
 }
 .login-form-input {
