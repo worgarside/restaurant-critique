@@ -3,12 +3,19 @@ extends partials/layout
 block content
     br
     .container
-        .col-md-12
-            form(action="/contact" method="POST")
-                label(for='contact-name') Your Name
-                    input#contact-name(type='text', name='name', placeholder='Your name...' required)
-                label(for='contact-email') Your Email
-                    input#contact-email(type='text', name='email', placeholder='Your email...' required)
-                label(for='contact-message') Message
-                    textarea#contact-message(name='message', placeholder='Message', style='height:200px' required)
-                    input(type='submit', value='Submit')
+        .row
+            .col-md-6
+                h1 Get in touch
+                p We would love to hear your thoughts on our services
+                form(action="/contact" method="POST" id="contact-form")
+                    .form-group
+                        label(for='contact-name') Name
+                        input#contact-name(type='text', name='name', placeholder='Your name' required)
+                    .form-group
+                        label(for='contact-email') Email
+                        input#contact-email(type='text', name='email', placeholder='Your email' required)
+                    .form-group
+                        label(for='contact-message') Message
+                        textarea#contact-message(name='message', placeholder='Your message', style='height:100px' required)
+                    .col-md-4
+                        input(type='submit', value='Submit')
