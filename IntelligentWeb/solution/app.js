@@ -63,11 +63,13 @@ const index = require('./routes/index');
 const signup = require('./routes/signup');
 const restaurantNew = require('./routes/restaurant_new');
 const restaurantsNearby = require('./routes/restaurants_nearby');
+const contact = require('./routes/contact');
 
 app.use('/', index);
 app.use('/signup', signup);
 app.use('/restaurant/new', restaurantNew);
 app.use('/restaurants-nearby', restaurantsNearby);
+app.use('/contact', contact);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {
