@@ -1,7 +1,7 @@
 let lat, lng, map, userMarker;
 
 $(() => {
-    $('#nearby-map').hover(
+    $('#nearby-map-wrapper').hover(
         () => {
             $('#nearby-map').removeClass('map-shrink');
         }, () => {
@@ -55,10 +55,20 @@ function createMap() {
     const currentLocation = {lat: lat, lng: lng};
     console.log(`Creating the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
 
+    const styles = [
+        {
+            "featureType": "poi.business",
+            "stylers": [
+                { "visibility": "off" }
+            ]
+        }
+    ];
+
     if (userLoggedIn) {
         map = new google.maps.Map($('#nearby-map')[0], {
             zoom: 14,
             center: currentLocation,
+            styles: styles
         });
 
         userMarker = new google.maps.Marker({
@@ -71,13 +81,16 @@ function createMap() {
         google.maps.event.addListener(userMarker, 'dragend', () => {
             lat = userMarker.getPosition().lat();
             lng = userMarker.getPosition().lng();
+            // TODO: think about this
+            // map.setCenter({lat: lat, lng: lng});
             updateList();
         });
     } else {
         map = new google.maps.Map($('#nearby-map')[0], {
             zoom: 14,
             center: currentLocation,
-            draggable: false
+            draggable: false,
+            styles: styles
         });
 
         userMarker = new google.maps.Marker({
@@ -129,7 +142,7 @@ function processData(results) {
 
         console.log(restaurant);
 
-        const contentString = `
+        const infoWindowContent = `
             <div class="container" id="info-${index}" style="max-width: 400px;">
                 <div class="row">
                     <div class="col">
@@ -147,7 +160,7 @@ function processData(results) {
         `;
 
         const infoWindow = new google.maps.InfoWindow({
-            content: contentString
+            content: infoWindowContent
         });
 
         const newMarker = new google.maps.Marker({
@@ -211,7 +224,7 @@ function getRestaurantDiv(restaurant, index) {
 
     if (restaurant.categories.length > 0) {
         for (const category of restaurant.categories) {
-            htmlCategories += `<p class="restaurant-category">${category}</p>`;
+            htmlCategories += `<p class="restaurant-category">${category.name}</p>`;
         }
     }
 
@@ -222,7 +235,7 @@ function getRestaurantDiv(restaurant, index) {
 
     let htmlDescription = '';
 
-    if (restaurant.description) {
+    if (restaurant.description !== 'No description currently available.') {
         htmlDescription = `
             <div class="row">
                 <div class="col">
@@ -250,10 +263,8 @@ function getRestaurantDiv(restaurant, index) {
 
     if (restaurant.images.length > 0) {
         for (const image of restaurant.images) {
-            if (image !== '.keep') {
-                htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
-                imageCount += 1;
-            }
+            htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+            imageCount += 1;
         }
     }
 
@@ -273,6 +284,7 @@ function getRestaurantDiv(restaurant, index) {
     htmlSlideshow += "</div>";
 
     const htmlEnd = `</div></div></div></div></div></div></div></div>`;
+    console.log(htmlSlideshow);
 
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }

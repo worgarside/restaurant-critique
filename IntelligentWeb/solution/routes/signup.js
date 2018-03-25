@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const passport = require('passport');
-
 const User = mongoose.model('User');
+
 router.use(bodyParser.urlencoded({extended: true}));
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
