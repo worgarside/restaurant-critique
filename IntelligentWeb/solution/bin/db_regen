@@ -38,8 +38,13 @@ function initialiseDatabase() {
             console.log(`DB drop failed: ${err}`);
         })
         .then(() => {
-            db.collection('restaurants').createIndex({location: "2dsphere"}).catch(() => {
-                console.log('Index failed');
+            let indexPromises = [];
+
+            indexPromises.push(db.collection('restaurants').createIndex({"$**": "text"}));
+            indexPromises.push(db.collection('restaurants').createIndex({location: "2dsphere"}));
+
+            Promise.all(indexPromises).catch((err) => {
+                console.log(`Indexing failed: ${err}`);
             }).then(() => {
                 populateCollections(conn);
             });
