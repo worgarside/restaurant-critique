@@ -1,7 +1,7 @@
 extends partials/layout
 
-
 block content
+    #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
     br
     .container
@@ -96,10 +96,25 @@ block content
                     .col
                         h4 Open hours:
                 .row
-                    .col-5.text-center
-                        p Mon
-                    .col-7.text-center
-                        p 9:00 - 21:00
+                    each times, index in restaurant.opening_times
+                        if times.length > 0
+                            .col-5.text-center
+                                p= daysOfWeek[index]
+                            .col-7.text-center
+                                - var openingHour = Math.floor(times[0]/60);
+                                - var om = times[0]%60;
+                                - om = om < 10 ? '0' + om : om;
+                                - var closingHour = Math.floor(times[1]/60);
+                                - var cm = (times[1]%60);
+                                - cm = cm < 10 ? '0' + cm : cm;
+                                p #{openingHour}:#{om} - #{closingHour}:#{cm}
+
+                        else
+                            .col-5.text-center
+                                p= daysOfWeek[index]
+                            .col-7.text-center
+                                p closed
+
 
                 .row
                     .col

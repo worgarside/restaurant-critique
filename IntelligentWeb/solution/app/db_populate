@@ -19,6 +19,8 @@ const ID = {
     'Istanbul Restaurant': '5ab1677c521e5430fc7d2499',
     'Piccolino': '5ab1677c521e5430fc7d2500',
     'Pizza Express': '5ab1677c521e5430fc7d2501',
+    'Las Iguanas': '5ab1677c521e5430fc7d2502',
+    'California Fresh': '5ab1677c521e5430fc7d2503',
 };
 
 // ================ Database ================ \\
@@ -473,6 +475,77 @@ function populateRestaurants(insertPromises) {
         images: ['2018-03-25 22-55-00'],
         average_rating: 4
     }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID["Las Iguanas"]),
+        name: "Las Iguanas",
+        address: {
+            line1: '8-9 Fitzwilliam Street',
+            line2: 'Devonshire Green',
+            city: 'Sheffield',
+            postcode: 'S1 4JB'
+        },
+        latitude: 53.379442,
+        longitude: -1.480565,
+        url: 'https://www.iguanas.co.uk',
+        menu: 'https://www.iguanas.co.uk/restaurants/sheffield/menus',
+        phone: '01142521010',
+        opening_times: [[600, 1410], [600, 1410], [600, 1410], [600, 1410], [600, 1440], [600, 1440], [600, 1410]],
+        description: 'Flame-grilled Latin American dishes and shared plates served in a contemporary chain dining room.',
+        price_range: 4,
+        categories: [
+            {name: 'Late-night food'}, {name: 'Latin American'}, {name: 'Beer'},
+            {name: 'Burgers'}, {name: 'Wine'}
+        ],
+        features: {
+            parking: false,
+            wifi: true,
+            takeout: true,
+            delivery: true,
+            outdoor_seating: true,
+            reservations: false,
+            alcohol: true,
+            vegetarian: true
+        },
+        reviews: ['5aad98377888995220605d18', '5aad98377888995220605d19'],
+        images: ['2018-03-26 20-36-00', '2018-03-26 20-36-01', '2018-03-26 20-36-02', '2018-03-26 20-36-03'],
+        average_rating: 3
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID["California Fresh"]),
+        name: "California Fresh",
+        address: {
+            line1: '257 Glossop Road',
+            city: 'Sheffield',
+            postcode: 'S10 2GZ'
+        },
+        latitude: 53.380101,
+        longitude: -1.483646,
+        url: 'http://www.californiafresh.co.uk/',
+        menu: 'http://www.californiafresh.co.uk/menu-1.html',
+        phone: '01143272331',
+        opening_times: [[690, 1080], [690, 1080], [690, 1080], [690, 1080], [690, 1080], [], []],
+        description: 'Bright, beach-theme room with surfboard-style tables for Mexican and American food made fresh daily.',
+        price_range: 2,
+        categories: [
+            {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'},
+            {name: 'Chipotle'}, {name: 'BBQ'}
+        ],
+        features: {
+            parking: false,
+            wifi: true,
+            takeout: true,
+            delivery: true,
+            outdoor_seating: false,
+            reservations: false,
+            alcohol: false,
+            vegetarian: true
+        },
+        reviews: ['5aad98377888995220605d20'],
+        images: ['2018-03-26 20-58-00', '2018-03-26 20-58-01', '2018-03-26 20-58-02'],
+        average_rating: 3
+    }).save());
 }
 
 function populateReviews(insertPromises) {
@@ -567,6 +640,33 @@ function populateReviews(insertPromises) {
         body: 'The pizza is nice but can be quite expensive and the sides are small',
         author_id: 'worgarside@gmail.com',
         restaurant_rating: 4
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d18'),
+        restaurant_id: ID["Las Iguanas"],
+        title: 'Expensive food',
+        body: 'The food was nice, but very expensive. Would only go out on a special ocasion to taste some Latin American cuisine',
+        author_id: 'worgarside@gmail.com',
+        restaurant_rating: 2
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d19'),
+        restaurant_id: ID["Las Iguanas"],
+        title: 'Amazing drinks!',
+        body: 'I have to say that the cocktails made in this restaurant are unbelievably tasty! I drank every last drop. The food was decent, but I was too drunk to care',
+        author_id: 'copeyrufus@gmail.com',
+        restaurant_rating: 5
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d20'),
+        restaurant_id: ID["California Fresh"],
+        title: 'Dont trust the burrito!',
+        body: 'I swear, its delicious, but afterwards you might have regrets from those burritos',
+        author_id: 'copeyrufus@gmail.com',
+        restaurant_rating: 3
     }).save());
 }
 
