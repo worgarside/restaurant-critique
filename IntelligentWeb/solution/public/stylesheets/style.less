@@ -5,6 +5,7 @@
 @nav-wide-width: 200;
 @navbar-height: 58;
 @background-color: #fdfdfd;
+@placeholder-color: #b7b7b7;
 
 body {
   font-family: 'Lato', sans-serif;
@@ -33,6 +34,21 @@ input.no-spinner[type="time"]::-webkit-search-cancel-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+input[type="text"], input[type="number"] {
+  &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: @placeholder-color;
+    opacity: 1; /* Firefox */
+  }
+
+  &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: @placeholder-color;
+  }
+
+  &:-ms-input-placeholder { /* Microsoft Edge */
+    color: @placeholder-color;
+  }
 }
 
 .vert-center-parent {
@@ -307,9 +323,94 @@ button.btn.btn-default#add-times {
   width: 100%;
 }
 
-#restaurant-map {
+#new-map {
   width: 100%;
-  margin-bottom: 30px;
+  height: 300px;
+}
+
+#found-address {
+  overflow: hidden;
+  &-edit {
+    display: none;
+  }
+
+  &-map {
+    width: 100%;
+    height: 300px;
+
+    &-wrapper {
+      width: 100%;
+      display: none;
+    }
+  }
+}
+
+.address-input {
+  &-found {
+    &-controls {
+      float: right;
+      a {
+        display: inline-block;
+        font-size: 18px;
+        cursor: pointer;
+        color: #000000;
+        padding: 0 5px;
+        margin: 0 1px;
+      }
+    }
+  }
+}
+
+#address-input-choice .btn-group {
+  width: 100%;
+}
+
+#address-lookup {
+  &-button {
+    width: 50%;
+    border-right: solid black 1px;
+  }
+
+  &-form {
+    display: none;
+  }
+
+  &-found {
+    display: none;
+
+    &-correct {
+      &:hover {
+        color: #00B400;
+        text-decoration: none;
+      }
+    }
+
+    &-edit {
+      &:hover {
+        color: #0061b4;
+        text-decoration: none;
+      }
+    }
+
+    &-incorrect {
+      &:hover {
+        color: #b40000;
+        text-decoration: none;
+      }
+    }
+  }
+
+}
+
+#address-map {
+  &-button {
+    width: 50%;
+    border-left: solid black 1px;
+  }
+
+  &-form {
+    display: none;
+  }
 }
 
 // ================ Restaurants Nearby ================ \\
@@ -319,23 +420,8 @@ button.btn.btn-default#add-times {
 }
 
 #nearby-map {
-  @normal-map-width: 60;
-  @map-transition: all 0.25s ease-in-out;
+  width: 100%;
   height: 725px;
-  width: unit(@normal-map-width, %);
-  transition: @map-transition;
-  padding: 50px;
-  display: inline-block;
-  &.map-shrink {
-    padding: 50px;
-    width: unit(@normal-map-width*1.4, %);
-    height: 200px;
-    transition: @map-transition;
-  }
-  &-wrapper {
-    width: 100%;
-    text-align: center;
-  }
 }
 
 .nearby-restaurant {

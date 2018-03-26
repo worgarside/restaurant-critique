@@ -46,7 +46,8 @@ function initMap() {
             lng = results[0].geometry.location.lng();
             createMap();
         } else {
-            alert("Geocode was not successful for the following reason: " + status);
+            //TODO: remove this
+            alert("Geocode error: " + status);
         }
     });
 }
@@ -68,7 +69,11 @@ function createMap() {
         map = new google.maps.Map($('#nearby-map')[0], {
             zoom: 14,
             center: currentLocation,
-            styles: styles
+            styles: styles,
+            zoomControl: true,
+            mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: true
         });
 
         userMarker = new google.maps.Marker({
@@ -90,7 +95,11 @@ function createMap() {
             zoom: 14,
             center: currentLocation,
             draggable: false,
-            styles: styles
+            styles: styles,
+            zoomControl: true,
+            mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: true
         });
 
         userMarker = new google.maps.Marker({
@@ -140,8 +149,6 @@ function processData(results) {
         restaurantListDOM.appendChild(restaurantContainer);
         initSlideshow(index);
 
-        console.log(restaurant);
-
         const infoWindowContent = `
             <div class="container" id="info-${index}" style="max-width: 400px;">
                 <div class="row">
@@ -173,7 +180,7 @@ function processData(results) {
             infoWindow.open(map, newMarker);
         });
     }
-    console.log('HTML Updated\n');
+    console.log('HTML Updated');
 }
 
 function getRestaurantDiv(restaurant, index) {
@@ -284,7 +291,6 @@ function getRestaurantDiv(restaurant, index) {
     htmlSlideshow += "</div>";
 
     const htmlEnd = `</div></div></div></div></div></div></div></div>`;
-    console.log(htmlSlideshow);
 
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
@@ -312,7 +318,6 @@ function initSlideshow(value) {
     });
 
     btnPrev.click(() => {
-        console.log('prev');
         $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
         if ($(`.previous-${value}`).is(':first-child')) {
             $(`.slide-${value}`).last().addClass(`current-${value}`);
@@ -331,7 +336,6 @@ function scrollToRestaurant(index) {
 
     // Wait for map to shrink
     setTimeout(() => {
-        console.log(`this fucker ${index}`);
         $('html, body').animate({
             scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
         }, 800, () => {

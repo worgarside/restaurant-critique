@@ -27,6 +27,23 @@ input.no-spinner[type="time"]::-webkit-search-cancel-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+input[type="text"]::placeholder,
+input[type="number"]::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #b7b7b7;
+  opacity: 1;
+  /* Firefox */
+}
+input[type="text"]:-ms-input-placeholder,
+input[type="number"]:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #b7b7b7;
+}
+input[type="text"]:-ms-input-placeholder,
+input[type="number"]:-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #b7b7b7;
+}
 .vert-center-parent {
   display: table;
   width: 100%;
@@ -242,29 +259,73 @@ footer .footer-right {
 button.btn.btn-default#add-times {
   width: 100%;
 }
-#restaurant-map {
+#new-map {
   width: 100%;
-  margin-bottom: 30px;
+  height: 300px;
+}
+#found-address {
+  overflow: hidden;
+}
+#found-address-edit {
+  display: none;
+}
+#found-address-map {
+  width: 100%;
+  height: 300px;
+}
+#found-address-map-wrapper {
+  width: 100%;
+  display: none;
+}
+.address-input-found-controls {
+  float: right;
+}
+.address-input-found-controls a {
+  display: inline-block;
+  font-size: 18px;
+  cursor: pointer;
+  color: #000000;
+  padding: 0 5px;
+  margin: 0 1px;
+}
+#address-input-choice .btn-group {
+  width: 100%;
+}
+#address-lookup-button {
+  width: 50%;
+  border-right: solid black 1px;
+}
+#address-lookup-form {
+  display: none;
+}
+#address-lookup-found {
+  display: none;
+}
+#address-lookup-found-correct:hover {
+  color: #00B400;
+  text-decoration: none;
+}
+#address-lookup-found-edit:hover {
+  color: #0061b4;
+  text-decoration: none;
+}
+#address-lookup-found-incorrect:hover {
+  color: #b40000;
+  text-decoration: none;
+}
+#address-map-button {
+  width: 50%;
+  border-left: solid black 1px;
+}
+#address-map-form {
+  display: none;
 }
 #login-warning {
   cursor: pointer;
 }
 #nearby-map {
-  height: 725px;
-  width: 60%;
-  transition: all 0.25s ease-in-out;
-  padding: 50px;
-  display: inline-block;
-}
-#nearby-map.map-shrink {
-  padding: 50px;
-  width: 84%;
-  height: 200px;
-  transition: all 0.25s ease-in-out;
-}
-#nearby-map-wrapper {
   width: 100%;
-  text-align: center;
+  height: 725px;
 }
 .nearby-restaurant {
   width: 80%;
