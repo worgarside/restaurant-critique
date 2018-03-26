@@ -5,6 +5,9 @@ const router = express.Router();
 const title = 'Restaurant Critique';
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const mongoose = require('mongoose');
+const Restaurant = mongoose.model('Restaurant');
+
 
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -42,13 +45,20 @@ router.get('/restaurants-nearby', (req, res) => {
     res.render('restaurants_nearby', {title: title, user: req.user});
 });
 
+router.get('/restaurant', (req, res) => {
+    res.render('restaurant', {title: title, user: req.user});
+});
+
 router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
 });
 
-router.get('/restaurant', (req, res) => {
-    res.render('restaurant', {title: title, user: req.user});
+router.get('/restaurant/:id', (req, res) => {
+    return Restaurant.findOne({ _id: req.params.id },  (err, result) => {
+        if (err) { throw(err); }
+        return res.render('restaurant', {title: title, restaurant: result});
+    });
 });
 
 // ================ POST Statements ================ \\
