@@ -47,6 +47,10 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+router.get('/restaurant', (req, res) => {
+    res.render('restaurant', {title: title, user: req.user});
+});
+
 // ================ POST Statements ================ \\
 
 router.post('/login', (req, res, next) => {

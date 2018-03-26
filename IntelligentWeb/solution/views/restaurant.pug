@@ -1,7 +1,122 @@
 extends partials/layout
 
+
 block content
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
     br
-        .container
-            .row
-                h1
+    .container
+        .row
+            .col-7
+                .row
+                    .col
+                        h1.d-inline Nando's
+                        p.restaurant-category.price-icon.d-inline ££
+                .row
+                    .col
+                        .restaurant-stars
+                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
+                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
+                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
+                            span.oi.oi-check.oi-star(aria-hidden='true')
+                            span.oi.oi-check.oi-star(aria-hidden='true')
+                .row
+                    .col
+                        p.restaurant-category Spicy
+                        p.restaurant-category Chicken
+                        p.restaurant-category Casual
+                .row
+                    .col
+                        p We love spicing things up at Nando’s and our new look does just that. It comes all the way from Southern Africa – the place our very first restaurant opened back in ’87.
+                        p Filled with vibrant colours, incredible patterns and interesting mixes of old and new, this new African design pays homage to our roots in a fresh, exciting way that’s packed with heat and a lot of heart!
+                .row
+                    .col
+                        h4
+                            span.oi.oi-browser.oi-space(aria-hidden='true')
+                            | Visit our official
+                            a(href='')    page
+                .row
+                    .col
+                        h4
+                            span.oi.oi-book.oi-space(aria-hidden='true')
+                            |Our
+                            a(href='')   menu
+                .row
+                    .col
+                        h4
+                            span.oi.oi-phone.oi-space(aria-hidden='true')
+                            |Contact us:
+                            a(href='tel: +4407510791583')  click to call
+                            |  or ring +440766642069
+                .row
+                    .col
+                        .wrapper-gret
+                            form#review-form(action='/review' method='POST')
+                                h5 Have you been to this restaurant? Let us know what you think about it!
+                                .form-row
+                                    .form-group.col
+                                        .stars
+                                            input#star-5.star(type='radio', name='star')
+                                            label.star(for='star-5')
+                                                span.oi.oi-star
+
+                                            input#star-4.star(type='radio', name='star')
+                                            label.star(for='star-4')
+                                                span.oi.oi-star
+
+                                            input#star-3.star(type='radio', name='star')
+                                            label.star(for='star-3')
+                                                span.oi.oi-star
+
+                                            input#star-2.star(type='radio', name='star')
+                                            label.star(for='star-2')
+                                                span.oi.oi-star
+
+                                            input#star-1.star(type='radio', name='star')
+                                            label.star(for='star-1')
+                                                span.oi.oi-star
+
+                                .form-row
+                                    .form-group.col
+                                        label(for='review-title') Title
+                                        input#review-title(type='text', name='email', placeholder='Your email' required)
+                                .form-row
+                                    .form-group.col
+                                        label(for='review-message') Review
+                                        textarea#review-message(name='message', placeholder='Your message', style='height:100px' required)
+                                .form-row
+                                    .form-group.col
+                                        input(type='submit', value='Submit')
+
+            .col-5
+                .row
+                    .col
+                        img(src="/images/site/sheffield-centre-scaled.jpg" alt="Sheffield centre")
+
+                .row
+                    .col
+                        h4 Includes:
+                .row
+                    .col
+                        p.restaurant-category WiFi
+                        p.restaurant-category Parking
+                        p.restaurant-category Alcohol
+                        p.restaurant-category Outdoor Seating
+                .row
+                    .col
+                        h4 Open hours:
+                .row
+                    .col-5.text-center
+                        p Mon
+                    .col-7.text-center
+                        p 9:00 - 21:00
+
+                .row
+                    .col
+                        h3 Address: Unit 8, 24 The Moor, Sheffield, S1 4PA
+                        label(for='restaurant-map')
+                        iframe#restaurant-map(frameborder="0" src='https://www.google.com/maps/embed/v1/place?key=AIzaSyCRpu2V59h2EyS8PjTazSBPIGA89ZZWo4w&q=Space+Needle,Seattle+WA')
+        .row
+            h3 Reviews
+
+
+

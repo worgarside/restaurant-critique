@@ -480,8 +480,8 @@ button.btn.btn-default#add-times {
   background-size: contain;
 }
 
-//================ContactForm================\\
-#contact-form input[type=text],select,textarea{
+//================ Contact Form ================\\
+#contact-form, #review-form input[type=text], select, textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -490,12 +490,12 @@ button.btn.btn-default#add-times {
   resize: vertical;
 }
 
-#contact-form label{
-  padding:12px 12px 12px 0;
-  display:inline-block;
+
+#contact-form, #review-form input[type=text]:focus {
+  border: 3px solid #555;
 }
 
-#contact-form input[type=submit]{
+#contact-form, #review-form input[type=submit] {
   background-color: black;
   color: white;
   padding: 12px 20px;
@@ -503,29 +503,80 @@ button.btn.btn-default#add-times {
   border-radius: 4px;
   cursor: pointer;
   float: left;
+  margin-left: -15px;
 }
 
-#contact-form input[type=submit]:hover{
+#contact-form, #review-form input[type=submit]:hover {
   background-color: darkgrey;
   color: black;
 }
 
-#contact-form.container{
+#contact-form, #review-form.container {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
 }
 
-#contact-form.row:after{
+#contact-form, #review-form.row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-@media screen and(max-width:600px){
-  .col-25,.col-75,input[type=submit]{
-    width:60%;
-    margin-top:0;
+@media screen and(max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 60%;
+    margin-top: 0;
   }
+}
+
+//================ Restaurant Page ================\\
+.price-icon {
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+.wrapper-gret {
+  text-align: center;
+}
+
+#review-form {
+  text-align: center;
+  margin: 0 100px;
+  background: lightgrey;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+//================ Star Icons ================\\
+
+.stars {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: darkgrey;
+  font-size: 30px;
+
+  label {
+    margin: 0;
+    &.star {
+      padding: 6px;
+    }
+  }
+}
+
+input.star {
+  display: none;
+}
+
+// Current star and all ancestors
+input.star:checked label.star span::before,
+input.star:checked ~ label.star span::before {
+  color: yellow;
+}
+
+// Hover star and all ancestors
+label.star:hover,
+label.star:hover ~ label.star span::before {
+  color: yellow;
 }
 
