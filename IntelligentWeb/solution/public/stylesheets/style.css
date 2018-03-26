@@ -452,7 +452,8 @@ button.btn.btn-default#add-times {
   background: url("/images/site/blank-stars.png");
   background-size: contain;
 }
-#contact-form input[type=text],
+#contact-form,
+#review-form input[type=text],
 select,
 textarea {
   width: 100%;
@@ -462,11 +463,12 @@ textarea {
   box-sizing: border-box;
   resize: vertical;
 }
-#contact-form label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
+#contact-form,
+#review-form input[type=text]:focus {
+  border: 3px solid #555;
 }
-#contact-form input[type=submit] {
+#contact-form,
+#review-form input[type=submit] {
   background-color: black;
   color: white;
   padding: 12px 20px;
@@ -474,17 +476,21 @@ textarea {
   border-radius: 4px;
   cursor: pointer;
   float: left;
+  margin-left: -15px;
 }
-#contact-form input[type=submit]:hover {
+#contact-form,
+#review-form input[type=submit]:hover {
   background-color: darkgrey;
   color: black;
 }
-#contact-form.container {
+#contact-form,
+#review-form.container {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
 }
-#contact-form.row:after {
+#contact-form,
+#review-form.row:after {
   content: "";
   display: table;
   clear: both;
@@ -496,4 +502,48 @@ textarea {
     width: 60%;
     margin-top: 0;
   }
+}
+.price-icon {
+  vertical-align: middle;
+  margin-left: 20px;
+}
+.wrapper-gret {
+  text-align: center;
+}
+#review-form {
+  text-align: center;
+  margin: 0 100px;
+  background: lightgrey;
+  padding: 20px;
+  border-radius: 20px;
+}
+.stars {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  color: darkgrey;
+  font-size: 30px;
+}
+.stars label {
+  margin: 0;
+}
+.stars label.star {
+  padding: 6px;
+}
+input.star {
+  display: none;
+}
+input.star:checked label.star span::before,
+input.star:checked ~ label.star span::before {
+  color: yellow;
+}
+label.star:hover,
+label.star:hover ~ label.star span::before {
+  color: yellow;
+}
+#restaurant-current-map {
+  width: 100%;
+  height: 250px;
+  transition: all 0.25s ease-in-out;
+  padding: 50px;
+  display: inline-block;
 }

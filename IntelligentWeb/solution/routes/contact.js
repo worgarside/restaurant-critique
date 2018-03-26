@@ -10,12 +10,15 @@ router.use(bodyParser.urlencoded({extended:true}));
 const EMAIL = 'worgarside.dev@gmail.com';
 const PASSWORD = 'mfdobnadqxkrxnch';
 
-//================POSTMethod================\\
+//================POST Method================\\
 
-router.post('/',function(req,res){
+router.post('/', (req,res) => {
 
-    nodemailer.createTestAccount(function(err,account){
-        var transporter = nodemailer.createTransport({
+    nodemailer.createTestAccount((err,account) => {
+        if(err)
+            console.log(err);
+
+        let transporter = nodemailer.createTransport({
             service:'gmail',
             auth:{
                 user: EMAIL,
@@ -24,27 +27,27 @@ router.post('/',function(req,res){
         });
 
 
-        var mailOptions={
+        let mailOptions={
             from: req.body.name + '' + req.body.email,
             to: EMAIL,
             subject:'Support Request from ' + req.body.email,
-            html: 'Name: ' + req.body.name + '<br> <br> Message: ' + req.body.message
+            html: '<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p>'
         };
 
-        transporter.sendMail(mailOptions,function(err,info){
+        transporter.sendMail(mailOptions, (err,info) => {
             if(err)
                 console.log(err);
             else
                 console.log(info);
 
-            var confirmMail = {
-                from: 'Restaurant Critique from ' + EMAIL,
+            let confirmMail = {
+                from: 'Restaurant Critique enquiry from ${EMAIL}',
                 to: req.body.email,
                 subject: 'Support Request from Restaurant Critique',
-                html: 'Thank you for your email, we will reply as soon as possible. <br> <br> Restaurant Critique'
+                html: '<p>Thank you for your email, we will reply as soon as possible.<\p> <p>Restaurant Critique</p>'
             }
 
-            transporter.sendMail(confirmMail,function(err,info){
+            transporter.sendMail(confirmMail,(err,info) =>{
                 if(err)
                     console.log(err);
                 else
