@@ -3,6 +3,10 @@ extends partials/layout
 block content
     #{features = ["Parking", "WiFi", "Takeout", "Delivery", "Outdoor Seating", "Reservations", "Alcohol", "Vegetarian", "Vegan"]}
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+    if (user)
+        script let userPostcode = `#{user.postcode}`;
+    else
+        script let userPostcode = 'S1 2JA';
     br
     .container
         .row
@@ -10,7 +14,7 @@ block content
                 h1 Add a Restaurant
                 br
         .row
-            .col-md-10.offset-md-1
+            .col-10.offset-1
                 form(action='/restaurant/new/add_restaurant', method='post', enctype="multipart/form-data")
                     .form-row
                         .col-6
@@ -19,21 +23,70 @@ block content
                                     label(for='restaurantName') Restaurant Name
                                     input.form-control#restaurantName(type='text', name='restaurantName',
                                     placeholder="Tom's Bistro", required, autocomplete='none')
-                            .form-row
-                                .form-group.col
-                                    label(for='address1') Address 1
-                                    input.form-control#address1(type='text', name='address1', placeholder='42 Wallaby Way', required, autocomplete='none')
-                            .form-row
-                                .form-group.col
-                                    label(for='address2') Address 2
-                                    input.form-control#address2(type='text', name='address2', placeholder='Kensington', autocomplete='none')
-                            .form-row
-                                .form-group.col-8
-                                    label(for='city') City
-                                    input.form-control#city(type='text', name='city', placeholder='Sydney', required, autocomplete='none')
-                                .form-group.col-4
-                                    label(for='postcode') Post Code
-                                    input.form-control#postcode(type='text', name='postcode', placeholder='SW1A 1AA', required, autocomplete='none')
+
+                            #address-input-choice
+                                .form-row
+                                    .form-group.col
+                                        .btn-group
+                                            button.btn.btn-secondary.address-input#address-lookup-button(type='button') Address Lookup
+                                            button.btn.btn-secondary.address-input#address-map-button(type='button') Set location on map
+
+                            #address-lookup-form
+                                .form-row
+                                    .form-group.col-8
+                                        label(for='address-search') Address Line 1
+                                        input.form-control#address-search(type='text', name='address-search', placeholder='221b', autocomplete='none')
+                                    .form-group.col-4
+                                        label(for='postcode-search') Post Code
+                                        input.form-control#postcode-search(type='text', name='postcode', placeholder='SW1A 1AA', autocomplete='none')
+                                .form-row
+                                    .form-group.col
+                                        button.btn(type='button', onclick='findAddress();') Find address
+
+                            #address-lookup-found
+                                .form-row
+                                    .form-group.col
+                                        .address-input-found-controls
+                                            a#address-lookup-found-correct(href='javascript:void(0)', onclick='confirmAddress();')
+                                                span.oi.oi-check(aria-hidden='true')
+                                            a#address-lookup-found-edit(href='javascript:void(0)', onclick='editAddress();')
+                                                span.oi.oi-pencil(aria-hidden='true')
+                                            a#address-lookup-found-incorrect(href='javascript:void(0)', onclick='rejectAddress();')
+                                                span.oi.oi-circle-x(aria-hidden='true')
+                                        p#found-address
+                            #found-address-edit
+                                .form-row
+                                    .form-group.col
+                                        label(for='address1') Address Line 1
+                                        input.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
+                                .form-row
+                                    .form-group.col
+                                        label(for='address2') Address Line 2
+                                        input.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
+                                .form-row
+                                    .form-group.col-6
+                                        label(for='city') City
+                                        input.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
+                                    .form-group.col-6
+                                        label(for='postcode') Postcode
+                                        input.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
+
+                            #found-address-map-wrapper
+                                .form-row
+                                    .form-group.col
+                                        #found-address-map
+
+                            #address-map-form
+                                .form-row
+                                    .col
+                                        label(for='new-map') Find the Restaurant
+                                        #new-map
+
+
+
+
+
+
                             .form-row
                                 .form-group.col-8
                                     label(for='url') Restaurant Website
@@ -72,7 +125,7 @@ block content
                                     placeholder="Say some things about the restaurant's atmosphere, the kind of " +
                                     "food served, or whatever you feel like!" , rows=4, style='resize: none')
                             .form-row
-                                .form-group.col-md-12
+                                .form-group.col-12
                                     label(for='price-range') Price Range
                                     select#price-range.form-control(name='priceRange')
                                         option(value='', disabled, selected) Price Range
@@ -95,21 +148,17 @@ block content
 
                         .col-5.offset-1
                             .form-row
-                                .col
-                                    label(for='restaurant-map') Find the Restaurant
-                                    iframe#restaurant-map(frameborder="0" src='https://www.google.com/maps/embed/v1/place?key=AIzaSyCRpu2V59h2EyS8PjTazSBPIGA89ZZWo4w&q=Space+Needle,Seattle+WA')
-                            .form-row
-                                .col-md-1.offset-md-5.text-center
+                                .col-1.offset-5.text-center
                                     p Yes
-                                .col-md-1.offset-md-1.text-center
+                                .col-1.offset-1.text-center
                                     p No
                             each feature in features
                                 .form-row
-                                    .col-md-4.text-right
+                                    .col-4.text-right
                                         p #{feature}
-                                    .col-md-1.offset-md-1.text-center
+                                    .col-1.offset-1.text-center
                                         input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=1, autocomplete='none')
-                                    .col-md-1.offset-md-1.text-center
+                                    .col-1.offset-1.text-center
                                         input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=0, autocomplete='none')
 
                     .opening-times-body(hidden=true)
@@ -117,10 +166,10 @@ block content
                             input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                             input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
 
-
                     .form-row
                         .form-group.col
                             .float-right
-                                input.btn(type='submit')
+                                input.btn(type='submit', value='Submit Restaurant')
 
     script(type='text/javascript', src='/javascripts/restaurant_new.js')
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
