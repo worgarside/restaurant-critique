@@ -1,6 +1,10 @@
+// ================ Middleware ================ \\
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+
+// ================ User ================ \\
 
 UserSchema = Schema({
     _id: {type: String},
@@ -16,10 +20,6 @@ UserSchema = Schema({
     user_rating: Number,
     restaurants: Array,
     updated_at: Date
-});
-
-UserSchema.virtual('username').get(function () {
-    return this.email;
 });
 
 UserSchema.pre('save', function (next) {

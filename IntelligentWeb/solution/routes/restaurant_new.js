@@ -82,7 +82,7 @@ function submitRestaurant(postcode, location, body) {
         [body.sunOpen, body.sunClose]
     ];
 
-    let lat, lng, priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol;
+    let lat, lng, priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol, vegetarian, vegan;
 
     if (location) {
         lat = location.lat;
@@ -137,6 +137,18 @@ function submitRestaurant(postcode, location, body) {
         alcohol = true
     }
 
+    if (body.vegetarian === '0') {
+        vegetarian = false
+    } else if (body.vegetarian === '1') {
+        vegetarian = true
+    }
+
+    if (body.vegan === '0') {
+        vegan = false
+    } else if (body.vegan === '1') {
+        vegan = true
+    }
+
     new Restaurant({
         name: body.restaurantName,
         address: {
@@ -153,7 +165,7 @@ function submitRestaurant(postcode, location, body) {
         opening_times: openingTimes,
         description: body.description,
         price_range: priceRange,
-        categories: [body.category],
+        // categories: [body.category],
         features: {
             parking: parking,
             wifi: wifi,
@@ -161,7 +173,9 @@ function submitRestaurant(postcode, location, body) {
             delivery: delivery,
             outdoor_seating: outdoorseating,
             reservations: reservations,
-            alcohol: alcohol
+            alcohol: alcohol,
+            vegetarian: vegetarian,
+            vegan: vegan
         },
         published: true //TODO: add published flag
     }).save().then(() => {

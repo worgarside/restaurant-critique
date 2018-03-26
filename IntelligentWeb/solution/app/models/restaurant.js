@@ -1,9 +1,13 @@
+// ================ Middleware ================ \\
+
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
 const fs = require('fs');
+const CategorySchema = mongoose.model('Category').schema;
+
+// ================ Restaurant ================ \\
 
 RestaurantSchema = Schema({
     name: {type: String, required: true, index: true},
-    wholeAddress: String,
     address: {
         line1: {type: String, required: true},
         line2: {type: String, trim: true},
@@ -17,14 +21,13 @@ RestaurantSchema = Schema({
     },
     latitude: {type: Number, min: -90, max: 90, default: 90},
     longitude: {type: Number, min: -180, max: 180, default: 180},
-    distance: Number,
     url: {type: String, trim: true},
     menu: {type: String, trim: true},
-    phone: {type: String, trim: true},
+    phone: {type: String, trim: true}, //TODO: restaurant email address for contact purposes as well as phone??
     opening_times: Array,
-    description: {type: String, trim: true},
+    description: {type: String, trim: true, default: 'No description currently available.'},
     price_range: Number,
-    categories: {type: [String], default: []}, //TODO: turn this into type: [Category] so we can display the name, not the ID
+    categories: [CategorySchema],
     features: {
         parking: Boolean,
         wifi: Boolean,
@@ -33,19 +36,17 @@ RestaurantSchema = Schema({
         outdoor_seating: Boolean,
         reservations: Boolean,
         alcohol: Boolean,
+        vegetarian: Boolean,
+        vegan: Boolean,
     },
     owner_id: {type: String, trim: true},
     owner_message: {type: String, trim: true},
     reviews: {type: [String], default: []},
-    images: {type: [String], default: []},
+    images: {type: [String], default: []}, //TODO: only show top 5 images on nearby page?
     average_rating: {type: Number, min: 0, max: 5},
-    published: {type: Boolean, required: true},
+    published: {type: Boolean, default: true},
     updated_at: Date
 });
-
-// RestaurantSchema.virtual('formattedAddress').get(function () {
-//     return  ;
-// });
 
 RestaurantSchema.pre('save', function (next) {
     if ((this.latitude) && (this.longitude)) {
@@ -60,33 +61,22 @@ RestaurantSchema.pre('save', function (next) {
 
     if (!fs.existsSync(imageDir)) {
         fs.mkdirSync(imageDir);
-        fs.closeSync(fs.openSync(`${imageDir}/.keep`, 'w'));
     }
 
+    this.address.postcode = this.address.postcode.toUpperCase();
 
-    // TODO: loop through address object instead
     this.address.formattedAddress = '';
-
-    if (this.address.line1){
-        this.address.formattedAddress += this.address.line1;
-    }
-
-    if (this.address.line2){
-        this.address.formattedAddress += ', ';
-        this.address.formattedAddress += this.address.line2;
-    }
-
-    if (this.address.city){
-        this.address.formattedAddress += ', ';
-        this.address.formattedAddress += this.address.city;
-    }
-
-    if (this.address.postcode){
-        this.address.formattedAddress += ', ';
-        this.address.formattedAddress += this.address.postcode;
-    }
+    const restaurant = this.toJSON();
+    Object.values(restaurant.address).forEach((element, index, objectValues) => {
+        if (element) {
+            this.address.formattedAddress += element;
+            if (objectValues[index + 1]) {
+                this.address.formattedAddress += ', ';
+            }
+        }
+    });
 
     next();
 });
 
-mongoose.model('Restaurant', RestaurantSchema);
+module.exports = mongoose.model('Restaurant', RestaurantSchema);

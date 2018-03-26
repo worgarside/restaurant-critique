@@ -71,4 +71,8 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+router.post('/search', (req, res, next) => {
+    return res.redirect('/search');
+});
+
 module.exports = router;

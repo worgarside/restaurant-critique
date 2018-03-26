@@ -319,17 +319,22 @@ button.btn.btn-default#add-times {
 }
 
 #nearby-map {
+  @normal-map-width: 60;
+  @map-transition: all 0.25s ease-in-out;
   height: 725px;
-  width: 100%;
-  transition: all 0.25s ease-in;
+  width: unit(@normal-map-width, %);
+  transition: @map-transition;
   padding: 50px;
-  margin-left: 0;
+  display: inline-block;
   &.map-shrink {
     padding: 50px;
-    width: 140%;
-    margin-left: -20%;
+    width: unit(@normal-map-width*1.4, %);
     height: 200px;
-    transition: all 0.25s ease-in;
+    transition: @map-transition;
+  }
+  &-wrapper {
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -391,11 +396,11 @@ button.btn.btn-default#add-times {
   &-title {
     font-size: 20pt;
     font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    color: #727272;
+    font-weight: 400;
+    color: #000000;
     &:hover {
       text-decoration: none;
-      color: #000000;
+      color: #727272;
     }
   }
 
@@ -436,6 +441,7 @@ button.btn.btn-default#add-times {
   height: 100%;
   position: relative;
   overflow: hidden;
+  background-color: #000000;
 
   &-wrapper {
     padding: 10px 0 10px 10px;

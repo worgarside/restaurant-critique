@@ -1,14 +1,17 @@
+// ================ Middleware ================ \\
+
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
+
+// ================ Review ================ \\
 
 ReviewSchema = Schema({
     restaurant_id: {type: String, required: true},
     title: {type: String, required: true},
     body: {type: String, required: true},
     author_id: {type: String, required: true},
-    datetime: {type: Date, required: true},
-    images: [String],
-    restaurant_rating: {type: Number, min:0, max: 5, required: true},
-    review_rating: Number,
+    images: {type: [String], default: []},
+    restaurant_rating: {type: Number, min: 0, max: 5, required: true},
+    review_rating: {type: Number, default: 0},
     updated_at: Date
 });
 
@@ -17,4 +20,4 @@ ReviewSchema.pre('save', function (next) {
     next();
 });
 
-mongoose.model('Review', ReviewSchema);
+module.exports = mongoose.model('Review', ReviewSchema);

@@ -1,7 +1,7 @@
 extends partials/layout
 
 block content
-    #{features = ["Parking", "WiFi", "Takeout", "Delivery", "Outdoor Seating", "Reservations", "Alcohol"]}
+    #{features = ["Parking", "WiFi", "Takeout", "Delivery", "Outdoor Seating", "Reservations", "Alcohol", "Vegetarian", "Vegan"]}
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     br
     .container
@@ -111,25 +111,6 @@ block content
                                         input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=1, autocomplete='none')
                                     .col-md-1.offset-md-1.text-center
                                         input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=0, autocomplete='none')
-
-                        //.form-group.col-5.offset-1
-                            //.form-row
-                            //    .form-group.offset-md-1
-                            //        label(for='display-picture') Restaurant Picture
-                            //        img#display-picture(src='/scripts/svg/home.svg')
-                            //        input#display-picture-upload(type='file', name='displayPicture', accept="image/*")
-
-                            //.form-row
-                            //    .form-group.col
-                            //        p.text-center Opening Times
-                            //.form-row
-                            //    .form-group.col-md-4.offset-md-4
-                            //        .form-group.col
-                            //            p.text-center Opening
-                            //    .form-group.col-md-4
-                            //        .form-group.col
-                            //            p.text-center Closing
-
 
                     .opening-times-body(hidden=true)
                         each day in daysOfWeek
