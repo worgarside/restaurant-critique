@@ -72,6 +72,11 @@ input[type="text"], input[type="number"] {
   -webkit-appearance: none;
 }
 
+.invisible-label:before{
+  content: 'ABCDEF';
+  visibility: hidden;
+}
+
 // ================ Index Head ================ \\
 
 #main-logo {
@@ -319,7 +324,7 @@ footer {
   padding-right: 0;
 }
 
-button.btn.btn-default#add-times {
+button.btn.btn-default#add-times, #lookup-btn {
   width: 100%;
 }
 
@@ -331,6 +336,10 @@ button.btn.btn-default#add-times {
 #found-address {
   overflow: hidden;
   &-edit {
+    display: none;
+  }
+
+  &-chosen{
     display: none;
   }
 
@@ -352,7 +361,6 @@ button.btn.btn-default#add-times {
       a {
         display: inline-block;
         font-size: 18px;
-        cursor: pointer;
         color: #000000;
         padding: 0 5px;
         margin: 0 1px;
@@ -380,6 +388,7 @@ button.btn.btn-default#add-times {
 
     &-correct {
       &:hover {
+        cursor: pointer;
         color: #00B400;
         text-decoration: none;
       }
@@ -387,6 +396,7 @@ button.btn.btn-default#add-times {
 
     &-edit {
       &:hover {
+        cursor: pointer;
         color: #0061b4;
         text-decoration: none;
       }
@@ -394,7 +404,16 @@ button.btn.btn-default#add-times {
 
     &-incorrect {
       &:hover {
+        cursor: pointer;
         color: #b40000;
+        text-decoration: none;
+      }
+    }
+
+    &-edit2 {
+      &:hover {
+        cursor: pointer;
+        color: #0061b4;
         text-decoration: none;
       }
     }

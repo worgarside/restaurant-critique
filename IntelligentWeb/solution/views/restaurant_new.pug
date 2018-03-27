@@ -33,15 +33,15 @@ block content
 
                             #address-lookup-form
                                 .form-row
-                                    .form-group.col-8
-                                        label(for='address-search') Address Line 1
-                                        input.form-control#address-search(type='text', name='address-search', placeholder='221b', autocomplete='none')
-                                    .form-group.col-4
-                                        label(for='postcode-search') Post Code
-                                        input.form-control#postcode-search(type='text', name='postcode', placeholder='SW1A 1AA', autocomplete='none')
-                                .form-row
+                                    .form-group.col-5
+                                        label(for='search-address') Address Line 1
+                                        input.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
+                                    .form-group.col-3
+                                        label(for='search-postcode') Post Code
+                                        input.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='none')
                                     .form-group.col
-                                        button.btn(type='button', onclick='findAddress();') Find address
+                                        label.invisible-label(for='lookup-btn')
+                                        button.btn#lookup-btn(type='button', onclick='findAddress();') Find address
 
                             #address-lookup-found
                                 .form-row
@@ -58,18 +58,26 @@ block content
                                 .form-row
                                     .form-group.col
                                         label(for='address1') Address Line 1
-                                        input.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
+                                        input.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
                                 .form-row
                                     .form-group.col
                                         label(for='address2') Address Line 2
-                                        input.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
+                                        input.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
                                 .form-row
                                     .form-group.col-6
                                         label(for='city') City
-                                        input.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
+                                        input.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
                                     .form-group.col-6
                                         label(for='postcode') Postcode
-                                        input.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
+                                        input.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
+
+                            #found-address-chosen
+                                .form-row
+                                    .form-group.col
+                                        label(for='formatted-address') Address
+                                        span#address-lookup-found-edit2.oi.oi-pencil.float-right(aria-hidden='true', onclick='resetAddressLookup();')
+                                        input#formatted-address.form-control(disabled)
+
 
                             #found-address-map-wrapper
                                 .form-row

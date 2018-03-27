@@ -26,41 +26,43 @@ const upload = multer({storage: storage});
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     console.log("Geocoding postcode...");
 
+    console.log(req.body);
+
     const postcode = req.body.postcode;
 
-    const googleMaps = require('@google/maps').createClient({
-        key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
-    });
+    // const googleMaps = require('@google/maps').createClient({
+    //     key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
+    // });
+    //
+    // let gmapsPromise = new Promise((resolve, reject) => {
+    //     googleMaps.geocode({
+    //         address: postcode
+    //     }, (err, response) => {
+    //         if (err) {
+    //             console.log(`Geocode Error: ${err}`);
+    //             reject();
+    //         } else {
+    //             const locationData = response.json.results[0].geometry.location;
+    //             resolve(locationData);
+    //         }
+    //     })
+    // });
 
-    let gmapsPromise = new Promise((resolve, reject) => {
-        googleMaps.geocode({
-            address: postcode
-        }, (err, response) => {
-            if (err) {
-                console.log(`Geocode Error: ${err}`);
-                reject();
-            } else {
-                const locationData = response.json.results[0].geometry.location;
-                resolve(locationData);
-            }
-        })
-    });
+    // let timeoutPromise = new Promise((resolve, reject) => {
+    //     let timer = setTimeout(() => {
+    //         clearTimeout(timer);
+    //         reject('Geocode request timed out.')
+    //     }, 10000)
+    // });
 
-    let timeoutPromise = new Promise((resolve, reject) => {
-        let timer = setTimeout(() => {
-            clearTimeout(timer);
-            reject('Geocode request timed out.')
-        }, 10000)
-    });
-
-    Promise.race([gmapsPromise, timeoutPromise])
-        .then((location) => {
-            submitRestaurant(postcode, location, req.body);
-        })
-        .catch((err) => {
-            console.log(`Error: ${err} Submitting null location`);
-            submitRestaurant(postcode, null, req.body);
-        });
+    // Promise.race([gmapsPromise, timeoutPromise])
+    //     .then((location) => {
+    //         submitRestaurant(postcode, location, req.body);
+    //     })
+    //     .catch((err) => {
+    //         console.log(`Error: ${err} Submitting null location`);
+    //         submitRestaurant(postcode, null, req.body);
+    //     });
 
     res.redirect('/')
 });

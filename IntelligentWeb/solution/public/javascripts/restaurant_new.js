@@ -2,6 +2,7 @@ console.log('Loaded restaurant_new.js');
 let geocoder;
 
 $(() => {
+
     $('#opening-time').timepicker({
         timeFormat: 'HH:mm',
         interval: 30,
@@ -46,18 +47,29 @@ $(() => {
     });
 
     $('#found-address-edit').on('input', () => {
-        let editedAddress = '';
+        formattedAddress = '';
 
-        $('#found-address-edit').find('input').each( (index, item) => {
+        $('#found-address-edit').find('input').each((index, item) => {
             if (item.value !== '') {
                 if (index > 0) {
-                    editedAddress += ', ';
+                    formattedAddress += ', ';
                 }
-                editedAddress += item.value;
+                formattedAddress += item.value;
             }
         });
 
-        $('#found-address').text(editedAddress);
+        $('#found-address').text(formattedAddress);
+    });
+
+    $('#address-lookup-form').find('input').keypress((e) => {
+        if (e.which === 13) {
+            $('#lookup-btn').click();
+            e.preventDefault()
+        }
+    });
+
+    $('.no-enter-submit').keypress((e) => {
+        if (e.which === 13) e.preventDefault();
     });
 
 });
@@ -137,20 +149,32 @@ function removeSelectedDay(button) {
 // ================ Address Lookup ================ \\
 
 let formattedAddress = '';
+let currentLocation;
+
+const inputAddress1 = $('#address1');
+const inputAddress2 = $('#address2');
+const inputCity = $('#city');
+const inputPostcode = $('#postcode');
+const searchAddress = $('#search-address');
+const searchPostcode = $('#search-postcode');
 
 // noinspection JSUnusedGlobalSymbols
 function findAddress() {
-    const submittedAddress1 = $('#address-search').val();
-    const submittedPostcode = $('#postcode-search').val();
+    const submittedAddress1 = searchAddress.val();
+    const submittedPostcode = searchPostcode.val();
     formattedAddress = '';
+
+    inputAddress1.val('');
+    inputAddress2.val('');
+    inputCity.val('');
+    inputPostcode.val('');
 
     if (!submittedPostcode || !submittedAddress1) {
         alert('Please enter a name/number and a postcode')
     } else {
         geocoder.geocode({'address': `${submittedPostcode}, UK`}, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
-
-                console.log(JSON.stringify(results[0]));
+                currentLocation = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
 
                 let foundAddress = {};
                 for (const component of results[0].address_components) {
@@ -159,22 +183,24 @@ function findAddress() {
                     }
                 }
 
-                $('#address1').val($('#address-search').val());
-                formattedAddress += $('#address-search').val();
+                inputAddress1.val(searchAddress.val());
+                formattedAddress += searchAddress.val();
 
                 if (foundAddress.route) {
-                    $('#address2').val(foundAddress.route);
+                    inputAddress2.val(foundAddress.route);
                     formattedAddress += `, ${foundAddress.route}`;
                 }
 
                 if (foundAddress.postal_town) {
-                    $('#city').val(foundAddress.postal_town);
+                    inputCity.val(foundAddress.postal_town);
                     formattedAddress += `, ${foundAddress.postal_town}`;
                 }
 
-                $('#postcode').val(foundAddress.postal_code);
-                formattedAddress += `, ${foundAddress.postal_code}`;
+                inputPostcode.val(foundAddress.postal_code);
+                console.log(foundAddress.postal_code);
 
+                formattedAddress += `, ${foundAddress.postal_code}`;
+                console.log(formattedAddress);
                 $('#found-address').text(formattedAddress);
 
                 showHTML([
@@ -185,10 +211,8 @@ function findAddress() {
                 ]);
 
                 hideHTML([
-                    $('#address-lookup-form'),
-                    $('#found-address-edit')
+                    $('#address-lookup-form')
                 ]);
-
             } else {
                 alert('Invalid postcode. Please try again.');
             }
@@ -198,50 +222,57 @@ function findAddress() {
 
 // noinspection JSUnusedGlobalSymbols
 function confirmAddress() {
-    const addressHtml = $('#found-address');
-    const foundAddressMapHtml = $('#found-address-map');
+    const oldPostcode = searchPostcode.val().toLowerCase().replace(/ /g, '');
+    const newPostcode = inputPostcode.val().toLowerCase().replace(/ /g, '');
 
+    if (oldPostcode !== newPostcode) {
+        geocoder.geocode({'address': `${newPostcode}, UK`}, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                currentLocation = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
+                confirmAddressHTMLMod()
+            }
+        })
+    } else {
+        confirmAddressHTMLMod()
+    }
+}
+
+function confirmAddressHTMLMod() {
+    $('#formatted-address').val(formattedAddress);
+
+    const styles = [{
+        "featureType": "poi.business",
+        "stylers": [
+            {"visibility": "off"}
+        ]
+    }];
+
+    const map = new google.maps.Map($('#found-address-map')[0], {
+        zoom: 15,
+        center: currentLocation,
+        styles: styles,
+        zoomControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        draggable: false
+    });
+
+    new google.maps.Marker({
+        map: map,
+        draggable: false,
+        position: currentLocation
+    });
+
+    showHTML([
+        $('#found-address-map-wrapper'),
+        $('#found-address-chosen')
+    ]);
     hideHTML([
-        $('.address-input-found-controls'),
+        $('#found-address-edit'),
+        $('#address-lookup-found'),
         $('#address-input-choice')
     ]);
-
-    addressHtml.replaceWith(`<label for="formattedAddress">Address</label><span class="oi oi-pencil float-right" aria-hidden='true'/><input id="formattedAddress" class="form-control" disabled value="${addressHtml.text()}" />`);
-
-    geocoder.geocode({'address': $('#postcode').val()}, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-            const currentLocation = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
-
-            const styles = [{
-                "featureType": "poi.business",
-                "stylers": [
-                    {"visibility": "off"}
-                ]
-            }];
-
-            const map = new google.maps.Map(foundAddressMapHtml[0], {
-                zoom: 15,
-                center: currentLocation,
-                styles: styles,
-                zoomControl: false,
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
-                draggable: false
-            });
-
-            new google.maps.Marker({
-                map: map,
-                draggable: false,
-                animation: google.maps.Animation.DROP,
-                position: currentLocation
-            });
-
-            showHTML([$('#found-address-map-wrapper')]);
-        }
-    });
-    hideHTML([$('#found-address-edit')]);
-
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -254,10 +285,10 @@ function editAddress() {
 function rejectAddress() {
     $('#found-address').text('');
 
-    $('#address1').val('');
-    $('#address2').val('');
-    $('#city').val('');
-    $('#postcode').val('');
+    inputAddress1.val('');
+    inputAddress2.val('');
+    inputCity.val('');
+    inputPostcode.val('');
 
     showHTML([$('#address-lookup-form')]);
     hideHTML([
@@ -266,16 +297,25 @@ function rejectAddress() {
     ]);
 }
 
+// noinspection JSUnusedGlobalSymbols
+function resetAddressLookup() {
+    showHTML([$('#address-input-choice')]);
+    hideHTML([
+        $('#found-address-chosen'),
+        $('#found-address-map-wrapper')
+    ]);
+}
+
 function showHTML(iterable) {
     for (const element of iterable) {
-        element.show('slow');
+        element.show(400);
         element.prop('readonly', false);
     }
 }
 
 function hideHTML(iterable) {
     for (const element of iterable) {
-        element.hide('slow');
+        element.hide(400);
         element.prop('readonly', true);
     }
 }
@@ -336,7 +376,7 @@ function initMap() {
 //                     if (component.long_name) {
 //                         switch (component.types[0]) {
 //                             case 'postal_code':
-//                                 $('#postcode').val(component.long_name);
+//                                 inputPostcode.val(component.long_name);
 //                                 break;
 //                             // case n:
 //                             //     code block
