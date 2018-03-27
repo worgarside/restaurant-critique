@@ -79,6 +79,11 @@ block content
                                         span#address-lookup-found-edit2.oi.oi-pencil.float-right(aria-hidden='true', onclick='resetAddressLookup();')
                                         input#formatted-address-lookup.form-control(disabled)
 
+                            #found-address-map-wrapper
+                                .form-row
+                                    .form-group.col
+                                        #found-address-map
+
                             #address-map-text
                                 .form-row
                                     .form-group.col
@@ -89,11 +94,6 @@ block content
                                 .form-row
                                     .form-group.col
                                         #address-map-map
-
-
-
-
-
 
                             .form-row
                                 .form-group.col-8
@@ -169,10 +169,13 @@ block content
                                     .col-1.offset-1.text-center
                                         input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=0, autocomplete='none')
 
-                    .opening-times-body(hidden=true)
+                    div(hidden=false)
                         each day in daysOfWeek
                             input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                             input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
+
+                        input#lat(type="number", name='lat', autocomplete='none', readonly)
+                        input#lng(type="number", name='lng', autocomplete='none', readonly)
 
                     .form-row
                         .form-group.col

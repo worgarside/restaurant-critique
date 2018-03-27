@@ -24,55 +24,13 @@ const upload = multer({storage: storage});
 // ================ POST Method ================ \\
 
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
-    console.log("Geocoding postcode...");
-
-    console.log(req.body);
-
-    const postcode = req.body.postcode;
-
-    // const googleMaps = require('@google/maps').createClient({
-    //     key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
-    // });
-    //
-    // let gmapsPromise = new Promise((resolve, reject) => {
-    //     googleMaps.geocode({
-    //         address: postcode
-    //     }, (err, response) => {
-    //         if (err) {
-    //             console.log(`Geocode Error: ${err}`);
-    //             reject();
-    //         } else {
-    //             const locationData = response.json.results[0].geometry.location;
-    //             resolve(locationData);
-    //         }
-    //     })
-    // });
-
-    // let timeoutPromise = new Promise((resolve, reject) => {
-    //     let timer = setTimeout(() => {
-    //         clearTimeout(timer);
-    //         reject('Geocode request timed out.')
-    //     }, 10000)
-    // });
-
-    // Promise.race([gmapsPromise, timeoutPromise])
-    //     .then((location) => {
-    //         submitRestaurant(postcode, location, req.body);
-    //     })
-    //     .catch((err) => {
-    //         console.log(`Error: ${err} Submitting null location`);
-    //         submitRestaurant(postcode, null, req.body);
-    //     });
-
-    res.redirect('/')
-});
-
-function submitRestaurant(postcode, location, body) {
     /**
      * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
          monClose:int, tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int,
          restaurantName: string, priceRange: string, outdoorseating: string}} body,
      */
+
+    const body = req.body;
 
     const openingTimes = [
         [body.monOpen, body.monClose],
@@ -84,12 +42,7 @@ function submitRestaurant(postcode, location, body) {
         [body.sunOpen, body.sunClose]
     ];
 
-    let lat, lng, priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol, vegetarian, vegan;
-
-    if (location) {
-        lat = location.lat;
-        lng = location.lng;
-    }
+    let priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol, vegetarian, vegan;
 
     if (body.priceRange) {
         priceRange = parseInt(body.priceRange);
@@ -157,10 +110,10 @@ function submitRestaurant(postcode, location, body) {
             line1: body.address1,
             line2: body.address2,
             city: body.city,
-            postcode: postcode
+            postcode: body.postcode
         },
-        latitude: lat,
-        longitude: lng,
+        latitude: body.lat,
+        longitude: body.lng,
         url: body.url,
         menu: body.menu,
         phone: body.phone,
@@ -193,6 +146,8 @@ function submitRestaurant(postcode, location, body) {
 
         USE AS IMAGE FILENAME
      */
-}
+
+    res.redirect('/')
+});
 
 module.exports = router;

@@ -7,6 +7,8 @@ const inputAddress1 = $('#address1');
 const inputAddress2 = $('#address2');
 const inputCity = $('#city');
 const inputPostcode = $('#postcode');
+const inputLat = $('#lat');
+const inputLng = $('#lng');
 const searchAddress = $('#search-address');
 const searchPostcode = $('#search-postcode');
 
@@ -189,7 +191,11 @@ function findAddress() {
     } else {
         geocoder.geocode({'address': `${submittedPostcode}, UK`}, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
-                currentLocation = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
+                const lat = results[0].geometry.location.lat();
+                const lng = results[0].geometry.location.lng();
+                inputLat.val(lat.toFixed(9));
+                inputLng.val(lng.toFixed(9));
+                currentLocation = {lat: lat, lng: lng};
 
                 let foundAddress = {};
                 for (const component of results[0].address_components) {
@@ -241,7 +247,11 @@ function confirmAddress() {
     if (oldPostcode !== newPostcode) {
         geocoder.geocode({'address': `${newPostcode}, UK`}, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
-                currentLocation = {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()};
+                const lat = results[0].geometry.location.lat();
+                const lng = results[0].geometry.location.lng();
+                inputLat.val(lat.toFixed(9));
+                inputLng.val(lng.toFixed(9));
+                currentLocation = {lat: lat, lng: lng};
                 confirmAddressHTMLMod()
             }
         })
@@ -361,8 +371,10 @@ function initMap() {
     });
 
     google.maps.event.addListener(marker, 'dragend', () => {
-        lat = marker.getPosition().lat();
-        lng = marker.getPosition().lng();
+        const lat = marker.getPosition().lat();
+        const lng = marker.getPosition().lng();
+        inputLat.val(lat.toFixed(9));
+        inputLng.val(lng.toFixed(9));
 
         geocoder.geocode({'location': {lat: lat, lng: lng}}, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
