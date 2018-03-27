@@ -1,5 +1,14 @@
 console.log('Loaded restaurant_new.js');
 let geocoder;
+let formattedAddress = '';
+let currentLocation = {lat: 53.380450, lng: -1.472233};
+
+const inputAddress1 = $('#address1');
+const inputAddress2 = $('#address2');
+const inputCity = $('#city');
+const inputPostcode = $('#postcode');
+const searchAddress = $('#search-address');
+const searchPostcode = $('#search-postcode');
 
 $(() => {
 
@@ -32,17 +41,25 @@ $(() => {
         $('#address-map-button').removeClass('active');
 
         showHTML([$('#address-lookup-form')]);
-        hideHTML([$('#address-map-form')]);
+        hideHTML([
+            $('#address-map-text'),
+            $('#address-map-map-wrapper')
+        ]);
     });
 
     $('#address-map-button').click(() => {
         $('#address-map-button').addClass('active');
         $('#address-lookup-button').removeClass('active');
 
-        showHTML([$('#address-map-form')]);
+        showHTML([
+            $('#address-map-text'),
+            $('#address-map-map-wrapper')
+        ]);
         hideHTML([
             $('#address-lookup-form'),
-            $('#address-lookup-found')
+            $('#address-lookup-found'),
+            $('#found-address-edit'),
+            $('#found-address-chosen')
         ]);
     });
 
@@ -72,6 +89,14 @@ $(() => {
         if (e.which === 13) e.preventDefault();
     });
 
+    $('.txt_firstCapital').keyup(function () {
+        const inputString = $(this).val().split(" ");
+        for (let i = 0; i < inputString.length; i++) {
+            const j = inputString[i].charAt(0).toUpperCase();
+            inputString[i] = j + inputString[i].substr(1);
+        }
+        $(this).val(inputString.join(' '));
+    });
 });
 
 // ================ Opening Times ================ \\
@@ -148,16 +173,6 @@ function removeSelectedDay(button) {
 
 // ================ Address Lookup ================ \\
 
-let formattedAddress = '';
-let currentLocation;
-
-const inputAddress1 = $('#address1');
-const inputAddress2 = $('#address2');
-const inputCity = $('#city');
-const inputPostcode = $('#postcode');
-const searchAddress = $('#search-address');
-const searchPostcode = $('#search-postcode');
-
 // noinspection JSUnusedGlobalSymbols
 function findAddress() {
     const submittedAddress1 = searchAddress.val();
@@ -197,10 +212,8 @@ function findAddress() {
                 }
 
                 inputPostcode.val(foundAddress.postal_code);
-                console.log(foundAddress.postal_code);
 
                 formattedAddress += `, ${foundAddress.postal_code}`;
-                console.log(formattedAddress);
                 $('#found-address').text(formattedAddress);
 
                 showHTML([
@@ -238,7 +251,7 @@ function confirmAddress() {
 }
 
 function confirmAddressHTMLMod() {
-    $('#formatted-address').val(formattedAddress);
+    $('#formatted-address-lookup').val(formattedAddress);
 
     const styles = [{
         "featureType": "poi.business",
@@ -324,73 +337,70 @@ function hideHTML(iterable) {
 
 // noinspection JSUnusedGlobalSymbols
 function initMap() {
-
     geocoder = new google.maps.Geocoder();
-    // let currentLocation = {lat: 53.381423, lng: -1.488378};
-    //
-    // geocoder.geocode({'address': userPostcode}, (results, status) => {
-    //     if (status === google.maps.GeocoderStatus.OK) {
-    //         const lat = results[0].geometry.location.lat();
-    //         const lng = results[0].geometry.location.lng();
-    //         currentLocation = {lat: lat, lng: lng};
-    //     } else {
-    //         //TODO: remove this
-    //         alert("Geocode error: " + status);
-    //     }
-    // });
-    //
-    // const styles = [{
-    //     "featureType": "poi.business",
-    //     "stylers": [
-    //         {"visibility": "off"}
-    //     ]
-    // }];
-    //
-    // const map = new google.maps.Map($('#new-map')[0], {
-    //     zoom: 14,
-    //     center: currentLocation,
-    //     styles: styles,
-    //     zoomControl: true,
-    //     mapTypeControl: false,
-    //     streetViewControl: false,
-    //     fullscreenControl: true
-    // });
-    //
-    // const userMarker = new google.maps.Marker({
-    //     map: map,
-    //     draggable: true,
-    //     animation: google.maps.Animation.DROP,
-    //     position: currentLocation
-    // });
-    //
-    // google.maps.event.addListener(userMarker, 'dragend', () => {
-    //     geocodePosition(userMarker.getPosition());
-    // });
-}
 
-// function geocodePosition(pos) {
-//     const geocoder = new google.maps.Geocoder();
-//     geocoder.geocode({latLng: pos}, (results, status) => {
-//             if (status === google.maps.GeocoderStatus.OK) {
-//                 for (const component of results[0].address_components) {
-//                     if (component.long_name) {
-//                         switch (component.types[0]) {
-//                             case 'postal_code':
-//                                 inputPostcode.val(component.long_name);
-//                                 break;
-//                             // case n:
-//                             //     code block
-//                             //     break;
-//                             // default:
-//                             //     code block
-//                         }
-//                         // console.log(component.long_name);
-//                         // console.log(component.types[0]);
-//                     }
-//                 }
-//             } else {
-//                 console.log('No valid address');
-//             }
-//         }
-//     );
-// }
+    const styles = [{
+        "featureType": "poi.business",
+        "stylers": [
+            {"visibility": "off"}
+        ]
+    }];
+
+    const map = new google.maps.Map($('#address-map-map')[0], {
+        zoom: 14,
+        center: currentLocation,
+        styles: styles,
+        mapTypeControl: false,
+        streetViewControl: false,
+    });
+
+    const marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: currentLocation
+    });
+
+    google.maps.event.addListener(marker, 'dragend', () => {
+        lat = marker.getPosition().lat();
+        lng = marker.getPosition().lng();
+
+        geocoder.geocode({'location': {lat: lat, lng: lng}}, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                let foundAddress = {};
+                formattedAddress = '';
+
+                console.log(results[0]);
+
+                for (const component of results[0].address_components) {
+                    if (component.long_name) {
+                        foundAddress[`${component.types[0]}`] = component.long_name;
+                    }
+                }
+
+                if (foundAddress.street_number) {
+                    inputAddress1.val(foundAddress.street_number);
+                    formattedAddress += `${foundAddress.street_number}, `;
+                } else if (foundAddress.premise) {
+                    inputAddress1.val(foundAddress.premise);
+                    formattedAddress += `${foundAddress.premise}, `;
+                }
+
+                if (foundAddress.route) {
+                    inputAddress2.val(foundAddress.route);
+                    formattedAddress += `${foundAddress.route}, `;
+                }
+
+                if (foundAddress.postal_town) {
+                    inputCity.val(foundAddress.postal_town);
+                    formattedAddress += `${foundAddress.postal_town}, `;
+                }
+
+                inputPostcode.val(foundAddress.postal_code);
+
+                formattedAddress += foundAddress.postal_code;
+                $('#formatted-address-map').val(formattedAddress);
+            }
+        });
+
+    });
+}
