@@ -2,7 +2,8 @@
 
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
 const fs = require('fs');
-const CategorySchema = mongoose.model('Category').schema;
+const Category = mongoose.model('Category');
+const CategorySchema = Category.schema;
 
 // ================ Restaurant ================ \\
 
@@ -76,7 +77,16 @@ RestaurantSchema.pre('save', function (next) {
         }
     });
 
+    for (const category of this.categories){
+        new Category(category).save().catch((err) => {
+            if (!err.errmsg.includes('duplicate key')){
+                console.log(err.errmsg);
+            }
+        })
+    }
+
     next();
 });
+
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);

@@ -30,19 +30,19 @@ input[type="number"] {
 input[type="text"]::placeholder,
 input[type="number"]::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #b7b7b7;
+  color: #727272;
   opacity: 1;
   /* Firefox */
 }
 input[type="text"]:-ms-input-placeholder,
 input[type="number"]:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
-  color: #b7b7b7;
+  color: #727272;
 }
 input[type="text"]:-ms-input-placeholder,
 input[type="number"]:-ms-input-placeholder {
   /* Microsoft Edge */
-  color: #b7b7b7;
+  color: #727272;
 }
 .vert-center-parent {
   display: table;
@@ -65,10 +65,6 @@ input[type="number"]:-ms-input-placeholder {
 .invisible-label:before {
   content: '-';
   visibility: hidden;
-}
-.row-bottom-border {
-  border-bottom: solid 2px #474747;
-  margin-bottom: 2px;
 }
 #main-logo {
   width: 400px;
@@ -167,12 +163,12 @@ a.nav-link.nav-thin#btn-login:hover {
 }
 #login-form {
   text-align: center;
-  background-color: #ffffff;
+  background-color: #555555;
   width: 400px;
   position: fixed;
   z-index: 100000;
   margin-top: 20px;
-  border: 5px solid #58001b;
+  border: 5px solid #555555;
   border-radius: 10px;
 }
 #login-form:after,
@@ -188,12 +184,12 @@ a.nav-link.nav-thin#btn-login:hover {
 }
 #login-form:after {
   border: 20px solid transparent;
-  border-bottom-color: #ffffff;
+  border-bottom-color: #555555;
   margin-left: -20px;
 }
 #login-form:before {
   border: 25px solid transparent;
-  border-bottom-color: #58001b;
+  border-bottom-color: #555555;
   margin-left: -25px;
 }
 .login-form-input {
@@ -207,14 +203,14 @@ footer {
   height: 75px;
 }
 footer a {
-  color: #c9c9c9;
+  color: #e6e6e6;
 }
 footer a:hover {
   text-decoration: none;
-  color: #ffffff;
+  color: white;
 }
 footer p {
-  color: #c9c9c9;
+  color: #e6e6e6;
 }
 footer ul,
 footer p {
@@ -224,7 +220,7 @@ footer ul li.list-inline-item:not(:last-child) {
   margin-right: 0;
 }
 footer ul li.list-inline-item:not(:first-child):before {
-  color: #c9c9c9;
+  color: #e6e6e6;
   content: "|";
   margin: 0 15px;
 }
@@ -241,7 +237,7 @@ footer .footer-right {
   height: 150px;
   display: block;
   padding: 1px;
-  border: solid 1px #000000;
+  border: solid 1px black;
 }
 #display-picture-upload {
   display: none;
@@ -274,7 +270,7 @@ button.btn.btn-default#add-times,
 .address-input-found-controls a {
   display: inline-block;
   font-size: 18px;
-  color: #000000;
+  color: black;
   padding: 0 5px;
   margin: 0 1px;
 }
@@ -299,7 +295,7 @@ button.btn.btn-default#add-times,
 }
 #address-lookup-found-confirm-control span:hover {
   cursor: pointer;
-  color: #00B400;
+  color: #00cd00;
   text-decoration: none;
 }
 #address-lookup-found-edit {
@@ -338,11 +334,12 @@ button.btn.btn-default#add-times,
   width: 100%;
   height: 1.5rem;
   position: relative;
-  background: #cfcfcf;
+  background: #e6e6e6;
   border-radius: 0.75rem;
 }
 #features .wrapper .selected-highlight {
-  border: solid 2px #cfcfcf;
+  cursor: pointer;
+  border: solid 2px #e6e6e6;
   border-radius: 50%;
   width: 20%;
   height: 100%;
@@ -367,7 +364,7 @@ button.btn.btn-default#add-times,
   left: 0;
 }
 #features .unknown-radio:checked ~ .selected-highlight {
-  background: #555555;
+  background: #727272;
   left: 40%;
 }
 #features .no-radio:checked ~ .selected-highlight {
@@ -396,7 +393,7 @@ button.btn.btn-default#add-times,
   margin: 0 -5%;
   content: ' ';
   display: block;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #c9c9c9;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -438,7 +435,7 @@ button.btn.btn-default#add-times,
   font-size: 20pt;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  color: #000000;
+  color: black;
 }
 .restaurant-title:hover {
   text-decoration: none;
@@ -447,7 +444,7 @@ button.btn.btn-default#add-times,
 .restaurant-stars span {
   font-size: 15pt;
   margin-right: 5px;
-  color: #2b2b2b;
+  color: #727272;
 }
 .restaurant-address {
   font-size: 13pt;
@@ -457,7 +454,7 @@ button.btn.btn-default#add-times,
 }
 .restaurant-category {
   font-size: 10pt;
-  color: #6d6d6d;
+  color: #727272;
   background: #e6e6e6;
   border-radius: 2px;
   display: inline-block;
@@ -466,7 +463,7 @@ button.btn.btn-default#add-times,
 }
 .restaurant-description {
   width: 100%;
-  color: #2b2b2b;
+  color: #222222;
   margin-bottom: 4px;
 }
 .slideshow {
@@ -474,7 +471,7 @@ button.btn.btn-default#add-times,
   height: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #000000;
+  background-color: black;
 }
 .slideshow-wrapper {
   padding: 10px 0 10px 10px;
@@ -518,57 +515,6 @@ button.btn.btn-default#add-times,
   background: url("/images/site/blank-stars.png");
   background-size: contain;
 }
-#contact-form,
-#review-form input[type=text],
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  resize: vertical;
-}
-#contact-form,
-#review-form input[type=text]:focus {
-  border: 3px solid #555;
-}
-#contact-form,
-#review-form input[type=submit] {
-  background-color: black;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  float: left;
-  margin-left: -15px;
-}
-#contact-form,
-#review-form input[type=submit]:hover {
-  background-color: darkgrey;
-  color: black;
-}
-#contact-form,
-#review-form.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-#contact-form,
-#review-form.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-@media screen and (max-width: 600px) {
-  .col-25,
-  .col-75,
-  input[type=submit] {
-    width: 60%;
-    margin-top: 0;
-  }
-}
 .price-icon {
   vertical-align: middle;
   margin-left: 20px;
@@ -579,14 +525,14 @@ textarea {
 #review-form {
   text-align: center;
   margin: 0 100px;
-  background: lightgrey;
+  background: #c9c9c9;
   padding: 20px;
   border-radius: 20px;
 }
 .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
-  color: darkgrey;
+  color: #727272;
   font-size: 30px;
 }
 .stars label {
@@ -600,11 +546,11 @@ input.star {
 }
 input.star:checked label.star span::before,
 input.star:checked ~ label.star span::before {
-  color: yellow;
+  color: #e69200;
 }
 label.star:hover,
 label.star:hover ~ label.star span::before {
-  color: yellow;
+  color: #e69200;
 }
 #restaurant-current-map {
   width: 100%;

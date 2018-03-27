@@ -27,7 +27,6 @@ const ID = {
 
 const populateFunction = function populateDatabase(insertPromises) {
     populateUsers(insertPromises);
-    populateCategories(insertPromises);
     populateRestaurants(insertPromises);
     populateReviews(insertPromises);
 };
@@ -91,34 +90,6 @@ function populateUsers(insertPromises) {
         user_rating: 0,
         restaurants: ['5aad8b2e6fb09e3a54ea366b']
     }).save());
-}
-
-function populateCategories(insertPromises) {
-    const categories = [
-        {name: 'Burgers'},
-        {name: 'Casual'},
-        {name: 'Chicken'},
-        {name: 'Convenient'},
-        {name: 'Fast Food'},
-        {name: 'Inexpensive'},
-        {name: 'Italian'},
-        {name: 'Japanese'},
-        {name: 'Late Night Food'},
-        {name: 'Mediterranean'},
-        {name: 'Pizza'},
-        {name: 'Portuguese'},
-        {name: 'Premium'},
-        {name: 'Smokehouse'},
-        {name: 'Spicy'},
-        {name: 'Steakhouse'},
-        {name: 'Student Discount'},
-        {name: 'Turkish'},
-        {name: 'Upscale'}
-    ];
-
-    for (let i = 0; i < categories.length; i++) {
-        insertPromises.push(new Category(categories[i]).save());
-    }
 }
 
 function populateRestaurants(insertPromises) {
@@ -494,7 +465,7 @@ function populateRestaurants(insertPromises) {
         description: 'Flame-grilled Latin American dishes and shared plates served in a contemporary chain dining room.',
         price_range: 4,
         categories: [
-            {name: 'Late-night food'}, {name: 'Latin American'}, {name: 'Beer'},
+            {name: 'Late Night Food'}, {name: 'Latin American'}, {name: 'Beer'},
             {name: 'Burgers'}, {name: 'Wine'}
         ],
         features: {
@@ -528,10 +499,7 @@ function populateRestaurants(insertPromises) {
         opening_times: [[690, 1080], [690, 1080], [690, 1080], [690, 1080], [690, 1080], [], []],
         description: 'Bright, beach-theme room with surfboard-style tables for Mexican and American food made fresh daily.',
         price_range: 2,
-        categories: [
-            {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'},
-            {name: 'Chipotle'}, {name: 'BBQ'}
-        ],
+        categories: [{name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chipotle'}, {name: 'Barbecue'}],
         features: {
             parking: false,
             wifi: true,
