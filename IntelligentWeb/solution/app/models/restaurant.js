@@ -14,49 +14,54 @@ RestaurantSchema = Schema({
         line2: {type: String, trim: true},
         city: {type: String, trim: true},
         postcode: {type: String, trim: true, required: true},
-        formattedAddress: String
+        formattedAddress: String,
+        latitude: {type: Number, min: -90, max: 90, default: 90},
+        longitude: {type: Number, min: -180, max: 180, default: 180}
     },
     location: {
         type: {type: String},
         coordinates: [Number]
     },
-    latitude: {type: Number, min: -90, max: 90, default: 90},
-    longitude: {type: Number, min: -180, max: 180, default: 180},
-    url: {type: String, trim: true},
-    menu: {type: String, trim: true},
-    phone: {type: String, trim: true}, //TODO: restaurant email address for contact purposes as well as phone??
-    opening_times: Array,
+    contact: {
+        url: {type: String, trim: true},
+        menu: {type: String, trim: true},
+        phone: {type: String, trim: true}, //TODO: restaurant email address for contact purposes as well as phone??
+    },
+    localUrl: {type: String, unique: true},
+    openingTimes: Array,
     description: {type: String, trim: true, default: 'No description currently available.'},
-    price_range: Number,
+    priceRange: Number,
     categories: [CategorySchema],
     features: {
-        parking: Boolean,
-        wifi: Boolean,
-        takeout: Boolean,
-        delivery: Boolean,
-        outdoor_seating: Boolean,
-        reservations: Boolean,
         alcohol: Boolean,
+        delivery: Boolean,
+        takeout: Boolean,
+        outdoor_seating: Boolean,
+        parking: Boolean,
+        reservations: Boolean,
+        tableService: Boolean,
         vegetarian: Boolean,
         vegan: Boolean,
+        wifi: Boolean,
     },
-    owner_id: {type: String, trim: true},
-    owner_message: {type: String, trim: true},
+    ownerId: {type: String, trim: true},
+    ownerMessage: {type: String, trim: true},
     reviews: {type: [String], default: []},
     images: {type: [String], default: []}, //TODO: only show top 5 images on nearby page?
-    average_rating: {type: Number, min: 0, max: 5},
+    averageRating: {type: Number, min: 0, max: 5},
     published: {type: Boolean, default: true},
-    updated_at: Date
+    updatedAt: Date
 });
 
 RestaurantSchema.pre('save', function (next) {
-    if ((this.latitude) && (this.longitude)) {
+    if ((this.address.latitude) && (this.address.longitude)) {
         this.location = {
-            "type": "Point",
-            "coordinates": [this.longitude, this.latitude] // long THEN lat, according to geoJSON standards
+            type: "Point",
+            coordinates: [this.address.longitude, this.address.latitude] // long THEN lat, according to geoJSON standards
         };
     }
-    this.updated_at = Date.now();
+
+    this.updatedAt = Date.now();
 
     const imageDir = `./public/images/restaurants/${this._id}`;
 
@@ -67,26 +72,30 @@ RestaurantSchema.pre('save', function (next) {
     this.address.postcode = this.address.postcode.toUpperCase();
 
     this.address.formattedAddress = '';
-    const restaurant = this.toJSON();
-    Object.values(restaurant.address).forEach((element, index, objectValues) => {
-        if (element) {
-            this.address.formattedAddress += element;
-            if (objectValues[index + 1]) {
+
+    const addressComponents = ['line1', 'line2', 'city', 'postcode'];
+
+    Object.keys(this.address).forEach((key, index, keys) => {
+        const value = this.address[key];
+        if (value && addressComponents.includes(key)) {
+            this.address.formattedAddress += value;
+            if (addressComponents.includes(keys[index + 1])) {
                 this.address.formattedAddress += ', ';
             }
         }
     });
 
-    for (const category of this.categories){
+    for (const category of this.categories) {
         new Category(category).save().catch((err) => {
-            if (!err.errmsg.includes('duplicate key')){
+            if (!err.errmsg.includes('duplicate key')) {
                 console.log(err.errmsg);
             }
         })
     }
 
+    this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
+
     next();
 });
-
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);

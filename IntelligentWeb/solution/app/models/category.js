@@ -7,12 +7,12 @@ const mongoose = require('mongoose'), Schema = mongoose.Schema;
 CategorySchema = Schema({
     _id: {type: String},
     name: {type: String, required: true},
-    updated_at: Date
+    updatedAt: Date
 });
 
 CategorySchema.pre('save', function (next) {
-    this._id = this.name.replace(/[^a-zA-Z0-9]/g, "");
-    this.updated_at = Date.now();
+    this._id = this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+    this.updatedAt = Date.now();
     next();
 });
 

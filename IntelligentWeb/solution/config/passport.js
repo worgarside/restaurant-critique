@@ -14,7 +14,7 @@ module.exports = function (passport) {
         },
         (req, email, password, done) => {
             process.nextTick(() => {
-                User.findOne({'email': email}, (err, user) => {
+                User.findOne({'_id': email}, (err, user) => {
                     if (err) {
                         console.log(`Error1: ${err}`);
                         return done(err);
@@ -44,7 +44,7 @@ module.exports = function (passport) {
         (req, email, password, done) => {
             process.nextTick(() => {
                 if (!req.user) {
-                    User.findOne({'email': email}, (err, user) => {
+                    User.findOne({'_id': email}, (err, user) => {
                         if (err) {
                             console.log(err);
                             return done(err);
@@ -59,7 +59,7 @@ module.exports = function (passport) {
                             const newUser = new User();
 
                             newUser._id = email.toLowerCase();
-                            newUser.email = email.toLowerCase();
+                            // newUser.email = email.toLowerCase();
                             newUser.password = password;
                             newUser.privilege_level = 1;
                             newUser.forename = req.body.forename;

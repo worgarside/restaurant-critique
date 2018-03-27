@@ -2,7 +2,6 @@ extends partials/layout
 
 block content
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css')
     br
     .container
         .row
@@ -31,19 +30,19 @@ block content
                         h4
                             span.oi.oi-browser.oi-space(aria-hidden='true')
                             | Visit official
-                            a(href=`${restaurant.url}`, target='_blank')    page
+                            a(href=`${restaurant.contact.url}`, target='_blank') page
                 .row
                     .col
                         h4
                             span.oi.oi-book.oi-space(aria-hidden='true')
                             | See
-                            a(href=`${restaurant.menu}`, target='_blank')   menu
+                            a(href=`${restaurant.contact.menu}`, target='_blank') menu
                 .row
                     .col
                         h4
                             span.oi.oi-phone.oi-space(aria-hidden='true')
-                            |Contact us:
-                            a(href=`tel: ${restaurant.phone}`)  #{restaurant.phone}
+                            | Contact us:
+                            a(href=`tel: ${restaurant.contact.phone}`)  #{restaurant.contact.phone}
                 .row
                     .col
                         .wrapper-gret
@@ -96,7 +95,7 @@ block content
                     .col
                         h4 Open hours:
                 .row
-                    each times, index in restaurant.opening_times
+                    each times, index in restaurant.openingTimes
                         if times.length > 0
                             .col-5.text-center
                                 p= daysOfWeek[index]
@@ -108,7 +107,6 @@ block content
                                 - var cm = (times[1]%60);
                                 - cm = cm < 10 ? '0' + cm : cm;
                                 p #{openingHour}:#{om} - #{closingHour}:#{cm}
-
                         else
                             .col-5.text-center
                                 p= daysOfWeek[index]
@@ -119,7 +117,7 @@ block content
                 .row
                     .col
                         h3 Address: #{restaurant.address.formattedAddress}
-                        label(for='restaurant-map')
+                        label(for='restaurant-current-map')
                         #restaurant-current-map
         .row
             h3 Reviews

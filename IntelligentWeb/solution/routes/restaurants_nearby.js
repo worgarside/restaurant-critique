@@ -17,7 +17,7 @@ let returnList;
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);
 
-    returnList = [];
+    // returnList = [];
     const point = {
         type: "Point",
         coordinates: [req.body.lng, req.body.lat]
@@ -38,13 +38,14 @@ router.post('/', (req, res) => {
                 console.log(`Error: ${err}`);
             }
 
-            async.map(restaurants, (restaurant) => {
-                restaurant.images = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-                returnList.push(restaurant)
-            });
+            // TODO: this shouldn't be here, the file extensions should be in the original array?!?
+            // async.map(restaurants, (restaurant) => {
+            //     restaurant.images = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
+            //     returnList.push(restaurant)
+            // });
 
             console.log(`Returning: ${restaurants.length}`);
-            res.send(returnList);
+            res.send(restaurants);
         });
 
     restaurantPromise

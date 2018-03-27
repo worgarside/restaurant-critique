@@ -1,10 +1,10 @@
 // ================ Middleware & Constants ================ \\
 
-const mongoose = require('mongoose'),
-    User = mongoose.model('User'),
-    Category = mongoose.model('Category'),
-    Restaurant = mongoose.model('Restaurant'),
-    Review = mongoose.model('Review');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Category = mongoose.model('Category');
+const Restaurant = mongoose.model('Restaurant');
+const Review = mongoose.model('Review');
 
 const ID = {
     "Aslan's": '5ab1677c521e5430fc7d2490',
@@ -34,45 +34,36 @@ const populateFunction = function populateDatabase(insertPromises) {
 function populateUsers(insertPromises) {
     insertPromises.push(new User({
         _id: 'copeyrufus@gmail.com',
-        email: 'copeyrufus@gmail.com',
         password: 'Caddy1',
-        privilege_level: 1,
         forename: 'Rufus',
         surname: 'Cope',
         ageCategory: 2,
         postcode: 'S10 2DN',
         reviews: [],
-        display_img_filename: 'copeyrufus-gmail-com',
-        user_rating: 0
+        displayImage: 'copeyrufus-gmail-com',
     }).save());
 
     insertPromises.push(new User({
         _id: 'greta.veronika@gmail.com',
-        email: 'greta.veronika@gmail.com',
         password: 'Vodka2',
-        privilege_level: 1,
         forename: 'Greta',
         surname: 'Ramaneckaite',
         ageCategory: 2,
         postcode: 'S10 2FL',
         reviews: [],
-        display_img_filename: 'greta-veronika-gmail-com',
-        user_rating: 0,
+        displayImage: 'greta-veronika-gmail-com',
         restaurants: []
     }).save());
 
     insertPromises.push(new User({
         _id: 'worgarside@gmail.com',
-        email: 'worgarside@gmail.com',
         password: 'Passw3rd',
-        privilege_level: 1,
         forename: 'Will',
         surname: 'Garside',
         ageCategory: 2,
         postcode: 'SY14 8JU',
         reviews: [],
-        display_img_filename: 'worgarside-gmail-com',
-        user_rating: 0,
+        displayImage: 'worgarside-gmail-com',
         restaurants: []
     }).save());
 
@@ -80,14 +71,12 @@ function populateUsers(insertPromises) {
         _id: 'aslan@chicken-shop.com',
         email: 'aslan@chicken-shop.com',
         password: 'Asl4n',
-        privilege_level: 1,
         forename: 'Aslan',
         surname: 'Chicken',
         ageCategory: 2,
         postcode: 'S1 4EW',
         reviews: [],
-        display_img_filename: 'aslan-chicken-shop-com',
-        user_rating: 0,
+        displayImage: 'aslan-chicken-shop-com',
         restaurants: ['5aad8b2e6fb09e3a54ea366b']
     }).save());
 }
@@ -100,28 +89,34 @@ function populateRestaurants(insertPromises) {
             line1: '187',
             line2: 'West Street',
             city: 'Sheffield',
-            postcode: 'S1 4EW'
+            postcode: 'S1 4EW',
+            latitude: 53.380002,
+            longitude: -1.480078
         },
-        latitude: 53.380002,
-        longitude: -1.480078,
-        phone: '01144345634',
-        opening_times: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
+        contact: {
+            phone: '01144345634'
+        },
+        openingTimes: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
         description: 'Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards',
-        price_range: 1,
-        categories: [{name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'}, {name: 'Late Night Food'}],
+        priceRange: 1,
+        categories: [
+            {name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'},
+            {name: 'Late Night Food'}, {name: 'Kebab'}
+        ],
         features: {
             parking: false,
             wifi: false,
             takeout: true,
             delivery: false,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: false,
             alcohol: false
         },
-        owner_id: 'aslan@chicken-shop.com',
-        owner_message: "Please come and buy my chicken, I don't want to close again!",
+        ownerId: 'aslan@chicken-shop.com',
+        ownerMessage: "Please come and buy my chicken, I don't want to close again!",
         reviews: ['5aad98377888995220605d10', '5aad98377888995220605d0f'],
-        average_rating: 3
+        images: ['2018-03 17-22-25-18.png', '2018-03 17-22-26-11.png', '2018-03 17-22-31-42.jpg'],
+        averageRating: 3
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -131,16 +126,18 @@ function populateRestaurants(insertPromises) {
             line1: 'Royal Plaza Development',
             line2: 'West Street',
             city: 'Sheffield',
-            postcode: 'S1 4EZ'
+            postcode: 'S1 4EZ',
+            latitude: 53.380494,
+            longitude: -1.477221
         },
-        latitude: 53.380494,
-        longitude: -1.477221,
-        url: 'https://www.nandos.co.uk',
-        menu: 'https://www.nandos.co.uk/food/menu',
-        phone: '01142780044',
-        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        contact: {
+            url: 'https://www.nandos.co.uk',
+            menu: 'https://www.nandos.co.uk/food/menu',
+            phone: '01142780044'
+        },
+        openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.',
-        price_range: 2,
+        priceRange: 2,
         categories: [
             {name: 'Chicken'}, {name: 'Portuguese'}, {name: 'Spicy'},
             {name: 'Burgers'}, {name: 'Casual'}
@@ -150,14 +147,14 @@ function populateRestaurants(insertPromises) {
             wifi: false,
             takeout: true,
             delivery: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: true,
             alcohol: true,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d16'],
-        images: ['2018-03-25 19-33-00', '2018-03-25 19-33-01', '2018-03-25 21-48-00'],
-        average_rating: 2
+        images: ['2018-03-25 19-33-00.jpg', '2018-03-25 19-33-01.jpg', '2018-03-25 21-48-00.jpg'],
+        averageRating: 2
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -167,29 +164,34 @@ function populateRestaurants(insertPromises) {
             line1: 'Unit 8',
             line2: '24 The Moor',
             city: 'Sheffield',
-            postcode: 'S1 4PA'
+            postcode: 'S1 4PA',
+            latitude: 53.377303,
+            longitude: -1.473198
         },
-        latitude: 53.377303,
-        longitude: -1.473198,
-        url: 'https://www.gbk.co.uk',
-        menu: 'https://www.gbk.co.uk/menu',
-        phone: '0114 275 5154',
-        opening_times: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
+        contact: {
+            url: 'https://www.gbk.co.uk',
+            menu: 'https://www.gbk.co.uk/menu',
+            phone: '0114 275 5154'
+        },
+        openingTimes: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
         description: 'Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.',
-        price_range: 3,
-        categories: [{name: 'Spicy'}, {name: 'Burgers'}, {name: 'Casual'}],
+        priceRange: 3,
+        categories: [
+            {name: 'Spicy'}, {name: 'Burgers'}, {name: 'Casual'}, {name: 'American'}
+        ],
         features: {
             parking: false,
             wifi: false,
             takeout: true,
             delivery: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: true,
             alcohol: true,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d11'],
-        average_rating: 4
+        images: ['2018-03-17 22-34-51.jpg'],
+        averageRating: 4
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -199,27 +201,33 @@ function populateRestaurants(insertPromises) {
             line1: '12',
             line2: 'Meadowhall Centre',
             city: 'Sheffield',
-            postcode: 'S9 1EP'
+            postcode: 'S9 1EP',
+            latitude: 53.414766,
+            longitude: -1.412663
         },
-        latitude: 53.414766,
-        longitude: -1.412663,
-        url: 'www.wagamama.com/restaurants/sheffield-meadowhall',
-        menu: 'www.wagamama.com/our-menu',
-        phone: '01142568033',
-        opening_times: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1380], [660, 1380]],
+        contact: {
+            url: 'www.wagamama.com/restaurants/sheffield-meadowhall',
+            menu: 'www.wagamama.com/our-menu',
+            phone: '01142568033'
+        },
+        openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1380], [660, 1380]],
         description: 'Asian-inspired & Japanese chain restaurant where dishes are whisked to long communal tables.',
-        price_range: 3,
-        categories: [{name: 'Spicy'}, {name: 'Casual'}, {name: 'Japanese'}],
+        priceRange: 3,
+        categories: [
+            {name: 'Spicy'}, {name: 'Casual'}, {name: 'Japanese'}, {name: 'Asian'}, {name: 'Contemporary'},
+            {name: 'Fusion'}, {name: 'Street Food'}
+        ],
         features: {
             parking: true,
             wifi: true,
             takeout: true,
             delivery: false,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: false,
             alcohol: true,
             vegetarian: true
-        }
+        },
+        images: ['2018-03-25 19-38-00.jpg', '2018-03-25 19-38-01.png']
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -229,26 +237,31 @@ function populateRestaurants(insertPromises) {
             line1: '32',
             line2: 'City Road',
             city: 'Chester',
-            postcode: 'CH1 3AE'
+            postcode: 'CH1 3AE',
+            latitude: '53.193437',
+            longitude: '-2.881447'
         },
-        latitude: '53.193437',
-        longitude: '-2.881447',
-        url: 'www.siam-teppanyaki.co.uk/',
-        phone: '01244403222',
-        opening_times: [[720, 1350], [1020, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1410]],
+        contact: {
+            url: 'www.siam-teppanyaki.co.uk/',
+            phone: '01244403222'
+        },
+        openingTimes: [[720, 1350], [1020, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1410]],
         description: 'Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.',
-        price_range: 3,
-        categories: [{name: 'Japanese'}, {name: 'Chicken'}],
+        priceRange: 3,
+        categories: [
+            {name: 'Japanese'}, {name: 'Chicken'}, {name: 'Sushi'}, {name: 'Thai'}, {name: 'Teppanyaki'}
+        ],
         features: {
             parking: true,
             takeout: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: true,
             alcohol: true,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d12'],
-        average_rating: 5
+        images: ['2018-03-20 20-08-00.jpg', '2018-03-20 20-09-01.jpg'],
+        averageRating: 5
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -258,17 +271,22 @@ function populateRestaurants(insertPromises) {
             line1: 'The Old Courthouse, 184',
             line2: 'Deansgate',
             city: 'Manchester',
-            postcode: 'M3 3WB'
+            postcode: 'M3 3WB',
+            latitude: 53.479377,
+            longitude: -2.249153
         },
-        latitude: 53.479377,
-        longitude: -2.249153,
-        url: 'www.handmadeburger.co.uk',
-        menu: 'www.handmadeburger.co.uk/menu/',
-        phone: '01618320708',
-        opening_times: [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1380], [720, 1260]],
+        contact: {
+            url: 'www.handmadeburger.co.uk',
+            menu: 'www.handmadeburger.co.uk/menu/',
+            phone: '01618320708'
+        },
+        openingTimes: [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1380], [720, 1260]],
         description: 'Chain serving specialist burgers on sourdough or brioche buns and hand-mixed milkshakes.',
-        price_range: 3,
-        categories: [{name: 'Burgers'}, {name: 'Spicy'}, {name: 'Student Discount'}, {name: 'Casual'}],
+        priceRange: 3,
+        categories: [
+            {name: 'Burgers'}, {name: 'Spicy'}, {name: 'Student Discount'}, {name: 'Casual'}, {name: 'American'},
+            {name: 'British'}
+        ],
         features: {
             parking: false,
             wifi: true,
@@ -285,26 +303,28 @@ function populateRestaurants(insertPromises) {
             line1: '345',
             line2: 'Ecclesall Rd S',
             city: 'Sheffield',
-            postcode: 'S11 9PW'
+            postcode: 'S11 9PW',
+            latitude: 53.3478805,
+            longitude: -1.5217238
         },
-        latitude: 53.3478805,
-        longitude: -1.5217238,
-        url: 'www.millerandcarter.co.uk/',
-        menu: 'www.millerandcarter.co.uk/food',
-        phone: '01142362735',
-        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
-        price_range: 5,
+        contact: {
+            url: 'www.millerandcarter.co.uk/',
+            menu: 'www.millerandcarter.co.uk/food',
+            phone: '01142362735'
+        },
+        openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        priceRange: 5,
         categories: [{name: 'Premium'}, {name: 'Steakhouse'}],
         features: {
             parking: true,
             takeout: false,
             delivery: false,
-            outdoor_seating: true,
+            outdoorSeating: true,
             reservations: true,
             alcohol: true
         },
-        owner_message: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
-        images: ['2018-03-25 19-24-00', '2018-03-25 19-24-01']
+        ownerMessage: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
+        images: ['2018-03-25 19-24-00.jpg', '2018-03-25 19-24-01.jpg']
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -314,13 +334,15 @@ function populateRestaurants(insertPromises) {
             line1: '100-102',
             line2: 'High Street',
             city: 'Manchester',
-            postcode: 'M4 1HP'
+            postcode: 'M4 1HP',
+            latitude: 53.484547,
+            longitude: -2.236922
         },
-        latitude: 53.484547,
-        longitude: -2.236922,
-        url: 'www.almostfamousburgers.com',
-        phone: '01612449422',
-        opening_times: [[1020, 1320], [1020, 1320], [1020, 1320], [1020, 1320], [720, 1380], [720, 1380], [720, 1320]],
+        contact: {
+            url: 'www.almostfamousburgers.com',
+            phone: '01612449422'
+        },
+        openingTimes: [[1020, 1320], [1020, 1320], [1020, 1320], [1020, 1320], [720, 1380], [720, 1380], [720, 1320]],
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
             vegetarian: true
@@ -334,25 +356,27 @@ function populateRestaurants(insertPromises) {
             line1: 'Old Fire Station',
             line2: '50 Division Street',
             city: 'Sheffield',
-            postcode: 'S1 4GF'
+            postcode: 'S1 4GF',
+            latitude: 53.379937,
+            longitude: -1.475055
         },
-        latitude: 53.379937,
-        longitude: -1.475055,
-        url: 'www.bungalowsandbears.com',
-        menu: 'www.bungalowsandbears.com/food',
-        phone: '01142792901',
-        opening_times: [[720, 1440], [720, 1440], [720, 1440], [720, 1440], [720, 90], [720, 90], [660, 1440]],
-        price_range: 3,
+        contact: {
+            url: 'www.bungalowsandbears.com',
+            menu: 'www.bungalowsandbears.com/food',
+            phone: '01142792901'
+        },
+        openingTimes: [[720, 1440], [720, 1440], [720, 1440], [720, 1440], [720, 90], [720, 90], [660, 1440]],
+        priceRange: 3,
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
             parking: false,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: false,
             alcohol: true
         },
         reviews: ['5aad98377888995220605d14'],
-        images: ['2018-03-25 20-27-00', '2018-03-25 20-27-01', '2018-03-25 20-27-02'],
-        average_rating: 2
+        images: ['2018-03-25 20-27-00.jpg', '2018-03-25 20-27-01.jpg', '2018-03-25 20-27-02.jpg'],
+        averageRating: 2
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -362,28 +386,30 @@ function populateRestaurants(insertPromises) {
             line1: '152 - 154',
             line2: 'West Street',
             city: 'Sheffield',
-            postcode: 'S1 4ES'
+            postcode: 'S1 4ES',
+            latitude: 53.380770,
+            longitude: -1.477069
         },
-        latitude: 53.380770,
-        longitude: -1.477069,
-        url: 'www.istanbulweststreet.com',
-        menu: 'www.istanbulweststreet.com/Menu.html',
-        phone: '01142759191',
-        opening_times: [[660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410]],
-        price_range: 2,
+        contact: {
+            url: 'www.istanbulweststreet.com',
+            menu: 'www.istanbulweststreet.com/Menu.html',
+            phone: '01142759191'
+        },
+        openingTimes: [[660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410]],
+        priceRange: 2,
         categories: [{name: 'Mediterranean'}, {name: 'Fast Food'}, {name: 'Turkish'}, {name: 'Late Night Food'}],
         features: {
             parking: false,
             wifi: false,
             takeout: true,
             delivery: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: true,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d15'],
-        images: ['2018-03-25 21-03-00', '2018-03-25 21-03-01'],
-        average_rating: 3
+        images: ['2018-03-25 21-03-00.jpg', '2018-03-25 21-03-01.jpg'],
+        averageRating: 3
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -393,27 +419,29 @@ function populateRestaurants(insertPromises) {
             line1: '4 Millennium Square',
             city: 'Sheffield',
             postcode: 'S1 2JJ',
+            latitude: 53.379483,
+            longitude: -1.468791
         },
-        latitude: 53.379483,
-        longitude: -1.468791,
-        url: 'www.individualrestaurants.com/piccolino/sheffield/',
-        phone: '01142752698',
-        opening_times: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1320]],
+        contact: {
+            url: 'www.individualrestaurants.com/piccolino/sheffield/',
+            phone: '01142752698'
+        },
+        openingTimes: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1320]],
         description: 'Upscale chain restaurant with a contemporary interior and a menu of classic Italian specialities.',
-        price_range: 5,
+        priceRange: 5,
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Upscale'}],
         features: {
             parking: false,
             takeout: false,
             delivery: false,
-            outdoor_seating: true,
+            outdoorSeating: true,
             reservations: true,
             alcohol: true,
             vegetarian: true,
         },
         reviews: ['5aad98377888995220605d13'],
-        images: ['2018-03-25 21-30-00', '2018-03-25 21-30-01', '2018-03-25 21-30-02'],
-        average_rating: 3
+        images: ['2018-03-25 21-30-00.jpg', '2018-03-25 21-30-01.jpg', '2018-03-25 21-30-02.jpg'],
+        averageRating: 3
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -423,28 +451,30 @@ function populateRestaurants(insertPromises) {
             line1: '124 Devonshire Street',
             city: 'Sheffield',
             postcode: 'S3 7SF',
+            latitude: 53.379492,
+            longitude: -1.477912
         },
-        latitude: 53.379492,
-        longitude: -1.477912,
-        url: 'www.pizzaexpress.com/',
-        menu: 'www.pizzaexpress.com/our-food/restaurant-menu',
-        phone: '01142752755',
-        opening_times: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
+        contact: {
+            url: 'www.pizzaexpress.com/',
+            menu: 'www.pizzaexpress.com/our-food/restaurant-menu',
+            phone: '01142752755'
+        },
+        openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Chefs in striped t-shirts tossing handmade pizzas where everyone can see.',
-        price_range: 5,
+        priceRange: 5,
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Pizza'}],
         features: {
             parking: false,
             takeout: true,
             delivery: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: true,
             alcohol: true,
             vegetarian: true,
         },
         reviews: ['5aad98377888995220605d17'],
-        images: ['2018-03-25 22-55-00'],
-        average_rating: 4
+        images: ['2018-03-25 22-55-00.jpg', '2018-03-25 22-55-01.png'],
+        averageRating: 4
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -454,33 +484,34 @@ function populateRestaurants(insertPromises) {
             line1: '8-9 Fitzwilliam Street',
             line2: 'Devonshire Green',
             city: 'Sheffield',
-            postcode: 'S1 4JB'
+            postcode: 'S1 4JB',
+            latitude: 53.379442,
+            longitude: -1.480565
         },
-        latitude: 53.379442,
-        longitude: -1.480565,
-        url: 'https://www.iguanas.co.uk',
-        menu: 'https://www.iguanas.co.uk/restaurants/sheffield/menus',
-        phone: '01142521010',
-        opening_times: [[600, 1410], [600, 1410], [600, 1410], [600, 1410], [600, 1440], [600, 1440], [600, 1410]],
+        contact: {
+            url: 'https://www.iguanas.co.uk',
+            menu: 'https://www.iguanas.co.uk/restaurants/sheffield/menus',
+            phone: '01142521010'
+        },
+        openingTimes: [[600, 1410], [600, 1410], [600, 1410], [600, 1410], [600, 1440], [600, 1440], [600, 1410]],
         description: 'Flame-grilled Latin American dishes and shared plates served in a contemporary chain dining room.',
-        price_range: 4,
+        priceRange: 4,
         categories: [
-            {name: 'Late Night Food'}, {name: 'Latin American'}, {name: 'Beer'},
-            {name: 'Burgers'}, {name: 'Wine'}
+            {name: 'Latin American'}, {name: 'Burgers'}, {name: 'Mexican'}, {name: 'Brazilian'}
         ],
         features: {
             parking: false,
             wifi: true,
             takeout: true,
             delivery: true,
-            outdoor_seating: true,
+            outdoorSeating: true,
             reservations: false,
             alcohol: true,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d18', '5aad98377888995220605d19'],
-        images: ['2018-03-26 20-36-00', '2018-03-26 20-36-01', '2018-03-26 20-36-02', '2018-03-26 20-36-03'],
-        average_rating: 3
+        images: ['2018-03-26 20-36-00.jpg', '2018-03-26 20-36-01.jpg', '2018-03-26 20-36-02.jpg', '2018-03-26 20-36-03.jpg'],
+        averageRating: 3
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -489,152 +520,157 @@ function populateRestaurants(insertPromises) {
         address: {
             line1: '257 Glossop Road',
             city: 'Sheffield',
-            postcode: 'S10 2GZ'
+            postcode: 'S10 2GZ',
+            latitude: 53.380101,
+            longitude: -1.483646
         },
-        latitude: 53.380101,
-        longitude: -1.483646,
-        url: 'http://www.californiafresh.co.uk/',
-        menu: 'http://www.californiafresh.co.uk/menu-1.html',
-        phone: '01143272331',
-        opening_times: [[690, 1080], [690, 1080], [690, 1080], [690, 1080], [690, 1080], [], []],
+        contact: {
+            url: 'http://www.californiafresh.co.uk/',
+            menu: 'http://www.californiafresh.co.uk/menu-1.html',
+            phone: '01143272331'
+        },
+        openingTimes: [[690, 1080], [690, 1080], [690, 1080], [690, 1080], [690, 1080], [], []],
         description: 'Bright, beach-theme room with surfboard-style tables for Mexican and American food made fresh daily.',
-        price_range: 2,
-        categories: [{name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chipotle'}, {name: 'Barbecue'}],
+        priceRange: 2,
+        categories: [
+            {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chipotle'}, {name: 'Barbecue'},
+            {name: 'American'}, {name: 'Fast Food'}
+        ],
         features: {
             parking: false,
             wifi: true,
             takeout: true,
             delivery: true,
-            outdoor_seating: false,
+            outdoorSeating: false,
             reservations: false,
             alcohol: false,
             vegetarian: true
         },
         reviews: ['5aad98377888995220605d20'],
-        images: ['2018-03-26 20-58-00', '2018-03-26 20-58-01', '2018-03-26 20-58-02'],
-        average_rating: 3
+        images: ['2018-03-26 20-58-00.jpg', '2018-03-26 20-58-01.jpeg', '2018-03-26 20-58-02.jpg'],
+        averageRating: 3
     }).save());
 }
 
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d09'),
-        restaurant_id: ID["Aslan's"],
+        restaurantID: ID["Aslan's"],
         title: "Aslan's Sucks",
         body: "I got food poisoning here, don't eat the turkey burgers",
-        author_id: 'greta.veronika@gmail.com',
+        authorID: 'greta.veronika@gmail.com',
         images: ['2018-03-17 22-25-18', '2018-03-17 22-26-11'],
-        restaurant_rating: 1,
+        restaurantRating: 1,
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d10'),
-        restaurant_id: ID["Aslan's"],
+        restaurantID: ID["Aslan's"],
         title: 'Greatest Kebab of All Time!!!',
         body: `This is, without doubt, the GOAT when it comes to kebabs. Even Adnan's doesn't
          stand up to the might that is ASLAN'S KEBAB HOUSE!!!`,
-        author_id: 'copeyrufus@gmail.com',
+        authorID: 'copeyrufus@gmail.com',
         images: ['2018-03-17 22-31-42'],
-        restaurant_rating: 5,
+        restaurantRating: 5,
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d11'),
-        restaurant_id: ID['Gourmet Burger Kitchen'],
+        restaurantID: ID['Gourmet Burger Kitchen'],
         title: 'Great burger place, gives me tiny hands',
         body: "The burgers are so big the make my hands feel tiny, phenomenal milkshakes, decent prices - what's not to like?",
-        author_id: 'worgarside@gmail.com',
+        authorID: 'worgarside@gmail.com',
         images: ['2018-03-17 22-34-51'],
-        restaurant_rating: 4
+        restaurantRating: 4
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d12'),
-        restaurant_id: ID['Siam Thai and Teppanyaki'],
+        restaurantID: ID['Siam Thai and Teppanyaki'],
         title: 'The Teppanyaki is amazing!',
         body: 'I went here for my 15th birthday and even though I had a broken arm at the time, they let me have a go doing the Teppanyaki and were so helpful and friendly',
-        author_id: 'worgarside@gmail.com',
+        authorID: 'worgarside@gmail.com',
         images: ['2018-03-20 20-08-00'],
-        restaurant_rating: 5
+        restaurantRating: 5
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
-        restaurant_id: ID['Piccolino'],
+        restaurantID: ID['Piccolino'],
         title: 'Reasonable food at a reasonable price',
         body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a 
         bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very 
         loud! The outdoor seats are great though :)`,
-        author_id: 'worgarside@gmail.com',
+        authorID: 'worgarside@gmail.com',
         images: ['2018-03-25 21-30-02'],
-        restaurant_rating: 3
+        restaurantRating: 3
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d14'),
-        restaurant_id: ID['Bungalows & Bears'],
+        restaurantID: ID['Bungalows & Bears'],
         title: 'Where are the bears?',
         body: `I've been here 3 times now but I've only seen a bear once?? And even then that was when my mom 
         showed me a picture on her phone`,
-        author_id: 'copeyrufus@gmail.com',
-        restaurant_rating: 2
+        authorID: 'copeyrufus@gmail.com',
+        restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d15'),
-        restaurant_id: ID['Istanbul Restaurant'],
+        restaurantID: ID['Istanbul Restaurant'],
         title: 'more of a takeaway!',
         body: 'Title says it all, pretty standard take out food with a nice front',
-        author_id: 'greta.veronika@gmail.com',
+        authorID: 'greta.veronika@gmail.com',
         images: ['2018-03-25 21-03-01'],
-        restaurant_rating: 3
+        restaurantRating: 3
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d16'),
-        restaurant_id: ID["Nando's"],
+        restaurantID: ID["Nando's"],
         title: "Definitely a 'mild' on my spice scale",
         body: `Food is meh, don't understand all the hype. Maybe it's those damn millennials. Also i ate my food
         before i took a picture, but that's what was left`,
-        author_id: 'copeyrufus@gmail.com',
+        authorID: 'copeyrufus@gmail.com',
         images: ['2018-03-25 21-48-00'],
-        restaurant_rating: 2
+        restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d17'),
-        restaurant_id: ID["Pizza Express"],
+        restaurantID: ID["Pizza Express"],
         title: 'Expensive pizza',
         body: 'The pizza is nice but can be quite expensive and the sides are small',
-        author_id: 'worgarside@gmail.com',
-        restaurant_rating: 4
+        authorID: 'worgarside@gmail.com',
+        restaurantRating: 4
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d18'),
-        restaurant_id: ID["Las Iguanas"],
+        restaurantID: ID["Las Iguanas"],
         title: 'Expensive food',
         body: 'The food was nice, but very expensive. Would only go out on a special ocasion to taste some Latin American cuisine',
-        author_id: 'worgarside@gmail.com',
-        restaurant_rating: 2
+        authorID: 'worgarside@gmail.com',
+        restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d19'),
-        restaurant_id: ID["Las Iguanas"],
+        restaurantID: ID["Las Iguanas"],
         title: 'Amazing drinks!',
         body: 'I have to say that the cocktails made in this restaurant are unbelievably tasty! I drank every last drop. The food was decent, but I was too drunk to care',
-        author_id: 'copeyrufus@gmail.com',
-        restaurant_rating: 5
+        authorID: 'copeyrufus@gmail.com',
+        restaurantRating: 5
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d20'),
-        restaurant_id: ID["California Fresh"],
+        restaurantID: ID["California Fresh"],
         title: 'Dont trust the burrito!',
         body: 'I swear, its delicious, but afterwards you might have regrets from those burritos',
-        author_id: 'copeyrufus@gmail.com',
-        restaurant_rating: 3
+        authorID: 'copeyrufus@gmail.com',
+        restaurantRating: 3
     }).save());
 }
 

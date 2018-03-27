@@ -149,6 +149,7 @@ function processData(results) {
         restaurantListDOM.appendChild(restaurantContainer);
         initSlideshow(index);
 
+        // language=HTML
         const infoWindowContent = `
             <div class="container" id="info-${index}" style="max-width: 400px;">
                 <div class="row">
@@ -160,7 +161,7 @@ function processData(results) {
                 </div>
                 <div class="row">
                     <div class="col">
-                        <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="#">More info</a>
+                        <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="javascript:void(0)">More info</a>
                     </div>
                 </div>
             </div>
@@ -172,7 +173,7 @@ function processData(results) {
 
         const newMarker = new google.maps.Marker({
             map: map,
-            position: {lat: restaurant.latitude, lng: restaurant.longitude},
+            position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
             icon: icon
         });
 
@@ -191,20 +192,20 @@ function getRestaurantDiv(restaurant, index) {
                     <div class="vert-center-parent">
                         <div class="vert-center-child">
                             <div class="row">
-                               <div class="col"><a href="#" class="restaurant-title d-inline">${restaurant.name}</a>
+                               <div class="col"><a href='restaurant/${restaurant.localUrl}' class="restaurant-title d-inline">${restaurant.name}</a>
     `;
 
     let htmlStars = '';
 
-    if (restaurant.average_rating) {
-        const starRating = Math.round(restaurant.average_rating);
+    if (restaurant.averageRating) {
+        const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
             <div class="restaurant-stars">
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" style="color: orange;" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star"></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {

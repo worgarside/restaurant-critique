@@ -5,14 +5,14 @@ const mongoose = require('mongoose'), Schema = mongoose.Schema;
 // ================ Review ================ \\
 
 ReviewSchema = Schema({
-    restaurant_id: {type: String, required: true},
+    restaurantID: {type: String, required: true},
     title: {type: String, required: true},
     body: {type: String, required: true},
-    author_id: {type: String, required: true},
+    authorID: {type: String, required: true},
     images: {type: [String], default: []},
-    restaurant_rating: {type: Number, min: 0, max: 5, required: true},
-    review_rating: {type: Number, default: 0},
-    updated_at: Date
+    restaurantRating: {type: Number, min: 0, max: 5, required: true},
+    reviewRating: {type: Number, default: 0},
+    updatedAt: Date
 });
 
 ReviewSchema.pre('save', function (next) {

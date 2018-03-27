@@ -54,8 +54,8 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-router.get('/restaurant/:id', (req, res) => {
-    return Restaurant.findOne({ _id: req.params.id },  (err, result) => {
+router.get('/restaurant/:url', (req, res) => {
+    return Restaurant.findOne({ localUrl: req.params.url },  (err, result) => {
         if (err) { throw(err); }
         return res.render('restaurant', {title: title, restaurant: result});
     });

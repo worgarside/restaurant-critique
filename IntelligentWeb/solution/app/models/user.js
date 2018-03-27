@@ -8,23 +8,22 @@ const bcrypt = require('bcrypt-nodejs');
 
 UserSchema = Schema({
     _id: {type: String},
-    email: String,
     password: {type: String, required: true},
-    privilege_level: {type: Number, required: true},
+    privilegeLevel: {type: Number, default: 0},
     forename: {type: String, required: true},
     surname: {type: String, required: true},
     ageCategory: {type: Number, min: 0, max: 6},
     postcode: String,
     reviews: Array,
-    display_img_filename: {type: String, unique: true},
-    user_rating: Number,
+    displayImage: {type: String, unique: true},
+    userRating: {type: Number, default: 0},
     restaurants: Array,
-    updated_at: Date
+    updatedAt: Date
 });
 
 UserSchema.pre('save', function (next) {
     this.password = generateHash(this.password);
-    this.updated_at = Date.now();
+    this.updatedAt = Date.now();
     next();
 });
 
@@ -33,7 +32,7 @@ UserSchema.methods.validPassword = function (password) {
 };
 
 function generateHash(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
 
 module.exports = mongoose.model('User', UserSchema);
