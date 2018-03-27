@@ -31,14 +31,14 @@ block content
                                             button.btn.btn-secondary.address-input#address-lookup-button(type='button') Address Lookup
                                             button.btn.btn-secondary.address-input#address-map-button(type='button') Set location on map
 
-                            #address-lookup-form
+                            #address-lookup-search
                                 .form-row
                                     .form-group.col-5
                                         label(for='search-address') Address Line 1
-                                        input.txt_firstCapital.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
+                                        input.title-case.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
                                     .form-group.col-3
                                         label(for='search-postcode') Post Code
-                                        input.txt_firstCapital.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='none')
+                                        input.upper-case.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='none')
                                     .form-group.col
                                         label.invisible-label(for='lookup-btn')
                                         button.btn#lookup-btn(type='button', onclick='findAddress();') Find address
@@ -46,48 +46,35 @@ block content
                             #address-lookup-found
                                 .form-row
                                     .form-group.col
-                                        .address-input-found-controls
-                                            a#address-lookup-found-correct(href='javascript:void(0)', onclick='confirmAddress();')
-                                                span.oi.oi-check(aria-hidden='true')
-                                            a#address-lookup-found-edit(href='javascript:void(0)', onclick='editAddress();')
-                                                span.oi.oi-pencil(aria-hidden='true')
-                                            a#address-lookup-found-incorrect(href='javascript:void(0)', onclick='rejectAddress();')
-                                                span.oi.oi-circle-x(aria-hidden='true')
-                                        p#found-address
+                                        label(for='formatted-address-lookup') Address
+                                        span#address-lookup-found-edit-control.oi.oi-pencil.float-right(aria-hidden='true', onclick='editAddress();')
+                                        input#formatted-address-lookup.form-control(disabled)
+                                    #address-lookup-found-confirm-control
+                                        .form-group.col-1
+                                            label.invisible-label
+                                            span.oi.oi-check( aria-hidden='true', onclick='confirmEdit();')
 
-                            #found-address-edit
+                            #address-lookup-found-edit
                                 .form-row
-                                    .form-group.col
+                                    .form-group.col-6
                                         label(for='address1') Address Line 1
-                                        input.txt_firstCapital.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
-                                .form-row
-                                    .form-group.col
+                                        input.title-case.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
+                                    .form-group.col-6
                                         label(for='address2') Address Line 2
-                                        input.txt_firstCapital.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
+                                        input.title-case.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
                                 .form-row
                                     .form-group.col-6
                                         label(for='city') City
-                                        input.txt_firstCapital.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
+                                        input.title-case.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
                                     .form-group.col-6
                                         label(for='postcode') Postcode
-                                        input.txt_firstCapital.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
-
-                            #found-address-chosen
-                                .form-row
-                                    .form-group.col
-                                        label(for='formatted-address-lookup') Address
-                                        span#address-lookup-found-edit2.oi.oi-pencil.float-right(aria-hidden='true', onclick='resetAddressLookup();')
-                                        input#formatted-address-lookup.form-control(disabled)
-
-                            #found-address-map-wrapper
-                                .form-row
-                                    .form-group.col
-                                        #found-address-map
+                                        input.upper-case.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
 
                             #address-map-text
                                 .form-row
                                     .form-group.col
                                         label(for='formatted-address-map') Address
+                                        span#address-map-edit-control.oi.oi-pencil.float-right(aria-hidden='true', onclick='editMapAddress();')
                                         input#formatted-address-map.form-control(disabled, value='Drag the marker on the map to set the address')
 
                             #address-map-map-wrapper
@@ -141,6 +128,30 @@ block content
                                         option(value='1') ££ - Average
                                         option(value='2') £££ - Above Average
                                         option(value='3') ££££ - Premium
+
+                        .col-5.offset-1
+                            #features
+                                .form-row
+                                    .col
+                                        p Restaurant Features
+                                .form-row
+                                    .col-4.offset-5
+                                        p.float-left Yes
+                                        p.float-right No
+                                each feature in features
+                                    -var featureID = `${feature.replace(/[ ]/g, "").toLowerCase()}`
+                                    .form-row
+                                        .col-4.text-right
+                                            p #{feature}
+                                        .col-4.offset-1
+                                            .wrapper
+                                                label.invisible-label.yes-label(for=`yes-${featureID}`)
+                                                input.yes-radio(id=`yes-${featureID}` type='radio', value='0', name=featureID)
+                                                label.invisible-label.unknown-label(for=`unknown-${featureID}`)
+                                                input.unknown-radio(id=`unknown-${featureID}` type='radio', value='1', name=featureID, checked)
+                                                label.invisible-label.no-label(for=`no-${featureID}`)
+                                                input.no-radio(id=`no-${featureID}` type='radio', value='2', name=featureID)
+                                                .selected-highlight
                             .form-row
                                 .form-group.col
                                     label(for='category') Category
@@ -154,22 +165,7 @@ block content
                                         option(value='1') Fishy Fingers
                                         option(value='0') Other
 
-                        .col-5.offset-1
-                            .form-row
-                                .col-1.offset-5.text-center
-                                    p Yes
-                                .col-1.offset-1.text-center
-                                    p No
-                            each feature in features
-                                .form-row
-                                    .col-4.text-right
-                                        p #{feature}
-                                    .col-1.offset-1.text-center
-                                        input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=1, autocomplete='none')
-                                    .col-1.offset-1.text-center
-                                        input(type="radio", name=`${feature.replace(/[ ]/g, "").toLowerCase()}`, value=0, autocomplete='none')
-
-                    div(hidden=false)
+                    div(hidden=true)
                         each day in daysOfWeek
                             input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                             input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)

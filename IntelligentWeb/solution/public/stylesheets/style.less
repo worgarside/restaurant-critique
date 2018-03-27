@@ -73,8 +73,13 @@ input[type="text"], input[type="number"] {
 }
 
 .invisible-label:before {
-  content: 'ABCDEF';
+  content: '-';
   visibility: hidden;
+}
+
+.row-bottom-border {
+  border-bottom: solid 2px #474747;
+  margin-bottom: 2px;
 }
 
 // ================ Index Head ================ \\
@@ -328,32 +333,6 @@ button.btn.btn-default#add-times, #lookup-btn {
   width: 100%;
 }
 
-#new-map {
-  width: 100%;
-  height: 300px;
-}
-
-#found-address {
-  overflow: hidden;
-  &-edit {
-    display: none;
-  }
-
-  &-chosen {
-    display: none;
-  }
-
-  &-map {
-    width: 100%;
-    height: 300px;
-
-    &-wrapper {
-      width: 100%;
-      display: none;
-    }
-  }
-}
-
 .address-input {
   &-found {
     &-controls {
@@ -369,76 +348,146 @@ button.btn.btn-default#add-times, #lookup-btn {
   }
 }
 
-#address-input-choice .btn-group {
-  width: 100%;
-}
 
-#address-lookup {
-  &-button {
-    width: 50%;
-    border-right: solid black 1px;
+#address {
+  &-input-choice .btn-group {
+    width: 100%;
   }
 
-  &-form {
-    display: none;
-  }
-
-  &-found {
-    display: none;
-
-    &-correct {
-      &:hover {
-        cursor: pointer;
-        color: #00B400;
-        text-decoration: none;
-      }
+  &-lookup {
+    &-button {
+      width: 50%;
+      border-right: solid black 1px;
     }
 
-    &-edit {
-      &:hover {
-        cursor: pointer;
-        color: #0061b4;
-        text-decoration: none;
-      }
+    &-search {
+      display: none;
     }
 
-    &-incorrect {
-      &:hover {
-        cursor: pointer;
-        color: #b40000;
-        text-decoration: none;
+    &-found {
+      display: none;
+      &-confirm {
+        &-control {
+          display: none;
+          span {
+            &::before {
+              font-size: 2rem;
+            }
+            &:hover {
+              cursor: pointer;
+              color: #00B400;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+
+      &-edit {
+        display: none;
+
+        &-control {
+          &:hover {
+            cursor: pointer;
+            color: #0061b4;
+            text-decoration: none;
+          }
+        }
       }
     }
-
-    &-edit2 {
-      &:hover {
-        cursor: pointer;
-        color: #0061b4;
-        text-decoration: none;
-      }
-    }
-  }
-
-}
-
-#address-map {
-  &-button {
-    width: 50%;
-    border-left: solid black 1px;
   }
 
   &-map {
-    width: 100%;
-    height: 300px;
+    &-button {
+      width: 50%;
+      border-left: solid black 1px;
+    }
 
-    &-wrapper {
+    &-edit-control:hover {
+      cursor: pointer;
+      color: #0061b4;
+      text-decoration: none;
+    }
+
+    &-map {
       width: 100%;
+      height: 300px;
+
+      &-wrapper {
+        width: 100%;
+        display: none;
+      }
+    }
+
+    &-text {
+      display: none;
+    }
+  }
+}
+
+#features {
+  @selector-bg-color: #cfcfcf;
+  @selector-yes-color: #00cd00;
+  @selector-unknown-color: #555555;
+  @selector-no-color: #eb0000;
+  @selector-height: 1.5rem;
+
+  p {
+    margin: 8px 0;
+  }
+
+  .wrapper {
+    margin: 8px 0;
+    width: 100%;
+    height: @selector-height;
+    position: relative;
+    background: @selector-bg-color;
+    border-radius: @selector-height/2;
+
+    .selected-highlight {
+      border: solid 2px @selector-bg-color;
+      border-radius: 50%;
+      width: 20%;
+      height: 100%;
+      position: absolute;
+      -webkit-transition: all 0.2s ease-in-out;
+      -moz-transition: all 0.2s ease-in-out;
+      -ms-transition: all 0.2s ease-in-out;
+      -o-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+    }
+
+    label {
+      cursor: pointer;
+      width: unit(100/3, %);
+      position: absolute;
+      display: inline-block;
+    }
+
+    input {
       display: none;
     }
   }
 
-  &-text {
-    display: none;
+  .yes-radio:checked ~ .selected-highlight {
+    background: @selector-yes-color;
+    left: 0;
+  }
+
+  .unknown-radio:checked ~ .selected-highlight {
+    background: @selector-unknown-color;
+    left: 40%;
+  }
+  .no-radio:checked ~ .selected-highlight {
+    background: @selector-no-color;
+    left: 80%;
+  }
+
+  .unknown-radio, .unknown-label {
+    left: unit(100/3, %);
+  }
+
+  .no-radio, .no-label {
+    left: unit(200/3, %);
   }
 }
 
@@ -583,7 +632,11 @@ button.btn.btn-default#add-times, #lookup-btn {
   padding: 10px;
   margin-top: -18px;
   color: white;
-  transition: 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slideshow-next {

@@ -63,8 +63,12 @@ input[type="number"]:-ms-input-placeholder {
   -webkit-appearance: none;
 }
 .invisible-label:before {
-  content: 'ABCDEF';
+  content: '-';
   visibility: hidden;
+}
+.row-bottom-border {
+  border-bottom: solid 2px #474747;
+  margin-bottom: 2px;
 }
 #main-logo {
   width: 400px;
@@ -264,27 +268,6 @@ button.btn.btn-default#add-times,
 #lookup-btn {
   width: 100%;
 }
-#new-map {
-  width: 100%;
-  height: 300px;
-}
-#found-address {
-  overflow: hidden;
-}
-#found-address-edit {
-  display: none;
-}
-#found-address-chosen {
-  display: none;
-}
-#found-address-map {
-  width: 100%;
-  height: 300px;
-}
-#found-address-map-wrapper {
-  width: 100%;
-  display: none;
-}
 .address-input-found-controls {
   float: right;
 }
@@ -302,28 +285,27 @@ button.btn.btn-default#add-times,
   width: 50%;
   border-right: solid black 1px;
 }
-#address-lookup-form {
+#address-lookup-search {
   display: none;
 }
 #address-lookup-found {
   display: none;
 }
-#address-lookup-found-correct:hover {
+#address-lookup-found-confirm-control {
+  display: none;
+}
+#address-lookup-found-confirm-control span::before {
+  font-size: 2rem;
+}
+#address-lookup-found-confirm-control span:hover {
   cursor: pointer;
   color: #00B400;
   text-decoration: none;
 }
-#address-lookup-found-edit:hover {
-  cursor: pointer;
-  color: #0061b4;
-  text-decoration: none;
+#address-lookup-found-edit {
+  display: none;
 }
-#address-lookup-found-incorrect:hover {
-  cursor: pointer;
-  color: #b40000;
-  text-decoration: none;
-}
-#address-lookup-found-edit2:hover {
+#address-lookup-found-edit-control:hover {
   cursor: pointer;
   color: #0061b4;
   text-decoration: none;
@@ -331,6 +313,11 @@ button.btn.btn-default#add-times,
 #address-map-button {
   width: 50%;
   border-left: solid black 1px;
+}
+#address-map-edit-control:hover {
+  cursor: pointer;
+  color: #0061b4;
+  text-decoration: none;
 }
 #address-map-map {
   width: 100%;
@@ -342,6 +329,58 @@ button.btn.btn-default#add-times,
 }
 #address-map-text {
   display: none;
+}
+#features p {
+  margin: 8px 0;
+}
+#features .wrapper {
+  margin: 8px 0;
+  width: 100%;
+  height: 1.5rem;
+  position: relative;
+  background: #cfcfcf;
+  border-radius: 0.75rem;
+}
+#features .wrapper .selected-highlight {
+  border: solid 2px #cfcfcf;
+  border-radius: 50%;
+  width: 20%;
+  height: 100%;
+  position: absolute;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+#features .wrapper label {
+  cursor: pointer;
+  width: 33.33333333%;
+  position: absolute;
+  display: inline-block;
+}
+#features .wrapper input {
+  display: none;
+}
+#features .yes-radio:checked ~ .selected-highlight {
+  background: #00cd00;
+  left: 0;
+}
+#features .unknown-radio:checked ~ .selected-highlight {
+  background: #555555;
+  left: 40%;
+}
+#features .no-radio:checked ~ .selected-highlight {
+  background: #eb0000;
+  left: 80%;
+}
+#features .unknown-radio,
+#features .unknown-label {
+  left: 33.33333333%;
+}
+#features .no-radio,
+#features .no-label {
+  left: 66.66666667%;
 }
 #login-warning {
   cursor: pointer;
@@ -460,7 +499,11 @@ button.btn.btn-default#add-times,
   padding: 10px;
   margin-top: -18px;
   color: white;
-  transition: 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .slideshow-next {
   right: 15px;

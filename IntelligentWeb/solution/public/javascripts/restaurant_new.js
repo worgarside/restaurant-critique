@@ -42,11 +42,13 @@ $(() => {
         $('#address-lookup-button').addClass('active');
         $('#address-map-button').removeClass('active');
 
-        showHTML([$('#address-lookup-form')]);
+
+        showHTML([$('#address-lookup-search')]);
         hideHTML([
             $('#address-map-text'),
             $('#address-map-map-wrapper')
         ]);
+        $('#search-address').focus();
     });
 
     $('#address-map-button').click(() => {
@@ -55,20 +57,21 @@ $(() => {
 
         showHTML([
             $('#address-map-text'),
-            $('#address-map-map-wrapper')
+            $('#address-map-map-wrapper'),
+            $('#address-map-edit-control')
         ]);
         hideHTML([
-            $('#address-lookup-form'),
+            $('#address-lookup-search'),
             $('#address-lookup-found'),
-            $('#found-address-edit'),
-            $('#found-address-chosen')
+            $('#address-lookup-found-edit'),
+            $('#address-input-choice')
         ]);
     });
 
-    $('#found-address-edit').on('input', () => {
+    $('#address-lookup-found-edit').on('input', () => {
         formattedAddress = '';
 
-        $('#found-address-edit').find('input').each((index, item) => {
+        $('#address-lookup-found-edit').find('input').each((index, item) => {
             if (item.value !== '') {
                 if (index > 0) {
                     formattedAddress += ', ';
@@ -76,11 +79,10 @@ $(() => {
                 formattedAddress += item.value;
             }
         });
-
-        $('#found-address').text(formattedAddress);
+        $('#formatted-address-lookup').val(formattedAddress);
     });
 
-    $('#address-lookup-form').find('input').keypress((e) => {
+    $('#address-lookup-search').find('input').keypress((e) => {
         if (e.which === 13) {
             $('#lookup-btn').click();
             e.preventDefault()
@@ -91,13 +93,17 @@ $(() => {
         if (e.which === 13) e.preventDefault();
     });
 
-    $('.txt_firstCapital').keyup(function () {
+    $('.title-case').keyup(function () {
         const inputString = $(this).val().split(" ");
         for (let i = 0; i < inputString.length; i++) {
             const j = inputString[i].charAt(0).toUpperCase();
             inputString[i] = j + inputString[i].substr(1);
         }
         $(this).val(inputString.join(' '));
+    });
+
+    $('.upper-case').keyup(function () {
+        $(this).val($(this).val().toUpperCase());
     });
 });
 
@@ -122,8 +128,6 @@ function addTimes() {
             const dayInput = $("#days-of-week");
             const dayString = dayInput.children("option").filter(":selected").text();
             const dayValue = dayInput.val();
-
-
             const selectedTimes = $("#selected-opening-times");
 
             const newHTML = `
@@ -220,17 +224,15 @@ function findAddress() {
                 inputPostcode.val(foundAddress.postal_code);
 
                 formattedAddress += `, ${foundAddress.postal_code}`;
-                $('#found-address').text(formattedAddress);
+                $('#formatted-address-lookup').val(formattedAddress);
 
                 showHTML([
-                    $('#address-lookup-found'),
-                    $('#address-lookup-found-correct'),
-                    $('#address-lookup-found-edit'),
-                    $('#address-lookup-found-incorrect')
+                    $('#address-lookup-found')
                 ]);
 
                 hideHTML([
-                    $('#address-lookup-form')
+                    $('#address-input-choice'),
+                    $('#address-lookup-search')
                 ]);
             } else {
                 alert('Invalid postcode. Please try again.');
@@ -240,7 +242,19 @@ function findAddress() {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function confirmAddress() {
+function editAddress() {
+    showHTML([
+        $('#address-input-choice'),
+        $('#address-lookup-found-edit'),
+        $('#address-lookup-found-confirm-control')
+    ]);
+    hideHTML([
+        $('#address-lookup-found-edit-control')
+    ]);
+}
+
+// noinspection JSUnusedGlobalSymbols
+function confirmEdit() {
     const oldPostcode = searchPostcode.val().toLowerCase().replace(/ /g, '');
     const newPostcode = inputPostcode.val().toLowerCase().replace(/ /g, '');
 
@@ -252,80 +266,34 @@ function confirmAddress() {
                 inputLat.val(lat.toFixed(9));
                 inputLng.val(lng.toFixed(9));
                 currentLocation = {lat: lat, lng: lng};
-                confirmAddressHTMLMod()
+                confirmEditHTMLMod()
             }
         })
     } else {
-        confirmAddressHTMLMod()
+        confirmEditHTMLMod()
     }
 }
 
-function confirmAddressHTMLMod() {
+function confirmEditHTMLMod() {
     $('#formatted-address-lookup').val(formattedAddress);
 
-    const styles = [{
-        "featureType": "poi.business",
-        "stylers": [
-            {"visibility": "off"}
-        ]
-    }];
-
-    const map = new google.maps.Map($('#found-address-map')[0], {
-        zoom: 15,
-        center: currentLocation,
-        styles: styles,
-        zoomControl: false,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-        draggable: false
-    });
-
-    new google.maps.Marker({
-        map: map,
-        draggable: false,
-        position: currentLocation
-    });
-
     showHTML([
-        $('#found-address-map-wrapper'),
-        $('#found-address-chosen')
+        $('#address-lookup-found-edit-control')
     ]);
     hideHTML([
-        $('#found-address-edit'),
-        $('#address-lookup-found'),
-        $('#address-input-choice')
-    ]);
-}
-
-// noinspection JSUnusedGlobalSymbols
-function editAddress() {
-    showHTML([$('#found-address-edit')]);
-    hideHTML([$('#address-lookup-found-edit')]);
-}
-
-// noinspection JSUnusedGlobalSymbols
-function rejectAddress() {
-    $('#found-address').text('');
-
-    inputAddress1.val('');
-    inputAddress2.val('');
-    inputCity.val('');
-    inputPostcode.val('');
-
-    showHTML([$('#address-lookup-form')]);
-    hideHTML([
-        $('#address-lookup-found'),
-        $('#found-address-edit')
+        $('#address-input-choice'),
+        $('#address-lookup-found-edit'),
+        $('#address-lookup-found-confirm-control')
     ]);
 }
 
 // noinspection JSUnusedGlobalSymbols
-function resetAddressLookup() {
-    showHTML([$('#address-input-choice')]);
+function editMapAddress() {
+    showHTML([
+        $('#address-input-choice'),
+    ]);
     hideHTML([
-        $('#found-address-chosen'),
-        $('#found-address-map-wrapper')
+        $('#address-map-edit-control')
     ]);
 }
 
