@@ -38,18 +38,15 @@ $(() => {
         scrollbar: false
     });
 
-    $.ajax({
-        url: '/restaurant/new/get-categories',
-        contentType: 'application/json; charset=utf-8',
-        type: 'POST',
-        success: (result) => {
-            console.log('AJAX Succeeded');
-            console.log(result);
-        },
-        error: (err) => {
-            console.log(`Error: ${JSON.stringify(err)}`);
-        }
-    });
+
+    console.log(categoryVar);
+    console.log(typeof categoryVar);
+
+
+
+    // for (const category of categories){
+    //     console.log(categoryVar);
+    // }
 
 });
 
@@ -401,19 +398,33 @@ function initMap() {
 
 // ================ Category Picker ================ \\
 
-let categoryList;
 
-$('#category').keyup(() =>{
-    let returnedCount = 10;
+$('#category').keyup( function () {
+    const matchedCategories = matchCategories(this.value);
+
     
-    if ($('this').val() === '0'){
-
-    }else{
-        console.log('showing dd');
+    if (matchedCategories.length() > 1){
         showCategoryDropdown();
+    }else{
+        hideCategoryDropdown();
     }
 });
 
+function matchCategories(categorySearch){
+    for (const category of categories){
+        if (category.startsWith(categorySearch)){
+            console.log(category);
+        }
+    }
+
+    return []
+}
+
 function showCategoryDropdown() {
     $('#category').css('border-radius', '4px 4px 0 0');
+
+}
+
+function hideCategoryDropdown() {
+    $('#category').css('border-radius', '4px');
 }

@@ -153,21 +153,4 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     res.redirect('/')
 });
 
-router.post('/get-categories', (req, res) => {
-    console.log('Getting categories');
-
-    Category.find({}).select('name -_id').then((categories) => {
-        let categoryList = [];
-        for (const category of categories){
-            categoryList.push(category.name)
-        }
-
-        console.log(categoryList);
-        res.send(categoryList);
-    }).catch((err) => {
-       console.log(err.errmsg);
-    });
-
-});
-
 module.exports = router;
