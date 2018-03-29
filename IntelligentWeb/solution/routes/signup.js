@@ -11,7 +11,7 @@ const User = mongoose.model('User');
 router.use(bodyParser.urlencoded({extended: true}));
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, './public/images/displayPictures');
+        callback(null, './public/images/userImages');
     },
     filename: (req, file, callback) => {
         const re = /(?:\.([^.]+))?$/;

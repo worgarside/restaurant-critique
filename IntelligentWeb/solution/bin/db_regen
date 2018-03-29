@@ -57,7 +57,7 @@ function populateCollections(conn) {
     DatabasePopulation.populateFunction(insertPromises);
     Promise.all(insertPromises)
         .catch((err) => {
-            console.log(`Error on population: ${err.errmsg}`)
+            console.log(`Error on population: ${err}`)
         })
         .then(() => {
             conn.close().catch(() => {
