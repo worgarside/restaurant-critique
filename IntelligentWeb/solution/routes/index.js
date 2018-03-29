@@ -104,8 +104,4 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-router.post('/search', (req, res) => {
-    return res.redirect('/search');
-});
-
 module.exports = router;

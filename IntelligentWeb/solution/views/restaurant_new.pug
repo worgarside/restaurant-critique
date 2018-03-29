@@ -155,15 +155,12 @@ block content
                             .form-row
                                 .form-group.col
                                     label(for='category') Category
-                                    select#category.form-control(name='category', required, autocomplete='none')
-                                        option(value='', disabled, selected) Category
-                                        option(value='6') Fast Food
-                                        option(value='5') Italian
-                                        option(value='4') Nando's
-                                        option(value='3') Mexican
-                                        option(value='2') Malaysian
-                                        option(value='1') Fishy Fingers
-                                        option(value='0') Other
+                                    .category-selector
+                                        input#category.form-control(name='category', required, autocomplete='none')
+                                        .category-dropdown
+                                            p.category Mexican
+                                            p.category Italian
+                                            p.category French
 
                     div(hidden=true)
                         each day in daysOfWeek

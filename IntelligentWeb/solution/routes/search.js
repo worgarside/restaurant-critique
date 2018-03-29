@@ -15,16 +15,17 @@ let returnList;
 
 //AJAX POSTs to '/search', so relatively '/'
 router.post('/', (req, res) => {
-    console.log(`POST received ${JSON.stringify(req.body)}`);
+    console.log(`AJAX POST received ${JSON.stringify(req.body)}`);
 
-    returnList = [];
+    const searchQueryData = req.body.searchQueryData;
+    console.log(`Searching for ${searchQueryData}`);
 
-    restaurantPromise
-        .then(() => {
-            console.log(`Returned ${returnList.length}`);
-        })
-        .catch((err) => {
-            console.log(`Restaurant aggregation failed: ${err}`);
+    Restaurant.find({$text: {$search: searchQueryData}})
+        .skip(20)
+        .limit(10)
+        .exec((err, docs) => {
+            console.log(err);
+            console.log(docs);
         });
 });
 
