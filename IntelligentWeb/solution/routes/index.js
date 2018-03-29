@@ -63,19 +63,6 @@ router.get('/restaurant/:url', (req, res) => {
 
 // ================ POST Statements ================ \\
 
-router.post('/search', (req, res) => {
-    console.log(`POST received ${JSON.stringify(req.body)}`);
-    Restaurant.find({$text: {$search: req.body.text_query}})
-        .skip(20)
-        .limit(10)
-        .exec(function(err, docs) { console.log("results");
-                                    console.log(docs);
-        });
-
-    console.log("you did an AJAX m9");
-    return res.redirect('/search');
-});
-
 router.post('/login', (req, res, next) => {
     passport.authenticate('login-local', (err, user) => {
         if (err) {
