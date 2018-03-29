@@ -107,6 +107,14 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         vegan = true
     }
 
+    let categoryList = [];
+
+    for (const category of body.categories){
+        categoryList.push({name: category});
+    }
+
+    console.log(categoryList);
+
     new Restaurant({
         name: body.restaurantName,
         address: {
@@ -123,7 +131,7 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         opening_times: openingTimes,
         description: body.description,
         price_range: priceRange,
-        // categories: [body.category],
+        categories: categoryList,
         features: {
             parking: parking,
             wifi: wifi,

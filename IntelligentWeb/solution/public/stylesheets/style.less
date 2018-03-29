@@ -12,10 +12,12 @@
 @blue: #0061b4;
 @orange: #e69200;
 
-@grey-lightest: #e6e6e6;
-@grey-light: #c9c9c9;
-@grey-mid: #727272;
-@grey-dark: #555555;
+@grey-lightest: #efefef;
+@grey-lighter: #dbdbdb;
+@grey-light: #bdbdbd;
+@grey-mid: #919191;
+@grey-dark: #818181;
+@grey-darker: #555555;
 @grey-darkest: #222222;
 
 @background-color: #fdfdfd;
@@ -29,7 +31,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'poo', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
 
@@ -91,6 +93,12 @@ input[type="text"], input[type="number"] {
 .invisible-label:before {
   content: '-';
   visibility: hidden;
+}
+
+.form-control:focus {
+  border-color: @grey-dark;
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 // ================ Index Head ================ \\
@@ -433,7 +441,7 @@ button.btn.btn-default#add-times, #lookup-btn {
 }
 
 #features {
-  @selector-bg-color: @grey-lightest;
+  @selector-bg-color: @grey-lighter;
   @selector-yes-color: @green;
   @selector-unknown-color: @grey-mid;
   @selector-no-color: @red;
@@ -729,12 +737,81 @@ label.star:hover ~ label.star span::before {
 
 // ================ Category Selector ================ \\
 
-.category-selector{
-  input{
-    //border-radius: 4px 4px 0 0;
+#category {
+
+  &-selected {
+    display: none;
+    border-radius: 4px 4px 0 0;
+    border: @grey-dark solid 1px;
+    background-color: white;
+    border-bottom: none;
   }
 
-  .category-dropdown{
-    background-color: @grey-light;
+  &-selector {
+    input {
+    }
+  }
+
+  &-dropdown {
+    background-color: @background-color;
+    display: none;
+    text-align: center;
+    width: 100%;
+    border: @grey-dark solid 1px;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+  }
+}
+
+.category {
+  &-matched {
+    display: inline-block;
+    background-color: @grey-lighter;
+    margin: 5px 8px;
+    border-radius: 2px;
+
+    p {
+      font-size: 0.95rem;
+      padding: 3px 5px;
+      margin: 0;
+      color: @grey-dark;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      &:hover {
+        cursor: pointer;
+        color: @grey-darkest;
+      }
+    }
+  }
+
+  &-selected {
+    height: 1.75rem;
+    display: inline-block;
+    background-color: @grey-lighter;
+    margin: 5px 8px;
+    border-radius: 2px;
+
+    color: @grey-dark;
+    p {
+      font-size: 0.95rem;
+      padding: 3px 0 3px 8px;
+      margin: 0;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    span{
+      font-size: 0.8rem;
+      padding: 1px 8px;
+      cursor: pointer;
+      &:hover{
+        color: @red;
+      }
+    }
   }
 }

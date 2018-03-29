@@ -1,7 +1,8 @@
 console.log('Loaded restaurant_new.js');
-let geocoder;
+let geocoder, categories;
 let formattedAddress = '';
 let currentLocation = {lat: 53.380450, lng: -1.472233};
+let selectedCategories = [];
 
 const inputAddress1 = $('#address1');
 const inputAddress2 = $('#address2');
@@ -11,6 +12,11 @@ const inputLat = $('#lat');
 const inputLng = $('#lng');
 const searchAddress = $('#search-address');
 const searchPostcode = $('#search-postcode');
+const categorySelector = $('#category-selector');
+const categorySelected = $('#category-selected');
+const categoryPicker = $('#category');
+const categoryDropdown = $('#category-dropdown');
+const categoryBodyInput = $('#category-body');
 
 $(() => {
 
@@ -38,15 +44,7 @@ $(() => {
         scrollbar: false
     });
 
-
-    console.log(categoryVar);
-    console.log(typeof categoryVar);
-
-
-
-    // for (const category of categories){
-    //     console.log(categoryVar);
-    // }
+    categories = categoryVar;
 
 });
 
@@ -398,33 +396,112 @@ function initMap() {
 
 // ================ Category Picker ================ \\
 
-
-$('#category').keyup( function () {
-    const matchedCategories = matchCategories(this.value);
-
-    
-    if (matchedCategories.length() > 1){
-        showCategoryDropdown();
-    }else{
+$(document).mousedown((e) => {
+    if (!categorySelector.is(e.target) && !categoryPicker.is(e.target) &&
+        !categoryDropdown.is(e.target) && categorySelector.has(e.target).length === 0) {
+        categoryPicker.blur();
+        categorySelected.css('border-color', '#ced4da');
+        categoryPicker.css('border-color', '#ced4da');
         hideCategoryDropdown();
     }
 });
 
-function matchCategories(categorySearch){
-    for (const category of categories){
-        if (category.startsWith(categorySearch)){
-            console.log(category);
+categoryPicker.focus(() => {
+    categoryPicker.css('border-color', '#818181');
+    categorySelected.css('border-color', '#818181');
+    checkCategoryPicker();
+});
+
+categoryPicker.keyup(() => {
+    checkCategoryPicker();
+});
+
+function checkCategoryPicker() {
+    if (categoryPicker.val().length > 0) {
+        const matchedCategories = matchCategories(categoryPicker.val());
+
+        if (matchedCategories.length > 0) {
+            showCategoryDropdown(matchedCategories);
+        } else {
+            hideCategoryDropdown();
+        }
+    } else {
+        hideCategoryDropdown();
+    }
+
+    if (selectedCategories.length > 0) {
+        categorySelected.show();
+    } else {
+        hideCategorySelected();
+    }
+
+}
+
+function matchCategories(categorySearch) {
+    let matchList = [];
+
+    for (const category of categories) {
+        if (category.toLowerCase().startsWith(categorySearch.toLowerCase())) {
+            matchList.push(category);
+        } else {
+            // console.log(`${category.toLowerCase()} doesn't start with ${categorySearch.toLowerCase()}`);
         }
     }
 
-    return []
+    return matchList
 }
 
-function showCategoryDropdown() {
-    $('#category').css('border-radius', '4px 4px 0 0');
+function showCategoryDropdown(matchedCategories) {
+    // categoryPicker.css('border-color', '#818181');
+    categoryPicker.css('border-bottom-left-radius', '0');
+    categoryPicker.css('border-bottom-right-radius', '0');
+    categoryDropdown.show();
 
+    $('.category-matched').remove();
+    for (category of matchedCategories) {
+        categoryDropdown.append(`<div class="category-matched" onclick="selectCategory('${category}');"><p>${category}</p></div>`);
+    }
 }
 
 function hideCategoryDropdown() {
-    $('#category').css('border-radius', '4px');
+    categoryPicker.css('border-bottom-left-radius', '4px');
+    categoryPicker.css('border-bottom-right-radius', '4px');
+    categoryDropdown.hide();
+}
+
+function selectCategory(category) {
+
+
+    categoryPicker.css('border-radius', '0');
+
+    selectedCategories.push(category);
+    categories.splice(categories.indexOf(category), 1);
+    categoryBodyInput.val(selectedCategories);
+
+    categorySelected.append(`
+        <div class="category-selected" id="selected-${category}">
+            <p>${category}
+                <span class="oi oi-x" onclick="removeCategory('${category}');"></span>
+            </p>
+        </div>
+    `);
+
+
+    checkCategoryPicker();
+}
+
+function removeCategory(category) {
+    $(`#selected-${category}`).remove();
+
+    selectedCategories.splice(selectedCategories.indexOf(category), 1);
+    categories.push(category);
+    categoryBodyInput.val(selectedCategories);
+
+    checkCategoryPicker();
+}
+
+function hideCategorySelected() {
+    categorySelected.hide();
+    categoryPicker.css('border-top-left-radius', '4px');
+    categoryPicker.css('border-top-right-radius', '4px');
 }

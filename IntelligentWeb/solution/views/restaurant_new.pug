@@ -8,8 +8,6 @@ block content
     else
         script let userPostcode = 'S1 2JA';
     br
-    p= JSON.parse(categories)
-    p= typeof categories
     .container
         .row
             .col
@@ -49,8 +47,8 @@ block content
                                 .form-row
                                     .form-group.col
                                         label(for='formatted-address-lookup') Address
-                                        span#address-lookup-found-edit-control.oi.oi-pencil.float-right(aria-hidden='true', onclick='editAddress();')
-                                        input#formatted-address-lookup.form-control(disabled)
+                                        span.oi.oi-pencil.float-right#address-lookup-found-edit-control(aria-hidden='true', onclick='editAddress();')
+                                        input.form-control#formatted-address-lookup(disabled)
                                     #address-lookup-found-confirm-control
                                         .form-group.col-1
                                             label.invisible-label
@@ -76,8 +74,8 @@ block content
                                 .form-row
                                     .form-group.col
                                         label(for='formatted-address-map') Address
-                                        span#address-map-edit-control.oi.oi-pencil.float-right(aria-hidden='true', onclick='editMapAddress();')
-                                        input#formatted-address-map.form-control(disabled, value='Drag the marker on the map to set the address')
+                                        span.oi.oi-pencil.float-right#address-map-edit-control(aria-hidden='true', onclick='editMapAddress();')
+                                        input.form-control#formatted-address-map(disabled, value='Drag the marker on the map to set the address')
 
                             #address-map-map-wrapper
                                 .form-row
@@ -98,7 +96,7 @@ block content
                             label(for='days-of-week') Opening Times
                             .form-row.opening-times-form
                                 .form-group.col-3
-                                    select#days-of-week.form-control.opening-times-form
+                                    select.form-control.opening-times-form#days-of-week
                                         option(value='0') Mon
                                         option(value='1') Tue
                                         option(value='2') Wed
@@ -124,7 +122,7 @@ block content
                             .form-row
                                 .form-group.col-12
                                     label(for='price-range') Price Range
-                                    select#price-range.form-control(name='priceRange')
+                                    select.form-control#price-range(name='priceRange')
                                         option(value='', disabled, selected) Price Range
                                         option(value='0') £ - Inexpensive
                                         option(value='1') ££ - Average
@@ -154,23 +152,22 @@ block content
                                                 label.invisible-label.no-label(for=`no-${featureID}`)
                                                 input.no-radio(id=`no-${featureID}` type='radio', value='2', name=featureID)
                                                 .selected-highlight
-                            .form-row
+                            .form-row-
                                 .form-group.col
                                     label(for='category') Category
-                                    .category-selector
-                                        input#category.form-control(name='category', required, autocomplete='none')
-                                        .category-dropdown
-                                            p.category Mexican
-                                            p.category Italian
-                                            p.category French
+                                    #category-selector
+                                        #category-selected
+                                        input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
+                                        #category-dropdown
 
-                    div(hidden=true)
+                    div(hidden=false)
                         each day in daysOfWeek
                             input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                             input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
 
                         input#lat(type="number", name='lat', autocomplete='none', readonly)
                         input#lng(type="number", name='lng', autocomplete='none', readonly)
+                        input#category-body(name='categories')
 
                     .form-row
                         .form-group.col

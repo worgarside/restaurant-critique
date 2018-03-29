@@ -46,8 +46,6 @@ router.get('/restaurant/new', (req, res) => {
             categoryList.push(category.name);
         }
 
-        console.log(categoryList);
-
         res.render('restaurant_new', {title: title, user: req.user, categories: JSON.stringify(categoryList)});
     }).catch((err) => {
         console.log(err.errmsg);
