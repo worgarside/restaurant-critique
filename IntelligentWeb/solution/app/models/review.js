@@ -1,8 +1,6 @@
 // ================ Middleware ================ \\
 
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
-// const User = mongoose.model('User');
-// const UserSchema = User.schema;
 
 // ================ Review ================ \\
 

@@ -102,7 +102,7 @@ block content
                     .col
                         each value, key in restaurant.features.toJSON()
                             if value
-                                p.restaurant-category= key
+                                p.restaurant-category(style = 'text-transform: capitalize')= key
                 .row
                     .col
                         h4 Open hours:

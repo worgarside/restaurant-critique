@@ -66,8 +66,6 @@ router.get('/restaurant/:url', (req, res) => {
         let reviewPromises = [];
 
         for (id of reviewIdList) {
-            console.log(id);
-
             reviewPromises.push(Review.findOne({_id: id}).then((review) => {
                 reviewList.push(review);
                 console.log(`Pushed review #${review.title}`);
