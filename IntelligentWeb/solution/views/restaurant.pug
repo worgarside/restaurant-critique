@@ -13,11 +13,12 @@ block content
                 .row
                     .col
                         .restaurant-stars
-                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
-                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
-                            span.oi.oi-check.oi-star(aria-hidden='true', style = 'color: orange')
-                            span.oi.oi-check.oi-star(aria-hidden='true')
-                            span.oi.oi-check.oi-star(aria-hidden='true')
+                            - const starRating = Math.round(restaurant.averageRating)
+                            - for(var i = 0; i < starRating; i++)
+                                span.oi.oi-check.oi-star(aria-hidden='true', style='color: #e69200;')
+
+                            - for(var i =0; i < (5 - starRating); i++)
+                                span.oi.oi-check.oi-star(aria-hidden='true')
                 .row
                     .col
                         each category in restaurant.categories
@@ -42,7 +43,7 @@ block content
                         h4
                             span.oi.oi-phone.oi-space(aria-hidden='true')
                             | Contact us:
-                            a(href=`tel: ${restaurant.contact.phone}`)  #{restaurant.contact.phone}
+                            a(href=`tel: ${restaurant.contact.phone}`) #{restaurant.contact.phone}
                 .row
                     .col
                         .wrapper-gret
@@ -77,12 +78,23 @@ block content
                                 .form-row
                                     .form-group.col
                                         input(type='submit', value='Submit')
-
             .col-5
                 .row
                     .col
-                        img(src="/images/site/sheffield-centre-scaled.jpg" alt="Sheffield centre")
-
+                        .float-right
+                            .slideshow-wrapper
+                                .slideshow
+                                    - var imageCount = 0;
+                                    - if (restaurant.images.length > 0)
+                                        each image in restaurant.images
+                                            - imageCount += 1
+                                            .slide
+                                                img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                                - if (imageCount > 1)
+                                    .slideshow-prev#button-prev
+                                        span.oi.oi-check.oi-chevron-left(aria-hidden='true')
+                                    .slideshow-next#button-next
+                                        span.oi.oi-check.oi-chevron-right(aria-hidden='true')
                 .row
                     .col
                         h4 Includes:
