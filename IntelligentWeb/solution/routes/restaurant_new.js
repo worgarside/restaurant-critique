@@ -3,10 +3,12 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const multer = require('multer');
 
+const mongoose = require('mongoose');
 const Restaurant = mongoose.model('Restaurant');
+const Category = mongoose.model('Category');
+
+const multer = require('multer');
 router.use(bodyParser.urlencoded({extended: true}));
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -23,6 +25,7 @@ const upload = multer({storage: storage});
 
 // ================ POST Method ================ \\
 
+// noinspection JSUnresolvedFunction
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     /**
      * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
@@ -148,6 +151,23 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
      */
 
     res.redirect('/')
+});
+
+router.post('/get-categories', (req, res) => {
+    console.log('Getting categories');
+
+    Category.find({}).select('name -_id').then((categories) => {
+        let categoryList = [];
+        for (const category of categories){
+            categoryList.push(category.name)
+        }
+
+        console.log(categoryList);
+        res.send(categoryList);
+    }).catch((err) => {
+       console.log(err.errmsg);
+    });
+
 });
 
 module.exports = router;

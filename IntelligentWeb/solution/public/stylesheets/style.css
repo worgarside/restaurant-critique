@@ -559,3 +559,6 @@ label.star:hover ~ label.star span::before {
   padding: 50px;
   display: inline-block;
 }
+.category-selector .category-dropdown {
+  background-color: #c9c9c9;
+}

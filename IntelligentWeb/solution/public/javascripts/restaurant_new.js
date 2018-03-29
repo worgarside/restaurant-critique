@@ -38,73 +38,19 @@ $(() => {
         scrollbar: false
     });
 
-    $('#address-lookup-button').click(() => {
-        $('#address-lookup-button').addClass('active');
-        $('#address-map-button').removeClass('active');
-
-
-        showHTML([$('#address-lookup-search')]);
-        hideHTML([
-            $('#address-map-text'),
-            $('#address-map-map-wrapper')
-        ]);
-        $('#search-address').focus();
-    });
-
-    $('#address-map-button').click(() => {
-        $('#address-map-button').addClass('active');
-        $('#address-lookup-button').removeClass('active');
-
-        showHTML([
-            $('#address-map-text'),
-            $('#address-map-map-wrapper'),
-            $('#address-map-edit-control')
-        ]);
-        hideHTML([
-            $('#address-lookup-search'),
-            $('#address-lookup-found'),
-            $('#address-lookup-found-edit'),
-            $('#address-input-choice')
-        ]);
-    });
-
-    $('#address-lookup-found-edit').on('input', () => {
-        formattedAddress = '';
-
-        $('#address-lookup-found-edit').find('input').each((index, item) => {
-            if (item.value !== '') {
-                if (index > 0) {
-                    formattedAddress += ', ';
-                }
-                formattedAddress += item.value;
-            }
-        });
-        $('#formatted-address-lookup').val(formattedAddress);
-    });
-
-    $('#address-lookup-search').find('input').keypress((e) => {
-        if (e.which === 13) {
-            $('#lookup-btn').click();
-            e.preventDefault()
+    $.ajax({
+        url: '/restaurant/new/get-categories',
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (result) => {
+            console.log('AJAX Succeeded');
+            console.log(result);
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
         }
     });
 
-    $('.no-enter-submit').keypress((e) => {
-        if (e.which === 13) e.preventDefault();
-    });
-
-    $('.title-case').keyup(function () {
-        const inputString = $(this).val().split(" ");
-        for (let i = 0; i < inputString.length; i++) {
-            const j = inputString[i].charAt(0).toUpperCase();
-            inputString[i] = j + inputString[i].substr(1);
-        }
-        $(this).val(inputString.join(' '));
-    });
-
-    $('.upper-case').keyup(function () {
-        $(this).val($(this).val().toUpperCase());
-    });
 });
 
 // ================ Opening Times ================ \\
@@ -178,6 +124,74 @@ function removeSelectedDay(button) {
 }
 
 // ================ Address Lookup ================ \\
+
+$('#address-lookup-button').click(() => {
+    $('#address-lookup-button').addClass('active');
+    $('#address-map-button').removeClass('active');
+
+
+    showHTML([$('#address-lookup-search')]);
+    hideHTML([
+        $('#address-map-text'),
+        $('#address-map-map-wrapper')
+    ]);
+    $('#search-address').focus();
+});
+
+$('#address-map-button').click(() => {
+    $('#address-map-button').addClass('active');
+    $('#address-lookup-button').removeClass('active');
+
+    showHTML([
+        $('#address-map-text'),
+        $('#address-map-map-wrapper'),
+        $('#address-map-edit-control')
+    ]);
+    hideHTML([
+        $('#address-lookup-search'),
+        $('#address-lookup-found'),
+        $('#address-lookup-found-edit'),
+        $('#address-input-choice')
+    ]);
+});
+
+$('#address-lookup-found-edit').on('input', () => {
+    formattedAddress = '';
+
+    $('#address-lookup-found-edit').find('input').each((index, item) => {
+        if (item.value !== '') {
+            if (index > 0) {
+                formattedAddress += ', ';
+            }
+            formattedAddress += item.value;
+        }
+    });
+    $('#formatted-address-lookup').val(formattedAddress);
+});
+
+$('#address-lookup-search').find('input').keypress((e) => {
+    if (e.which === 13) {
+        $('#lookup-btn').click();
+        e.preventDefault()
+    }
+});
+
+$('.no-enter-submit').keypress((e) => {
+    if (e.which === 13) e.preventDefault();
+});
+
+$('.title-case').keyup(function () {
+    const inputString = $(this).val().split(" ");
+    for (let i = 0; i < inputString.length; i++) {
+        const j = inputString[i].charAt(0).toUpperCase();
+        inputString[i] = j + inputString[i].substr(1);
+    }
+    $(this).val(inputString.join(' '));
+});
+
+$('.upper-case').keyup(function () {
+    $(this).val($(this).val().toUpperCase());
+});
 
 // noinspection JSUnusedGlobalSymbols
 function findAddress() {
@@ -383,4 +397,23 @@ function initMap() {
         });
 
     });
+}
+
+// ================ Category Picker ================ \\
+
+let categoryList;
+
+$('#category').keyup(() =>{
+    let returnedCount = 10;
+    
+    if ($('this').val() === '0'){
+
+    }else{
+        console.log('showing dd');
+        showCategoryDropdown();
+    }
+});
+
+function showCategoryDropdown() {
+    $('#category').css('border-radius', '4px 4px 0 0');
 }

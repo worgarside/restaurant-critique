@@ -60,7 +60,7 @@ function createMap() {
         {
             "featureType": "poi.business",
             "stylers": [
-                { "visibility": "off" }
+                {"visibility": "off"}
             ]
         }
     ];
@@ -258,13 +258,11 @@ function getRestaurantDiv(restaurant, index) {
                 </div>
             </div>
             <div class="col-4">
-                <div class="vert-center-parent">
-                    <div class="vert-center-child">
-                    <div class="row">
-                        <div class="col">
-                            <div class="float-right">
-                                <div class="slideshow-wrapper">
-                                    <div class="slideshow">
+                        <div class="row">
+                            <div class="col">
+                                <div class="float-right">
+                                    <div class="slideshow-wrapper">
+                                        <div class="slideshow">
         `;
 
     let imageCount = 0;
@@ -291,7 +289,7 @@ function getRestaurantDiv(restaurant, index) {
 
     htmlSlideshow += "</div>";
 
-    const htmlEnd = `</div></div></div></div></div></div></div></div>`;
+    const htmlEnd = `</div></div></div></div></div></div>`;
 
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
