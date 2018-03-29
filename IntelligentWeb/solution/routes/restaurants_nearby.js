@@ -11,13 +11,10 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
-let returnList;
-
 //AJAX POSTs to '/restaurants-nearby', so relatively '/'
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);
 
-    // returnList = [];
     const point = {
         type: "Point",
         coordinates: [req.body.lng, req.body.lat]
@@ -38,13 +35,13 @@ router.post('/', (req, res) => {
                 console.log(`Error: ${err}`);
             }
 
-            console.log(`Returning: ${restaurants.length}`);
+            console.log(`Returning: ${restaurants.length} restaurants`);
             res.send(restaurants);
         });
 
     restaurantPromise
         .then(() => {
-            console.log(`Returned ${returnList.length}`);
+            console.log('Return successful');
         })
         .catch((err) => {
             console.log(`Restaurant aggregation failed: ${err}`);
