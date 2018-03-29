@@ -1,37 +1,5 @@
 $(() => {
-    const btnNext = $(`#button-next`);
-    const btnPrev = $(`#button-prev`);
-
-    $(`.slide`).first().addClass(`current`);
-    $(`.slide`).hide();
-    $(`.current`).show();
-
-    // noinspection JSJQueryEfficiency
-    btnNext.click(() => {
-        $(`.current`).removeClass(`current`).addClass(`previous`);
-        if ($(`.previous`).is(':last-child')) {
-            $(`.slide`).first().addClass(`current`);
-        }
-        else {
-            $(`.previous`).next().addClass(`current`);
-        }
-        $(`.previous`).removeClass(`previous`);
-        $(`.slide`).fadeOut();
-        $(`.current`).fadeIn();
-    });
-
-    btnPrev.click(() => {
-        $(`.current`).removeClass(`current`).addClass(`previous`);
-        if ($(`.previous`).is(':first-child')) {
-            $(`.slide`).last().addClass(`current`);
-        }
-        else {
-            $(`.previous`).prev().addClass(`current`);
-        }
-        $(`.previous`).removeClass(`previous`);
-        $(`.slide`).fadeOut();
-        $(`.current`).fadeIn();
-    });
+    initMainSlideshow();
 });
 
 function initMap() {
@@ -61,5 +29,43 @@ function initMap() {
         lat = userMarker.getPosition().lat();
         lng = userMarker.getPosition().lng();
         map.setCenter({lat: lat, lng: lng});
+    });
+}
+
+function initMainSlideshow(){
+    const btnNext = $(`#button-next-rest`);
+    const btnPrev = $(`#button-prev-rest`);
+
+    $(`.slide-rest`).first().addClass(`current-rest`);
+    $(`.slide-rest`).hide();
+    $(`.current-rest`).show();
+
+    // noinspection JSJQueryEfficiency
+    btnNext.click(() => {
+        console.log('next');
+        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
+        if ($(`.previous-rest`).is(':last-child')) {
+            $(`.slide-rest`).first().addClass(`current-rest`);
+        }
+        else {
+            $(`.previous-rest`).next().addClass(`current-rest`);
+        }
+        $(`.previous-rest`).removeClass(`previous-rest`);
+        $(`.slide-rest`).fadeOut();
+        $(`.current-rest`).fadeIn();
+    });
+
+    btnPrev.click(() => {
+        console.log('prev');
+        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
+        if ($(`.previous-rest`).is(':first-child')) {
+            $(`.slide-rest`).last().addClass(`current-rest`);
+        }
+        else {
+            $(`.previous-rest`).prev().addClass(`current-rest`);
+        }
+        $(`.previous-rest`).removeClass(`previous-rest`);
+        $(`.slide-rest`).fadeOut();
+        $(`.current-rest`).fadeIn();
     });
 }

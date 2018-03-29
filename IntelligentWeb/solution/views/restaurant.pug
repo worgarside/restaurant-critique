@@ -88,12 +88,12 @@ block content
                                     - if (restaurant.images.length > 0)
                                         each image in restaurant.images
                                             - imageCount += 1
-                                            .slide
+                                            .slide-rest
                                                 img(src=`/images/restaurants/${restaurant._id}/${image}`)
                                 - if (imageCount > 1)
-                                    .slideshow-prev#button-prev
+                                    .slideshow-prev#button-prev-rest
                                         span.oi.oi-check.oi-chevron-left(aria-hidden='true')
-                                    .slideshow-next#button-next
+                                    .slideshow-next#button-next-rest
                                         span.oi.oi-check.oi-chevron-right(aria-hidden='true')
                 .row
                     .col
@@ -132,9 +132,53 @@ block content
                         label(for='restaurant-current-map')
                         #restaurant-current-map
         .row
-            h3 Reviews
+            .col-8
+                h3 Reviews
+                each review in reviews
+                    .row
+                        .col-8
+                            .row
+                                .col-1
+                                    img(src=`/images/userImages/${review.author.displayImage}`, style='clip: rect(0px,20px,20px,0px); width: 30px; border-radius: 50%;')
+                                .col
+                                    h5
+                                    | #{review.author.forename}
+                                    | #{review.author.surname}
+                            .row
+                                .col
+                                    h6 #{review.title}
+                            .row
+                                .col
+                                    .restaurant-stars
+                                        - const reviewRating = Math.round(review.restaurantRating)
+                                        - for(var i = 0; i < reviewRating; i++)
+                                            span.oi.oi-check.oi-star(aria-hidden='true', style='color: #e69200;')
+                                        - for(var i =0; i < (5 - reviewRating); i++)
+                                            span.oi.oi-check.oi-star(aria-hidden='true')
+                            .row
+                                .col
+                                    p #{review.body}
+                        .col-4
+                            .float-right
+                                .slideshow-wrapper
+                                    .slideshow
+                                        - var imageCount = 0;
+                                        - if (review.images.length > 0)
+                                        each image in review.images
+                                            - imageCount += 1
+                                            .slide
+                                                img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                                    - if (imageCount > 1)
+                                        .slideshow-prev#button-prev
+                                            span.oi.oi-check.oi-chevron-left(aria-hidden='true')
+                                        .slideshow-next#button-next
+                                            span.oi.oi-check.oi-chevron-right(aria-hidden='true')
 
 
+
+
+
+    script const restaurantId = `#{restaurant._id}`
     script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`)
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

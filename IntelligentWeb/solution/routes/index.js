@@ -8,7 +8,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const Restaurant = mongoose.model('Restaurant');
 const Category = mongoose.model('Category');
-
+const Review = mongoose.model('Review');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -69,9 +69,31 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/restaurant/:url', (req, res) => {
-    return Restaurant.findOne({ localUrl: req.params.url },  (err, result) => {
-        if (err) { throw(err); }
-        return res.render('restaurant', {title: title, restaurant: result});
+    return Restaurant.findOne({localUrl: req.params.url}, (err, restaurant) => {
+        if (err) {
+            throw(err);
+        }
+
+        const reviewIdList = restaurant.reviews;
+        let reviewList = [];
+        let reviewPromises = [];
+
+        for (id of reviewIdList) {
+            console.log(id);
+
+            reviewPromises.push(Review.findOne({_id: id}).then((review) => {
+                reviewList.push(review);
+                console.log(`Pushed review #${review.title}`);
+            }).catch((err) => {
+                console.log(`Error fetching review: ${err}`);
+            }));
+        }
+
+        Promise.all(reviewPromises).then(() => {
+            return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
+        }).catch(() => {
+            return res.render('/error');
+        })
     });
 });
 

@@ -114,8 +114,8 @@ function populateRestaurants(insertPromises) {
         },
         ownerId: 'aslan@chicken-shop.com',
         ownerMessage: "Please come and buy my chicken, I don't want to close again!",
-        reviews: ['5aad98377888995220605d10', '5aad98377888995220605d0f'],
-        images: ['2018-03 17-22-25-18.png', '2018-03 17-22-26-11.png', '2018-03 17-22-31-42.jpg'],
+        reviews: ['5aad98377888995220605d09', '5aad98377888995220605d10'],
+        images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png', '2018-03-17 22-31-42.jpg'],
         averageRating: 3
     }).save());
 
@@ -558,8 +558,12 @@ function populateReviews(insertPromises) {
         restaurantID: ID["Aslan's"],
         title: "Aslan's Sucks",
         body: "I got food poisoning here, don't eat the turkey burgers",
-        authorID: 'greta.veronika@gmail.com',
-        images: ['2018-03-17 22-25-18', '2018-03-17 22-26-11'],
+        author: {
+            forename: 'Greta',
+            surname: 'Ramaneckaite',
+            displayImage: 'greta-veronika-gmail-com.jpg',
+        },
+        images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png'],
         restaurantRating: 1,
     }).save());
 
@@ -569,8 +573,12 @@ function populateReviews(insertPromises) {
         title: 'Greatest Kebab of All Time!!!',
         body: `This is, without doubt, the GOAT when it comes to kebabs. Even Adnan's doesn't
          stand up to the might that is ASLAN'S KEBAB HOUSE!!!`,
-        authorID: 'copeyrufus@gmail.com',
-        images: ['2018-03-17 22-31-42'],
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            displayImage: 'copeyrufus-gmail-com.jpg',
+        },
+        images: ['2018-03-17 22-31-42.jpg'],
         restaurantRating: 5,
     }).save());
 
@@ -579,8 +587,12 @@ function populateReviews(insertPromises) {
         restaurantID: ID['Gourmet Burger Kitchen'],
         title: 'Great burger place, gives me tiny hands',
         body: "The burgers are so big the make my hands feel tiny, phenomenal milkshakes, decent prices - what's not to like?",
-        authorID: 'worgarside@gmail.com',
-        images: ['2018-03-17 22-34-51'],
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            displayImage: 'worgarside-gmail-com.jpg',
+        },
+        images: ['2018-03-17 22-34-51.jpg'],
         restaurantRating: 4
     }).save());
 
@@ -589,8 +601,12 @@ function populateReviews(insertPromises) {
         restaurantID: ID['Siam Thai and Teppanyaki'],
         title: 'The Teppanyaki is amazing!',
         body: 'I went here for my 15th birthday and even though I had a broken arm at the time, they let me have a go doing the Teppanyaki and were so helpful and friendly',
-        authorID: 'worgarside@gmail.com',
-        images: ['2018-03-20 20-08-00'],
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            displayImage: 'worgarside-gmail-com.jpg',
+        },
+        images: ['2018-03-20 20-08-00.jpg'],
         restaurantRating: 5
     }).save());
 
@@ -598,11 +614,15 @@ function populateReviews(insertPromises) {
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
         restaurantID: ID['Piccolino'],
         title: 'Reasonable food at a reasonable price',
-        body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a 
-        bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very 
+        body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a
+        bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very
         loud! The outdoor seats are great though :)`,
-        authorID: 'worgarside@gmail.com',
-        images: ['2018-03-25 21-30-02'],
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            displayImage: 'worgarside-gmail-com.jpg',
+        },
+        images: ['2018-03-25 21-30-02.jpg'],
         restaurantRating: 3
     }).save());
 
@@ -610,19 +630,27 @@ function populateReviews(insertPromises) {
         _id: mongoose.Types.ObjectId('5aad98377888995220605d14'),
         restaurantID: ID['Bungalows & Bears'],
         title: 'Where are the bears?',
-        body: `I've been here 3 times now but I've only seen a bear once?? And even then that was when my mom 
+        body: `I've been here 3 times now but I've only seen a bear once?? And even then that was when my mom
         showed me a picture on her phone`,
-        authorID: 'copeyrufus@gmail.com',
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            displayImage: 'copeyrufus-gmail-com.jpg',
+        },
         restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d15'),
         restaurantID: ID['Istanbul Restaurant'],
-        title: 'more of a takeaway!',
+        title: 'More of a takeaway!',
         body: 'Title says it all, pretty standard take out food with a nice front',
-        authorID: 'greta.veronika@gmail.com',
-        images: ['2018-03-25 21-03-01'],
+        author: {
+            forename: 'Greta',
+            surname: 'Ramaneckaite',
+            displayImage: 'greta-veronika-gmail-com.jpg',
+        },
+        images: ['2018-03-25 21-03-01.jpg'],
         restaurantRating: 3
     }).save());
 
@@ -632,8 +660,12 @@ function populateReviews(insertPromises) {
         title: "Definitely a 'mild' on my spice scale",
         body: `Food is meh, don't understand all the hype. Maybe it's those damn millennials. Also i ate my food
         before i took a picture, but that's what was left`,
-        authorID: 'copeyrufus@gmail.com',
-        images: ['2018-03-25 21-48-00'],
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            displayImage: 'copeyrufus-gmail-com.jpg',
+        },
+        images: ['2018-03-25 21-48-00.jpg'],
         restaurantRating: 2
     }).save());
 
@@ -642,7 +674,11 @@ function populateReviews(insertPromises) {
         restaurantID: ID["Pizza Express"],
         title: 'Expensive pizza',
         body: 'The pizza is nice but can be quite expensive and the sides are small',
-        authorID: 'worgarside@gmail.com',
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            displayImage: 'worgarside-gmail-com.jpg',
+        },
         restaurantRating: 4
     }).save());
 
@@ -651,7 +687,11 @@ function populateReviews(insertPromises) {
         restaurantID: ID["Las Iguanas"],
         title: 'Expensive food',
         body: 'The food was nice, but very expensive. Would only go out on a special ocasion to taste some Latin American cuisine',
-        authorID: 'worgarside@gmail.com',
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            displayImage: 'worgarside-gmail-com.jpg',
+        },
         restaurantRating: 2
     }).save());
 
@@ -660,7 +700,11 @@ function populateReviews(insertPromises) {
         restaurantID: ID["Las Iguanas"],
         title: 'Amazing drinks!',
         body: 'I have to say that the cocktails made in this restaurant are unbelievably tasty! I drank every last drop. The food was decent, but I was too drunk to care',
-        authorID: 'copeyrufus@gmail.com',
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            displayImage: 'copeyrufus-gmail-com.jpg',
+        },
         restaurantRating: 5
     }).save());
 
@@ -669,7 +713,11 @@ function populateReviews(insertPromises) {
         restaurantID: ID["California Fresh"],
         title: 'Dont trust the burrito!',
         body: 'I swear, its delicious, but afterwards you might have regrets from those burritos',
-        authorID: 'copeyrufus@gmail.com',
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            displayImage: 'copeyrufus-gmail-com.jpg',
+        },
         restaurantRating: 3
     }).save());
 }

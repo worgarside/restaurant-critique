@@ -1,6 +1,8 @@
 // ================ Middleware ================ \\
 
 const mongoose = require('mongoose'), Schema = mongoose.Schema;
+// const User = mongoose.model('User');
+// const UserSchema = User.schema;
 
 // ================ Review ================ \\
 
@@ -8,7 +10,11 @@ ReviewSchema = Schema({
     restaurantID: {type: String, required: true},
     title: {type: String, required: true},
     body: {type: String, required: true},
-    authorID: {type: String, required: true},
+    author: {
+        forename: String,
+        surname: String,
+        displayImage: String
+    },
     images: {type: [String], default: []},
     restaurantRating: {type: Number, min: 0, max: 5, required: true},
     reviewRating: {type: Number, default: 0},
@@ -16,7 +22,7 @@ ReviewSchema = Schema({
 });
 
 ReviewSchema.pre('save', function (next) {
-    this.updated_at = Date.now();
+    this.updatedAt = Date.now();
     next();
 });
 
