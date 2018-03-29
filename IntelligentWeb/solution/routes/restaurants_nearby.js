@@ -38,12 +38,6 @@ router.post('/', (req, res) => {
                 console.log(`Error: ${err}`);
             }
 
-            // TODO: this shouldn't be here, the file extensions should be in the original array?!?
-            // async.map(restaurants, (restaurant) => {
-            //     restaurant.images = fs.readdirSync(`./public/images/restaurants/${restaurant._id}`);
-            //     returnList.push(restaurant)
-            // });
-
             console.log(`Returning: ${restaurants.length}`);
             res.send(restaurants);
         });

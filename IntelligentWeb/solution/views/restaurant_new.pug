@@ -8,6 +8,8 @@ block content
     else
         script let userPostcode = 'S1 2JA';
     br
+    p= JSON.parse(categories)
+    p= typeof categories
     .container
         .row
             .col
@@ -175,5 +177,6 @@ block content
                             .float-right
                                 input.btn(type='submit', value='Submit Restaurant')
 
+    script const categoryVar = JSON.parse('!{categories}');
     script(type='text/javascript', src='/javascripts/restaurant_new.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

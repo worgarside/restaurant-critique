@@ -7,8 +7,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const Restaurant = mongoose.model('Restaurant');
+const Category = mongoose.model('Category');
 const Review = mongoose.model('Review');
-
 
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -39,7 +39,20 @@ router.get('/accessibility', (req, res) => {
 });
 
 router.get('/restaurant/new', (req, res) => {
-    res.render('restaurant_new', {title: title, user: req.user});
+    let categoryList = [];
+
+    Category.find({}).select('name -_id').then((categories) => {
+        for (const category of categories){
+            categoryList.push(category.name);
+        }
+
+        console.log(categoryList);
+
+        res.render('restaurant_new', {title: title, user: req.user, categories: JSON.stringify(categoryList)});
+    }).catch((err) => {
+        console.log(err.errmsg);
+    });
+
 });
 
 router.get('/restaurants-nearby', (req, res) => {
