@@ -24,4 +24,20 @@ $(window).scroll(() => {
     checkNavPos();
 });
 
+$("#searchbutton").click(function(e) {
+    $.ajax({
+        url: '/search',
+        data: text_query,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (result) => {
+            console.log('AJAX Succeeded');
+            processData(result);
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+}
+
 console.log('Loaded index.js');

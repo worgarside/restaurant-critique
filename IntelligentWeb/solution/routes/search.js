@@ -16,16 +16,12 @@ let returnList;
 //AJAX POSTs to '/search', so relatively '/'
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);
+    Restaurant.find({$text: {$search: "Sheffield"}})
+        .skip(20)
+        .limit(10)
+        .exec(function(err, docs) { console.log(docs);  });
+    console.log("you did an AJAX m9");
 
-    returnList = [];
-
-    restaurantPromise
-        .then(() => {
-            console.log(`Returned ${returnList.length}`);
-        })
-        .catch((err) => {
-            console.log(`Restaurant aggregation failed: ${err}`);
-        });
 });
 
 module.exports = router;

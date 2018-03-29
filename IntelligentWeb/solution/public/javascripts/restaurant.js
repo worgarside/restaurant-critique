@@ -1,4 +1,40 @@
-function initMap () {
+$(() => {
+    const btnNext = $(`#button-next`);
+    const btnPrev = $(`#button-prev`);
+
+    $(`.slide`).first().addClass(`current`);
+    $(`.slide`).hide();
+    $(`.current`).show();
+
+    // noinspection JSJQueryEfficiency
+    btnNext.click(() => {
+        $(`.current`).removeClass(`current`).addClass(`previous`);
+        if ($(`.previous`).is(':last-child')) {
+            $(`.slide`).first().addClass(`current`);
+        }
+        else {
+            $(`.previous`).next().addClass(`current`);
+        }
+        $(`.previous`).removeClass(`previous`);
+        $(`.slide`).fadeOut();
+        $(`.current`).fadeIn();
+    });
+
+    btnPrev.click(() => {
+        $(`.current`).removeClass(`current`).addClass(`previous`);
+        if ($(`.previous`).is(':first-child')) {
+            $(`.slide`).last().addClass(`current`);
+        }
+        else {
+            $(`.previous`).prev().addClass(`current`);
+        }
+        $(`.previous`).removeClass(`previous`);
+        $(`.slide`).fadeOut();
+        $(`.current`).fadeIn();
+    });
+});
+
+function initMap() {
     const currentLocation = {lat: coordinates[1], lng: coordinates[0]};
 
     const styles = [{
