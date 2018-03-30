@@ -26,10 +26,33 @@ const ID = {
 // ================ Database ================ \\
 
 const populateFunction = function populateDatabase(insertPromises) {
+    populateCategories(insertPromises);
     populateUsers(insertPromises);
     populateRestaurants(insertPromises);
     populateReviews(insertPromises);
 };
+
+
+function populateCategories(insertPromises) {
+    const categories = [
+        'African', 'American', 'Arabic', 'Argentinian', 'Asian', 'Australian', 'Balti', 'Bangladeshi', 'Bar',
+        'Barbecue', 'Brazilian', 'Brew Pub', 'British', 'Cafe', 'Canadian', 'Cantonese', 'Caribbean',
+        'Central American', 'Central European', 'Chinese', 'Colombian', 'Contemporary', 'Cuban', 'Delicatessen',
+        'Diner', 'Eastern European', 'Egyptian', 'Ethiopian', 'European', 'Fast Food', 'French', 'Fusion',
+        'Gastropub', 'Georgian', 'German', 'Greek', 'Grill', 'Healthy', 'Hong Kong', 'Hungarian', 'Indian',
+        'International', 'Italian', 'Jamaican', 'Japanese', 'Korean', 'Latin', 'Lebanese', 'Malaysian',
+        'Mediterranean', 'Mexican', 'Middle Eastern', 'Minority Chinese', 'Moroccan', 'Nepalese', 'New Zealand',
+        'North Eastern Chinese', 'Pakistani', 'Persian', 'Peruvian', 'Pizza', 'Polish', 'Portuguese', 'Pub',
+        'Romanian', 'Russian', 'Scandinavian', 'Seafood', 'Shanghai', 'Soups', 'South American', 'Southwestern',
+        'Spanish', 'Sri Lankan', 'Steakhouse', 'Street Food', 'Sushi', 'Szechuan', 'Taiwanese', 'Thai', 'Tunisian',
+        'Turkish', 'Vietnamese', 'Wine Bar'
+    ];
+
+    for (let i = 0; i < categories.length; i++) {
+        insertPromises.push(new Category({name: categories[i]}).save());
+    }
+}
+
 
 function populateUsers(insertPromises) {
     insertPromises.push(new User({

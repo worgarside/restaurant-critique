@@ -109,11 +109,10 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
     let categoryList = [];
 
-    for (const category of body.categories){
-        categoryList.push({name: category});
+    for (const category of JSON.parse(body.categories)){
+        categoryList.push(category);
     }
 
-    console.log(categoryList);
 
     new Restaurant({
         name: body.restaurantName,

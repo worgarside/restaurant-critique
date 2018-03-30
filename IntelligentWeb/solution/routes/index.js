@@ -39,14 +39,9 @@ router.get('/accessibility', (req, res) => {
 });
 
 router.get('/restaurant/new', (req, res) => {
-    let categoryList = [];
 
-    Category.find({}).select('name -_id').then((categories) => {
-        for (const category of categories){
-            categoryList.push(category.name);
-        }
-
-        res.render('restaurant_new', {title: title, user: req.user, categories: JSON.stringify(categoryList)});
+    Category.find({}).select('name _id').then((categories) => {
+        res.render('restaurant_new', {title: title, user: req.user, categories: JSON.stringify(categories)});
     }).catch((err) => {
         console.log(err.errmsg);
     });

@@ -441,10 +441,8 @@ function matchCategories(categorySearch) {
     let matchList = [];
 
     for (const category of categories) {
-        if (category.toLowerCase().startsWith(categorySearch.toLowerCase())) {
+        if (category.name.toLowerCase().startsWith(categorySearch.toLowerCase())) {
             matchList.push(category);
-        } else {
-            // console.log(`${category.toLowerCase()} doesn't start with ${categorySearch.toLowerCase()}`);
         }
     }
 
@@ -452,14 +450,19 @@ function matchCategories(categorySearch) {
 }
 
 function showCategoryDropdown(matchedCategories) {
-    // categoryPicker.css('border-color', '#818181');
     categoryPicker.css('border-bottom-left-radius', '0');
     categoryPicker.css('border-bottom-right-radius', '0');
     categoryDropdown.show();
 
     $('.category-matched').remove();
     for (category of matchedCategories) {
-        categoryDropdown.append(`<div class="category-matched" onclick="selectCategory('${category}');"><p>${category}</p></div>`);
+        // Need to have single quotes around the onclick function!
+
+        categoryDropdown.append(`
+            <div class="category-matched" onclick='selectCategory(${JSON.stringify(category)});'>
+                <p>${category.name}</p>
+            </div>
+        `);
     }
 }
 
@@ -471,31 +474,44 @@ function hideCategoryDropdown() {
 
 function selectCategory(category) {
 
-
     categoryPicker.css('border-radius', '0');
 
     selectedCategories.push(category);
-    categories.splice(categories.indexOf(category), 1);
-    categoryBodyInput.val(selectedCategories);
 
+    for (const [index, object] of categories.entries()){
+        if (object._id === category._id){
+            categories.splice(index, 1);
+            break
+        }
+    }
+
+    categoryBodyInput.val(JSON.stringify(selectedCategories));
+
+    // Need to have single quotes around the onclick function!
     categorySelected.append(`
-        <div class="category-selected" id="selected-${category}">
-            <p>${category}
-                <span class="oi oi-x" onclick="removeCategory('${category}');"></span>
+        <div class="category-selected" id="selected-${category._id}">
+            <p>${category.name}
+                <span class="oi oi-x" onclick='removeCategory(${JSON.stringify(category)});'></span>
             </p>
         </div>
     `);
-
 
     checkCategoryPicker();
 }
 
 function removeCategory(category) {
-    $(`#selected-${category}`).remove();
+    $(`#selected-${category._id}`).remove();
 
-    selectedCategories.splice(selectedCategories.indexOf(category), 1);
+
+    for (const [index, object] of selectedCategories.entries()){
+        if (object._id === category._id){
+            selectedCategories.splice(index, 1);
+            break
+        }
+    }
+
     categories.push(category);
-    categoryBodyInput.val(selectedCategories);
+    categoryBodyInput.val(JSON.stringify(selectedCategories));
 
     checkCategoryPicker();
 }
