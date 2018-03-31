@@ -1,7 +1,6 @@
 extends partials/layout
 
 block content
-    #{features = ["Parking", "WiFi", "Takeout", "Delivery", "Outdoor Seating", "Reservations", "Alcohol", "Vegetarian", "Vegan"]}
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     if (user)
         script let userPostcode = `#{user.postcode}`;
@@ -119,15 +118,38 @@ block content
                                     textarea.form-control#description(maxlength="200", name='description',
                                     placeholder="Say some things about the restaurant's atmosphere, the kind of " +
                                     "food served, or whatever you feel like!" , rows=4, style='resize: none')
-                            .form-row
-                                .form-group.col-12
-                                    label(for='price-range') Price Range
-                                    select.form-control#price-range(name='priceRange')
+                            //.form-row
+                                .form-group.col
+                                    select.form-control#price-range
                                         option(value='', disabled, selected) Price Range
                                         option(value='0') £ - Inexpensive
                                         option(value='1') ££ - Average
                                         option(value='2') £££ - Above Average
                                         option(value='3') ££££ - Premium
+
+                            .form-row
+                                .form-group.col
+                                    //input.form-control#price-range-selector(type='text', placeholder='Use the buttons to select a price range')
+                                    label(for='price-range-selector') Price Range
+                                    .input-group
+                                        div.form-control#price-range-selector
+                                            p.d-inline#price-range-selector-1 £
+                                            p.d-inline#price-range-selector-2 £
+                                            p.d-inline#price-range-selector-3 £
+                                            p.d-inline#price-range-selector-4 £
+                                        #price-range-btn-group
+                                            button.btn.btn-default#price-range-increase
+                                                span.oi.oi-caret-top
+                                            button.btn.btn-default#price-range-decrease
+                                                span.oi.oi-caret-bottom
+
+                            .form-row
+                                .form-group.col
+                                    label(for='category') Category
+                                    #category-selector
+                                        #category-selected
+                                        input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
+                                        #category-dropdown
 
                         .col-5.offset-1
                             #features
@@ -135,30 +157,28 @@ block content
                                     .col
                                         p Restaurant Features
                                 .form-row
-                                    .col-4.offset-5
+                                    .col-3.offset-9
                                         p.float-left Yes
                                         p.float-right No
-                                each feature in features
-                                    -var featureID = `${feature.replace(/[ ]/g, "").toLowerCase()}`
+                                each id in Object.keys(features)
+                                    - var value = features[id].name
                                     .form-row
-                                        .col-4.text-right
-                                            p #{feature}
-                                        .col-4.offset-1
+                                        .col-8.text-right
+                                            p #{value}
+                                        .col-3.offset-1
                                             .wrapper
-                                                label.invisible-label.yes-label(for=`yes-${featureID}`)
-                                                input.yes-radio(id=`yes-${featureID}` type='radio', value='0', name=featureID)
-                                                label.invisible-label.unknown-label(for=`unknown-${featureID}`)
-                                                input.unknown-radio(id=`unknown-${featureID}` type='radio', value='1', name=featureID, checked)
-                                                label.invisible-label.no-label(for=`no-${featureID}`)
-                                                input.no-radio(id=`no-${featureID}` type='radio', value='2', name=featureID)
+                                                label.invisible-label.yes-label(for=`yes-${id}`)
+                                                input.yes-radio(id=`yes-${id}` type='radio', value='0', name=id)
+                                                label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
+                                                label.invisible-label.no-label(for=`no-${id}`)
+                                                input.no-radio(id=`no-${id}` type='radio', value='2', name=id)
                                                 .selected-highlight
-                            .form-row-
-                                .form-group.col
-                                    label(for='category') Category
-                                    #category-selector
-                                        #category-selected
-                                        input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
-                                        #category-dropdown
+
+                            .form-row
+                                .from-group.col
+                                    label(for='published') Published
+                                    input#published(type='checkbox')
 
                     div(hidden=false)
                         each day in daysOfWeek
@@ -167,7 +187,8 @@ block content
 
                         input#lat(type="number", name='lat', autocomplete='none', readonly)
                         input#lng(type="number", name='lng', autocomplete='none', readonly)
-                        input#category-body(name='categories')
+                        input#category-body(name='categories', readonly)
+                        input#price-range(type='number', name='priceRange', readonly)
 
                     .form-row
                         .form-group.col

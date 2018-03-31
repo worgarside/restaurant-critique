@@ -1,22 +1,4 @@
 console.log('Loaded restaurant_new.js');
-let geocoder, categories;
-let formattedAddress = '';
-let currentLocation = {lat: 53.380450, lng: -1.472233};
-let selectedCategories = [];
-
-const inputAddress1 = $('#address1');
-const inputAddress2 = $('#address2');
-const inputCity = $('#city');
-const inputPostcode = $('#postcode');
-const inputLat = $('#lat');
-const inputLng = $('#lng');
-const searchAddress = $('#search-address');
-const searchPostcode = $('#search-postcode');
-const categorySelector = $('#category-selector');
-const categorySelected = $('#category-selected');
-const categoryPicker = $('#category');
-const categoryDropdown = $('#category-dropdown');
-const categoryBodyInput = $('#category-body');
 
 $(() => {
 
@@ -119,6 +101,20 @@ function removeSelectedDay(button) {
 }
 
 // ================ Address Lookup ================ \\
+
+let geocoder, categories;
+let formattedAddress = '';
+let currentLocation = {lat: 53.380450, lng: -1.472233};
+let selectedCategories = [];
+
+const inputAddress1 = $('#address1');
+const inputAddress2 = $('#address2');
+const inputCity = $('#city');
+const inputPostcode = $('#postcode');
+const inputLat = $('#lat');
+const inputLng = $('#lng');
+const searchAddress = $('#search-address');
+const searchPostcode = $('#search-postcode');
 
 $('#address-lookup-button').click(() => {
     $('#address-lookup-button').addClass('active');
@@ -396,6 +392,12 @@ function initMap() {
 
 // ================ Category Picker ================ \\
 
+const categorySelector = $('#category-selector');
+const categorySelected = $('#category-selected');
+const categoryPicker = $('#category');
+const categoryDropdown = $('#category-dropdown');
+const categoryBodyInput = $('#category-body');
+
 $(document).mousedown((e) => {
     if (!categorySelector.is(e.target) && !categoryPicker.is(e.target) &&
         !categoryDropdown.is(e.target) && categorySelector.has(e.target).length === 0) {
@@ -478,8 +480,8 @@ function selectCategory(category) {
 
     selectedCategories.push(category);
 
-    for (const [index, object] of categories.entries()){
-        if (object._id === category._id){
+    for (const [index, object] of categories.entries()) {
+        if (object._id === category._id) {
             categories.splice(index, 1);
             break
         }
@@ -503,8 +505,8 @@ function removeCategory(category) {
     $(`#selected-${category._id}`).remove();
 
 
-    for (const [index, object] of selectedCategories.entries()){
-        if (object._id === category._id){
+    for (const [index, object] of selectedCategories.entries()) {
+        if (object._id === category._id) {
             selectedCategories.splice(index, 1);
             break
         }
@@ -520,4 +522,49 @@ function hideCategorySelected() {
     categorySelected.hide();
     categoryPicker.css('border-top-left-radius', '4px');
     categoryPicker.css('border-top-right-radius', '4px');
+}
+
+// ================ Price Range ================ \\
+
+const priceRangeBody = $('#price-range');
+const increaseButton = $('#price-range-increase');
+const decreaseButton = $('#price-range-decrease');
+
+increaseButton.click((e) => {
+    e.preventDefault();
+
+    if (priceRangeBody.val()) {
+        if (priceRangeBody.val() < 4) {
+            priceRangeBody.val(parseInt(priceRangeBody.val()) + 1);
+        }
+    } else {
+        priceRangeBody.val(1);
+    }
+
+    colorPriceRangeInput();
+});
+
+decreaseButton.click((e) => {
+    e.preventDefault();
+
+    if (priceRangeBody.val()) {
+        if (priceRangeBody.val() > 1) {
+            priceRangeBody.val(parseInt(priceRangeBody.val()) - 1);
+        }
+    } else {
+        priceRangeBody.val(1);
+
+    }
+
+    colorPriceRangeInput();
+});
+
+function colorPriceRangeInput(){
+    for (let i = 0; i < 5; i++) {
+        if (i < priceRangeBody.val()) {
+            $(`#price-range-selector-${i + 1}`).css('color', 'black');
+        } else {
+            $(`#price-range-selector-${i + 1}`).css('color', '#919191');
+        }
+    }
 }

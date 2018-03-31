@@ -127,13 +127,13 @@ function populateRestaurants(insertPromises) {
             {name: 'Late Night Food'}, {name: 'Kebab'}
         ],
         features: {
-            parking: false,
-            wifi: false,
-            takeout: true,
-            delivery: false,
-            outdoorSeating: false,
-            reservations: false,
-            alcohol: false
+            parking: {value: false},
+            wifi: {value: false},
+            takeout: {value: true},
+            delivery: {value: false},
+            outdoorSeating: {value: false},
+            reservations: {value: false},
+            alcohol: {value: false}
         },
         ownerId: 'aslan@chicken-shop.com',
         ownerMessage: "Please come and buy my chicken, I don't want to close again!",
@@ -166,14 +166,14 @@ function populateRestaurants(insertPromises) {
             {name: 'Burgers'}, {name: 'Casual'}
         ],
         features: {
-            parking: false,
-            wifi: false,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: false,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: false},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d16'],
         images: ['2018-03-25 19-33-00.jpg', '2018-03-25 19-33-01.jpg', '2018-03-25 21-48-00.jpg'],
@@ -203,14 +203,14 @@ function populateRestaurants(insertPromises) {
             {name: 'Spicy'}, {name: 'Burgers'}, {name: 'Casual'}, {name: 'American'}
         ],
         features: {
-            parking: false,
-            wifi: false,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: false,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: false},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d11'],
         images: ['2018-03-17 22-34-51.jpg'],
@@ -241,14 +241,14 @@ function populateRestaurants(insertPromises) {
             {name: 'Fusion'}, {name: 'Street Food'}
         ],
         features: {
-            parking: true,
-            wifi: true,
-            takeout: true,
-            delivery: false,
-            outdoorSeating: false,
-            reservations: false,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: true},
+            wifi: {value: true},
+            takeout: {value: true},
+            delivery: {value: false},
+            outdoorSeating: {value: false},
+            reservations: {value: false},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         images: ['2018-03-25 19-38-00.jpg', '2018-03-25 19-38-01.png']
     }).save());
@@ -275,12 +275,12 @@ function populateRestaurants(insertPromises) {
             {name: 'Japanese'}, {name: 'Chicken'}, {name: 'Sushi'}, {name: 'Thai'}, {name: 'Teppanyaki'}
         ],
         features: {
-            parking: true,
-            takeout: true,
-            outdoorSeating: false,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: true},
+            takeout: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d12'],
         images: ['2018-03-20 20-08-00.jpg', '2018-03-20 20-09-01.jpg'],
@@ -311,11 +311,11 @@ function populateRestaurants(insertPromises) {
             {name: 'British'}
         ],
         features: {
-            parking: false,
-            wifi: true,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: true},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         }
     }).save());
 
@@ -339,12 +339,12 @@ function populateRestaurants(insertPromises) {
         priceRange: 5,
         categories: [{name: 'Premium'}, {name: 'Steakhouse'}],
         features: {
-            parking: true,
-            takeout: false,
-            delivery: false,
-            outdoorSeating: true,
-            reservations: true,
-            alcohol: true
+            parking: {value: true},
+            takeout: {value: false},
+            delivery: {value: false},
+            outdoorSeating: {value: true},
+            reservations: {value: true},
+            alcohol: {value: true}
         },
         ownerMessage: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
         images: ['2018-03-25 19-24-00.jpg', '2018-03-25 19-24-01.jpg']
@@ -368,7 +368,7 @@ function populateRestaurants(insertPromises) {
         openingTimes: [[1020, 1320], [1020, 1320], [1020, 1320], [1020, 1320], [720, 1380], [720, 1380], [720, 1320]],
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
-            vegetarian: true
+            vegetarian: {value: true}
         }
     }).save());
 
@@ -392,10 +392,10 @@ function populateRestaurants(insertPromises) {
         priceRange: 3,
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
-            parking: false,
-            outdoorSeating: false,
-            reservations: false,
-            alcohol: true
+            parking: {value: false},
+            outdoorSeating: {value: false},
+            reservations: {value: false},
+            alcohol: {value: true}
         },
         reviews: ['5aad98377888995220605d14'],
         images: ['2018-03-25 20-27-00.jpg', '2018-03-25 20-27-01.jpg', '2018-03-25 20-27-02.jpg'],
@@ -422,13 +422,13 @@ function populateRestaurants(insertPromises) {
         priceRange: 2,
         categories: [{name: 'Mediterranean'}, {name: 'Fast Food'}, {name: 'Turkish'}, {name: 'Late Night Food'}],
         features: {
-            parking: false,
-            wifi: false,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: false,
-            reservations: true,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: false},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d15'],
         images: ['2018-03-25 21-03-00.jpg', '2018-03-25 21-03-01.jpg'],
@@ -454,13 +454,13 @@ function populateRestaurants(insertPromises) {
         priceRange: 5,
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Upscale'}],
         features: {
-            parking: false,
-            takeout: false,
-            delivery: false,
-            outdoorSeating: true,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true,
+            parking: {value: false},
+            takeout: {value: false},
+            delivery: {value: false},
+            outdoorSeating: {value: true},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true},
         },
         reviews: ['5aad98377888995220605d13'],
         images: ['2018-03-25 21-30-00.jpg', '2018-03-25 21-30-01.jpg', '2018-03-25 21-30-02.jpg'],
@@ -487,13 +487,13 @@ function populateRestaurants(insertPromises) {
         priceRange: 5,
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Pizza'}],
         features: {
-            parking: false,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: false,
-            reservations: true,
-            alcohol: true,
-            vegetarian: true,
+            parking: {value: false},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: true},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d17'],
         images: ['2018-03-25 22-55-00.jpg', '2018-03-25 22-55-01.png'],
@@ -523,14 +523,14 @@ function populateRestaurants(insertPromises) {
             {name: 'Latin American'}, {name: 'Burgers'}, {name: 'Mexican'}, {name: 'Brazilian'}
         ],
         features: {
-            parking: false,
-            wifi: true,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: true,
-            reservations: false,
-            alcohol: true,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: true},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: true},
+            reservations: {value: false},
+            alcohol: {value: true},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d18', '5aad98377888995220605d19'],
         images: ['2018-03-26 20-36-00.jpg', '2018-03-26 20-36-01.jpg', '2018-03-26 20-36-02.jpg', '2018-03-26 20-36-03.jpg'],
@@ -560,14 +560,14 @@ function populateRestaurants(insertPromises) {
             {name: 'American'}, {name: 'Fast Food'}
         ],
         features: {
-            parking: false,
-            wifi: true,
-            takeout: true,
-            delivery: true,
-            outdoorSeating: false,
-            reservations: false,
-            alcohol: false,
-            vegetarian: true
+            parking: {value: false},
+            wifi: {value: true},
+            takeout: {value: true},
+            delivery: {value: true},
+            outdoorSeating: {value: false},
+            reservations: {value: false},
+            alcohol: {value: false},
+            vegetarian: {value: true}
         },
         reviews: ['5aad98377888995220605d20'],
         images: ['2018-03-26 20-58-00.jpg', '2018-03-26 20-58-01.jpeg', '2018-03-26 20-58-02.jpg'],

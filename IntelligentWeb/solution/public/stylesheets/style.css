@@ -332,15 +332,15 @@ button.btn.btn-default#add-times,
   display: none;
 }
 #features p {
-  margin: 8px 0;
+  margin: 6px 0;
 }
 #features .wrapper {
   margin: 8px 0;
   width: 100%;
-  height: 1.5rem;
+  height: 1.125rem;
   position: relative;
   background: #dbdbdb;
-  border-radius: 0.75rem;
+  border-radius: 0.5625rem;
 }
 #features .wrapper .selected-highlight {
   cursor: pointer;
@@ -383,6 +383,31 @@ button.btn.btn-default#add-times,
 #features .no-radio,
 #features .no-label {
   left: 66.66666667%;
+}
+#price-range-selector {
+  display: block;
+  color: #919191;
+  width: 4.15rem;
+}
+#price-range-selector p {
+  margin-right: 0.05rem;
+}
+#price-range-btn-group {
+  white-space: nowrap;
+  width: 20rem;
+  vertical-align: middle;
+  display: table-cell;
+}
+#price-range-btn-group > .btn {
+  display: block;
+  padding: 8px;
+  position: relative;
+  background-color: #efefef;
+  border: solid 1px #818181;
+}
+#price-range-btn-group span {
+  position: absolute;
+  left: 6px;
 }
 #login-warning {
   cursor: pointer;

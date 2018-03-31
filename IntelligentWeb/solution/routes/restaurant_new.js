@@ -113,7 +113,6 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         categoryList.push(category);
     }
 
-
     new Restaurant({
         name: body.restaurantName,
         address: {
@@ -136,7 +135,7 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
             wifi: wifi,
             takeout: takeout,
             delivery: delivery,
-            outdoor_seating: outdoorseating,
+            outdoorSeating: outdoorseating,
             reservations: reservations,
             alcohol: alcohol,
             vegetarian: vegetarian,

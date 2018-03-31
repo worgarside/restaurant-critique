@@ -39,13 +39,22 @@ router.get('/accessibility', (req, res) => {
 });
 
 router.get('/restaurant/new', (req, res) => {
+    const tempRestaurant = new Restaurant;
 
     Category.find({}).select('name _id').then((categories) => {
-        res.render('restaurant_new', {title: title, user: req.user, categories: JSON.stringify(categories)});
+        res.render('restaurant_new', {
+            title: title,
+            user: req.user,
+            categories: JSON.stringify(categories),
+            features: tempRestaurant.features
+        });
     }).catch((err) => {
-        console.log(err.errmsg);
+        if (err.errmsg) {
+            console.log(err.errmsg);
+        } else {
+            console.log(err);
+        }
     });
-
 });
 
 router.get('/restaurants-nearby', (req, res) => {
