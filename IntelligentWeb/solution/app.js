@@ -21,12 +21,20 @@ require('./app/models/category');
 require('./app/models/restaurant');
 require('./app/models/review');
 
-const url = 'mongodb://localhost:27017';
-const dbName = "restaurant_critique";
+const database = {
+    local:{
+        url: 'mongodb://localhost:27017',
+        name: 'restaurant_critique'
+    },
+    atlas: {
+        username: 'worgarside',
+        password: 'V9hG0P3a025bnbTY'
+    }
+};
 
-mongoose.connect(`${url}/${dbName}`)
+mongoose.connect(`${database.local.url}/${database.local.name}`)
     .then(() => {
-        console.log(`Connected to ${url}/${dbName}`);
+        console.log(`Connected to ${database.local.url}/${database.local.name}`);
     })
     .catch((err) => {
         console.log(`Failed to connect to DB: ${err}`);

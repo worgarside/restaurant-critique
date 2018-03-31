@@ -34,6 +34,9 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
      */
 
     const body = req.body;
+    const creator = JSON.parse(body.user);
+
+
 
     const openingTimes = [
         [body.monOpen, body.monClose],
@@ -60,17 +63,18 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
             line1: body.address1,
             line2: body.address2,
             city: body.city,
-            postcode: body.postcode
+            postcode: body.postcode,
+            latitude: body.lat,
+            longitude: body.lng,
         },
-        latitude: body.lat,
-        longitude: body.lng,
         url: body.url,
         menu: body.menu,
         phone: body.phone,
-        opening_times: openingTimes,
+        openingTimes: openingTimes,
         description: body.description,
         priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
         categories: categoryList,
+        creator: creator,
         published: true //TODO: add published flag
     });
 
@@ -80,11 +84,11 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         }
     }
 
-    // newRestaurant.save().then(() => {
-    //     console.log("Restaurant added to collection")
-    // }).catch((err) => {
-    //     console.log(`Restaurant failed to add to collection: ${err}`)
-    // });
+    newRestaurant.save().then(() => {
+        console.log("Restaurant added to collection")
+    }).catch((err) => {
+        console.log(`Restaurant failed to add to collection: ${err}`)
+    });
 
     /*
         FOR ADDING A NEW REVIEW
@@ -93,7 +97,6 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
         USE AS IMAGE FILENAME
      */
-    console.log(newRestaurant);
     res.redirect('/')
 });
 

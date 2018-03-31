@@ -11,7 +11,14 @@ block content
         if (!user)
             .row
                 .col
-                    p please login xo
+                    p
+                        | To add a new restaurant to the community, please&nbsp;
+                        a(href='javascript:void(0)' onclick=("document.getElementById('btn-login').click()")) login
+                        | &nbsp;or&nbsp;
+                        a(href='/signup') create an account
+                        | &nbsp;and confirm it&nbsp;
+                        strong before
+                        | &nbsp;publishing the restaurant
         else
             .row
                 .col-10.offset-1
@@ -170,15 +177,17 @@ block content
                                                     input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
                                                     .selected-highlight
 
-                        div(hidden=true)
+                        div(hidden=false)
                             each day in daysOfWeek
                                 input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                                 input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
 
+                            - var userDetails = {_id: user._id, name: {first: user.name.first, last: user.name.last}}
                             input#lat(type="number", name='lat', autocomplete='none', readonly)
                             input#lng(type="number", name='lng', autocomplete='none', readonly)
                             input#category-body(name='categories', readonly)
                             input#price-range(type='number', name='priceRange', readonly)
+                            input#price-range(type='text', name='user', readonly, value=JSON.stringify(userDetails))
 
                         .form-row
                             .form-group.col
