@@ -28,6 +28,9 @@
 body {
   font-family: 'Lato', sans-serif;
   background-color: @background-color;
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -261,11 +264,13 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 // ================ Footer ================ \\
 
 footer {
-  margin-top: 50px;
+  margin-top: 500px;
   background-color: @grey-darkest;
   text-align: center;
   font-size: 12pt;
   height: 75px;
+  position: absolute;
+  bottom: 0;
 
   a {
     color: @grey-lightest;
@@ -304,6 +309,10 @@ footer {
   .footer-right {
     width: 20%;
   }
+}
+
+#footer-buffer{
+  height: 125px;
 }
 
 // ================ Signup ================ \\

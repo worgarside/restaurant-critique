@@ -1,6 +1,9 @@
 body {
   font-family: 'Lato', sans-serif;
   background-color: #fdfdfd;
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
 }
 h1,
 h2,
@@ -201,11 +204,13 @@ a.nav-link.nav-thin#btn-login:hover {
   margin-top: 15px;
 }
 footer {
-  margin-top: 50px;
+  margin-top: 500px;
   background-color: #222222;
   text-align: center;
   font-size: 12pt;
   height: 75px;
+  position: absolute;
+  bottom: 0;
 }
 footer a {
   color: #efefef;
@@ -234,6 +239,9 @@ footer .footer-left {
 }
 footer .footer-right {
   width: 20%;
+}
+#footer-buffer {
+  height: 125px;
 }
 #display-picture {
   object-fit: cover;
