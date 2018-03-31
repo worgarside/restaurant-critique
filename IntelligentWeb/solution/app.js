@@ -91,5 +91,5 @@ app.use((err, req, res) => {
     res.render('error');
 });
 
-
+console.log('App Started');
 module.exports = app;

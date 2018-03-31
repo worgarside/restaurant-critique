@@ -1,62 +1,36 @@
-//================Middleware================\\
+//================ Middleware ================\\
 
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+const nodemailer = require('../config/nodemailer');
 
-router.use(bodyParser.urlencoded({extended:true}));
+router.use(bodyParser.urlencoded({extended: true}));
 
-const EMAIL = 'worgarside.dev@gmail.com';
-const PASSWORD = 'mfdobnadqxkrxnch';
+//================ POST Method ================\\
 
-//================POST Method================\\
-
-router.post('/', (req,res) => {
-
-    nodemailer.createTestAccount((err,account) => {
-        if(err)
-            console.log(err);
-
-        let transporter = nodemailer.createTransport({
-            service:'gmail',
-            auth:{
-                user: EMAIL,
-                pass: PASSWORD
-            }
-        });
-
-
-        let mailOptions={
-            from: req.body.name + '' + req.body.email,
-            to: EMAIL,
-            subject:'Support Request from ' + req.body.email,
-            html: '<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p>'
-        };
-
-        transporter.sendMail(mailOptions, (err,info) => {
-            if(err)
-                console.log(err);
-            else
-                console.log(info);
-
-            let confirmMail = {
-                from: 'Restaurant Critique enquiry from ${EMAIL}',
-                to: req.body.email,
-                subject: 'Support Request from Restaurant Critique',
-                html: '<p>Thank you for your email, we will reply as soon as possible.<\p> <p>Restaurant Critique</p>'
-            }
-
-            transporter.sendMail(confirmMail,(err,info) =>{
-                if(err)
-                    console.log(err);
-                else
-                    console.log(info);
-            })
-        });
-    });
+router.post('/', (req, res) => {
+    sendSupportRequest(req);
+    sendConfirmationEmail(req);
     res.render('contact-submitted');
-
 });
+
+function sendSupportRequest(req) {
+    const to = 'worgarside.dev@gmail.com'; // This would be suuport@restaurantcritique.com
+    const subject = `Support Request: ${req.body.email}`;
+    const body = `<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p>`;
+    const from = `"${req.body.name}" <${req.body.email}>`;
+
+    nodemailer.sendEmail(to, subject, body, from);
+}
+
+function sendConfirmationEmail(req) {
+    const to = req.body.email;
+    const subject = 'Support Request Confirmation3';
+    const body = `<p>Thank you for your email, we will reply as soon as possible.<p> <p>Restaurant Critique</p>`;
+    const from = "'Restaurant Critique' <no-reply@restaurantcritique.com>";
+
+    nodemailer.sendEmail(to, subject, body, from);
+}
 
 module.exports = router;
