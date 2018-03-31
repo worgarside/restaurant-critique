@@ -4,6 +4,7 @@ const mongoose = require('mongoose'), Schema = mongoose.Schema;
 const fs = require('fs');
 const Category = mongoose.model('Category');
 const CategorySchema = Category.schema;
+const nodemailer = require(`${appRoot}/config/nodemailer`);
 
 // ================ Restaurant ================ \\
 
@@ -113,7 +114,21 @@ RestaurantSchema.pre('save', function (next) {
     this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
     this.updatedAt = Date.now();
 
+    emailCreator(this);
+
     next();
 });
+
+function emailCreator(restaurant){
+    const to = restaurant.creator._id;
+    const subject = 'Restaurant creation confirmation';
+    const body = `
+        <p>${restaurant.creator.name.first} ${restaurant.creator.name.last},</p>
+        <p>This is your confirmation email for creating ${restaurant.name} at ${restaurant.address.postcode} on <a href="www.restaurantcritique.com">Restaurant Critique.</a></p>
+        <p>Thank you for contributing to the community!</p>
+        <p>Please note your submission may take up to 24 hours to appear on the website, if you do not see it after this time <strong>do not</strong> re-submit it. Instead please contact us <a href="www.restaurantcritique.com/contact">here</a>.</p>
+    `;
+    nodemailer.sendEmail(to, subject, body);
+}
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);

@@ -5,7 +5,7 @@ const restaurantCritiqueAccount = {email: 'worgarside.dev@gmail.com', password: 
 
 //================ Email Manager ================\\
 
-function sendEmail(to, subject, body, from = restaurantCritiqueAccount.email) {
+function sendEmail(to, subject, body, from = `"Restaurant Critique" <restaurantCritiqueAccount.email>`) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -23,10 +23,10 @@ function sendEmail(to, subject, body, from = restaurantCritiqueAccount.email) {
 
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
-            console.log(err)
+            console.log(`Email error: ${err}`);
         }
         else {
-            console.log(info);
+            console.log(`Email sent: ${JSON.stringify(info)}`);
         }
     });
 

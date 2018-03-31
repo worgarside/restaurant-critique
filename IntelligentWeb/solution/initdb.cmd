@@ -1,1 +1,1 @@
-node bin/db_regen
+node db_regen

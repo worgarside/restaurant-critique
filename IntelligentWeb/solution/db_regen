@@ -1,11 +1,13 @@
 // ================ Middleware ================ \\
 
 const mongoose = require('mongoose');
-require('../app/models/user');
-require('../app/models/category');
-require('../app/models/restaurant');
-require('../app/models/review');
-const DatabasePopulation = require('../app/db_populate');
+const path = require('path');
+global.appRoot = path.resolve(__dirname);
+require('./app/models/user');
+require('./app/models/category');
+require('./app/models/restaurant');
+require('./app/models/review');
+const DatabasePopulation = require('./app/db_populate');
 
 // ================ Database ================ \\
 

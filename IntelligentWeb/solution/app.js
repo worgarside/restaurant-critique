@@ -10,6 +10,7 @@ const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
+global.appRoot = path.resolve(__dirname);
 
 require('./config/passport')(passport);
 
@@ -91,5 +92,5 @@ app.use((err, req, res) => {
     res.render('error');
 });
 
-console.log('App Started');
+console.log(`App Started @ ${appRoot}`);
 module.exports = app;
