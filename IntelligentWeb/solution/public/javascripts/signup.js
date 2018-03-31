@@ -1,16 +1,16 @@
 console.log('Loaded signup.js');
 
-$("#display-picture").click(() => {
+$('#display-picture').click(() => {
     $("#display-picture-upload").click();
 });
 
-function fasterPreview(upload_form) {
-    if (upload_form.files && upload_form.files[0]) {
-        const img_url = window.URL.createObjectURL(upload_form.files[0]);
-        $('#display-picture').attr('src', img_url);
+function previewImage(imageInput) {
+    if (imageInput.files && imageInput.files[0]) {
+        const imageURL = window.URL.createObjectURL(imageInput.files[0]);
+        $('#display-picture').attr('src', imageURL);
     }
 }
 
-$("#display-picture-upload").change(() => {
-    fasterPreview(this);
+$('#display-picture-upload').change(function(){
+    previewImage(this);
 });
