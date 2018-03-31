@@ -59,18 +59,16 @@ module.exports = function (passport) {
                             const newUser = new User();
 
                             newUser._id = email.toLowerCase();
-                            // newUser.email = email.toLowerCase();
                             newUser.password = password;
                             newUser.privilege_level = 1;
-                            newUser.forename = req.body.forename;
-                            newUser.surname = req.body.surname;
+                            newUser.name.first = req.body.forename;
+                            newUser.name.last = req.body.surname;
                             newUser.password = req.body.password;
                             newUser.ageCategory = req.body.age;
                             newUser.county = req.body.county;
                             newUser.reviews = [];
                             newUser.display_img_filename = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
                             newUser.user_rating = 0;
-                            newUser.restaurants = [];
 
                             newUser.save((err) => {
                                 if (err)

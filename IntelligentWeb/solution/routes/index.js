@@ -67,7 +67,7 @@ router.get('/restaurant', (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.redirect('back');
 });
 
 router.get('/restaurant/:url', (req, res) => {
@@ -112,7 +112,7 @@ router.post('/login', (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            return res.redirect('/');
+            return res.redirect('back');
         });
     })(req, res, next);
 });

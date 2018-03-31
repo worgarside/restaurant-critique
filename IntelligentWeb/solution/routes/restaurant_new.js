@@ -45,75 +45,16 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         [body.sunOpen, body.sunClose]
     ];
 
-    let priceRange, parking, wifi, takeout, delivery, outdoorseating, reservations, alcohol, vegetarian, vegan;
-
-    if (body.priceRange) {
-        priceRange = parseInt(body.priceRange);
-    }
-
-    // TODO: find a way of condensing these for loops
-
-    if (body.parking === '0') {
-        parking = false
-    } else if (body.parking === '1') {
-        parking = true
-    }
-
-    if (body.wifi === '0') {
-        wifi = false
-    } else if (body.wifi === '1') {
-        wifi = true
-    }
-
-    if (body.takeout === '0') {
-        takeout = false
-    } else if (body.takeout === '1') {
-        takeout = true
-    }
-
-    if (body.delivery === '0') {
-        delivery = false
-    } else if (body.delivery === '1') {
-        delivery = true
-    }
-
-    if (body.outdoorseating === '0') {
-        outdoorseating = false
-    } else if (body.outdoorseating === '1') {
-        outdoorseating = true
-    }
-
-    if (body.reservations === '0') {
-        reservations = false
-    } else if (body.reservations === '1') {
-        reservations = true
-    }
-
-    if (body.alcohol === '0') {
-        alcohol = false
-    } else if (body.alcohol === '1') {
-        alcohol = true
-    }
-
-    if (body.vegetarian === '0') {
-        vegetarian = false
-    } else if (body.vegetarian === '1') {
-        vegetarian = true
-    }
-
-    if (body.vegan === '0') {
-        vegan = false
-    } else if (body.vegan === '1') {
-        vegan = true
-    }
-
     let categoryList = [];
 
-    for (const category of JSON.parse(body.categories)){
-        categoryList.push(category);
+    if (body.categories){
+        for (const category of JSON.parse(body.categories)) {
+            categoryList.push(category);
+        }
     }
 
-    new Restaurant({
+
+    let newRestaurant = new Restaurant({
         name: body.restaurantName,
         address: {
             line1: body.address1,
@@ -128,34 +69,31 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         phone: body.phone,
         opening_times: openingTimes,
         description: body.description,
-        price_range: priceRange,
+        priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
         categories: categoryList,
-        features: {
-            parking: parking,
-            wifi: wifi,
-            takeout: takeout,
-            delivery: delivery,
-            outdoorSeating: outdoorseating,
-            reservations: reservations,
-            alcohol: alcohol,
-            vegetarian: vegetarian,
-            vegan: vegan
-        },
         published: true //TODO: add published flag
-    }).save().then(() => {
-        console.log("Restaurant added to collection")
-    }).catch((err) => {
-        console.log(`Restaurant failed to add to collection: ${err}`)
     });
+
+    for (let key of Object.keys(newRestaurant.features)){
+        if (body[key] !== '1'){
+            newRestaurant.features[key].value = body[key] === '2'
+        }
+    }
+
+    // newRestaurant.save().then(() => {
+    //     console.log("Restaurant added to collection")
+    // }).catch((err) => {
+    //     console.log(`Restaurant failed to add to collection: ${err}`)
+    // });
 
     /*
         FOR ADDING A NEW REVIEW
         const dateFormat = require('dateformat');
-        var now = dateFormat(new Date(), "yyyy-mm-dd-HH-MM-ss");
+        var now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
 
         USE AS IMAGE FILENAME
      */
-
+    console.log(newRestaurant);
     res.redirect('/')
 });
 

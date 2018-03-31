@@ -30,7 +30,15 @@ RestaurantSchema = Schema({
     localUrl: {type: String, unique: true},
     openingTimes: Array,
     description: {type: String, trim: true, default: 'No description currently available.'},
-    priceRange: {type: Number, min: 1, max: 5},
+    priceRange: {
+        lower: Number,
+        upper: Number,
+        band: {
+            type: Number,
+            min: 1,
+            max: 5
+        }
+    },
     categories: [CategorySchema],
     features: {
         alcohol: {name: {type: String, default: 'Alcohol'}, value: Boolean},
@@ -41,7 +49,7 @@ RestaurantSchema = Schema({
         glutenFree: {name: {type: String, default: 'Gluten Free options'}, value: Boolean},
         mastercard: {name: {type: String, default: 'Accepts Mastercard'}, value: Boolean},
         outdoorSeating: {name: {type: String, default: 'Outdoor Seating'}, value: Boolean},
-        parking: {name: {type: String, default: 'Parking'}, value: Boolean},
+        parking: {name: {type: String, default: 'Dedicated Parking'}, value: Boolean},
         reservations: {name: {type: String, default: 'Reservations'}, value: Boolean},
         seating: {name: {type: String, default: 'Seating'}, value: Boolean},
         tableService: {name: {type: String, default: 'Table Service'}, value: Boolean},
@@ -52,8 +60,15 @@ RestaurantSchema = Schema({
         wheelchairAccessible: {name: {type: String, default: 'Wheelchair accessible'}, value: Boolean},
         wifi: {name: {type: String, default: 'Free WiFi'}, value: Boolean}
     },
-    ownerId: {type: String, trim: true},
-    ownerMessage: {type: String, trim: true},
+    creator: {
+        _id: {type: String, required: true},
+        name: {first: String, last: String},
+    },
+    owner: {
+        _id: String,
+        name: {first: String, last: String}
+    },
+    ownerMessage: {type: String},
     reviews: {type: [String], default: []},
     images: {type: [String], default: []}, //TODO: only show top 5 images on nearby page?
     averageRating: {type: Number, min: 0, max: 5},
@@ -69,20 +84,14 @@ RestaurantSchema.pre('save', function (next) {
         };
     }
 
-    this.updatedAt = Date.now();
-
     const imageDir = `./public/images/restaurants/${this._id}`;
-
     if (!fs.existsSync(imageDir)) {
         fs.mkdirSync(imageDir);
     }
 
     this.address.postcode = this.address.postcode.toUpperCase();
-
     this.address.formattedAddress = '';
-
     const addressComponents = ['line1', 'line2', 'city', 'postcode'];
-
     Object.keys(this.address).forEach((key, index, keys) => {
         const value = this.address[key];
         if (value && addressComponents.includes(key)) {
@@ -102,6 +111,7 @@ RestaurantSchema.pre('save', function (next) {
     }
 
     this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
+    this.updatedAt = Date.now();
 
     next();
 });

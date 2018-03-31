@@ -53,54 +53,53 @@ function populateCategories(insertPromises) {
     }
 }
 
-
 function populateUsers(insertPromises) {
     insertPromises.push(new User({
         _id: 'copeyrufus@gmail.com',
         password: 'Caddy1',
-        forename: 'Rufus',
-        surname: 'Cope',
+        name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
         reviews: [],
         displayImage: 'copeyrufus-gmail-com',
+        restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"]]}
     }).save());
 
     insertPromises.push(new User({
         _id: 'greta.veronika@gmail.com',
         password: 'Vodka2',
-        forename: 'Greta',
-        surname: 'Ramaneckaite',
+        name: {first: 'Greta', last: 'Ramaneckaite'},
         ageCategory: 2,
         postcode: 'S10 2FL',
         reviews: [],
         displayImage: 'greta-veronika-gmail-com',
-        restaurants: []
+        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"]]}
     }).save());
 
     insertPromises.push(new User({
         _id: 'worgarside@gmail.com',
         password: 'Passw3rd',
-        forename: 'Will',
-        surname: 'Garside',
+        name: {first: 'Will', last: 'Garside'},
         ageCategory: 2,
         postcode: 'SY14 8JU',
         reviews: [],
         displayImage: 'worgarside-gmail-com',
-        restaurants: []
+        restaurants: {created: [ID["Nando's"], ID['Gourmet Burger Kitchen'], ID['Istanbul Restaurant'], ID['Pizza Express']]}
     }).save());
 
     insertPromises.push(new User({
         _id: 'aslan@chicken-shop.com',
         email: 'aslan@chicken-shop.com',
         password: 'Asl4n',
-        forename: 'Aslan',
-        surname: 'Chicken',
+        name: {first: 'Aslan', last: 'Chicken'},
         ageCategory: 2,
         postcode: 'S1 4EW',
         reviews: [],
         displayImage: 'aslan-chicken-shop-com',
-        restaurants: ['5aad8b2e6fb09e3a54ea366b']
+        restaurants: {
+            created: [ID["Aslan's"]],
+            owned: [ID["Aslan's"]]
+        }
     }).save());
 }
 
@@ -121,21 +120,32 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
         description: 'Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards',
-        priceRange: 1,
+        priceRange: {lower: 2.5, upper: 7, band: 1},
         categories: [
             {name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'},
             {name: 'Late Night Food'}, {name: 'Kebab'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: false},
-            takeout: {value: true},
+            alcohol: {value: false},
+            creditCard: {value: true},
             delivery: {value: false},
+            highchairs: {value: false},
+            glutenFree: {value: false},
+            mastercard: {value: true},
             outdoorSeating: {value: false},
+            parking: {value: false},
             reservations: {value: false},
-            alcohol: {value: false}
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
-        ownerId: 'aslan@chicken-shop.com',
+        creator: {_id: 'aslan@chicken-shop.com', name: {first: 'Aslan', last: 'Chicken'}},
+        owner: 'aslan@chicken-shop.com',
         ownerMessage: "Please come and buy my chicken, I don't want to close again!",
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d10'],
         images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png', '2018-03-17 22-31-42.jpg'],
@@ -160,21 +170,32 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.',
-        priceRange: 2,
+        priceRange: {lower: 3.95, upper: 15.2, band: 2},
         categories: [
             {name: 'Chicken'}, {name: 'Portuguese'}, {name: 'Spicy'},
             {name: 'Burgers'}, {name: 'Casual'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: false},
-            takeout: {value: true},
-            delivery: {value: true},
-            outdoorSeating: {value: false},
-            reservations: {value: true},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
         reviews: ['5aad98377888995220605d16'],
         images: ['2018-03-25 19-33-00.jpg', '2018-03-25 19-33-01.jpg', '2018-03-25 21-48-00.jpg'],
         averageRating: 2
@@ -198,20 +219,30 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
         description: 'Chain restaurant with classic wooden decor, serving gourmet British beef, chicken or veggie burgers.',
-        priceRange: 3,
+        priceRange: {lower: 5, upper: 11.35, band: 2},
         categories: [
             {name: 'Spicy'}, {name: 'Burgers'}, {name: 'Casual'}, {name: 'American'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: false},
-            takeout: {value: true},
-            delivery: {value: true},
-            outdoorSeating: {value: false},
-            reservations: {value: true},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true}
         },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
         reviews: ['5aad98377888995220605d11'],
         images: ['2018-03-17 22-34-51.jpg'],
         averageRating: 4
@@ -235,21 +266,32 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1380], [660, 1380]],
         description: 'Asian-inspired & Japanese chain restaurant where dishes are whisked to long communal tables.',
-        priceRange: 3,
+        priceRange: {lower: 9.85, upper: 14.50, band: 2},
         categories: [
             {name: 'Spicy'}, {name: 'Casual'}, {name: 'Japanese'}, {name: 'Asian'}, {name: 'Contemporary'},
             {name: 'Fusion'}, {name: 'Street Food'}
         ],
         features: {
-            parking: {value: true},
-            wifi: {value: true},
-            takeout: {value: true},
-            delivery: {value: false},
-            outdoorSeating: {value: false},
-            reservations: {value: false},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: true},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
         },
+        creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
         images: ['2018-03-25 19-38-00.jpg', '2018-03-25 19-38-01.png']
     }).save());
 
@@ -270,18 +312,31 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[720, 1350], [1020, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1410]],
         description: 'Airy Asian eatery with Japanese Teppanyaki dining, Thai restaurant and a bar on separate floors.',
-        priceRange: 3,
+        priceRange: {lower: 15.5, upper: 24.95, band: 3},
         categories: [
             {name: 'Japanese'}, {name: 'Chicken'}, {name: 'Sushi'}, {name: 'Thai'}, {name: 'Teppanyaki'}
         ],
         features: {
-            parking: {value: true},
-            takeout: {value: true},
-            outdoorSeating: {value: false},
-            reservations: {value: true},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: false},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
         reviews: ['5aad98377888995220605d12'],
         images: ['2018-03-20 20-08-00.jpg', '2018-03-20 20-09-01.jpg'],
         averageRating: 5
@@ -305,18 +360,29 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1380], [720, 1260]],
         description: 'Chain serving specialist burgers on sourdough or brioche buns and hand-mixed milkshakes.',
-        priceRange: 3,
+        priceRange: {lower: 5.45, upper: 10.95, band: 2},
         categories: [
             {name: 'Burgers'}, {name: 'Spicy'}, {name: 'Student Discount'}, {name: 'Casual'}, {name: 'American'},
             {name: 'British'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: true},
-            reservations: {value: true},
             alcohol: {value: true},
-            vegetarian: {value: true}
-        }
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true}
+        },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}}
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -336,16 +402,27 @@ function populateRestaurants(insertPromises) {
             phone: '01142362735'
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
-        priceRange: 5,
+        priceRange: {lower: 14.95, upper: 46.95, band: 3},
         categories: [{name: 'Premium'}, {name: 'Steakhouse'}],
         features: {
-            parking: {value: true},
-            takeout: {value: false},
+            alcohol: {value: true},
+            americanExpress: {value: true},
+            creditCard: {value: true},
             delivery: {value: false},
+            highchairs: {value: false},
+            mastercard: {value: true},
             outdoorSeating: {value: true},
+            parking: {value: true},
             reservations: {value: true},
-            alcohol: {value: true}
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: false},
+            vegetarian: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
         },
+        creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
         ownerMessage: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
         images: ['2018-03-25 19-24-00.jpg', '2018-03-25 19-24-01.jpg']
     }).save());
@@ -361,6 +438,7 @@ function populateRestaurants(insertPromises) {
             latitude: 53.484547,
             longitude: -2.236922
         },
+        priceRange: {lower: 9, upper: 12, band: 2},
         contact: {
             url: 'www.almostfamousburgers.com',
             phone: '01612449422'
@@ -368,8 +446,26 @@ function populateRestaurants(insertPromises) {
         openingTimes: [[1020, 1320], [1020, 1320], [1020, 1320], [1020, 1320], [720, 1380], [720, 1380], [720, 1320]],
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
-            vegetarian: {value: true}
-        }
+            alcohol: {value: true},
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
+        },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}}
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -389,14 +485,29 @@ function populateRestaurants(insertPromises) {
             phone: '01142792901'
         },
         openingTimes: [[720, 1440], [720, 1440], [720, 1440], [720, 1440], [720, 90], [720, 90], [660, 1440]],
-        priceRange: 3,
+        priceRange: {lower: 6, upper: 11.5, band: 2},
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
-            parking: {value: false},
+            alcohol: {value: true},
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: false},
+            glutenFree: {value: true},
+            mastercard: {value: true},
             outdoorSeating: {value: false},
+            parking: {value: false},
             reservations: {value: false},
-            alcohol: {value: true}
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: false},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
         reviews: ['5aad98377888995220605d14'],
         images: ['2018-03-25 20-27-00.jpg', '2018-03-25 20-27-01.jpg', '2018-03-25 20-27-02.jpg'],
         averageRating: 2
@@ -419,17 +530,29 @@ function populateRestaurants(insertPromises) {
             phone: '01142759191'
         },
         openingTimes: [[660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410], [660, 1410]],
-        priceRange: 2,
+        priceRange: {lower: 7.5, upper: 12, band: 1},
         categories: [{name: 'Mediterranean'}, {name: 'Fast Food'}, {name: 'Turkish'}, {name: 'Late Night Food'}],
         features: {
-            parking: {value: false},
-            wifi: {value: false},
-            takeout: {value: true},
+            alcohol: {value: false},
+            americanExpress: {value: false},
+            creditCard: {value: true},
             delivery: {value: true},
+            highchairs: {value: false},
+            glutenFree: {value: false},
+            mastercard: {value: true},
             outdoorSeating: {value: false},
+            parking: {value: false},
             reservations: {value: true},
-            vegetarian: {value: true}
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
         reviews: ['5aad98377888995220605d15'],
         images: ['2018-03-25 21-03-00.jpg', '2018-03-25 21-03-01.jpg'],
         averageRating: 3
@@ -451,17 +574,29 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1320]],
         description: 'Upscale chain restaurant with a contemporary interior and a menu of classic Italian specialities.',
-        priceRange: 5,
+        priceRange: {lower: 8, upper: 57.75, band: 4},
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Upscale'}],
         features: {
-            parking: {value: false},
-            takeout: {value: false},
-            delivery: {value: false},
-            outdoorSeating: {value: true},
-            reservations: {value: true},
             alcohol: {value: true},
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: true},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: false},
             vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         reviews: ['5aad98377888995220605d13'],
         images: ['2018-03-25 21-30-00.jpg', '2018-03-25 21-30-01.jpg', '2018-03-25 21-30-02.jpg'],
         averageRating: 3
@@ -484,17 +619,29 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Chefs in striped t-shirts tossing handmade pizzas where everyone can see.',
-        priceRange: 5,
+        priceRange: {lower: 10.95, upper: 12.95, band: 3},
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Pizza'}],
         features: {
-            parking: {value: false},
-            takeout: {value: true},
-            delivery: {value: true},
-            outdoorSeating: {value: false},
-            reservations: {value: true},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
         reviews: ['5aad98377888995220605d17'],
         images: ['2018-03-25 22-55-00.jpg', '2018-03-25 22-55-01.png'],
         averageRating: 4
@@ -518,20 +665,30 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[600, 1410], [600, 1410], [600, 1410], [600, 1410], [600, 1440], [600, 1440], [600, 1410]],
         description: 'Flame-grilled Latin American dishes and shared plates served in a contemporary chain dining room.',
-        priceRange: 4,
+        priceRange: {lower: 8.5, upper: 18.95, band: 2},
         categories: [
             {name: 'Latin American'}, {name: 'Burgers'}, {name: 'Mexican'}, {name: 'Brazilian'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: true},
-            takeout: {value: true},
-            delivery: {value: true},
-            outdoorSeating: {value: true},
-            reservations: {value: false},
             alcohol: {value: true},
-            vegetarian: {value: true}
+            americanExpress: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: false},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true}
         },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         reviews: ['5aad98377888995220605d18', '5aad98377888995220605d19'],
         images: ['2018-03-26 20-36-00.jpg', '2018-03-26 20-36-01.jpg', '2018-03-26 20-36-02.jpg', '2018-03-26 20-36-03.jpg'],
         averageRating: 3
@@ -554,21 +711,32 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1080], [690, 1080], [690, 1080], [690, 1080], [690, 1080], [], []],
         description: 'Bright, beach-theme room with surfboard-style tables for Mexican and American food made fresh daily.',
-        priceRange: 2,
+        priceRange: {lower: 4.95, upper: 10.75, band: 1},
         categories: [
             {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chipotle'}, {name: 'Barbecue'},
             {name: 'American'}, {name: 'Fast Food'}
         ],
         features: {
-            parking: {value: false},
-            wifi: {value: true},
-            takeout: {value: true},
-            delivery: {value: true},
-            outdoorSeating: {value: false},
-            reservations: {value: false},
             alcohol: {value: false},
-            vegetarian: {value: true}
+            americanExpress: {value: false},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: false},
+            glutenFree: {value: false},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
         },
+        creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
         reviews: ['5aad98377888995220605d20'],
         images: ['2018-03-26 20-58-00.jpg', '2018-03-26 20-58-01.jpeg', '2018-03-26 20-58-02.jpg'],
         averageRating: 3

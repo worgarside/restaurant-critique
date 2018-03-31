@@ -10,14 +10,19 @@ UserSchema = Schema({
     _id: {type: String},
     password: {type: String, required: true},
     privilegeLevel: {type: Number, default: 0},
-    forename: {type: String, required: true},
-    surname: {type: String, required: true},
+    name: {
+        first: {type: String, required: true},
+        last: {type: String, required: true}
+    },
     ageCategory: {type: Number, min: 0, max: 6},
     postcode: String,
     reviews: Array,
     displayImage: {type: String, unique: true},
     userRating: {type: Number, default: 0},
-    restaurants: Array,
+    restaurants: {
+        created: [String],
+        owned: [String]
+    },
     updatedAt: Date
 });
 
