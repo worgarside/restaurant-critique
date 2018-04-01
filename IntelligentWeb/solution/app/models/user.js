@@ -27,7 +27,7 @@ UserSchema = Schema({
     },
     verified: {
         flag: {type: Boolean, default: false},
-        hash: {type: String, default: crypto.randomBytes(20).toString('hex')}
+        hash: {type: String}
     },
     updatedAt: Date
 });
@@ -38,6 +38,7 @@ UserSchema.pre('save', function (next) {
     //TODO unique check on verification hash?
 
     if (!this.verified.flag) {
+        this.verified.hash = crypto.randomBytes(20).toString('hex');
         sendVerificationEmail(this);
     }
 

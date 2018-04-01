@@ -144,13 +144,13 @@ function processData(results) {
     };
 
     for (const [index, restaurant] of results.entries()) {
-        let restaurantContainer = document.createElement('div');
-        restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
-        restaurantListDOM.appendChild(restaurantContainer);
-        initSlideshow(index);
+        if (restaurant.published) {
+            let restaurantContainer = document.createElement('div');
+            restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
+            restaurantListDOM.appendChild(restaurantContainer);
+            initSlideshow(index);
 
-        // language=HTML
-        const infoWindowContent = `
+            const infoWindowContent = `
             <div class="container" id="info-${index}" style="max-width: 400px;">
                 <div class="row">
                     <div class="col">
@@ -167,21 +167,21 @@ function processData(results) {
             </div>
         `;
 
-        const infoWindow = new google.maps.InfoWindow({
-            content: infoWindowContent
-        });
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoWindowContent
+            });
 
-        const newMarker = new google.maps.Marker({
-            map: map,
-            position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
-            icon: icon
-        });
+            const newMarker = new google.maps.Marker({
+                map: map,
+                position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
+                icon: icon
+            });
 
-        newMarker.addListener('click', () => {
-            infoWindow.open(map, newMarker);
-        });
+            newMarker.addListener('click', () => {
+                infoWindow.open(map, newMarker);
+            });
+        }
     }
-    console.log('HTML Updated');
 }
 
 function getRestaurantDiv(restaurant, index) {

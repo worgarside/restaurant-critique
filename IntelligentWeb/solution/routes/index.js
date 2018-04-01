@@ -116,7 +116,6 @@ router.get('/verify-user/:hash', (req, res) => {
                 }
             });
 
-            console.log(user);
             res.render('user-verification', {title: title, verified: true});
         }
     });

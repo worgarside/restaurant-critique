@@ -16,13 +16,13 @@ block content
                         a(href='javascript:void(0)' onclick=("document.getElementById('btn-login').click()")) login
                         | &nbsp;or&nbsp;
                         a(href='/signup') create an account
-                        | &nbsp;and confirm it&nbsp;
+                        | &nbsp;and verify it&nbsp;
                         strong before
                         | &nbsp;publishing the restaurant
         else
             .row
                 .col-10.offset-1
-                    form(action='/restaurant/new/add_restaurant', method='post', enctype="multipart/form-data")
+                    form#new-restaurant-form(action='/restaurant/new/add_restaurant', method='post', enctype="multipart/form-data")
                         .form-row
                             .col-6
                                 .form-row
@@ -177,7 +177,7 @@ block content
                                                     input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
                                                     .selected-highlight
 
-                        div(hidden=false)
+                        .d-none
                             each day in daysOfWeek
                                 input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                                 input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
@@ -188,12 +188,27 @@ block content
                             input#category-body(name='categories', readonly)
                             input#price-range(type='number', name='priceRange', readonly)
                             input#price-range(type='text', name='user', readonly, value=JSON.stringify(userDetails))
+                            input#publish-flag(type='checkbox', name='published')
+                            input#submit(type='submit')
 
                         .form-row
-                            .form-group.col
-                                .float-right
-                                    input.btn(type='submit', value='Save Restaurant')
-                                    input.btn(type='submit', value='Publish Restaurant')
+                            .form-group.col.offset-7
+                                br
+                                if (!user.verified.flag)
+                                    .form-row
+                                        .col
+                                            button.btn#save-restaurant(type='button') Save Restaurant
+                                            button.btn.float-right(type='button', disabled) Publish Restaurant
+                                    .form-row
+                                        .col
+                                            small Publishing a new Restaurant requires a verified account. To resend the verification email click&nbsp;
+                                                a(href='#') here
+                                else
+                                    .form-row
+                                        .col
+                                            button.btn#save-restaurant(type='button') Save Restaurant
+                                            input.d-none#verified-flag(type='checkbox', name='verified', checked)
+                                            button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
 
             script const categoryVar = JSON.parse(`!{categories}`);
             script(type='text/javascript', src='/javascripts/restaurant_new.js')

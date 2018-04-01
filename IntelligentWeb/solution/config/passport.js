@@ -53,10 +53,13 @@ module.exports = function (passport) {
                         if (user) {
                             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                         } else {
-                            const re = /(?:\.([^.]+))?$/;
-                            const imgExtension = `.${re.exec(req.file.originalname)[1]}`;
-
                             const newUser = new User();
+
+                            if (req.file.originalname){
+                                const re = /(?:\.([^.]+))?$/;
+                                const imgExtension = `.${re.exec(req.file.originalname)[1]}`;
+                                newUser.displayImage = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
+                            }
 
                             newUser._id = email.toLowerCase();
                             newUser.password = password;
@@ -67,7 +70,7 @@ module.exports = function (passport) {
                             newUser.ageCategory = req.body.age;
                             newUser.county = req.body.county;
                             newUser.reviews = [];
-                            newUser.display_img_filename = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
+
                             newUser.user_rating = 0;
 
                             newUser.save((err) => {

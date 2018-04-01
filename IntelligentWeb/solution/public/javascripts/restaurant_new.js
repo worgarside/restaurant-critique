@@ -559,7 +559,7 @@ decreaseButton.click((e) => {
     colorPriceRangeInput();
 });
 
-function colorPriceRangeInput(){
+function colorPriceRangeInput() {
     for (let i = 0; i < 5; i++) {
         if (i < priceRangeBody.val()) {
             $(`#price-range-selector-${i + 1}`).css('color', 'black');
@@ -568,3 +568,32 @@ function colorPriceRangeInput(){
         }
     }
 }
+
+// ================ Create Restaurant ================ \\
+
+$('#save-restaurant').click(() => {
+    $('#verified-flag').prop('checked', false);
+    $('#publish-flag').prop('checked', false);
+    $('#submit').click();
+
+});
+
+$('#publish-restaurant').click(() => {
+    $('#verified-flag').prop('checked', true);
+    $('#publish-flag').prop('checked', true);
+    $('#submit').click();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+

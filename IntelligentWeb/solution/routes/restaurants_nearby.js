@@ -35,7 +35,6 @@ router.post('/', (req, res) => {
                 console.log(`Error: ${err}`);
             }
 
-            console.log(`Returning: ${restaurants.length} restaurants`);
             res.send(restaurants);
         });
 

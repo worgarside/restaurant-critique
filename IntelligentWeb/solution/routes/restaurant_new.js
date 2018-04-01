@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 const Restaurant = mongoose.model('Restaurant');
-const Category = mongoose.model('Category');
+const User = mongoose.model('User');
 
 const multer = require('multer');
 router.use(bodyParser.urlencoded({extended: true}));
@@ -25,18 +25,15 @@ const upload = multer({storage: storage});
 
 // ================ POST Method ================ \\
 
-// noinspection JSUnresolvedFunction
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
-    /**
-     * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int,
-         monClose:int, tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int,
-         restaurantName: string, priceRange: string, outdoorseating: string}} body,
-     */
 
     const body = req.body;
     const creator = JSON.parse(body.user);
+    let published = false;
 
-
+    if (body.verified) {
+        published = !!body.published;
+    }
 
     const openingTimes = [
         [body.monOpen, body.monClose],
@@ -50,14 +47,14 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
     let categoryList = [];
 
-    if (body.categories){
+    if (body.categories) {
         for (const category of JSON.parse(body.categories)) {
             categoryList.push(category);
         }
     }
 
-
     let newRestaurant = new Restaurant({
+        _id: mongoose.Types.ObjectId(),
         name: body.restaurantName,
         address: {
             line1: body.address1,
@@ -75,12 +72,12 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
         categories: categoryList,
         creator: creator,
-        published: true //TODO: add published flag
+        published: published
     });
 
-    for (let key of Object.keys(newRestaurant.features)){
-        if (body[key] !== '1'){
-            newRestaurant.features[key].value = body[key] === '2'
+    for (let key of Object.keys(newRestaurant.features)) {
+        if (parseInt(body[key]) !== 1) {
+            newRestaurant.features[key].value = parseInt(body[key]) === 2;
         }
     }
 
@@ -89,6 +86,16 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     }).catch((err) => {
         console.log(`Restaurant failed to add to collection: ${err}`)
     });
+
+    User.findByIdAndUpdate(
+        creator._id,
+        {$push: {'restaurants.created': newRestaurant._id}},
+        (err) => {
+            if (err) {
+                console.log(`Error: ${err}`);
+            }
+
+        });
 
     /*
         FOR ADDING A NEW REVIEW
