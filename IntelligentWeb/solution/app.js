@@ -11,8 +11,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 global.appRoot = path.resolve(__dirname);
+global.dbRegen = false;
 
 require('./config/passport')(passport);
+const database = require('./config/database');
 
 // ================ Database ================ \\
 
@@ -21,25 +23,7 @@ require('./app/models/category');
 require('./app/models/restaurant');
 require('./app/models/review');
 
-const database = {
-    local:{
-        url: 'mongodb://localhost:27017',
-        name: 'restaurant_critique'
-    },
-    atlas: {
-        username: 'worgarside',
-        password: 'V9hG0P3a025bnbTY'
-    }
-};
-
-mongoose.connect(`${database.local.url}/${database.local.name}`)
-    .then(() => {
-        console.log(`Connected to ${database.local.url}/${database.local.name}`);
-    })
-    .catch((err) => {
-        console.log(`Failed to connect to DB: ${err}`);
-        process.exit(1);
-    });
+database.connect();
 
 // ================ View Engine ================ \\
 

@@ -114,7 +114,9 @@ RestaurantSchema.pre('save', function (next) {
     this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
     this.updatedAt = Date.now();
 
-    emailCreator(this);
+    if (!dbRegen){
+        emailCreator(this);
+    }
 
     next();
 });
