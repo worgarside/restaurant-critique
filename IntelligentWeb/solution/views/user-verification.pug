@@ -1,0 +1,25 @@
+extends mixins/layout
+
+block content
+    br
+    .container
+        .row
+            .col
+                h1 User Verification
+        .row
+            .col.offset-1
+                br
+                br
+                if (verified)
+                    p Your user account has been successfully verified!
+                    p You should be automatically redirected within 5 seconds, if not please click&nbsp;
+                        a#redirect-link(href='/') here
+                    script(type='text/javascript', src='/javascripts/user-verification.js')
+                else
+                    p Unfortunately your verification has not succeeded, please check the following to help rectify this:
+                    ul
+                        li If you manually typed the URL for this page, double check there are no mistakes.
+                        li If you think you may have already verified your account, you can check you status on your&nbsp;
+                            a(href='#') profile page
+                        li If you are seeing this page in error, please contact us&nbsp;
+                            a(href='/contact') here

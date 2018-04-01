@@ -1,4 +1,4 @@
-//================ Middleware ================\\
+// ================ Middleware ================ \\
 
 const mongoose = require('mongoose');
 const database = {
@@ -7,7 +7,7 @@ const database = {
     name: 'restaurant_critique'
 };
 
-//================ Database Manager ================\\
+// ================ Database Manager ================ \\
 
 function connect(nextFunction) {
     return mongoose.connect(`mongodb+srv://${database.username}:${database.password}@restaurant-critique-gct1h.mongodb.net/`, {dbName: database.name})

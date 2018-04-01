@@ -1,9 +1,9 @@
-//================ Middleware ================\\
+// ================ Middleware ================ \\
 
 const nodemailer = require('nodemailer');
 const restaurantCritiqueAccount = {email: 'worgarside.dev@gmail.com', password: 'mfdobnadqxkrxnch'};
 
-//================ Email Manager ================\\
+// ================ Email Manager ================ \\
 
 function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`) {
     const transporter = nodemailer.createTransport({

@@ -8,17 +8,17 @@ block content
                 h1 Create an Account
                 br
         .row
-            .col-md-10.offset-md-1
+            .col-10.offset-1
                 form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
-                        .form-group.col-md-6
+                        .form-group.col-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name',
                             required, autocomplete='given-name')
-                        .form-group.col-md-6
+                        .form-group.col-6
                             input#surname.form-control(type='text', name='surname', placeholder='Surname', required,
                             autocomplete='family-name')
                     .form-row
-                        .form-group.col-md-6
+                        .form-group.col-6
                             .form-row
                                 .form-group.col
                                     input#email.form-control(type='text', name='email', placeholder='Email Address',
@@ -33,7 +33,7 @@ block content
                                     input.form-control(type='password', placeholder='Confirm your password',
                                     name='passwordConfirm', required, autocomplete='none')
                             .form-row
-                                .form-group.col-md-10
+                                .form-group.col-10
                                     select#age.form-control(name='age')
                                         option(value='', disabled, selected) Age
                                         option(value='1') 17 and under
@@ -43,13 +43,13 @@ block content
                                         option(value='5') 50 - 64
                                         option(value='6') 65+
                                         option(value='0') Prefer not to say
-                                .form-group.col-md-2
+                                .form-group.col-2
                                     .vert-center-parent
                                         .vert-center-child.text-center
                                             span.signup-help.oi.oi-question-mark(aria-hidden='true',
                                             title='This helps us find better recommendations for you')
                             .form-row
-                                .form-group.col-md-10
+                                .form-group.col-10
                                     select.form-control(name='county', autocomplete='address-level1')
                                         option(value='', disabled, selected) County
                                         optgroup(label='England')
@@ -157,14 +157,14 @@ block content
                                             option Fermanagh
                                             option Londonderry
                                             option Tyrone
-                                .form-group.col-md-2
+                                .form-group.col-2
                                     .vert-center-parent
                                         .vert-center-child.text-center
                                             span.signup-help.oi.oi-question-mark(aria-hidden='true',
                                             title='This helps us find better recommendations for you')
-                        .form-group.col-md-6
+                        .form-group.col-6
                             .form-row
-                                .form-group.offset-md-1
+                                .form-group.offset-1
                                     // TODO: use media capture to add PP
                                     label(for='display-picture') Display Picture
                                     img#display-picture(src='/scripts/svg/person.svg')
