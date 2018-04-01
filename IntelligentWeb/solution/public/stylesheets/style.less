@@ -104,6 +104,11 @@ input[type="text"], input[type="number"] {
   -webkit-box-shadow: none;
 }
 
+label.error{
+  color: @red;
+  font-style: italic;
+}
+
 // ================ Index Head ================ \\
 
 #main-logo {
@@ -134,7 +139,18 @@ input[type="text"], input[type="number"] {
   height: 40px;
   margin: 0 auto;
   button.btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     width: 100px;
+  }
+
+  input{
+    border-radius: 0;
+  }
+
+  select{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 

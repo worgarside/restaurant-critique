@@ -61,24 +61,29 @@ router.get('/restaurant/:url', (req, res) => {
             throw(err);
         }
 
-        const reviewIdList = restaurant.reviews;
-        let reviewList = [];
-        let reviewPromises = [];
+        if (restaurant) {
+            const reviewIdList = restaurant.reviews;
+            let reviewList = [];
+            let reviewPromises = [];
 
-        for (id of reviewIdList) {
-            reviewPromises.push(Review.findOne({_id: id}).then((review) => {
-                reviewList.push(review);
-                console.log(`Pushed review #${review.title}`);
-            }).catch((err) => {
-                console.log(`Error fetching review: ${err}`);
-            }));
+            for (id of reviewIdList) {
+                reviewPromises.push(Review.findOne({_id: id}).then((review) => {
+                    reviewList.push(review);
+                    console.log(`Pushed review #${review.title}`);
+                }).catch((err) => {
+                    console.log(`Error fetching review: ${err}`);
+                }));
+            }
+
+            Promise.all(reviewPromises).then(() => {
+                return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
+            }).catch(() => {
+                return res.render('error');
+            })
+        }else{
+            res.render('error');
         }
 
-        Promise.all(reviewPromises).then(() => {
-            return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
-        }).catch(() => {
-            return res.render('/error');
-        })
     });
 });
 

@@ -9,7 +9,7 @@ block content
                 br
         .row
             .col-10.offset-1
-                form(action='/signup/add_user', method='post', enctype="multipart/form-data")
+                form#signup-form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name',
@@ -21,17 +21,17 @@ block content
                         .form-group.col-6
                             .form-row
                                 .form-group.col
-                                    input#email.form-control(type='text', name='email', placeholder='Email Address',
+                                    input#email.form-control(type='email', name='email', placeholder='Email Address',
                                     required, autocomplete='email')
                                     //small We'll never share your personal details with third parties
                             .form-row
                                 .form-group.col
-                                    input.form-control(type='password', placeholder='Password', name='password',
+                                    input.form-control#password(type='password', placeholder='Password', name='password',
                                     required, autocomplete='current-password')
                             .form-row
                                 .form-group.col
                                     input.form-control(type='password', placeholder='Confirm your password',
-                                    name='passwordConfirm', required, autocomplete='none')
+                                    name='password-confirm', required, autocomplete='none')
                             .form-row
                                 .form-group.col-10
                                     select#age.form-control(name='age')
@@ -50,113 +50,7 @@ block content
                                             title='This helps us find better recommendations for you')
                             .form-row
                                 .form-group.col-10
-                                    select.form-control(name='county', autocomplete='address-level1')
-                                        option(value='', disabled, selected) County
-                                        optgroup(label='England')
-                                            option Bedfordshire
-                                            option Berkshire
-                                            option Bristol
-                                            option Buckinghamshire
-                                            option Cambridgeshire
-                                            option Cheshire
-                                            option City of London
-                                            option Cornwall
-                                            option Cumbria
-                                            option Derbyshire
-                                            option Devon
-                                            option Dorset
-                                            option Durham
-                                            option East Yorkshire
-                                            option East Sussex
-                                            option Essex
-                                            option Gloucestershire
-                                            option Greater London
-                                            option Greater Manchester
-                                            option Hampshire
-                                            option Herefordshire
-                                            option Hertfordshire
-                                            option Isle of Wight
-                                            option Kent
-                                            option Lancashire
-                                            option Leicestershire
-                                            option Lincolnshire
-                                            option Merseyside
-                                            option Norfolk
-                                            option North Yorkshire
-                                            option Northamptonshire
-                                            option Northumberland
-                                            option Nottinghamshire
-                                            option Oxfordshire
-                                            option Rutland
-                                            option Shropshire
-                                            option Somerset
-                                            option South Yorkshire
-                                            option Staffordshire
-                                            option Suffolk
-                                            option Surrey
-                                            option Tyne and Wear
-                                            option Warwickshire
-                                            option West Midlands
-                                            option West Sussex
-                                            option West Yorkshire
-                                            option Wiltshire
-                                            option Worcestershire
-                                        optgroup(label='Wales')
-                                            option Anglesey
-                                            option Brecknockshire
-                                            option Caernarfonshire
-                                            option Carmarthenshire
-                                            option Cardiganshire
-                                            option Denbighshire
-                                            option Flintshire
-                                            option Glamorgan
-                                            option Merioneth
-                                            option Monmouthshire
-                                            option Montgomeryshire
-                                            option Pembrokeshire
-                                            option Radnorshire
-                                        optgroup(label='Scotland')
-                                            option Aberdeenshire
-                                            option Angus
-                                            option Argyllshire
-                                            option Ayrshire
-                                            option Banffshire
-                                            option Berwickshire
-                                            option Buteshire
-                                            option Cromartyshire
-                                            option Caithness
-                                            option Clackmannanshire
-                                            option Dumfriesshire
-                                            option Dunbartonshire
-                                            option East Lothian
-                                            option Fife
-                                            option Inverness-shire
-                                            option Kincardineshire
-                                            option Kinross
-                                            option Kirkcudbrightshire
-                                            option Lanarkshire
-                                            option Midlothian
-                                            option Morayshire
-                                            option Nairnshire
-                                            option Orkney
-                                            option Peeblesshire
-                                            option Perthshire
-                                            option Renfrewshire
-                                            option Ross-shire
-                                            option Roxburghshire
-                                            option Selkirkshire
-                                            option Shetland
-                                            option Stirlingshire
-                                            option Sutherland
-                                            option West Lothian
-                                            option Wigtownshire
-                                        optgroup(label='Northern Ireland')
-                                            option Antrim
-                                            option Armagh
-                                            option Down
-                                            option Fermanagh
-                                            option Londonderry
-                                            option Tyrone
+                                    input.form-control(name='postcode')
                                 .form-group.col-2
                                     .vert-center-parent
                                         .vert-center-child.text-center
@@ -174,4 +68,5 @@ block content
                             .float-right
                                 input.btn(type='submit')
 
+    script(type='text/javascript', src="/scripts/jquery.validate.js")
     script(type='text/javascript', src='/javascripts/signup.js')
