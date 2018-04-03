@@ -36,6 +36,7 @@ $("#searchbutton").click((e) => {
         type: 'POST',
         success: (result) => {
             console.log('AJAX Succeeded');
+            processData(result)
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
