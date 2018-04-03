@@ -39,7 +39,9 @@ UserSchema.pre('save', function (next) {
 
     if (!this.verified.flag) {
         this.verified.hash = crypto.randomBytes(20).toString('hex');
-        sendVerificationEmail(this);
+        if (!dbRegen) {
+            sendVerificationEmail(this);
+        }
     }
 
     this.updatedAt = Date.now();
