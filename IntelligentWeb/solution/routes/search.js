@@ -18,17 +18,13 @@ router.post('/', (req, res) => {
     const searchQueryData = req.body.searchQueryData;
     console.log(`Searching for ${searchQueryData}`);
 
-    Restaurant.collection.indexes(function(err, docs) {
-            //console.log(err);
-            //console.log(docs);
-        });
     Restaurant.find({$text: {$search: searchQueryData}})
         .limit(10)
-        .exec((err, docs) => {
-            console.log("RESULTS: " + docs.length);
+        .exec((err, restaurants) => {
+            console.log("RESULTS: " + restaurants.length);
             console.log(err);
-            console.log(docs);
         });
+
 });
 
 module.exports = router;
