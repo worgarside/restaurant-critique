@@ -11,8 +11,6 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
-let returnList;
-
 //AJAX POSTs to '/search', so relatively '/'
 router.post('/', (req, res) => {
     console.log(`AJAX POST received ${JSON.stringify(req.body)}`);
@@ -20,10 +18,14 @@ router.post('/', (req, res) => {
     const searchQueryData = req.body.searchQueryData;
     console.log(`Searching for ${searchQueryData}`);
 
+    Restaurant.collection.indexes(function(err, docs) {
+            //console.log(err);
+            //console.log(docs);
+        });
     Restaurant.find({$text: {$search: searchQueryData}})
-        .skip(20)
         .limit(10)
         .exec((err, docs) => {
+            console.log("RESULTS: " + docs.length);
             console.log(err);
             console.log(docs);
         });
