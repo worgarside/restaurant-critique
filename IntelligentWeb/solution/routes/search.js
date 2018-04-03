@@ -19,12 +19,14 @@ router.post('/', (req, res) => {
     console.log(`Searching for ${searchQueryData}`);
 
     Restaurant.find({$text: {$search: searchQueryData}})
-        .limit(10)
-        .exec((err, restaurants) => {
-            console.log("RESULTS: " + restaurants.length);
+        .exec()
+        .then((restaurants) => {
+            console.log(`RESULTS: ${restaurants.length}`);
+            res.send(restaurants);
+        })
+        .catch((err) => {
             console.log(err);
         });
-
 });
 
 module.exports = router;

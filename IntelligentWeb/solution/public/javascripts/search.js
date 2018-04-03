@@ -1,4 +1,4 @@
-function updateList() {
+function sendSearchQuery() {
     const query = JSON.stringify({search});
     console.log(`Sending ${query} to AJAX POST`);
 
@@ -9,7 +9,7 @@ function updateList() {
         type: 'POST',
         success: (result) => {
             console.log('AJAX Succeeded');
-            processData(result);
+            displaySearchResults(result);
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -17,7 +17,7 @@ function updateList() {
     });
 }
 
-function processData(results) {
+function displaySearchResults(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
