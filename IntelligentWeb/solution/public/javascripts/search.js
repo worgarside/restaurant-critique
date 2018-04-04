@@ -172,11 +172,17 @@ function initSlideshow(value) {
     });
 }
 
-$("#searchbutton").click((e) => {
-    e.preventDefault();
-    console.log($('#search-input').val());
-    const searchQueryData = JSON.stringify({searchQueryData: $('#search-input').val()});
 
+$(function() {
+    const query = sessionStorage.getItem("query");
+    if (query!= null ){
+        search(query);
+        $('#search-input').val(query);
+        sessionStorage.removeItem("query");
+}});
+
+function search(query){
+    const searchQueryData = JSON.stringify({searchQueryData: query});
     $.ajax({
         url: '/search',
         data: searchQueryData,
@@ -190,4 +196,13 @@ $("#searchbutton").click((e) => {
             console.log(`Error: ${JSON.stringify(err)}`);
         }
     });
+}
+
+
+
+$("#searchbutton").click((e) => {
+    e.preventDefault();
+    console.log($('#search-input').val());
+    const query = $('#search-input').val();
+    search(query);
 });

@@ -27,21 +27,8 @@ $(window).scroll(() => {
 $("#searchbutton").click((e) => {
     e.preventDefault();
     console.log($('#search-input').val());
-    const searchQueryData = JSON.stringify({searchQueryData: $('#search-input').val()});
-
-    $.ajax({
-        url: '/search',
-        data: searchQueryData,
-        contentType: 'application/json; charset=utf-8',
-        type: 'POST',
-        success: (result) => {
-            console.log('AJAX Succeeded');
-            processData(result)
-        },
-        error: (err) => {
-            console.log(`Error: ${JSON.stringify(err)}`);
-        }
-    });
+    sessionStorage.setItem("query", $('#search-input').val());
+    window.location.replace("/search");
 });
 
 console.log('Loaded index.js');
