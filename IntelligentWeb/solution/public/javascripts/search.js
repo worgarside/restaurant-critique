@@ -1,15 +1,27 @@
 function displaySearchResults(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
+    let restaurantContainer = document.createElement('div');
 
-    for (const [index, restaurant] of results.entries()) {
-        let restaurantContainer = document.createElement('div');
-        restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
-        restaurantListDOM.appendChild(restaurantContainer);
-        initSlideshow(index);
-
+    if (results.length > 0) {
+        for (const [index, restaurant] of results.entries()) {
+            restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
+            initSlideshow(index);
+        }
+    } else {
+        restaurantContainer.innerHTML = displayNoResultsFound();
     }
+    restaurantListDOM.appendChild(restaurantContainer);
     console.log('HTML Updated');
+}
+
+function displayNoResultsFound(){
+    return `
+        <div class="row">
+                <div class="col">
+                    <h2> No Results Found, Please Search Again</h2>
+                </div>
+        </div> `;
 }
 
 function getRestaurantDiv(restaurant, index) {
@@ -160,7 +172,8 @@ function initSlideshow(value) {
     });
 }
 
-$("#search-input").keyup((e) => {
+$("#searchbutton").click((e) => {
+    e.preventDefault();
     console.log($('#search-input').val());
     const searchQueryData = JSON.stringify({searchQueryData: $('#search-input').val()});
 
