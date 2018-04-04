@@ -5,6 +5,28 @@ block content
 
     .container
         .row
+            form#index-search-form
+                #main-logo
+                .input-group#index-search-group
+                    .input-group-prepend
+                        select.btn
+                            option(value='', selected) Quick Filter
+                            optgroup(label='Cuisine')
+                                option Italian
+                                option Asian
+                                option French
+                                option American
+                                option British
+                            optgroup(label='Price Range')
+                                option £
+                                option ££
+                                option £££
+                                option ££££
+                    input#search-input.form-control.no-border(name='searchQuery' type='text', placeholder='Search by Cuisine, Keyword, Location etc.', aria-label='Text input with dropdown button')
+                    .input-group-append
+                        button.btn#searchbutton
+                            span.oi.oi-magnifying-glass(aria-hidden='true')
+        .row
             .col
                 h2#restaurant-result-header Search Results
                 #restaurant-list

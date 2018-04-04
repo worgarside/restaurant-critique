@@ -1,22 +1,3 @@
-function sendSearchQuery() {
-    const query = JSON.stringify({search});
-    console.log(`Sending ${query} to AJAX POST`);
-
-    $.ajax({
-        url: '/search',
-        data: query,
-        contentType: 'application/json; charset=utf-8',
-        type: 'POST',
-        success: (result) => {
-            console.log('AJAX Succeeded');
-            displaySearchResults(result);
-        },
-        error: (err) => {
-            console.log(`Error: ${JSON.stringify(err)}`);
-        }
-    });
-}
-
 function displaySearchResults(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
@@ -178,3 +159,22 @@ function initSlideshow(value) {
         $(`.current-${value}`).fadeIn();
     });
 }
+
+$("#search-input").keyup((e) => {
+    console.log($('#search-input').val());
+    const searchQueryData = JSON.stringify({searchQueryData: $('#search-input').val()});
+
+    $.ajax({
+        url: '/search',
+        data: searchQueryData,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (result) => {
+            console.log('AJAX Succeeded');
+            displaySearchResults(result)
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+});
