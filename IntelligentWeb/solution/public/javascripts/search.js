@@ -1,19 +1,20 @@
 function displaySearchResults(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
-    let restaurantContainer = document.createElement('div');
 
     if (results.length > 0) {
         console.log(results.length);
         for (const [index, restaurant] of results.entries()) {
+            let restaurantContainer = document.createElement('div');
             console.log(restaurant.name);
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
+            restaurantListDOM.appendChild(restaurantContainer);
             initSlideshow(index);
         }
     } else {
         restaurantContainer.innerHTML = displayNoResultsFound();
     }
-    restaurantListDOM.appendChild(restaurantContainer);
+
     console.log('HTML Updated');
 }
 
@@ -27,6 +28,7 @@ function displayNoResultsFound(){
 }
 
 function getRestaurantDiv(restaurant, index) {
+    console.log(`Getting restaurant ${restaurant.name} info @ index ${index}...`);
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
