@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
     const searchQueryData = req.body.searchQueryData;
     console.log(`Searching for ${searchQueryData}`);
 
-    Restaurant.find({$text: {$search: searchQueryData}})
+    Restaurant.find({$text: {$search: "/"+searchQueryData+"/"}})
         .exec()
         .then((restaurants) => {
             console.log(`RESULTS: ${restaurants.length}`);

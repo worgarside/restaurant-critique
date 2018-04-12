@@ -36,8 +36,8 @@ function initialiseDatabase() {
             let indexPromises = [];
 
             indexPromises.push(db.collection('restaurants').createIndex({
-                name: 'text', categories: 'text', postcode: 'text', description: 'text' },
-                {name: 'String Search Index', weights: {name: 10, categories: 4, postcode: 5, description: 1}}));
+                name: 'text', categories: 'text', formattedAddress: 'text', description: 'text' },
+                {name: 'String Search Index', weights: {name: 20, categories: 10, formattedAddress: 15, description: 10}}));
             indexPromises.push(db.collection('restaurants').createIndex({location: "2dsphere"}));
 
             Promise.all(indexPromises).catch((err) => {

@@ -4,7 +4,9 @@ function displaySearchResults(results) {
     let restaurantContainer = document.createElement('div');
 
     if (results.length > 0) {
+        console.log(results.length);
         for (const [index, restaurant] of results.entries()) {
+            console.log(restaurant.name);
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
             initSlideshow(index);
         }
@@ -191,6 +193,7 @@ function search(query){
         success: (result) => {
             console.log('AJAX Succeeded');
             displaySearchResults(result)
+
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);

@@ -26,7 +26,6 @@ $(window).scroll(() => {
 
 $("#searchbutton").click((e) => {
     e.preventDefault();
-    console.log($('#search-input').val());
     sessionStorage.setItem("query", $('#search-input').val());
     window.location.replace("/search");
 });
