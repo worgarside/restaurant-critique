@@ -31,6 +31,7 @@ function displayNoResultsFound(){
 
 function getRestaurantDiv(restaurant, index) {
     console.log(`Getting restaurant ${restaurant.name} info @ index ${index}...`);
+    console.log(restaurant);
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">

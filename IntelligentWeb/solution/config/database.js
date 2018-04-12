@@ -12,7 +12,7 @@ const database = {
 function connect(nextFunction) {
     return mongoose.connect(`mongodb+srv://${database.username}:${database.password}@restaurant-critique-gct1h.mongodb.net/`, {dbName: database.name})
         .then(() => {
-            console.log(`Connected to mongodb+srv://${database.username}@restaurant-critique-gct1h.mongodb.net`);
+            console.log('\x1b[36m%s\x1b[0m', `Connected to mongodb+srv://${database.username}@restaurant-critique-gct1h.mongodb.net`);
             if (nextFunction) {
                 nextFunction();
             }
