@@ -12,7 +12,9 @@ function displaySearchResults(results) {
             initSlideshow(index);
         }
     } else {
+        let restaurantContainer = document.createElement('div');
         restaurantContainer.innerHTML = displayNoResultsFound();
+        restaurantListDOM.appendChild(restaurantContainer);
     }
 
     console.log('HTML Updated');
