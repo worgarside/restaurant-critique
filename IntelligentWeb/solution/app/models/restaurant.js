@@ -1,3 +1,10 @@
+/**
+ * Definition of the Restaurant mongoose Schema
+ * A Restaurant is an object which holds all the data about a Restaurant to be shown on the website
+ * Can be edited by Restaurant owners and administrators. Submitted by verified Users
+ * @author Will Garside
+ */
+
 // ================ Middleware ================ \\
 
 const mongoose = require('mongoose');
@@ -7,7 +14,7 @@ const Category = mongoose.model('Category');
 const CategorySchema = Category.schema;
 const nodemailer = require(`${appRoot}/config/nodemailer`);
 
-// ================ Restaurant ================ \\
+// ================ Restaurant Schema Definition ================ \\
 
 RestaurantSchema = Schema({
     name: {type: String, required: true},
@@ -27,7 +34,7 @@ RestaurantSchema = Schema({
     contact: {
         url: {type: String, trim: true},
         menu: {type: String, trim: true},
-        phone: {type: String, trim: true}, //TODO: restaurant email address for contact purposes as well as phone??
+        phone: {type: String, trim: true}
     },
     localUrl: {type: String, unique: true},
     openingTimes: Array,
@@ -42,6 +49,7 @@ RestaurantSchema = Schema({
         }
     },
     categories: {type: [CategorySchema]},
+    // Features are boolean attributes, with friendly names set with default values
     features: {
         alcohol: {name: {type: String, default: 'Alcohol'}, value: Boolean},
         americanExpress: {name: {type: String, default: 'Accepts American Express'}, value: Boolean},
@@ -72,10 +80,11 @@ RestaurantSchema = Schema({
     },
     ownerMessage: {type: String},
     reviews: {type: [String], default: []},
-    images: {type: [String], default: []}, //TODO: only show top 5 images on nearby page?
+    images: {type: [String], default: []},
     averageRating: {type: Number, min: 0, max: 5},
     published: {type: Boolean, default: true},
     updatedAt: Date,
+    // Searchable object used to improve search effectiveness
     searchable: {
         all: String,
         name: String,
@@ -98,6 +107,7 @@ RestaurantSchema.pre('save', function (next) {
         fs.mkdirSync(imageDir);
     }
 
+    // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
     this.address.postcode = this.address.postcode.toUpperCase();
     this.address.formattedAddress = '';
     const addressComponents = ['line1', 'line2', 'city', 'postcode'];
@@ -111,6 +121,7 @@ RestaurantSchema.pre('save', function (next) {
         }
     });
 
+    // Save all new categories on creation - although this is currently only used on db_regen
     for (const category of this.categories) {
         new Category(category).save().catch((err) => {
             if (!err.errmsg.includes('duplicate key')) {
@@ -120,25 +131,32 @@ RestaurantSchema.pre('save', function (next) {
     }
 
     this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
-    this.updatedAt = Date.now();
 
-    if (!dbRegen){
+    // Don't send an email if the database is being generated to avoid spam
+    if (!dbRegen) {
         emailCreator(this);
     }
 
+    // Searchable data has all special characters removed
     this.searchable.name = this.name.replace(/[^\w\s]/, '');
     this.searchable.description = this.description.replace(/[^\w\s]/, '');
     this.searchable.formattedAddress = this.address.formattedAddress.replace(/[^\w\s]/, '');
     this.searchable.categoryString = '';
-    for (category of this.categories){
+    for (const category of this.categories) {
         this.searchable.categoryString += `${category.name} `;
     }
     this.searchable.all = `${this.searchable.name} ${this.searchable.description} ${this.searchable.formattedAddress} ${this.searchable.categoryString}`;
 
+    this.updatedAt = Date.now();
+
     next();
 });
 
-function emailCreator(restaurant){
+/**
+ * Send a confirmation email to the creator upon Restaurant creation. Uses nodemailer configuration template
+ * @param restaurant: the Restaurant object which has been created
+ */
+function emailCreator(restaurant) {
     const to = restaurant.creator._id;
     const subject = 'Restaurant creation confirmation';
     const body = `

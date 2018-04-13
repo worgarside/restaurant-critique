@@ -1,10 +1,27 @@
+/**
+ * Configuration.template file for sending emails.
+ * Uses Nodemailer middleware to create the transport and Gmail to send the email
+ * The Gmail login info is in this file - in production this wll be moved to environment variables
+ * @author Will Garside, Greta Ramaneckaite
+ */
+
 // ================ Middleware ================ \\
 
 const nodemailer = require('nodemailer');
-const restaurantCritiqueAccount = {email: 'worgarside.dev@gmail.com', password: 'mfdobnadqxkrxnch'};
+const restaurantCritiqueAccount = {
+    email: 'worgarside.dev@gmail.com',
+    password: 'mfdobnadqxkrxnch'
+};
 
 // ================ Email Manager ================ \\
 
+/**
+ * Send an email with nodemailer and Gmail from the accouet defined above
+ * @param to The recipient of the email
+ * @param subject Email subject content
+ * @param body The main body of the email
+ * @param from The sender's name to be added to the email (e.g. 'Support Request', 'User Confirmation', etc.)
+ */
 function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',

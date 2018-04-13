@@ -1,24 +1,31 @@
+/**
+ * Adds search functionality to site by aggregating Restaurant objects
+ * @author Will Garside, Rufus Cope
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const fs = require('fs');
 const Restaurant = mongoose.model('Restaurant');
-const async = require('async');
 router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
-//AJAX POSTs to '/search', so relatively '/'
+/**
+ * Uses regex to search the Restaurants' 'searchable' attribute objects
+ * Once matches have been found, the usable fields are projected to the client
+ * Also adds a weight attribute for useful ordering
+ */
 router.post('/', (req, res) => {
     const searchQueryData = req.body.searchQueryData.replace(/[^\w\s]/, ''); // remove special chars
     const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`; // split for regex AND
     const re = new RegExp(regexQuery, 'i'); // turn to regex, case insensitive
     console.log(`Searching with ${re}`);
 
-    const restaurantPromise = Restaurant.aggregate(
+    Restaurant.aggregate(
         [
             {
                 "$match": {'searchable.all': {$regex: re}},
@@ -33,7 +40,7 @@ router.post('/', (req, res) => {
                     'averageRating': 1,
                     'localUrl': 1,
                     'searchable': 1,
-                    'score': 1
+                    'weight': 1
                 }
             }
         ], (err, restaurants) => {
@@ -41,60 +48,56 @@ router.post('/', (req, res) => {
                 console.log(`Error: ${err}`);
             }
 
-            const weightedRestaurants = applyWeightings(restaurants, searchQueryData);
-
-            res.send(weightedRestaurants);
+            res.send(applyWeightings(restaurants, searchQueryData));
         }
-    );
-
-    restaurantPromise
-        .then(() => {
-            console.log('Return successful');
-        })
-        .catch((err) => {
-            console.log(`Restaurant aggregation failed: ${err}`);
-        });
-
+    ).catch((err) => {
+        console.log(`Restaurant aggregation failed: ${err}`);
+    });
 });
 
+/**
+ * Applies a weighting to each Restaurant by evaluating the similarity between the search query and the Restaurant data
+ * Weight is added as such: Query word in the name +8; word in the description +4; Matched category +2; In Address +1
+ * @param restaurants Returned list of search-matched restaurants
+ * @param query The User's search query
+ */
 function applyWeightings(restaurants, query) {
-    /*
-    * In the name +8
-    * In the description +4
-    * Matched category +2
-    * In Address +1
-    */
-
     for (let restaurant of restaurants) {
-        let score = 0;
-
+        let weight = 0;
         for (let word of query.split(' ')) {
+            // The split function returns empty strings if there are leading/trailing spaces
             if (word === '') continue;
 
-            if (restaurant.searchable.name.toLowerCase().includes(word.toLowerCase())) score += 8;
+            if (restaurant.searchable.name.toLowerCase().includes(word.toLowerCase())) weight += 8;
 
-            if (restaurant.searchable.description.toLowerCase().includes(word.toLowerCase())) score += 4;
+            if (restaurant.searchable.description.toLowerCase().includes(word.toLowerCase())) weight += 4;
 
+            // Evaluate each Category in turn
             for (const category of restaurant.categories) {
-                if (category.name.toLowerCase().includes(word.toLowerCase())) score += 2;
+                if (category.name.toLowerCase().includes(word.toLowerCase())) weight += 2;
             }
 
-            if (restaurant.searchable.formattedAddress.toLowerCase().includes(word.toLowerCase())) score += 1;
+            if (restaurant.searchable.formattedAddress.toLowerCase().includes(word.toLowerCase())) weight += 1;
         }
 
-        restaurant.score = score;
+        restaurant.weight = weight;
     }
-
     return restaurants.sort(compare);
 }
 
+/**
+ * Comparison method for the restaurants, called by the sort method
+ * @param a The first Restaurant to be compared
+ * @param b The second Restaurant to be compared
+ * @returns {number} An integer indicative of the comparison, allows correct sorting
+ */
 function compare(a, b) {
-    const scoreA = a.score;
-    const scoreB = b.score;
+    const weightA = a.weight;
+    const weightB = b.weight;
 
-    if (scoreA < scoreB) {
+    if (weightA < weightB) {
         return 1;
-    } else if (scoreA > scoreB) {
+    } else if (weightA > weightB) {
         return -1;
     } else {
         return 0;

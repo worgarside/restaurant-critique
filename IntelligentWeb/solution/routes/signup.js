@@ -1,3 +1,8 @@
+/**
+ * User signup management, uses passport configuration file
+ * @author Will Garside
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
@@ -9,6 +14,10 @@ const passport = require('passport');
 const User = mongoose.model('User');
 
 router.use(bodyParser.urlencoded({extended: true}));
+
+/**
+ * Uses multer to manage the User's display image
+ */
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, './public/images/userImages');
@@ -24,6 +33,15 @@ const upload = multer({storage: storage});
 
 // ================ POST Method ================ \\
 
+/**
+ * Uses passport to authenticate user and sign them in
+ *
+ * @function upload.single,
+ *      Uploads a single image with multer
+ * @function passport.authenticate
+ *      Uses passport middleware to authenticate the user and create a user session
+ *      @see config/passport.js
+ */
 router.post('/add_user', upload.single('displayPicture'), passport.authenticate('signup-local', {
     successRedirect: '/',
     failureRedirect: '/signup'

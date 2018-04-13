@@ -1,3 +1,10 @@
+/**
+ * Route management for the index of the site
+ * this covers the majority of the site with the GET requests. POST request and more complex functions are located in
+ * each pages specific routing file
+ * @author WIll Garside, Rufus Cope, Greta Ramaneckaite
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
@@ -36,6 +43,9 @@ router.get('/logout', (req, res) => {
     res.redirect('back');
 });
 
+/**
+ * Send the list of Category objects to the new restaurant page to add options to the Category picker
+ */
 router.get('/restaurant/new', (req, res) => {
     const tempRestaurant = new Restaurant;
 
@@ -55,6 +65,10 @@ router.get('/restaurant/new', (req, res) => {
     });
 });
 
+/**
+ * Dynamically load the Restaurant information when the URL is loaded
+ * Send the Restaurant's Review objects to the client as well for dynamic display
+ */
 router.get('/restaurant/:url', (req, res) => {
     return Restaurant.findOne({localUrl: req.params.url}, (err, restaurant) => {
         if (err) {
@@ -99,9 +113,12 @@ router.get('/signup', (req, res) => {
     res.render('signup', {title: title, user: req.user});
 });
 
+/**
+ * Dynamic URL routing for verifying Users when they click on the link in the verification email
+ * Whe the page is loaded, the verification flag is updated in the database and the hash is removed from the User
+ * If the hash is not in the database, the User is shown an error
+ */
 router.get('/verify-user/:hash', (req, res) => {
-
-
     User.findOne({'verified.hash': req.params.hash}, (err, user) => {
         if (err) {
             console.log(err);
@@ -128,6 +145,10 @@ router.get('/verify-user/:hash', (req, res) => {
 
 // ================ POST Statements ================ \\
 
+/**
+ * When the User attempts to log in, the Passport configuration ensures that their password is correct and starts a
+ * User login session
+ */
 router.post('/login', (req, res, next) => {
     passport.authenticate('login-local', (err, user) => {
         if (err) {

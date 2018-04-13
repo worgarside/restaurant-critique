@@ -1,8 +1,15 @@
+/**
+ * Definition of the Category mongoose Schema
+ * A Category is a child document of a Restaurant and is used in setting the cuisine (etc.) type
+ * @author Will Garside
+ */
+
 // ================ Middleware ================ \\
 
-const mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-// ================ Category ================ \\
+// ================ Category Schema Definition ================ \\
 
 CategorySchema = Schema({
     _id: {type: String},
@@ -11,6 +18,7 @@ CategorySchema = Schema({
 });
 
 CategorySchema.pre('save', function (next) {
+    // The name of the Category has all special chars removed to create the _id
     this._id = this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
     this.updatedAt = Date.now();
     next();

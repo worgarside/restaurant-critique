@@ -1,3 +1,11 @@
+/**
+ * Routing file for new Restaurants
+ * Manages the insertion of a new Restaurant to the database, as well as saving any images to the correct
+ * directory
+ * @author Will Garside, Rufus Cope
+ * @param req.body.restaurantName the name of the Restaurant added, used in setting the name of the image
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
@@ -10,6 +18,11 @@ const User = mongoose.model('User');
 
 const multer = require('multer');
 router.use(bodyParser.urlencoded({extended: true}));
+
+/**
+ * Use multer middleware to save the Restaurant's images to the correct directory
+ * Also sets the images' filenames
+ */
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, './public/images/restaurant');
@@ -25,8 +38,17 @@ const upload = multer({storage: storage});
 
 // ================ POST Method ================ \\
 
-router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
 
+/**
+ * Configures and adds a new Restaurant object to the database when a formis submitted
+ * Also adds the Restaurant ID to the creator's restaurants attribute
+ *
+ * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int, monClose:int,
+  * tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int, restaurantName: string,
+  * priceRange: string, address1:String, address2:String, priceLower:int, priceUpper:int, priceBand:int
+  * }} body The values from the input form used in setting the attributes of the Restaurant
+ */
+router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     const body = req.body;
     const creator = JSON.parse(body.user);
     let published = false;
@@ -82,28 +104,22 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     }
 
     newRestaurant.save().then(() => {
-        console.log("Restaurant added to collection")
+        console.log("Restaurant added to collection");
+
+        // Add the Restaurant ID to the User's attribute
+        User.findByIdAndUpdate(
+            creator._id,
+            {$push: {'restaurants.created': newRestaurant._id}},
+            (err) => {
+                if (err) {
+                    console.log(`Error: ${err}`);
+                }
+
+            });
     }).catch((err) => {
-        console.log(`Restaurant failed to add to collection: ${err}`)
+        console.log(`Restaurant failed to add to collection: ${err}`);
     });
 
-    User.findByIdAndUpdate(
-        creator._id,
-        {$push: {'restaurants.created': newRestaurant._id}},
-        (err) => {
-            if (err) {
-                console.log(`Error: ${err}`);
-            }
-
-        });
-
-    /*
-        FOR ADDING A NEW REVIEW
-        const dateFormat = require('dateformat');
-        var now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
-
-        USE AS IMAGE FILENAME
-     */
     res.redirect('/')
 });
 

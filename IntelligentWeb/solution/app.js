@@ -1,3 +1,8 @@
+/**
+ * Partially generated file for running app
+ * @author Will Garside, Rufus Cope, Greta Ramaneckaite
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
@@ -56,7 +61,6 @@ const signup = require('./routes/signup');
 const restaurantNew = require('./routes/restaurant_new');
 const restaurantsNearby = require('./routes/restaurants_nearby');
 const contact = require('./routes/contact');
-const restaurant = require('./routes/restaurant');
 const search = require('./routes/search');
 
 app.use('/', index);
@@ -64,7 +68,6 @@ app.use('/signup', signup);
 app.use('/restaurant/new', restaurantNew);
 app.use('/restaurants-nearby', restaurantsNearby);
 app.use('/contact', contact);
-app.use('/restaurant', restaurant);
 app.use('/search', search);
 
 // catch 404 and forward to error handler

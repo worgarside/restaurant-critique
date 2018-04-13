@@ -1,3 +1,8 @@
+/**
+ * Database generation file - overwrites existing data to regenerate the collections with the db_populate file
+ * @author WIll Garside
+ */
+
 // ================ Middleware ================ \\
 
 const mongoose = require('mongoose');
@@ -8,19 +13,24 @@ require('./app/models/category');
 require('./app/models/restaurant');
 require('./app/models/review');
 const DatabasePopulation = require('./app/db_populate');
+
+// Set a global flag to let the model Schema know if they should send any emails (used to avoid spam emails basically)
 global.dbRegen = true;
+
 const database = require('./config/database');
 
 // ================ Database ================ \\
 
 database.connect(initialiseDatabase);
 
+/**
+ * Drops all existing collections and initialise list of insertion Promise objects for fulfilment
+ */
 function initialiseDatabase() {
     const collections = ["users", "categories", "restaurants", "reviews"];
 
     const conn = mongoose.connection;
     const db = conn.db;
-
     const dropPromises = [];
 
     console.log("Dropping database");
@@ -33,14 +43,7 @@ function initialiseDatabase() {
             console.log(`DB drop failed: ${err}`);
         })
         .then(() => {
-            let indexPromises = [];
-
-            // indexPromises.push(db.collection('restaurants').createIndex({
-            //     name: 'text', categories: 'text', formattedAddress: 'text', description: 'text' },
-            //     {name: 'String Search Index', weights: {name: 20, categories: 10, formattedAddress: 15, description: 10}}));
-            indexPromises.push(db.collection('restaurants').createIndex({location: "2dsphere"}));
-
-            Promise.all(indexPromises).catch((err) => {
+            db.collection('restaurants').createIndex({location: "2dsphere"}).catch((err) => {
                 console.log(`Indexing failed: ${err}`);
             }).then(() => {
                 populateCollections(conn);
@@ -48,17 +51,26 @@ function initialiseDatabase() {
         });
 }
 
+/**
+ * Populates all four collections with the hard-coded test data in the db_populate file
+ * @param conn Mongoose connection object to keep DB connection alive
+ * @see app/db_populate
+ */
 function populateCollections(conn) {
     const insertPromises = [];
     console.log("Populating collections");
+
+    // Run the functions in the db_populate file, pass the promise array for Promise checking
     DatabasePopulation.populateFunction(insertPromises);
+
+    // Wait for all insertions to complete before continuing
     Promise.all(insertPromises)
         .catch((err) => {
             console.log(`Error on population: ${err}`)
         })
         .then(() => {
-            conn.close().catch(() => {
-                console.log("Unable to close connection");
+            conn.close().catch((err) => {
+                console.log(`Unable to close connection: ${err}`);
             });
         });
 }

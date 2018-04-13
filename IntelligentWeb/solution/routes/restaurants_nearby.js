@@ -1,17 +1,24 @@
+/**
+ * Returns a list of nearby restaurant to the client when a GMaps marker is dropped
+ * @author Will Garside
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const fs = require('fs');
 const Restaurant = mongoose.model('Restaurant');
-const async = require('async');
 router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
-//AJAX POSTs to '/restaurants-nearby', so relatively '/'
+/**
+ * Uses AJAX to receive the location chosen on the GMap and then aggregates the nearest restaurants by using geojson
+ * indexing. Returns the list in order of ascending distance
+ * AJAX POSTs to '/restaurants-nearby', so relatively '/'
+ */
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);
 

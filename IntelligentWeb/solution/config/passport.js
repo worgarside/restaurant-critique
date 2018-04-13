@@ -1,3 +1,9 @@
+/**
+ * Configuration for the Passport middleware
+ * Manages the user login sessions and verification
+ * @author Will Garside
+ */
+
 // ================ Middleware ================ \\
 
 const LocalStrategy = require('passport-local').Strategy;
@@ -6,7 +12,6 @@ const User = require('../app/models/user');
 // ================ Passport ================ \\
 
 module.exports = function (passport) {
-
     passport.use('login-local', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',

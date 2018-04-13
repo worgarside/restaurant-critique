@@ -1,3 +1,9 @@
+/**
+ * A file of hard-coded data for populating the database with test data.
+ * Run by the db_regen file as a one-time operation
+ * @author Will Garside, Greta Ramaneckaite
+ */
+
 // ================ Middleware & Constants ================ \\
 
 const mongoose = require('mongoose');
@@ -25,6 +31,10 @@ const ID = {
 
 // ================ Database ================ \\
 
+/**
+ * Calls each Schema's population function
+ * @param insertPromises An array of Promises which all have to be fulfilled before disconnecting from the database
+ */
 const populateFunction = function populateDatabase(insertPromises) {
     populateCategories(insertPromises);
     populateUsers(insertPromises);
@@ -32,7 +42,10 @@ const populateFunction = function populateDatabase(insertPromises) {
     populateReviews(insertPromises);
 };
 
-
+/**
+ * Populates the 'Categories' collection of the database
+ * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ */
 function populateCategories(insertPromises) {
     const categories = [
         'African', 'American', 'Arabic', 'Argentinian', 'Asian', 'Australian', 'Balti', 'Bangladeshi', 'Bar',
@@ -53,6 +66,10 @@ function populateCategories(insertPromises) {
     }
 }
 
+/**
+ * Populates the 'Users' collection in the database with test data
+ * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ */
 function populateUsers(insertPromises) {
     insertPromises.push(new User({
         _id: 'copeyrufus@gmail.com',
@@ -103,6 +120,10 @@ function populateUsers(insertPromises) {
     }).save());
 }
 
+/**
+ * Populates the 'Restaurants' collection of the database with varied test data
+ * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ */
 function populateRestaurants(insertPromises) {
     insertPromises.push(new Restaurant({
         _id: mongoose.Types.ObjectId(ID["Aslan's"]),
@@ -743,6 +764,10 @@ function populateRestaurants(insertPromises) {
     }).save());
 }
 
+/**
+ * Populate the 'Reviews' collection of the database with test data
+ * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ */
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d09'),
@@ -877,7 +902,7 @@ function populateReviews(insertPromises) {
         _id: mongoose.Types.ObjectId('5aad98377888995220605d18'),
         restaurantID: ID["Las Iguanas"],
         title: 'Expensive food',
-        body: 'The food was nice, but very expensive. Would only go out on a special ocasion to taste some Latin American cuisine',
+        body: 'The food was nice, but very expensive. Would only go out on a special occasion to taste some Latin American cuisine',
         author: {
             forename: 'Will',
             surname: 'Garside',
