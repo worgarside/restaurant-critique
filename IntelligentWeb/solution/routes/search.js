@@ -83,7 +83,7 @@ function applyWeightings(restaurants, query) {
 
         restaurant.weight = weight;
     }
-    return restaurants.sort(compare);
+    return restaurants.sort(compareRestaurants);
 }
 
 /**
@@ -92,7 +92,7 @@ function applyWeightings(restaurants, query) {
  * @param b The second Restaurant to be compared
  * @returns {number} An integer indicative of the comparison, allows correct sorting
  */
-function compare(a, b) {
+function compareRestaurants(a, b) {
     const weightA = a.weight;
     const weightB = b.weight;
 
