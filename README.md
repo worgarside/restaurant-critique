@@ -7,29 +7,21 @@
 
 ### Task List
 - [x] Database creation 
-- [ ] Restaurant Object
+- [x] Restaurant Object
 - [x] User creation/signup
 - [x] Login management
 - [ ] Administrator privileges
-- [ ] Dynamic restaurant view page
+- [x] Dynamic restaurant view page
 - [ ] Review input and structure
-- [ ] Restaurant search (keywords, tags, distance)
-- [ ] Map page
+- [x] Restaurant search (keywords, tags, distance)
+- [x] Map page
 - [ ] Progressive App/Responsive Design?
 - [ ] Camera integration
-- [ ] Basic pages (home, contact, about, accessibility)
-- [ ] Site navigation/UML model
+- [x] Basic pages (home, contact, about, accessibility)
+- [x] Site navigation/UML model
 - [ ] 'Owner level' users & verification
 - [ ] Category page, categorisation of restaurants
 
 ### Installation & Running
 
-To install the app, `cd` into the `solution` directory. Then run these commands in order:
-```
-npm install
-mongod --dbpath  "./database"     / OR /          initdb
-initdb                            / OR /          node bin/db_regen
-nodemon                           / OR /          run
-```
-
-Alternatively, replace `mongod` with the absolute path to *mongod.exe*
+To run the app, either run `bin/www` or use `nodemon` in the root (solution) directory

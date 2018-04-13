@@ -1,17 +1,17 @@
 {
   "source": {
     "include": [
-      "solution/app",
-      "solution/config",
-      "solution/public/javascripts",
-      "solution/routes",
-      "solution/app.js",
-      "solution/db_regen.js"
+      "IntelligentWeb/solution/app",
+      "IntelligentWeb/solution/config",
+      "IntelligentWeb/solution/public/javascripts",
+      "IntelligentWeb/solution/routes",
+      "IntelligentWeb/solution/app.js",
+      "IntelligentWeb/solution/db_regen.js"
     ],
     "exclude": [
-      "solution/config/jsdoc.json",
-      "solution/node_modules",
-      "solution/Compile Less.ahk"
+      "IntelligentWeb/solution/config/jsdoc.json",
+      "IntelligentWeb/solution/node_modules",
+      "IntelligentWeb/solution/Compile Less.ahk"
     ],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"

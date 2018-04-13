@@ -34,13 +34,9 @@ const upload = multer({storage: storage});
 // ================ POST Method ================ \\
 
 /**
- * Uses passport to authenticate user and sign them in
- *
- * @function upload.single,
- *      Uploads a single image with multer
- * @function passport.authenticate
- *      Uses passport middleware to authenticate the user and create a user session
- *      @see config/passport.js
+ * Uses passport middleware to authenticate the user and create a user session after signing in
+ * @see config/passport.js
+ * @function addUser
  */
 router.post('/add_user', upload.single('displayPicture'), passport.authenticate('signup-local', {
     successRedirect: '/',

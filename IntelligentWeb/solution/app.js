@@ -86,6 +86,6 @@ app.use((err, req, res) => {
     res.render('error');
 });
 
-console.log('\033c'); //Clears terminal
+// console.log('\033c'); //Clears terminal
 console.log('\x1b[32m%s\x1b[0m', `App Started @ ${appRoot}`);
 module.exports = app;

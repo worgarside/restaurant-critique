@@ -18,6 +18,7 @@ router.use(bodyParser.urlencoded({extended: true}));
  * Uses AJAX to receive the location chosen on the GMap and then aggregates the nearest restaurants by using geojson
  * indexing. Returns the list in order of ascending distance
  * AJAX POSTs to '/restaurants-nearby', so relatively '/'
+ * @function getNearbyRestaurants
  */
 router.post('/', (req, res) => {
     console.log(`POST received ${JSON.stringify(req.body)}`);

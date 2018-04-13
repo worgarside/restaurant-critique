@@ -28,7 +28,7 @@ function connect(nextFunction) {
         {dbName: database.name}
     )
         .then(() => {
-            console.log('\x1b[36m%s\x1b[0m', `Connected to mongodb+srv://${database.username}@${database.url}`);
+            // console.log('\x1b[36m%s\x1b[0m', `Connected to mongodb+srv://${database.username}@${database.url}`);
             if (nextFunction) {
                 nextFunction();
             }

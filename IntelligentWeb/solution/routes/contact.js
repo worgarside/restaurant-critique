@@ -17,6 +17,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 /**
  * Sends the support request and a confirmation email on the Contact form submission
+ * @function postContactForm
  */
 router.post('/', (req, res) => {
     sendSupportRequest(req);
