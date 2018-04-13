@@ -1,9 +1,19 @@
-function displaySearchResults(results) {
+/**
+ * search.js
+ * Client-side JS
+ * @author Rufus Cope, Will Garside
+ */
+
+/**
+ * Displays the list of search results on the page
+ * @param {Array} restaurants The array of results returned from the AJAX request
+ */
+function displaySearchResults(restaurants) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
-    if (results.length > 0) {
-        for (const [index, restaurant] of results.entries()) {
+    if (restaurants.length > 0) {
+        for (const [index, restaurant] of restaurants.entries()) {
             console.log();
             let restaurantContainer = document.createElement('div');
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
@@ -17,7 +27,11 @@ function displaySearchResults(results) {
     }
 }
 
-function displayNoResultsFound(){
+/**
+ * Displays a 'No results found' message to the User
+ * @returns {string} HTML to show no results were found
+ */
+function displayNoResultsFound() {
     return `
         <div class="row">
                 <div class="col">
@@ -26,6 +40,14 @@ function displayNoResultsFound(){
         </div> `;
 }
 
+/**
+ * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
+ * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
+ * @param {Restaurant} restaurant The Restaurant being previewed
+ * @param {Integer} index The number the Restaurant is on the page, used for setting button IDs
+ * @returns {string} The generated HTML to be appended to the page
+ * @author Will Garside
+ */
 function getRestaurantDiv(restaurant, index) {
     console.log(`${restaurant.name} @ I${index}: S${restaurant.score}`);
     const htmlStart = `
@@ -139,6 +161,13 @@ function getRestaurantDiv(restaurant, index) {
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
 
+/**
+ * Image slideshow navigation using buttons on page
+ * JQuery selectors have to be re-used due to the changing classes of the images
+ * @param {Integer} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * getting mixed up
+ * @author Will Garside
+ */
 function initSlideshow(value) {
     const btnNext = $(`#button-next-${value}`);
     const btnPrev = $(`#button-prev-${value}`);
@@ -176,15 +205,21 @@ function initSlideshow(value) {
 }
 
 
-$(function() {
-    const query = sessionStorage.getItem("query");
-    if (query!= null ){
+$(() => {
+    const query = sessionStorage.getItem('query');
+    if (query != null) {
         search(query);
         $('#search-input').val(query);
-        sessionStorage.removeItem("query");
-}});
+        sessionStorage.removeItem('query');
+    }
+});
 
-function search(query){
+/**
+ * Sends an AJAX POST request to the server to get the User's search results
+ * @param {String} query The User's search query
+ * @see routes/search.js
+ */
+function search(query) {
     const searchQueryData = JSON.stringify({searchQueryData: query});
     $.ajax({
         url: '/search',
@@ -201,9 +236,13 @@ function search(query){
 }
 
 
-
-$("#searchbutton").click((e) => {
+/**
+ * Calls the search function when the button is clicked
+ */
+$("#search-button").click((e) => {
     e.preventDefault();
     const query = $('#search-input').val();
     search(query);
 });
+
+console.log('Loaded search.js');

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: public/javascripts/restaurant.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,58 +17,99 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: public/javascripts/restaurant.js</h1>
 
     
 
 
 
     
-
-
-    <h3>RestaurantCritique 1.0</h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1><em>COM3504 - The Intelligent Web</em> Assignment</h1><h3>Team Members:</h3><ul>
-<li>Will Garside - <a href="mailto:worgarside@gmail.com">worgarside@gmail.com</a></li>
-<li>Greta Ramaneckaite - <a href="mailto:gramaneckaite1@sheffield.ac.uk">gramaneckaite1@sheffield.ac.uk</a></li>
-<li>Rufus Cope - <a href="mailto:rcope2@sheffield.ac.uk">rcope2@sheffield.ac.uk</a></li>
-</ul>
-<h3>Task List</h3><ul>
-<li>[x] Database creation </li>
-<li>[x] Restaurant Object</li>
-<li>[x] User creation/signup</li>
-<li>[x] Login management</li>
-<li>[ ] Administrator privileges</li>
-<li>[x] Dynamic restaurant view page</li>
-<li>[ ] Review input and structure</li>
-<li>[x] Restaurant search (keywords, tags, distance)</li>
-<li>[x] Map page</li>
-<li>[ ] Progressive App/Responsive Design?</li>
-<li>[ ] Camera integration</li>
-<li>[x] Basic pages (home, contact, about, accessibility)</li>
-<li>[x] Site navigation/UML model</li>
-<li>[ ] 'Owner level' users &amp; verification</li>
-<li>[ ] Category page, categorisation of restaurants</li>
-</ul>
-<h3>Installation &amp; Running</h3><p>To run the app, either run <code>bin/www</code> or use <code>nodemon</code> in the root (solution) directory</p></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * restaurant.js
+ * Client-side JS
+ * @author Greta Ramaneckaite, Will Garside
+ * @param {Array} coordinates
+ */
+
+$(() => {
+    initMainSlideshow();
+});
+
+/**
+ * Called by GMaps script after map is loaded
+ * Initialises Google Map V3 attributes and markers
+ */
+function initMap() {
+    const currentLocation = {lat: coordinates[1], lng: coordinates[0]};
+
+    const styles = [{
+        "featureType": "poi.business",
+        "stylers": [
+            {"visibility": "off"}
+        ]
+    }];
+
+    map = new google.maps.Map($('#restaurant-current-map')[0], {
+        zoom: 14,
+        center: currentLocation,
+        styles: styles
+    });
+
+    userMarker = new google.maps.Marker({
+        map: map,
+        draggable: false,
+        animation: google.maps.Animation.DROP,
+        position: currentLocation
+    });
+
+    google.maps.event.addListener(userMarker, 'dragend', () => {
+        lat = userMarker.getPosition().lat();
+        lng = userMarker.getPosition().lng();
+        map.setCenter({lat: lat, lng: lng});
+    });
+}
+
+/**
+ * Image slideshow navigation using buttons on page
+ * JQuery selectors have to be re-used due to the changing classes of the images
+ * @author Will Garside
+ */
+function initMainSlideshow() {
+    const btnNext = $(`#button-next-rest`);
+    const btnPrev = $(`#button-prev-rest`);
+
+    $(`.slide-rest`).first().addClass(`current-rest`);
+    $(`.slide-rest`).hide();
+    $(`.current-rest`).show();
+
+    btnNext.click(() => {
+        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
+        if ($(`.previous-rest`).is(':last-child')) {
+            $(`.slide-rest`).first().addClass(`current-rest`);
+        } else {
+            $(`.previous-rest`).next().addClass(`current-rest`);
+        }
+        $(`.previous-rest`).removeClass(`previous-rest`);
+        $(`.slide-rest`).fadeOut();
+        $(`.current-rest`).fadeIn();
+    });
+
+    btnPrev.click(() => {
+        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
+        if ($(`.previous-rest`).is(':first-child')) {
+            $(`.slide-rest`).last().addClass(`current-rest`);
+        } else {
+            $(`.previous-rest`).prev().addClass(`current-rest`);
+        }
+        $(`.previous-rest`).removeClass(`previous-rest`);
+        $(`.slide-rest`).fadeOut();
+        $(`.current-rest`).fadeIn();
+    });
+}</code></pre>
+        </article>
     </section>
-
-
 
 
 

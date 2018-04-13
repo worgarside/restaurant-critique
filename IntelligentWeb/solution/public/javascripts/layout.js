@@ -1,3 +1,10 @@
+/**
+ * layout.js
+ * Client-side JS
+ * @author Will Garside
+ * @param {Boolean} userLoggedIn login flag passed from server
+ */
+
 $(() => {
     if (!userLoggedIn) {
         setLoginFormPosition();
@@ -12,18 +19,6 @@ $('#btn-login').on('click', () => {
 });
 
 if (!userLoggedIn) {
-    function setLoginFormPosition() {
-        const form = $('#login-form');
-        const btn = $('#btn-login');
-        const btn_width = btn.outerWidth(true);
-        const btn_left = btn.position()['left'];
-        const btn_right = btn_left + btn_width;
-        const form_width = form.outerWidth(true);
-
-        const form_right = $(document).width() - (btn_right + ((form_width - btn_width) / 2));
-
-        form.css({right: form_right});
-    }
 
     $(document)
         .mousedown((e) => {
@@ -44,6 +39,22 @@ if (!userLoggedIn) {
                 }
             }
         });
+}
+
+/**
+ * Sets the location of the floating login form relative to the login button's location
+ */
+function setLoginFormPosition() {
+    const form = $('#login-form');
+    const btn = $('#btn-login');
+    const btn_width = btn.outerWidth(true);
+    const btn_left = btn.position()['left'];
+    const btn_right = btn_left + btn_width;
+    const form_width = form.outerWidth(true);
+
+    const form_right = $(document).width() - (btn_right + ((form_width - btn_width) / 2));
+
+    form.css({right: form_right});
 }
 
 console.log('Loaded layout.js');

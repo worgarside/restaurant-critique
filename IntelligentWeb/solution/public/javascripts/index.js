@@ -1,9 +1,18 @@
+/**
+ * index.js
+ * Client-side JS
+ * @author Will Garside, Rufus Cope
+ */
+
 $(() => {
     checkNavPos();
 });
 
 // ----------- Logo ----------- \\
 
+/**
+ * Checks the vertical position of the NavBar for the mini logo animation
+ */
 function checkNavPos() {
     const elementOffset = $('.navbar').offset().top;
     const topOfWindow = $(window).scrollTop();
@@ -19,12 +28,11 @@ function checkNavPos() {
     }
 }
 
-// if the image in the window of browser when scrolling the page, show that image
 $(window).scroll(() => {
     checkNavPos();
 });
 
-$("#searchbutton").click((e) => {
+$("#search-button").click((e) => {
     e.preventDefault();
     sessionStorage.setItem("query", $('#search-input').val());
     window.location.replace("/search");

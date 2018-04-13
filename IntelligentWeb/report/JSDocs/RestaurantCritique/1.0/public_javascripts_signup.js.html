@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: public/javascripts/signup.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,58 +17,65 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: public/javascripts/signup.js</h1>
 
     
 
 
 
     
-
-
-    <h3>RestaurantCritique 1.0</h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1><em>COM3504 - The Intelligent Web</em> Assignment</h1><h3>Team Members:</h3><ul>
-<li>Will Garside - <a href="mailto:worgarside@gmail.com">worgarside@gmail.com</a></li>
-<li>Greta Ramaneckaite - <a href="mailto:gramaneckaite1@sheffield.ac.uk">gramaneckaite1@sheffield.ac.uk</a></li>
-<li>Rufus Cope - <a href="mailto:rcope2@sheffield.ac.uk">rcope2@sheffield.ac.uk</a></li>
-</ul>
-<h3>Task List</h3><ul>
-<li>[x] Database creation </li>
-<li>[x] Restaurant Object</li>
-<li>[x] User creation/signup</li>
-<li>[x] Login management</li>
-<li>[ ] Administrator privileges</li>
-<li>[x] Dynamic restaurant view page</li>
-<li>[ ] Review input and structure</li>
-<li>[x] Restaurant search (keywords, tags, distance)</li>
-<li>[x] Map page</li>
-<li>[ ] Progressive App/Responsive Design?</li>
-<li>[ ] Camera integration</li>
-<li>[x] Basic pages (home, contact, about, accessibility)</li>
-<li>[x] Site navigation/UML model</li>
-<li>[ ] 'Owner level' users &amp; verification</li>
-<li>[ ] Category page, categorisation of restaurants</li>
-</ul>
-<h3>Installation &amp; Running</h3><p>To run the app, either run <code>bin/www</code> or use <code>nodemon</code> in the root (solution) directory</p></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * signup.js
+ * Client-side JS
+ * @author Will Garside
+ */
+
+$('#display-picture').click(() => {
+    $("#display-picture-upload").click();
+});
+
+/**
+ * Shows a preview of the User's display image on the page after it is uploaded
+ * @param {HTMLElement} imageInput The HTML element which alows image submission
+ */
+function previewImage(imageInput) {
+    if (imageInput.files &amp;&amp; imageInput.files[0]) {
+        const imageURL = window.URL.createObjectURL(imageInput.files[0]);
+        $('#display-picture').attr('src', imageURL);
+    }
+}
+
+$('#display-picture-upload').change(function () {
+    previewImage(this);
+});
+
+/**
+ * Uses JS Validation to validate the User's form pre-submission
+ * @function validateSignUpForm
+ */
+$('#signup-form').validate({
+    rules: {
+        password: {
+            minlength: 8
+        },
+        'password-confirm': {
+            minlength: 8,
+            equalTo: "#password"
+        }
+    },
+    messages: {
+        'password-confirm': {
+            equalTo: 'Passwords do not match'
+        }
+    }
+});
+
+console.log('Loaded signup.js');
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

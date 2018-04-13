@@ -1,3 +1,9 @@
+/**
+ * restaurants_nearby.js
+ * Client-side JS
+ * @author Will Garside
+ */
+
 let lat, lng, map, userMarker;
 
 $(() => {
@@ -18,6 +24,10 @@ $(() => {
     }
 });
 
+/**
+ * Function to get Users location from browser geolocation after they allow it
+ * @param {Boolean} allowed Flag to signify whether the User has allowed geolocation or not
+ */
 function allowLocation(allowed) {
     if (allowed) {
         const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
@@ -38,6 +48,10 @@ function allowLocation(allowed) {
     $('#restaurant-overlay').css('display', 'none');
 }
 
+/**
+ * Called by GMaps script after map is loaded
+ * Initialises Google Map V3 attributes
+ */
 function initMap() {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address': postcode}, (results, status) => {
@@ -46,12 +60,15 @@ function initMap() {
             lng = results[0].geometry.location.lng();
             createMap();
         } else {
-            //TODO: remove this
+            //TODO: remove/substitute this
             alert("Geocode error: " + status);
         }
     });
 }
 
+/**
+ * Creates the map on the page, with the User at the centre and with a marker to show their location
+ */
 function createMap() {
     const currentLocation = {lat: lat, lng: lng};
     console.log(`Creating the map @ ${currentLocation.lat}, ${currentLocation.lng}`);
@@ -115,6 +132,10 @@ function createMap() {
     updateList();
 }
 
+/**
+ * Sends an AJAX POST request to the server to get a list of nearby Restaurants
+ * @see routes/restaurants_nearby.js
+ */
 function updateList() {
     const coordinates = JSON.stringify({lat: lat, lng: lng});
     console.log(`Sending ${coordinates} to AJAX POST`);
@@ -126,7 +147,7 @@ function updateList() {
         type: 'POST',
         success: (result) => {
             console.log('AJAX Succeeded');
-            processData(result);
+            processRestaurants(result);
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -134,7 +155,13 @@ function updateList() {
     });
 }
 
-function processData(results) {
+/**
+ * Process the returned list of restaurants to create HTML for them and append it to the page
+ * Also adds their locations to the map with markers and info windows
+ * @param {Array} results
+ * @see updateList()
+ */
+function processRestaurants(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
@@ -146,7 +173,7 @@ function processData(results) {
     for (const [index, restaurant] of results.entries()) {
         if (restaurant.published) {
             let restaurantContainer = document.createElement('div');
-            restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
+            restaurantContainer.innerHTML = createRestaurantPreview(restaurant, index);
             restaurantListDOM.appendChild(restaurantContainer);
             initSlideshow(index);
 
@@ -184,7 +211,15 @@ function processData(results) {
     }
 }
 
-function getRestaurantDiv(restaurant, index) {
+/**
+ * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
+ * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
+ * @param {Restaurant} restaurant The Restaurant being previewed
+ * @param {Integer} index The number the Restaurant is on the page, used for setting button IDs
+ * @returns {string} The generated HTML to be appended to the page
+ * @author Will Garside
+ */
+function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
@@ -295,6 +330,13 @@ function getRestaurantDiv(restaurant, index) {
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
 
+/**
+ * Image slideshow navigation using buttons on page
+ * JQuery selectors have to be re-used due to the changing classes of the images
+ * @param {integer} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * getting mixed up
+ * @author Will Garside
+ */
 function initSlideshow(value) {
     const btnNext = $(`#button-next-${value}`);
     const btnPrev = $(`#button-prev-${value}`);
@@ -329,6 +371,10 @@ function initSlideshow(value) {
     });
 }
 
+/**
+ * Auto-scrolls to Restaurant preview from the link in the map infowindow
+ * @param {Integer} index The index of the Restaurant
+ */
 function scrollToRestaurant(index) {
     $('#nearby-map').addClass('map-shrink');
 

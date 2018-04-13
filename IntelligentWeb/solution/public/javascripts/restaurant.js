@@ -1,7 +1,18 @@
+/**
+ * restaurant.js
+ * Client-side JS
+ * @author Greta Ramaneckaite, Will Garside
+ * @param {Array} coordinates
+ */
+
 $(() => {
     initMainSlideshow();
 });
 
+/**
+ * Called by GMaps script after map is loaded
+ * Initialises Google Map V3 attributes and markers
+ */
 function initMap() {
     const currentLocation = {lat: coordinates[1], lng: coordinates[0]};
 
@@ -32,7 +43,12 @@ function initMap() {
     });
 }
 
-function initMainSlideshow(){
+/**
+ * Image slideshow navigation using buttons on page
+ * JQuery selectors have to be re-used due to the changing classes of the images
+ * @author Will Garside
+ */
+function initMainSlideshow() {
     const btnNext = $(`#button-next-rest`);
     const btnPrev = $(`#button-prev-rest`);
 
@@ -40,14 +56,11 @@ function initMainSlideshow(){
     $(`.slide-rest`).hide();
     $(`.current-rest`).show();
 
-    // noinspection JSJQueryEfficiency
     btnNext.click(() => {
-        console.log('next');
         $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
         if ($(`.previous-rest`).is(':last-child')) {
             $(`.slide-rest`).first().addClass(`current-rest`);
-        }
-        else {
+        } else {
             $(`.previous-rest`).next().addClass(`current-rest`);
         }
         $(`.previous-rest`).removeClass(`previous-rest`);
@@ -56,12 +69,10 @@ function initMainSlideshow(){
     });
 
     btnPrev.click(() => {
-        console.log('prev');
         $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
         if ($(`.previous-rest`).is(':first-child')) {
             $(`.slide-rest`).last().addClass(`current-rest`);
-        }
-        else {
+        } else {
             $(`.previous-rest`).prev().addClass(`current-rest`);
         }
         $(`.previous-rest`).removeClass(`previous-rest`);

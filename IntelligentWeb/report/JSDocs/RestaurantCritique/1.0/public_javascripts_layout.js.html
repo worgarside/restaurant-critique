@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: public/javascripts/layout.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,58 +17,78 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: public/javascripts/layout.js</h1>
 
     
 
 
 
     
-
-
-    <h3>RestaurantCritique 1.0</h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1><em>COM3504 - The Intelligent Web</em> Assignment</h1><h3>Team Members:</h3><ul>
-<li>Will Garside - <a href="mailto:worgarside@gmail.com">worgarside@gmail.com</a></li>
-<li>Greta Ramaneckaite - <a href="mailto:gramaneckaite1@sheffield.ac.uk">gramaneckaite1@sheffield.ac.uk</a></li>
-<li>Rufus Cope - <a href="mailto:rcope2@sheffield.ac.uk">rcope2@sheffield.ac.uk</a></li>
-</ul>
-<h3>Task List</h3><ul>
-<li>[x] Database creation </li>
-<li>[x] Restaurant Object</li>
-<li>[x] User creation/signup</li>
-<li>[x] Login management</li>
-<li>[ ] Administrator privileges</li>
-<li>[x] Dynamic restaurant view page</li>
-<li>[ ] Review input and structure</li>
-<li>[x] Restaurant search (keywords, tags, distance)</li>
-<li>[x] Map page</li>
-<li>[ ] Progressive App/Responsive Design?</li>
-<li>[ ] Camera integration</li>
-<li>[x] Basic pages (home, contact, about, accessibility)</li>
-<li>[x] Site navigation/UML model</li>
-<li>[ ] 'Owner level' users &amp; verification</li>
-<li>[ ] Category page, categorisation of restaurants</li>
-</ul>
-<h3>Installation &amp; Running</h3><p>To run the app, either run <code>bin/www</code> or use <code>nodemon</code> in the root (solution) directory</p></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * layout.js
+ * Client-side JS
+ * @author Will Garside
+ * @param {Boolean} userLoggedIn login flag passed from server
+ */
+
+$(() => {
+    if (!userLoggedIn) {
+        setLoginFormPosition();
+    }
+});
+
+// ----------- Login Form ----------- \\
+
+
+$('#btn-login').on('click', () => {
+    $('#login-form').fadeToggle();
+});
+
+if (!userLoggedIn) {
+
+    $(document)
+        .mousedown((e) => {
+            const form = $('#login-form');
+            const btn = $('#btn-login');
+            const loginWarning = $('#login-warning');
+
+            // check mouse loc isn't form, button or descendant of form
+            if (!form.is(e.target) &amp;&amp; !btn.is(e.target) &amp;&amp; !loginWarning.is(e.target) &amp;&amp; form.has(e.target).length === 0) {
+                form.fadeOut();
+            }
+
+        })
+        .keydown((e) => {
+            if (!userLoggedIn) {
+                if (e.keyCode === 27) { // escape key maps to keycode `27`
+                    $('#login-form').fadeOut();
+                }
+            }
+        });
+}
+
+/**
+ * Sets the location of the floating login form relative to the login button's location
+ */
+function setLoginFormPosition() {
+    const form = $('#login-form');
+    const btn = $('#btn-login');
+    const btn_width = btn.outerWidth(true);
+    const btn_left = btn.position()['left'];
+    const btn_right = btn_left + btn_width;
+    const form_width = form.outerWidth(true);
+
+    const form_right = $(document).width() - (btn_right + ((form_width - btn_width) / 2));
+
+    form.css({right: form_right});
+}
+
+console.log('Loaded layout.js');
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

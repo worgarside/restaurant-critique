@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: public/javascripts/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,58 +17,58 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: public/javascripts/index.js</h1>
 
     
 
 
 
     
-
-
-    <h3>RestaurantCritique 1.0</h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1><em>COM3504 - The Intelligent Web</em> Assignment</h1><h3>Team Members:</h3><ul>
-<li>Will Garside - <a href="mailto:worgarside@gmail.com">worgarside@gmail.com</a></li>
-<li>Greta Ramaneckaite - <a href="mailto:gramaneckaite1@sheffield.ac.uk">gramaneckaite1@sheffield.ac.uk</a></li>
-<li>Rufus Cope - <a href="mailto:rcope2@sheffield.ac.uk">rcope2@sheffield.ac.uk</a></li>
-</ul>
-<h3>Task List</h3><ul>
-<li>[x] Database creation </li>
-<li>[x] Restaurant Object</li>
-<li>[x] User creation/signup</li>
-<li>[x] Login management</li>
-<li>[ ] Administrator privileges</li>
-<li>[x] Dynamic restaurant view page</li>
-<li>[ ] Review input and structure</li>
-<li>[x] Restaurant search (keywords, tags, distance)</li>
-<li>[x] Map page</li>
-<li>[ ] Progressive App/Responsive Design?</li>
-<li>[ ] Camera integration</li>
-<li>[x] Basic pages (home, contact, about, accessibility)</li>
-<li>[x] Site navigation/UML model</li>
-<li>[ ] 'Owner level' users &amp; verification</li>
-<li>[ ] Category page, categorisation of restaurants</li>
-</ul>
-<h3>Installation &amp; Running</h3><p>To run the app, either run <code>bin/www</code> or use <code>nodemon</code> in the root (solution) directory</p></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * index.js
+ * Client-side JS
+ * @author Will Garside, Rufus Cope
+ */
+
+$(() => {
+    checkNavPos();
+});
+
+// ----------- Logo ----------- \\
+
+/**
+ * Checks the vertical position of the NavBar for the mini logo animation
+ */
+function checkNavPos() {
+    const elementOffset = $('.navbar').offset().top;
+    const topOfWindow = $(window).scrollTop();
+    const distance = (elementOffset - topOfWindow);
+    const showLogo = distance &lt; 1;
+
+    if (showLogo) {
+        $("#first-nav-item").stop().animate({'margin-left': '60px'});
+        $("#nav-logo-anim").stop().fadeIn();
+    } else {
+        $("#nav-logo-anim").stop().fadeOut();
+        $("#first-nav-item").stop().animate({'margin-left': '0'});
+    }
+}
+
+$(window).scroll(() => {
+    checkNavPos();
+});
+
+$("#search-button").click((e) => {
+    e.preventDefault();
+    sessionStorage.setItem("query", $('#search-input').val());
+    window.location.replace("/search");
+});
+
+console.log('Loaded index.js');</code></pre>
+        </article>
     </section>
-
-
 
 
 
