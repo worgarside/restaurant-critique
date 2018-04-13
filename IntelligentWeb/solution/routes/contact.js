@@ -17,6 +17,8 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 /**
  * Sends the support request and a confirmation email on the Contact form submission
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
  * @function postContactForm
  */
 router.post('/', (req, res) => {
@@ -27,7 +29,7 @@ router.post('/', (req, res) => {
 
 /**
  * Send the support request email to Restaurant Critique with request details
- * @param req The client request object containing the body of info
+ * @param {Object} req The client request object containing the body of info
  */
 function sendSupportRequest(req) {
     const to = 'worgarside.dev@gmail.com'; // This would be e.g. support@restaurantcritique.com
@@ -40,7 +42,7 @@ function sendSupportRequest(req) {
 
 /**
  * Sends an email to the user confirming their support request submission
- * @param req The client request object containing the body of info
+ * @param {Object} req The client request object containing the body of info
  */
 function sendConfirmationEmail(req) {
     const to = req.body.email;

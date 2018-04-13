@@ -17,10 +17,10 @@ const restaurantCritiqueAccount = {
 
 /**
  * Send an email with nodemailer and Gmail from the accouet defined above
- * @param to The recipient of the email
- * @param subject Email subject content
- * @param body The main body of the email
- * @param from The sender's name to be added to the email (e.g. 'Support Request', 'User Confirmation', etc.)
+ * @param {String} to The recipient of the email
+ * @param {String} subject Email subject content
+ * @param {String} body The main body of the email
+ * @param {String} from The sender's name to be added to the email (e.g. 'Support Request', 'User Confirmation', etc.)
  */
 function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`) {
     const transporter = nodemailer.createTransport({

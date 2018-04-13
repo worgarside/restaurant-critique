@@ -154,7 +154,7 @@ RestaurantSchema.pre('save', function (next) {
 
 /**
  * Send a confirmation email to the creator upon Restaurant creation. Uses nodemailer configuration template
- * @param restaurant: the Restaurant object which has been created
+ * @param {Restaurant} restaurant: the Restaurant object which has been created
  */
 function emailCreator(restaurant) {
     const to = restaurant.creator._id;

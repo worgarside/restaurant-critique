@@ -53,7 +53,7 @@ function initialiseDatabase() {
 
 /**
  * Populates all four collections with the hard-coded test data in the db_populate file
- * @param conn Mongoose connection object to keep DB connection alive
+ * @param {mongoose.connection} conn Mongoose connection object to keep DB connection alive
  * @see app/db_populate.js
  */
 function populateCollections(conn) {

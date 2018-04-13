@@ -1,12 +1,6 @@
 {
   "source": {
     "include": [
-      "IntelligentWeb/solution/app",
-      "IntelligentWeb/solution/config",
-      "IntelligentWeb/solution/public/javascripts",
-      "IntelligentWeb/solution/routes",
-      "IntelligentWeb/solution/app.js",
-      "IntelligentWeb/solution/db_regen.js"
     ],
     "exclude": [
       "IntelligentWeb/solution/config/jsdoc.json",

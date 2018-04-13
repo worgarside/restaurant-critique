@@ -57,8 +57,9 @@ UserSchema.pre('save', function (next) {
 
 /**
  * A function to validate the user password when they are logging in or changing their password
- * @param password The plaintext password that has been entered for validation
- * @returns {*} Boolean value for password validity
+ * @param password {String} The plaintext password that has been entered for validation
+ * @returns {Boolean} Boolean value for password validity
+ * @function validPassword
  */
 UserSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
@@ -66,8 +67,8 @@ UserSchema.methods.validPassword = function (password) {
 
 /**
  * Uses the bcrypt middleware to slat and hash the User's password
- * @param password Plaintext password to be salted and hashed
- * @returns {*} The salted and hashed value of the password
+ * @param {String} password Plaintext password to be salted and hashed
+ * @returns {String} The salted and hashed value of the password
  */
 function generateHash(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -76,7 +77,7 @@ function generateHash(password) {
 /**
  * Sends a verification email to the user when they sign up to ensure email legitimacy and remove span
  * Again, uses nodemailer configuration template
- * @param user The User who has requested or requires a verification email
+ * @param {User} user The User who has requested or requires a verification email
  */
 function sendVerificationEmail(user) {
     const to = user._id;

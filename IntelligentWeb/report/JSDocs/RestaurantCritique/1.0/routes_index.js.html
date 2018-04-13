@@ -73,6 +73,8 @@ router.get('/logout', (req, res) => {
 
 /**
  * Send the list of Category objects to the new restaurant page to add options to the Category picker
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
  * @function loadNewRestaurantPage
  */
 router.get('/restaurant/new', (req, res) => {
@@ -97,6 +99,8 @@ router.get('/restaurant/new', (req, res) => {
 /**
  * Dynamically load the Restaurant information when the URL is loaded
  * Send the Restaurant's Review objects to the client as well for dynamic display
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with restaurant info
  * @function loadRestaurantPage
  */
 router.get('/restaurant/:url', (req, res) => {
@@ -147,6 +151,8 @@ router.get('/signup', (req, res) => {
  * Dynamic URL routing for verifying Users when they click on the link in the verification email
  * Whe the page is loaded, the verification flag is updated in the database and the hash is removed from the User
  * If the hash is not in the database, the User is shown an error
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
  * @function verifyUser
  */
 router.get('/verify-user/:hash', (req, res) => {
@@ -179,6 +185,9 @@ router.get('/verify-user/:hash', (req, res) => {
 /**
  * When the User attempts to log in, the Passport configuration ensures that their password is correct and starts a
  * User login session
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
+ * @param {function} next The next step in running the server
  * @function userLogin
  */
 router.post('/login', (req, res, next) => {
@@ -210,13 +219,13 @@ module.exports = router;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#populateCategories">populateCategories</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#sendVerificationEmail">sendVerificationEmail</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCategories">populateCategories</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#sendVerificationEmail">sendVerificationEmail</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 13 2018 19:15:06 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Apr 13 2018 19:46:56 GMT+0100 (GMT Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

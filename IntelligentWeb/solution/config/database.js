@@ -18,8 +18,8 @@ const database = {
 
 /**
  * Connects to the remote database with login information and returns the database connection
- * @param nextFunction A function to be run after the database has been connected to
- * @returns {*} Mongoose connection Promise, with DB connection object after fulfillment
+ * @param {function} nextFunction A function to be run after the database has been connected to
+ * @returns {mongoose.connection} Mongoose connection Promise, with DB connection object after fulfillment
  */
 function connect(nextFunction) {
     // noinspection JSUnresolvedFunction - Parameters are correct for Mongoose connection

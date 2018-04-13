@@ -33,7 +33,7 @@ const ID = {
 
 /**
  * Calls each Schema's population function
- * @param insertPromises An array of Promises which all have to be fulfilled before disconnecting from the database
+ * @param {Array} insertPromises An array of Promises which all have to be fulfilled before disconnecting from the database
  */
 const populateFunction = function populateDatabase(insertPromises) {
     populateCategories(insertPromises);
@@ -44,7 +44,7 @@ const populateFunction = function populateDatabase(insertPromises) {
 
 /**
  * Populates the 'Categories' collection of the database
- * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateCategories(insertPromises) {
     const categories = [
@@ -68,7 +68,7 @@ function populateCategories(insertPromises) {
 
 /**
  * Populates the 'Users' collection in the database with test data
- * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateUsers(insertPromises) {
     insertPromises.push(new User({
@@ -122,7 +122,7 @@ function populateUsers(insertPromises) {
 
 /**
  * Populates the 'Restaurants' collection of the database with varied test data
- * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateRestaurants(insertPromises) {
     insertPromises.push(new Restaurant({
@@ -766,7 +766,7 @@ function populateRestaurants(insertPromises) {
 
 /**
  * Populate the 'Reviews' collection of the database with test data
- * @param insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
+ * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({

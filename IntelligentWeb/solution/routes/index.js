@@ -45,6 +45,8 @@ router.get('/logout', (req, res) => {
 
 /**
  * Send the list of Category objects to the new restaurant page to add options to the Category picker
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
  * @function loadNewRestaurantPage
  */
 router.get('/restaurant/new', (req, res) => {
@@ -69,6 +71,8 @@ router.get('/restaurant/new', (req, res) => {
 /**
  * Dynamically load the Restaurant information when the URL is loaded
  * Send the Restaurant's Review objects to the client as well for dynamic display
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with restaurant info
  * @function loadRestaurantPage
  */
 router.get('/restaurant/:url', (req, res) => {
@@ -119,6 +123,8 @@ router.get('/signup', (req, res) => {
  * Dynamic URL routing for verifying Users when they click on the link in the verification email
  * Whe the page is loaded, the verification flag is updated in the database and the hash is removed from the User
  * If the hash is not in the database, the User is shown an error
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
  * @function verifyUser
  */
 router.get('/verify-user/:hash', (req, res) => {
@@ -151,6 +157,9 @@ router.get('/verify-user/:hash', (req, res) => {
 /**
  * When the User attempts to log in, the Passport configuration ensures that their password is correct and starts a
  * User login session
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
+ * @param {function} next The next step in running the server
  * @function userLogin
  */
 router.post('/login', (req, res, next) => {

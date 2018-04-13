@@ -18,6 +18,8 @@ router.use(bodyParser.urlencoded({extended: true}));
  * Uses regex to search the Restaurants' 'searchable' attribute objects
  * Once matches have been found, the usable fields are projected to the client
  * Also adds a weight attribute for useful ordering
+ * @param {object} req Client request object with body of info
+ * @param {object} res Client response object to be sent with array of restaurants
  * @function submitSearchQuery
  */
 router.post('/', (req, res) => {
@@ -59,8 +61,8 @@ router.post('/', (req, res) => {
 /**
  * Applies a weighting to each Restaurant by evaluating the similarity between the search query and the Restaurant data
  * Weight is added as such: Query word in the name +8; word in the description +4; Matched category +2; In Address +1
- * @param restaurants Returned list of search-matched restaurants
- * @param query The User's search query
+ * @param {Array} restaurants Returned list of search-matched restaurants
+ * @param {String} query The User's search query
  */
 function applyWeightings(restaurants, query) {
     for (let restaurant of restaurants) {
@@ -88,8 +90,8 @@ function applyWeightings(restaurants, query) {
 
 /**
  * Comparison method for the restaurants, called by the sort method
- * @param a The first Restaurant to be compared
- * @param b The second Restaurant to be compared
+ * @param a {Restaurant} The first Restaurant to be compared
+ * @param b {Restaurant} The second Restaurant to be compared
  * @returns {number} An integer indicative of the comparison, allows correct sorting
  */
 function compareRestaurants(a, b) {
