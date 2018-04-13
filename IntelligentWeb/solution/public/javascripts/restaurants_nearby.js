@@ -253,6 +253,7 @@ function getRestaurantDiv(restaurant, index) {
         `;
     }
 
+    //TODO: only show top 5 images on nearby page?
     let htmlSlideshow = `
                     </div>
                 </div>
@@ -307,8 +308,7 @@ function initSlideshow(value) {
         $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
         if ($(`.previous-${value}`).is(':last-child')) {
             $(`.slide-${value}`).first().addClass(`current-${value}`);
-        }
-        else {
+        } else {
             $(`.previous-${value}`).next().addClass(`current-${value}`);
         }
         $(`.previous-${value}`).removeClass(`previous-${value}`);
@@ -320,8 +320,7 @@ function initSlideshow(value) {
         $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
         if ($(`.previous-${value}`).is(':first-child')) {
             $(`.slide-${value}`).last().addClass(`current-${value}`);
-        }
-        else {
+        } else {
             $(`.previous-${value}`).prev().addClass(`current-${value}`);
         }
         $(`.previous-${value}`).removeClass(`previous-${value}`);
