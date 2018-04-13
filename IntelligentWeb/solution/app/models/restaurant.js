@@ -81,7 +81,7 @@ RestaurantSchema = Schema({
         name: String,
         description: String,
         formattedAddress: String,
-        categories: String
+        categoryString: String
     }
 });
 
@@ -129,7 +129,11 @@ RestaurantSchema.pre('save', function (next) {
     this.searchable.name = this.name.replace(/[^\w\s]/, '');
     this.searchable.description = this.description.replace(/[^\w\s]/, '');
     this.searchable.formattedAddress = this.address.formattedAddress.replace(/[^\w\s]/, '');
-    this.searchable.all = `${this.searchable.name} ${this.searchable.description} ${this.searchable.formattedAddress}`;
+    this.searchable.categoryString = '';
+    for (category of this.categories){
+        this.searchable.categoryString += `${category.name} `;
+    }
+    this.searchable.all = `${this.searchable.name} ${this.searchable.description} ${this.searchable.formattedAddress} ${this.searchable.categoryString}`;
 
     next();
 });

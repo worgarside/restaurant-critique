@@ -13,15 +13,10 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 //AJAX POSTs to '/search', so relatively '/'
 router.post('/', (req, res) => {
-    console.log(`AJAX POST received: ${JSON.stringify(req.body)}`);
-
-    const searchQueryData = req.body.searchQueryData.replace(/[^\w\s]/, '');
-    console.log(`Searching for ${searchQueryData}`);
-
-    const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`;
-    const re = new RegExp(regexQuery, 'i');
-
-    console.log(`RegExp: ${re}`);
+    const searchQueryData = req.body.searchQueryData.replace(/[^\w\s]/, ''); // remove special chars
+    const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`; // split for regex AND
+    const re = new RegExp(regexQuery, 'i'); // turn to regex, case insensitive
+    console.log(`Searching with ${re}`);
 
     const restaurantPromise = Restaurant.aggregate(
         [
@@ -37,23 +32,16 @@ router.post('/', (req, res) => {
                     'images': 1,
                     'averageRating': 1,
                     'localUrl': 1,
-                    'score': {
-                        '$add': [
-                            {'$cond': [{'$in': [searchQueryData, {$split: ['$searchable.all', ' ']}]}, 5, 0]},
-                            // {'$cond': [{'$in': ['$description', {$split :[searchQueryData, ' ']}]}, 2, 0]},
-                            // {'$cond': [{'$in': ['$address.formattedAddress', {$split :[searchQueryData, ' ']}]}, 1, 0]}
-                        ]
-                    }
+                    'searchable': 1,
+                    'score': 1
                 }
-            },
-
-            {"$sort": {"score": -1}}
+            }
         ], (err, restaurants) => {
             if (err) {
                 console.log(`Error: ${err}`);
             }
 
-            const weightedRestaurants = applyWeightings(restaurants);
+            const weightedRestaurants = applyWeightings(restaurants, searchQueryData);
 
             res.send(weightedRestaurants);
         }
@@ -69,9 +57,49 @@ router.post('/', (req, res) => {
 
 });
 
-function applyWeightings(restaurants) {
-    // TODO: apply weighting: e.g. name = 5, description = 4, category = 3, formattedAddress = 3
-    return restaurants;
+function applyWeightings(restaurants, query) {
+    /*
+    * In the name +8
+    * In the description +4
+    * Matched category +2
+    * In Address +1
+    */
+
+    for (let restaurant of restaurants) {
+        let score = 0;
+
+        for (let word of query.split(' ')) {
+            if (word === '') continue;
+
+            if (restaurant.searchable.name.toLowerCase().includes(word.toLowerCase())) score += 8;
+
+            if (restaurant.searchable.description.toLowerCase().includes(word.toLowerCase())) score += 4;
+
+            for (const category of restaurant.categories) {
+                if (category.name.toLowerCase().includes(word.toLowerCase())) score += 2;
+            }
+
+            if (restaurant.searchable.formattedAddress.toLowerCase().includes(word.toLowerCase())) score += 1;
+        }
+
+        restaurant.score = score;
+    }
+
+    return restaurants.sort(compare);
 }
+
+function compare(a, b) {
+    const scoreA = a.score;
+    const scoreB = b.score;
+
+    if (scoreA < scoreB) {
+        return 1;
+    } else if (scoreA > scoreB) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
 
 module.exports = router;
