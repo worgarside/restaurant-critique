@@ -3,10 +3,9 @@ function displaySearchResults(results) {
     restaurantListDOM.innerHTML = null;
 
     if (results.length > 0) {
-        console.log(results.length);
         for (const [index, restaurant] of results.entries()) {
+            console.log();
             let restaurantContainer = document.createElement('div');
-            console.log(restaurant.name);
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
             restaurantListDOM.appendChild(restaurantContainer);
             initSlideshow(index);
@@ -16,8 +15,6 @@ function displaySearchResults(results) {
         restaurantContainer.innerHTML = displayNoResultsFound();
         restaurantListDOM.appendChild(restaurantContainer);
     }
-
-    console.log('HTML Updated');
 }
 
 function displayNoResultsFound(){
@@ -30,8 +27,7 @@ function displayNoResultsFound(){
 }
 
 function getRestaurantDiv(restaurant, index) {
-    console.log(`Getting restaurant ${restaurant.name} info @ index ${index}...`);
-    console.log(restaurant);
+    console.log(`${restaurant.name} @ I${index}: S${restaurant.score}`);
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
@@ -196,9 +192,7 @@ function search(query){
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (result) => {
-            console.log('AJAX Succeeded');
             displaySearchResults(result)
-
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -210,7 +204,6 @@ function search(query){
 
 $("#searchbutton").click((e) => {
     e.preventDefault();
-    console.log($('#search-input').val());
     const query = $('#search-input').val();
     search(query);
 });

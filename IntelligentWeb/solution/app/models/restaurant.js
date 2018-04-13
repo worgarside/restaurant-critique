@@ -1,6 +1,7 @@
 // ================ Middleware ================ \\
 
-const mongoose = require('mongoose'), Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const fs = require('fs');
 const Category = mongoose.model('Category');
 const CategorySchema = Category.schema;
@@ -9,13 +10,13 @@ const nodemailer = require(`${appRoot}/config/nodemailer`);
 // ================ Restaurant ================ \\
 
 RestaurantSchema = Schema({
-    name: {type: String, required: true, index: true},
+    name: {type: String, required: true},
     address: {
         line1: {type: String, required: true},
         line2: {type: String, trim: true},
         city: {type: String, trim: true},
         postcode: {type: String, trim: true, required: true},
-        formattedAddress: String,
+        formattedAddress: {type: String, searchable: true},
         latitude: {type: Number, min: -90, max: 90, default: 90},
         longitude: {type: Number, min: -180, max: 180, default: 180}
     },
@@ -30,7 +31,7 @@ RestaurantSchema = Schema({
     },
     localUrl: {type: String, unique: true},
     openingTimes: Array,
-    description: {type: String, trim: true, default: 'No description currently available.'},
+    description: {type: String, default: 'No description currently available.'},
     priceRange: {
         lower: Number,
         upper: Number,
@@ -40,7 +41,7 @@ RestaurantSchema = Schema({
             max: 5
         }
     },
-    categories: [CategorySchema],
+    categories: {type: [CategorySchema]},
     features: {
         alcohol: {name: {type: String, default: 'Alcohol'}, value: Boolean},
         americanExpress: {name: {type: String, default: 'Accepts American Express'}, value: Boolean},
@@ -61,11 +62,11 @@ RestaurantSchema = Schema({
         wheelchairAccessible: {name: {type: String, default: 'Wheelchair accessible'}, value: Boolean},
         wifi: {name: {type: String, default: 'Free WiFi'}, value: Boolean}
     },
-    creator: {
+    creator: { // These are of type User, but only some fields - db is not relational
         _id: {type: String, required: true},
         name: {first: String, last: String},
     },
-    owner: {
+    owner: { // These are of type User, but only some fields - db is not relational
         _id: String,
         name: {first: String, last: String}
     },
@@ -74,7 +75,14 @@ RestaurantSchema = Schema({
     images: {type: [String], default: []}, //TODO: only show top 5 images on nearby page?
     averageRating: {type: Number, min: 0, max: 5},
     published: {type: Boolean, default: true},
-    updatedAt: Date
+    updatedAt: Date,
+    searchable: {
+        all: String,
+        name: String,
+        description: String,
+        formattedAddress: String,
+        categories: String
+    }
 });
 
 RestaurantSchema.pre('save', function (next) {
@@ -117,6 +125,11 @@ RestaurantSchema.pre('save', function (next) {
     if (!dbRegen){
         emailCreator(this);
     }
+
+    this.searchable.name = this.name.replace(/[^\w\s]/, '');
+    this.searchable.description = this.description.replace(/[^\w\s]/, '');
+    this.searchable.formattedAddress = this.address.formattedAddress.replace(/[^\w\s]/, '');
+    this.searchable.all = `${this.searchable.name} ${this.searchable.description} ${this.searchable.formattedAddress}`;
 
     next();
 });

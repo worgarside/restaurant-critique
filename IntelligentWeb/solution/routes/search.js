@@ -15,45 +15,18 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.post('/', (req, res) => {
     console.log(`AJAX POST received: ${JSON.stringify(req.body)}`);
 
-    const searchQueryData = req.body.searchQueryData;
+    const searchQueryData = req.body.searchQueryData.replace(/[^\w\s]/, '');
     console.log(`Searching for ${searchQueryData}`);
 
-    //{description: {$regex: "/"+searchQueryData+"/i"}}
-    // Restaurant.find({ description : { $regex: '/'+se archQueryData+'/', $options: 'i' } })
-    //     .exec()
-    //     .then((restaurants) => {
-    //         console.log(`RESULTS: ${restaurants.length}`);
-    //         res.send(restaurants);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
+    const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`;
+    const re = new RegExp(regexQuery, 'i');
 
-
-    const re = new RegExp(searchQueryData, 'i');
-
-    // Restaurant.find().or([{name: {$regex: re}}, {description: {$regex: re}}])
-    //     .exec()
-    //     .then((restaurants) => {
-    //         console.log(`RESULTS: ${restaurants.length}`);
-    //         res.send(restaurants);
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
+    console.log(`RegExp: ${re}`);
 
     const restaurantPromise = Restaurant.aggregate(
         [
             {
-                "$match": {
-                    "$or": [
-                        // TODO make this more flexible (e.g. '187 west street' instead of '187, west street')
-                        {name: {$regex: re}},
-                        {description: {$regex: re}},
-                        {'address.formattedAddress': {$regex: re}},
-                        // {formattedAddress: {$regex: re}}
-                    ]
-                }
+                "$match": {'searchable.all': {$regex: re}},
             },
             {
                 "$project": {
@@ -63,8 +36,17 @@ router.post('/', (req, res) => {
                     'categories': 1,
                     'images': 1,
                     'averageRating': 1,
+                    'localUrl': 1,
+                    'score': {
+                        '$add': [
+                            {'$cond': [{'$in': [searchQueryData, {$split: ['$searchable.all', ' ']}]}, 5, 0]},
+                            // {'$cond': [{'$in': ['$description', {$split :[searchQueryData, ' ']}]}, 2, 0]},
+                            // {'$cond': [{'$in': ['$address.formattedAddress', {$split :[searchQueryData, ' ']}]}, 1, 0]}
+                        ]
+                    }
                 }
             },
+
             {"$sort": {"score": -1}}
         ], (err, restaurants) => {
             if (err) {
@@ -77,7 +59,6 @@ router.post('/', (req, res) => {
         }
     );
 
-
     restaurantPromise
         .then(() => {
             console.log('Return successful');
@@ -86,10 +67,9 @@ router.post('/', (req, res) => {
             console.log(`Restaurant aggregation failed: ${err}`);
         });
 
-
 });
 
-function applyWeightings(restaurants){
+function applyWeightings(restaurants) {
     // TODO: apply weighting: e.g. name = 5, description = 4, category = 3, formattedAddress = 3
     return restaurants;
 }
