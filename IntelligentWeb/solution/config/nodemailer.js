@@ -21,8 +21,14 @@ const restaurantCritiqueAccount = {
  * @param {String} subject Email subject content
  * @param {String} body The main body of the email
  * @param {String} from The sender's name to be added to the email (e.g. 'Support Request', 'User Confirmation', etc.)
+ * @param {*} nextFunction A function to be run after sending the email
  */
-function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`) {
+function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`, nextFunction=undefined) {
+    //'from' can be set to empty string to allow default value whilst still using the nextFunction param
+    if (from === ''){
+        from = `"Restaurant Critique" <no-reply@restaurantcritique.com>`
+    }
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -43,6 +49,10 @@ function sendEmail(to, subject, body, from = `"Restaurant Critique" <no-reply@re
             console.log(`Email error: ${err}`);
         } else {
             console.log(`Email sent to ${to} with subject '${subject}'`);
+        }
+
+        if (nextFunction) {
+            nextFunction();
         }
     });
 
