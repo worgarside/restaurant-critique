@@ -298,19 +298,19 @@ function createRestaurantPreview(restaurant, index) {
                             <div class="col">
                                 <div class="float-right">
                                     <div class="slideshow-wrapper">
-                                        <div class="slideshow">
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
+        htmlSlideshow += '<div class="slideshow">';
         for (const image of restaurant.images) {
             htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
             imageCount += 1;
         }
+        htmlSlideshow += "</div>";
     }
 
-    htmlSlideshow += "</div>";
 
     if (imageCount > 1) {
         htmlSlideshow += `

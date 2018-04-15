@@ -137,6 +137,7 @@ RestaurantSchema.pre('save', function (next) {
         emailCreator(this);
     }
 
+    // TODO add stemming and stoplist
     // Searchable data has all special characters removed
     this.searchable.name = this.name.replace(/[^\w\s]/, '');
     this.searchable.description = this.description.replace(/[^\w\s]/, '');

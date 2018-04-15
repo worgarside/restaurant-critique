@@ -23,7 +23,7 @@ router.use(bodyParser.urlencoded({extended: true}));
  * @function submitSearchQuery
  */
 router.post('/', (req, res) => {
-    const searchQueryData = req.body.searchQueryData.replace(/[^\w\s]/, ''); // remove special chars
+    const searchQueryData = req.body.searchQueryData.replace(/[^\w\\S ]/, ''); // remove special chars
     const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`; // split for regex AND
     const re = new RegExp(regexQuery, 'i'); // turn to regex, case insensitive
     console.log(`Searching with ${re}`);
@@ -53,9 +53,13 @@ router.post('/', (req, res) => {
 
             res.send(applyWeightings(restaurants, searchQueryData));
         }
-    ).catch((err) => {
-        console.log(`Restaurant aggregation failed: ${err}`);
-    });
+    )
+        .then(() => {
+            console.log('Return successful');
+        })
+        .catch((err) => {
+            console.log(`Restaurant aggregation failed: ${err}`);
+        });
 });
 
 /**
