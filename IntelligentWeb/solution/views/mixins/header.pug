@@ -18,12 +18,11 @@ block navbar
                 li.nav-item(style='margin-left: 60px;')
                     a.nav-link.nav-wide(href='/restaurants-nearby') Restaurants near Me
             li.nav-item
-                a.nav-link.nav-wide(href='/restaurant/new') Write a Review
+                a.nav-link.nav-wide(href='#') Write a Review
             li.nav-item
-                a.nav-link.nav-wide(href='/restaurant/new') Recommendations
+                a.nav-link.nav-wide(href='/restaurant/new') Add a Restaurant
 
         ul.navbar-nav.row
-            // TODO: could do with passing req.user to js directly
             if (!user)
                 script const userLoggedIn = false
                 li.nav-item
