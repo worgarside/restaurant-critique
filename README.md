@@ -24,4 +24,5 @@
 
 ### Installation & Running
 
+Install the app by running `npm i` in the root (solution) directory. This will install the necessary `node_modules`.
 To run the app, either run `bin/www` or use `nodemon` in the root (solution) directory
