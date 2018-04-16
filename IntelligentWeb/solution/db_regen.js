@@ -53,7 +53,7 @@ function initialiseDatabase() {
 
 /**
  * Populates all four collections with the hard-coded test data in the db_populate file
- * @param {mongoose.connection} conn Mongoose connection object to keep DB connection alive
+ * @param {Connection} conn Mongoose connection object to keep DB connection alive
  * @see app/db_populate.js
  */
 function populateCollections(conn) {
@@ -66,7 +66,10 @@ function populateCollections(conn) {
     // Wait for all insertions to complete before continuing
     Promise.all(insertPromises)
         .catch((err) => {
-            console.log(`Error on population: ${err}`)
+            // Categories can be duplicated if Restaurants save before Categories
+            if ((!err.errmsg.includes('duplicate key')) && (!err.errmsg.includes('categories'))){
+                console.log(`Error on population: ${err}`);
+            }
         })
         .then(() => {
             conn.close().catch((err) => {
