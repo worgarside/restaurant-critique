@@ -22,6 +22,10 @@ block content
                                     input#contact-email(type='text', name='email', placeholder='Your email' required)
                             .form-row
                                 .form-group.col
+                                    label(for='contact-reference') Reference Number
+                                    input.no-spinner#contact-reference(type='number', name='reference', placeholder='Reference')
+                            .form-row
+                                .form-group.col
                                     label(for='contact-message') Message
                                     textarea#contact-message(name='message', placeholder='Your message', required)
                             .form-row

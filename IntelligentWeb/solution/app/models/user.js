@@ -36,6 +36,7 @@ UserSchema = Schema({
         flag: {type: Boolean, default: false},
         hash: {type: String}
     },
+    supportRequests: {type: [{reference: Number, content: String}]},
     updatedAt: Date
 });
 

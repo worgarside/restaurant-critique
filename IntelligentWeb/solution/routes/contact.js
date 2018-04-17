@@ -9,7 +9,11 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+
 const nodemailer = require('../config/nodemailer');
+
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -22,19 +26,31 @@ router.use(bodyParser.urlencoded({extended: true}));
  * @function postContactForm
  */
 router.post('/', (req, res) => {
-    sendSupportRequest(req);
-    sendConfirmationEmail(req);
+    const reference = new Date().getTime();
+    sendSupportRequest(req,reference);
+    sendConfirmationEmail(req, reference);
+
+    User.findByIdAndUpdate(
+        req.body.email,
+        {$push: {'supportRequests': {reference: reference, content: req.body.message}}},
+        (err) => {
+            if (err) {
+                console.log(`Error: ${err}`);
+            }
+        });
+
     res.render('contact-submitted');
 });
 
 /**
  * Send the support request email to Restaurant Critique with request details
  * @param {Object} req The client request object containing the body of info
+ * @param {Number} reference The support request reference number
  */
-function sendSupportRequest(req) {
+function sendSupportRequest(req, reference) {
     const to = 'worgarside.dev@gmail.com'; // This would be e.g. support@restaurantcritique.com
     const subject = `Support Request: ${req.body.email}`;
-    const body = `<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p>`;
+    const body = `<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p><p>Ref: ${reference}</p>`;
     const from = `"${req.body.name}" <${req.body.email}>`;
 
     nodemailer.sendEmail(to, subject, body, from);
@@ -43,11 +59,12 @@ function sendSupportRequest(req) {
 /**
  * Sends an email to the user confirming their support request submission
  * @param {Object} req The client request object containing the body of info
+ * @param {Number} reference The support request reference number
  */
-function sendConfirmationEmail(req) {
+function sendConfirmationEmail(req, reference) {
     const to = req.body.email;
     const subject = 'Support Request Confirmation';
-    const body = `<p>Thank you for your email, we will reply as soon as possible.<p> <p>Restaurant Critique</p>`;
+    const body = `<p>Thank you for your email, we will reply as soon as possible.<p><p>Your unique reference ID is ${reference}</p><p>Restaurant Critique</p>`;
     const from = "'Restaurant Critique' <no-reply@restaurantcritique.com>";
 
     nodemailer.sendEmail(to, subject, body, from);
