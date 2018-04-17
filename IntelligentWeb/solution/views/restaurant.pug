@@ -139,7 +139,8 @@ block content
                         .col-8
                             .row
                                 .col-1
-                                    img(src=`/images/userImages/${review.author.displayImage}`, style='clip: rect(0px,20px,20px,0px); width: 30px; border-radius: 50%;')
+                                    // TODO must NOT have inline styling
+                                    img(src=`/images/userImages/${review.author.reducedID}`, style='clip: rect(0px,20px,20px,0px); width: 30px; border-radius: 50%;')
                                 .col
                                     h5
                                     | #{review.author.forename}
@@ -150,6 +151,7 @@ block content
                             .row
                                 .col
                                     .restaurant-stars
+                                        // TODO fix these to be pug and not hybrid code
                                         - const reviewRating = Math.round(review.restaurantRating)
                                         - for(var i = 0; i < reviewRating; i++)
                                             span.oi.oi-check.oi-star(aria-hidden='true', style='color: #e69200;')

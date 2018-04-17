@@ -77,8 +77,8 @@ function populateUsers(insertPromises) {
         name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
-        reviews: [],
-        displayImage: 'copeyrufus-gmail-com',
+        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19'],
+        reducedID: 'copeyrufus-gmail-com',
         restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"]]}
     }).save());
 
@@ -88,8 +88,8 @@ function populateUsers(insertPromises) {
         name: {first: 'Greta', last: 'Ramaneckaite'},
         ageCategory: 2,
         postcode: 'S10 2FL',
-        reviews: [],
-        displayImage: 'greta-veronika-gmail-com',
+        reviews: ['5aad98377888995220605d09', '5aad98377888995220605d15'],
+        reducedID: 'greta-veronika-gmail-com',
         restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"]]}
     }).save());
 
@@ -99,8 +99,8 @@ function populateUsers(insertPromises) {
         name: {first: 'Will', last: 'Garside'},
         ageCategory: 2,
         postcode: 'SY14 8JU',
-        reviews: [],
-        displayImage: 'worgarside-gmail-com',
+        reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18'],
+        reducedID: 'worgarside-gmail-com',
         restaurants: {created: [ID["Nando's"], ID['Gourmet Burger Kitchen'], ID['Istanbul Restaurant'], ID['Pizza Express']]}
     }).save());
 
@@ -112,14 +112,12 @@ function populateUsers(insertPromises) {
         ageCategory: 2,
         postcode: 'S1 4EW',
         reviews: [],
-        displayImage: 'aslan-chicken-shop-com',
+        reducedID: 'aslan-chicken-shop-com',
         restaurants: {
             created: [ID["Aslan's"]],
             owned: [ID["Aslan's"]]
         }
     }).save());
-
-
 
     insertPromises.push(new User({
         _id: 'test@user.com',
@@ -128,7 +126,7 @@ function populateUsers(insertPromises) {
         ageCategory: 3,
         postcode: 'S1 1ES',
         reviews: [],
-        displayImage: 'test-user-com',
+        reducedID: 'test-user-com',
         verified: {
             flag: true,
             hash: undefined
@@ -787,13 +785,13 @@ function populateRestaurants(insertPromises) {
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d09'),
-        restaurantID: ID["Aslan's"],
+        restaurant: {_id: ID["Aslan's"], name: "Aslan's"},
         title: "Aslan's Sucks",
         body: "I got food poisoning here, don't eat the turkey burgers",
         author: {
             forename: 'Greta',
             surname: 'Ramaneckaite',
-            displayImage: 'greta-veronika-gmail-com.jpg',
+            reducedID: 'greta-veronika-gmail-com.jpg',
         },
         images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png'],
         restaurantRating: 1,
@@ -801,14 +799,14 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d10'),
-        restaurantID: ID["Aslan's"],
+        restaurant: {_id: ID["Aslan's"], name: "Aslan's"},
         title: 'Greatest Kebab of All Time!!!',
         body: `This is, without doubt, the GOAT when it comes to kebabs. Even Adnan's doesn't
          stand up to the might that is ASLAN'S KEBAB HOUSE!!!`,
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            displayImage: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com.jpg',
         },
         images: ['2018-03-17 22-31-42.jpg'],
         restaurantRating: 5,
@@ -816,13 +814,13 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d11'),
-        restaurantID: ID['Gourmet Burger Kitchen'],
+        restaurant: {_id: ID['Gourmet Burger Kitchen'], name: 'Gourmet Burger Kitchen'},
         title: 'Great burger place, gives me tiny hands',
         body: "The burgers are so big the make my hands feel tiny, phenomenal milkshakes, decent prices - what's not to like?",
         author: {
             forename: 'Will',
             surname: 'Garside',
-            displayImage: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com.jpg',
         },
         images: ['2018-03-17 22-34-51.jpg'],
         restaurantRating: 4
@@ -830,13 +828,13 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d12'),
-        restaurantID: ID['Siam Thai and Teppanyaki'],
+        restaurant: {_id: ID['Siam Thai and Teppanyaki'], name: 'Siam Thai and Teppanyaki'},
         title: 'The Teppanyaki is amazing!',
         body: 'I went here for my 15th birthday and even though I had a broken arm at the time, they let me have a go doing the Teppanyaki and were so helpful and friendly',
         author: {
             forename: 'Will',
             surname: 'Garside',
-            displayImage: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com.jpg',
         },
         images: ['2018-03-20 20-08-00.jpg'],
         restaurantRating: 5
@@ -844,7 +842,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
-        restaurantID: ID['Piccolino'],
+        restaurant: {_id: ID['Piccolino'], name: 'Piccolino'},
         title: 'Reasonable food at a reasonable price',
         body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a
         bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very
@@ -852,7 +850,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            displayImage: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com.jpg',
         },
         images: ['2018-03-25 21-30-02.jpg'],
         restaurantRating: 3
@@ -860,27 +858,27 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d14'),
-        restaurantID: ID['Bungalows & Bears'],
+        restaurant: {_id: ID['Bungalows & Bears'], name: 'Bungalows & Bears'},
         title: 'Where are the bears?',
         body: `I've been here 3 times now but I've only seen a bear once?? And even then that was when my mom
         showed me a picture on her phone`,
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            displayImage: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com.jpg',
         },
         restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d15'),
-        restaurantID: ID['Istanbul Restaurant'],
+        restaurant: {_id: ID['Istanbul Restaurant'], name: 'Istanbul Restaurant'},
         title: 'More of a takeaway!',
         body: 'Title says it all, pretty standard take out food with a nice front',
         author: {
             forename: 'Greta',
             surname: 'Ramaneckaite',
-            displayImage: 'greta-veronika-gmail-com.jpg',
+            reducedID: 'greta-veronika-gmail-com.jpg',
         },
         images: ['2018-03-25 21-03-01.jpg'],
         restaurantRating: 3
@@ -888,14 +886,14 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d16'),
-        restaurantID: ID["Nando's"],
+        restaurant: {_id: ID["Nando's"], name: "Nando's"},
         title: "Definitely a 'mild' on my spice scale",
         body: `Food is meh, don't understand all the hype. Maybe it's those damn millennials. Also i ate my food
         before i took a picture, but that's what was left`,
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            displayImage: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com.jpg',
         },
         images: ['2018-03-25 21-48-00.jpg'],
         restaurantRating: 2
@@ -903,52 +901,52 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d17'),
-        restaurantID: ID["Pizza Express"],
+        restaurant: {_id: ID["Pizza Express"], name: "Pizza Express"},
         title: 'Expensive pizza',
         body: 'The pizza is nice but can be quite expensive and the sides are small',
         author: {
             forename: 'Will',
             surname: 'Garside',
-            displayImage: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com.jpg',
         },
         restaurantRating: 4
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d18'),
-        restaurantID: ID["Las Iguanas"],
+        restaurant: {_id: ID["Las Iguanas"], name: "Las Iguanas"},
         title: 'Expensive food',
         body: 'The food was nice, but very expensive. Would only go out on a special occasion to taste some Latin American cuisine',
         author: {
             forename: 'Will',
             surname: 'Garside',
-            displayImage: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com.jpg',
         },
         restaurantRating: 2
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d19'),
-        restaurantID: ID["Las Iguanas"],
+        restaurant: {_id: ID["Las Iguanas"], name: "Las Iguanas"},
         title: 'Amazing drinks!',
         body: 'I have to say that the cocktails made in this restaurant are unbelievably tasty! I drank every last drop. The food was decent, but I was too drunk to care',
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            displayImage: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com.jpg',
         },
         restaurantRating: 5
     }).save());
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d20'),
-        restaurantID: ID["California Fresh"],
-        title: 'Dont trust the burrito!',
-        body: 'I swear, its delicious, but afterwards you might have regrets from those burritos',
+        restaurant: {_id: ID["California Fresh"], name: "California Fresh"},
+        title: "Don't trust the burrito!",
+        body: "I swear, it's delicious, but afterwards you might have regrets from those burritos",
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            displayImage: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com.jpg',
         },
         restaurantRating: 3
     }).save());

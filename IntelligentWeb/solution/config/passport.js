@@ -79,7 +79,7 @@ module.exports = function (passport) {
                             if (req.file.originalname){
                                 const re = /(?:\.([^.]+))?$/;
                                 const imgExtension = `.${re.exec(req.file.originalname)[1]}`;
-                                newUser.displayImage = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
+                                newUser.reducedID = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
                             }
 
                             newUser._id = email.toLowerCase();

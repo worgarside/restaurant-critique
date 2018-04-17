@@ -39,8 +39,10 @@ router.post('/', (req, res) => {
             }
         });
 
-    res.render('contact-submitted');
+    res.render('contact_submitted');
 });
+
+// TODO: change email bodies
 
 /**
  * Send the support request email to Restaurant Critique with request details
