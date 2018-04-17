@@ -78,6 +78,16 @@ label.error {
   color: #eb0000;
   font-style: italic;
 }
+.quote {
+  font-style: italic;
+  color: #818181;
+}
+.quote:before {
+  content: "\"";
+}
+.quote:after {
+  content: "\"";
+}
 #main-logo {
   width: 400px;
   background: url('/images/site/logo-wide-white.png');
@@ -481,6 +491,10 @@ button.btn.btn-default#add-times,
   font-weight: 400;
   color: black;
 }
+.restaurant-title.no-hover:hover {
+  color: black;
+  text-decoration: none;
+}
 .restaurant-title:hover {
   text-decoration: none;
   color: #919191;
@@ -663,4 +677,15 @@ label.star:hover ~ label.star span::before {
 }
 .category-selected span:hover {
   color: #eb0000;
+}
+.card-header button {
+  font-size: 16pt;
+  color: #555555;
+}
+.card-header button:hover {
+  text-decoration: none;
+  color: #bdbdbd;
+}
+.card-header button:focus {
+  text-decoration: none;
 }

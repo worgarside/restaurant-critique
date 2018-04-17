@@ -98,10 +98,10 @@ router.get('/restaurant/:url', (req, res) => {
             Promise.all(reviewPromises).then(() => {
                 return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
             }).catch(() => {
-                return res.render('error');
+                return res.render('error', {title: title, user: req.user});
             })
         }else{
-            res.render('error');
+            res.render('error', {title: title, user: req.user});
         }
 
     });
@@ -117,6 +117,43 @@ router.get('/search', (req, res) => {
 
 router.get('/signup', (req, res) => {
     res.render('signup', {title: title, user: req.user});
+});
+
+router.get('/user/:_id', (req, res) => {
+    console.log(req.user);
+    if ((req.user) && (req.user.reducedID === req.params._id)){
+        let restaurantList = [];
+        let childrenPromises = [];
+        let reviewList = [];
+
+        for (id of req.user.restaurants.created) {
+            childrenPromises.push(Restaurant.findOne({_id: id}).then((restaurant) => {
+                restaurantList.push(restaurant);
+                console.log(`Pushed restaurant #${restaurant.name}`);
+            }).catch((err) => {
+                console.log(`Error fetching restaurant: ${err}`);
+            }));
+        }
+
+        for (id of req.user.reviews) {
+            childrenPromises.push(Review.findOne({_id: id}).then((review) => {
+                reviewList.push(review);
+                console.log(`Pushed review #${review.title}`);
+            }).catch((err) => {
+                console.log(`Error fetching review: ${err}`);
+            }));
+        }
+
+        Promise.all(childrenPromises).then(() => {
+            return res.render('user_manager', {title: title, user: req.user, reviews: reviewList, restaurants: restaurantList});
+        }).catch((err) => {
+            console.log(err);
+            return res.render('error', {title: title, user: req.user});
+        });
+
+    }else{
+        res.render('error', {title: title, user: req.user});
+    }
 });
 
 /**
@@ -135,7 +172,7 @@ router.get('/verify-user/:hash', (req, res) => {
 
         if (!user) {
             console.log('No user');
-            res.render('user-verification', {title: title, verified: false});
+            res.render('user-verification', {title: title, user: req.user, verified: false});
         } else {
             User.update({'verified.hash': req.params.hash}, {
                 'verified.flag': true,
@@ -143,11 +180,11 @@ router.get('/verify-user/:hash', (req, res) => {
             }, (err) => {
                 if (err) {
                     console.log(`Error: ${err}`);
-                    res.render('user-verification', {title: title, verified: false});
+                    res.render('user_verification', {title: title, user: req.user, verified: false});
                 }
             });
 
-            res.render('user-verification', {title: title, verified: true});
+            res.render('user_verification', {title: title, user: req.user, verified: true});
         }
     });
 });

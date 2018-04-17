@@ -30,7 +30,10 @@ block navbar
                 li.nav-item
                     a.nav-link.nav-thin(href='/signup') Sign Up
             else
+                script console.log(`!{user}`);
                 script const userLoggedIn = true
+                li.nav-item
+                    a.nav-link.nav-thin(href=`/user/${user.reducedID}`) Your Profile
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 
