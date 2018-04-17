@@ -26,3 +26,9 @@
 
 Install the app by running `npm i` in the root (solution) directory. This will install the necessary `node_modules`.
 To run the app, either run `bin/www` or use `nodemon` in the root (solution) directory
+
+There is a User account created for testing without having to verify it:
+- Email: test@user.com
+- Password: Re5taurant
+
+Alternatively, you can sign up with a new account, and use that. A verification email will be sent with a link to verify the account, so use a real email address if you intend to submit a Restaurant. The link in the email goes to localhost, so make sure you click the link on the computer running the project.

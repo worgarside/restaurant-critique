@@ -118,6 +118,22 @@ function populateUsers(insertPromises) {
             owned: [ID["Aslan's"]]
         }
     }).save());
+
+
+
+    insertPromises.push(new User({
+        _id: 'test@user.com',
+        password: 'Re5taurant',
+        name: {first: 'Rick', last: 'Astley'},
+        ageCategory: 3,
+        postcode: 'S1 1ES',
+        reviews: [],
+        displayImage: 'test-user-com',
+        verified: {
+            flag: true,
+            hash: undefined
+        },
+    }).save());
 }
 
 /**
