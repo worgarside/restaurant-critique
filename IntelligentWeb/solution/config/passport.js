@@ -77,9 +77,7 @@ module.exports = function (passport) {
                             const newUser = new User();
 
                             if (req.file.originalname){
-                                const re = /(?:\.([^.]+))?$/;
-                                const imgExtension = `.${re.exec(req.file.originalname)[1]}`;
-                                newUser.reducedID = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-") + imgExtension;
+                                newUser.reducedID = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-");
                             }
 
                             newUser._id = email.toLowerCase();
@@ -95,9 +93,9 @@ module.exports = function (passport) {
                             newUser.user_rating = 0;
 
                             newUser.save((err) => {
-                                if (err)
+                                if (err) {
                                     return done(err);
-
+                                }
                                 return done(null, newUser);
                             });
                         }
