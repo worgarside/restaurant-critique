@@ -5,17 +5,17 @@ block content
     .container
         .row
             .col
-                h1 Your Account
+                h1 Your Profile
                 br
-
 
         .row
             .col-8.offset-2
-                    .card
-                        #header-details.card-header
-                            button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-details') Details
-                        #collapse-details.collapse(aria-labelledby='header-details', data-parent='#accordion')
-                            .card-body
+                .card
+                    #header-details.card-header
+                        button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-details') Details
+                    #collapse-details.collapse
+                        .card-body
+                            .details-name
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -23,7 +23,8 @@ block content
                                                 p.mb-0 Name: #{user.name.first} #{user.name.last}
                                     .col
                                         button.btn.float-right#edit-name Edit
-                                br
+                            br
+                            .details-email
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -36,7 +37,8 @@ block content
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-email Edit
-                                br
+                            br
+                            .details-postcode
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -44,7 +46,8 @@ block content
                                                 p.mb-0 Postcode: #{user.postcode}
                                     .col
                                         button.btn.float-right#edit-postcode Edit
-                                br
+                            br
+                            .details-password
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -52,7 +55,8 @@ block content
                                                 p.mb-0 Password: &#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;
                                     .col
                                         button.btn.float-right#edit-password Change
-                                br
+                            br
+                            .details-image
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -60,45 +64,47 @@ block content
                                                 p.mb-0 Update your profile picture
                                     .col
                                         button.btn.float-right#edit-image Change
-                    br
-                    .card
-                        #header-restaurants.card-header
-                            button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-restaurants') Submitted Restaurants
-                        #collapse-restaurants.collapse(aria-labelledby='header-restaurants', data-parent='#accordion')
-                            .card-body
-                                each restaurant, index in restaurants
-                                    .row
-                                        .col-10
-                                            h5.mb-0= restaurant.name
-                                            p.mb-0= restaurant.address.formattedAddress
-                                        .col-2
-                                            .vert-center-parent
-                                                .vert-center-child
-                                                    a.btn.btn-info.float-right(href=`/restaurant/${restaurant.localUrl}`) View
-                                    if index < restaurants.length - 1
-                                        hr
-                    br
-                    .card
-                        #header-reviews.card-header
-                            button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-reviews') Reviews
-                        .collapse#collapse-reviews
-                            .card-body
-                                each review, index in reviews
-                                    // TODO add score
-                                    .row
-                                        .col-9
-                                            h5.mb-0.quote #{review.title}
-                                            p.mb-0 #{review.restaurant.name}
-                                            p.mb-0= review.updatedAt.toUTCString()
-                                        .col-3
-                                            .vert-center-parent
-                                                .vert-center-child
-                                                    .btn-group.float-right
-                                                        a.btn.btn-info(href='#') View
-                                                        button.btn.btn-danger(id=`delete-${review._id}`) Delete
-                                    if index < reviews.length-1
-                                        hr
+                br
+                .card
+                    #header-restaurants.card-header
+                        button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-restaurants') Submitted Restaurants
+                    #collapse-restaurants.collapse
+                        .card-body
+                            each restaurant, restaurantIndex in restaurants
+                                .row
+                                    .col-10
+                                        h5.mb-0= restaurant.name
+                                        p.mb-0= restaurant.address.formattedAddress
+                                    .col-2
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                a.btn.btn-info.float-right(href=`/restaurant/${restaurant.localUrl}`) View
+                                if restaurantIndex < restaurants.length - 1
+                                    hr
+                br
+                .card
+                    #header-reviews.card-header
+                        button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-reviews') Reviews
+                    .collapse#collapse-reviews
+                        .card-body
+                            each review, reviewIndex in reviews
+                                // TODO add score
+                                .row
+                                    .col-9
+                                        h5.mb-0.quote #{review.title}
+                                        p.mb-0 #{review.restaurant.name}
+                                        p.mb-0= review.updatedAt.toUTCString()
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                .btn-group.float-right
+                                                    a.btn.btn-info(href='#') View
+                                                    button.btn.btn-danger(id=`delete-${review._id}`) Delete
+                                if reviewIndex < reviews.length-1
+                                    hr
 
+    script const user = `!{user}`;
+    script(type='text/javascript', src='/javascripts/user_management.js')
 
     // Change name
     // Change password

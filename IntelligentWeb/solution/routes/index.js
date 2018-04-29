@@ -120,7 +120,6 @@ router.get('/signup', (req, res) => {
 });
 
 router.get('/user/:_id', (req, res) => {
-    console.log(req.user);
     if ((req.user) && (req.user.reducedID === req.params._id)){
         let restaurantList = [];
         let childrenPromises = [];
