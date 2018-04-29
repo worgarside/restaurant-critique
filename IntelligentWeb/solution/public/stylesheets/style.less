@@ -121,6 +121,10 @@ label.error {
   }
 }
 
+.basic-inline{
+  display: inline;
+}
+
 // ================ Index Head ================ \\
 
 #main-logo {
@@ -241,7 +245,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   max-height: 100%;
 }
 
-#user-profile-image{
+#user-profile-image {
   height: unit(@navbar-height - 10, px);
   width: unit(@navbar-height - 10, px);
   object-fit: cover;
@@ -894,28 +898,37 @@ label.star:hover ~ label.star span::before {
 
 // ================ User Management ================ \\
 
-.card-header {
-  button {
-    font-size: 16pt;
-    color: @grey-darker;
-
-    &:hover{
-      text-decoration: none;
-      color: @grey-light;
-    }
-
-    &:focus{
-      text-decoration: none;
-    }
-  }
-}
-
-.card{
-  &-header{
+.card {
+  &-header {
     border-bottom: none;
+    padding: 0;
+
+    button {
+      font-size: 16pt;
+      color: @grey-darker;
+      display: block;
+      padding: 1rem 1.25rem;
+      width: 100%;
+      text-align: left;
+
+      &:hover {
+        text-decoration: none;
+        color: @grey-light;
+      }
+
+      &:focus {
+        text-decoration: none;
+      }
+    }
   }
 
-  #collapse-details.collapse.show, #collapse-details.collapsing{
-    border-top: @grey-lighter 1px solid;
+  .new{
+    display: none;
+  }
+
+  #collapse-details {
+    &.collapse.show, #collapse-details.collapsing {
+      border-top: @grey-lighter 1px solid;
+    }
   }
 }

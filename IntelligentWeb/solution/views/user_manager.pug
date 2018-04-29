@@ -15,16 +15,24 @@ block content
                         button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-details') Details
                     #collapse-details.collapse
                         .card-body
-                            .details-name
-                                .row
-                                    .col-10
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                p.mb-0 Name: #{user.name.first} #{user.name.last}
-                                    .col
-                                        button.btn.float-right#edit-name Edit
+                            #details-name
+                                form#user-name-form
+                                    .row.current
+                                        .col-10
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                        p.mb-0 Name: #{user.name.first} #{user.name.last}
+                                        .col
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                    button.btn.float-right#edit-name(type='button') Edit
+                                    .row.new
+                                        .col-10
+                                            label(for='first') Name:
+                                            input.form-control.d-inline#first(type='text', value=`${user.name.first}`)
+                                            input.form-control.d-inline#last(type='text', value=`${user.name.last}`)
                             br
-                            .details-email
+                            #details-email
                                 .row
                                     .col-10
                                         .vert-center-parent
@@ -36,16 +44,18 @@ block content
                                     .col
                                         .vert-center-parent
                                             .vert-center-child
-                                                button.btn.float-right#edit-email Edit
+                                                button.btn.float-right#edit-email(type='button') Edit
                             br
-                            .details-postcode
+                            #details-postcode
                                 .row
                                     .col-10
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Postcode: #{user.postcode}
                                     .col
-                                        button.btn.float-right#edit-postcode Edit
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#edit-postcode(type='button') Edit
                             br
                             .details-password
                                 .row
@@ -54,16 +64,20 @@ block content
                                             .vert-center-child
                                                 p.mb-0 Password: &#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;
                                     .col
-                                        button.btn.float-right#edit-password Change
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#edit-password(type='button') Change
                             br
-                            .details-image
+                            #details-image
                                 .row
                                     .col-10
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Update your profile picture
                                     .col
-                                        button.btn.float-right#edit-image Change
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#edit-image(type='button') Change
                 br
                 .card
                     #header-restaurants.card-header

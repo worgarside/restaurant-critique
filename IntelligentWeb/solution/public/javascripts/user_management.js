@@ -4,27 +4,27 @@ const editPostcode = $('#edit-postcode');
 const editPassword = $('#edit-password');
 const editImage = $('#edit-image');
 
+const detailsName = $('#details-name');
+const detailsEmail = $('#details-email');
+const detailsPostcode = $('#details-postcode');
+const detailsPassword = $('#details-password');
+const detailsImage = $('#details-image');
+
 editName.click(() => {
-    $('.details-name').hide();
+    detailsName.find('.current').hide();
+    detailsName.find('.new').show();
 });
 
 editEmail.click(() => {
-    $('.details-email').hide();
-
-    const formName = `
-        <input type='text'/>
-    `;
-
+    detailsEmail.hide();
 });
 
 editPostcode.click(() => {
-    $('.details-postcode').hide();
+    detailsPostcode.hide();
 });
 
 editPassword.click(() => {
-    $('.details-password').hide();
+    detailsPassword.hide();
 });
-
-
 
 console.log('Loaded user_management.js');

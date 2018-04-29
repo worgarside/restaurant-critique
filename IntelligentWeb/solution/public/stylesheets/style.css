@@ -88,6 +88,9 @@ label.error {
 .quote:after {
   content: "\"";
 }
+.basic-inline {
+  display: inline;
+}
 #main-logo {
   width: 400px;
   background: url('/images/site/logo-wide-white.png');
@@ -686,9 +689,17 @@ label.star:hover ~ label.star span::before {
 .category-selected span:hover {
   color: #eb0000;
 }
+.card-header {
+  border-bottom: none;
+  padding: 0;
+}
 .card-header button {
   font-size: 16pt;
   color: #555555;
+  display: block;
+  padding: 1rem 1.25rem;
+  width: 100%;
+  text-align: left;
 }
 .card-header button:hover {
   text-decoration: none;
@@ -697,10 +708,10 @@ label.star:hover ~ label.star span::before {
 .card-header button:focus {
   text-decoration: none;
 }
-.card-header {
-  border-bottom: none;
+.card .new {
+  display: none;
 }
 .card #collapse-details.collapse.show,
-.card #collapse-details.collapsing {
+.card #collapse-details #collapse-details.collapsing {
   border-top: #dbdbdb 1px solid;
 }
