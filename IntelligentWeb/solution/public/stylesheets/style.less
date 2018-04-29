@@ -241,6 +241,15 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   max-height: 100%;
 }
 
+#user-profile-image{
+  height: unit(@navbar-height - 10, px);
+  width: unit(@navbar-height - 10, px);
+  object-fit: cover;
+  border-radius: unit((@navbar-height - 10)/2, px);
+  position: absolute;
+  margin: -10px 0 0 unit(-@navbar-height, px);
+}
+
 // ================ Login Form ================ \\
 
 @form-width: 400;

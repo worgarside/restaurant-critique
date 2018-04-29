@@ -192,6 +192,14 @@ a.nav-link.nav-thin#btn-login:hover {
   max-width: 100%;
   max-height: 100%;
 }
+#user-profile-image {
+  height: 48px;
+  width: 48px;
+  object-fit: cover;
+  border-radius: 24px;
+  position: absolute;
+  margin: -10px 0 0 -58px;
+}
 #login-form {
   text-align: center;
   background-color: #818181;

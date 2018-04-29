@@ -791,7 +791,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Greta',
             surname: 'Ramaneckaite',
-            reducedID: 'greta-veronika-gmail-com.jpg',
+            reducedID: 'greta-veronika-gmail-com',
         },
         images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png'],
         restaurantRating: 1,
@@ -806,7 +806,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            reducedID: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com',
         },
         images: ['2018-03-17 22-31-42.jpg'],
         restaurantRating: 5,
@@ -820,7 +820,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            reducedID: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com',
         },
         images: ['2018-03-17 22-34-51.jpg'],
         restaurantRating: 4
@@ -834,7 +834,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            reducedID: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com',
         },
         images: ['2018-03-20 20-08-00.jpg'],
         restaurantRating: 5
@@ -850,7 +850,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            reducedID: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com',
         },
         images: ['2018-03-25 21-30-02.jpg'],
         restaurantRating: 3
@@ -865,7 +865,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            reducedID: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com',
         },
         restaurantRating: 2
     }).save());
@@ -878,7 +878,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Greta',
             surname: 'Ramaneckaite',
-            reducedID: 'greta-veronika-gmail-com.jpg',
+            reducedID: 'greta-veronika-gmail-com',
         },
         images: ['2018-03-25 21-03-01.jpg'],
         restaurantRating: 3
@@ -893,7 +893,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            reducedID: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com',
         },
         images: ['2018-03-25 21-48-00.jpg'],
         restaurantRating: 2
@@ -907,7 +907,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            reducedID: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com',
         },
         restaurantRating: 4
     }).save());
@@ -920,7 +920,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Will',
             surname: 'Garside',
-            reducedID: 'worgarside-gmail-com.jpg',
+            reducedID: 'worgarside-gmail-com',
         },
         restaurantRating: 2
     }).save());
@@ -933,7 +933,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            reducedID: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com',
         },
         restaurantRating: 5
     }).save());
@@ -946,7 +946,7 @@ function populateReviews(insertPromises) {
         author: {
             forename: 'Rufus',
             surname: 'Cope',
-            reducedID: 'copeyrufus-gmail-com.jpg',
+            reducedID: 'copeyrufus-gmail-com',
         },
         restaurantRating: 3
     }).save());
