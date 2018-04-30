@@ -711,7 +711,17 @@ label.star:hover ~ label.star span::before {
 .card .new {
   display: none;
 }
-.card #collapse-details.collapse.show,
-.card #collapse-details #collapse-details.collapsing {
+.card .collapse.show,
+.card .collapsing {
   border-top: #dbdbdb 1px solid;
+}
+#collapse-details #first,
+#collapse-details #last,
+#collapse-details #postcode {
+  width: 35%;
+  margin-left: 1rem;
+}
+#collapse-details #email {
+  width: 70%;
+  margin-left: 1rem;
 }

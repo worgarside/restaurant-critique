@@ -121,7 +121,7 @@ label.error {
   }
 }
 
-.basic-inline{
+.basic-inline {
   display: inline;
 }
 
@@ -922,13 +922,25 @@ label.star:hover ~ label.star span::before {
     }
   }
 
-  .new{
+  .new {
     display: none;
   }
 
-  #collapse-details {
-    &.collapse.show, #collapse-details.collapsing {
-      border-top: @grey-lighter 1px solid;
-    }
+  .collapse.show, .collapsing {
+    border-top: @grey-lighter 1px solid;
   }
+}
+
+#collapse-details{
+  #first, #last, #postcode{
+    width: 35%;
+    margin-left: 1rem;
+  }
+
+  #email{
+    width: 70%;
+    margin-left: 1rem;
+  }
+
+
 }

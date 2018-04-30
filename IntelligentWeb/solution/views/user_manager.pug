@@ -16,38 +16,54 @@ block content
                     #collapse-details.collapse
                         .card-body
                             #details-name
-                                form#user-name-form
-                                    .row.current
-                                        .col-10
-                                            .vert-center-parent
-                                                .vert-center-child
-                                                        p.mb-0 Name: #{user.name.first} #{user.name.last}
-                                        .col
-                                            .vert-center-parent
-                                                .vert-center-child
-                                                    button.btn.float-right#edit-name(type='button') Edit
-                                    .row.new
-                                        .col-10
-                                            label(for='first') Name:
-                                            input.form-control.d-inline#first(type='text', value=`${user.name.first}`)
-                                            input.form-control.d-inline#last(type='text', value=`${user.name.last}`)
+                                .row.current
+                                    .col-10
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                    p.mb-0#name Name: #{user.name.first} #{user.name.last}
+                                    .col
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#edit-name(type='button') Edit
+                                .row.new
+                                    .col-10
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label(for='first') Name:
+                                                input.form-control.d-inline#first(type='text', value=`${user.name.first}`, autocomplete='none')
+                                                input.form-control.d-inline#last(type='text', value=`${user.name.last}`, autocomplete='none')
+                                    .col
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#confirm-name(type='button') Confirm
                             br
                             #details-email
-                                .row
+                                .row.current
                                     .col-10
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Email: #{user._id}
                                                 if (!user.verified.flag)
                                                     small
-                                                        a(href='#') Re-send verification email
+                                                        a(href='javascript:void(0)') Re-send verification email
                                     .col
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-email(type='button') Edit
+                                .row.new
+                                    .col-10
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label(for='email') Email:
+                                                input.form-control.d-inline#email(type='text', value=`${user._id}`, autocomplete='none')
+                                    .col
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#confirm-email(type='button') Confirm
+
                             br
                             #details-postcode
-                                .row
+                                .row.current
                                     .col-10
                                         .vert-center-parent
                                             .vert-center-child
@@ -56,6 +72,16 @@ block content
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-postcode(type='button') Edit
+                                .row.new
+                                    .col-10
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label(for='postcode') Postcode:
+                                                input.form-control.d-inline#postcode(type='text', value=`${user.postcode}`, autocomplete='none')
+                                    .col
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                button.btn.float-right#confirm-postcode(type='button') Confirm
                             br
                             .details-password
                                 .row
@@ -117,7 +143,7 @@ block content
                                 if reviewIndex < reviews.length-1
                                     hr
 
-    script const user = `!{user}`;
+    script const userVar = `!{JSON.stringify(user)}`;
     script(type='text/javascript', src='/javascripts/user_management.js')
 
     // Change name

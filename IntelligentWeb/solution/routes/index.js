@@ -128,7 +128,7 @@ router.get('/user/:_id', (req, res) => {
         for (id of req.user.restaurants.created) {
             childrenPromises.push(Restaurant.findOne({_id: id}).then((restaurant) => {
                 restaurantList.push(restaurant);
-                console.log(`Pushed restaurant #${restaurant.name}`);
+                // console.log(`Pushed restaurant ${restaurant.name}`);
             }).catch((err) => {
                 console.log(`Error fetching restaurant: ${err}`);
             }));
@@ -137,7 +137,7 @@ router.get('/user/:_id', (req, res) => {
         for (id of req.user.reviews) {
             childrenPromises.push(Review.findOne({_id: id}).then((review) => {
                 reviewList.push(review);
-                console.log(`Pushed review #${review.title}`);
+                // console.log(`Pushed review ${review.title}`);
             }).catch((err) => {
                 console.log(`Error fetching review: ${err}`);
             }));
