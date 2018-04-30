@@ -58,3 +58,26 @@ function setLoginFormPosition() {
 }
 
 console.log('Loaded layout.js');
+
+// ================ Input Formatting ================ \\
+
+/**
+ * Automatically applies Title Case to inputs with the class '.title-case'
+ * @function autoTitleCase
+ */
+$('.title-case').keyup(function () {
+    const inputString = $(this).val().split(" ");
+    for (let i = 0; i < inputString.length; i++) {
+        const j = inputString[i].charAt(0).toUpperCase();
+        inputString[i] = j + inputString[i].substr(1);
+    }
+    $(this).val(inputString.join(' '));
+});
+
+/**
+ * Automatically changes input value to uppercase
+ * @function autoCapitalise
+ */
+$('.upper-case').keyup(function () {
+    $(this).val($(this).val().toUpperCase());
+});

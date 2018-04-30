@@ -41,12 +41,16 @@ UserSchema = Schema({
 });
 
 UserSchema.pre('save', function (next) {
+    this.increment();
+
     // Passwords are salted and hashed before saving
     this.password = generateHash(this.password);
 
     // For user verification, a hash value is generated and email to the user for them to confirm their email legitimacy
-    if (!this.verified.flag) {
-        this.verified.hash = crypto.randomBytes(20).toString('hex');
+    if (!this.verified.flag && this.__v === 0) {
+        if (!this.verified.hash){
+            this.verified.hash = crypto.randomBytes(20).toString('hex');
+        }
         if (!dbRegen) {
             sendVerificationEmail(this);
         }
@@ -91,6 +95,13 @@ function sendVerificationEmail(user) {
 
     nodemailer.sendEmail(to, subject, body);
 }
+
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if(err) return cb(err);
+        cb(null, isMatch);
+    });
+};
 
 
 module.exports = mongoose.model('User', UserSchema);

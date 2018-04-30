@@ -931,16 +931,22 @@ label.star:hover ~ label.star span::before {
   }
 }
 
-#collapse-details{
-  #first, #last, #postcode{
-    width: 35%;
+#collapse-details {
+  #first, #last, #postcode, #old-password, #new-password, #new-password-confirm {
+    width: 40%;
     margin-left: 1rem;
   }
 
-  #email{
-    width: 70%;
-    margin-left: 1rem;
+  #password-divider {
+    width: 40%;
+    margin: 3px 1rem;
+    border-top: @grey-mid 1px solid;
   }
 
+  #incorrect-old-password {
+    margin-left: 1rem;
+    padding: 6px 18px;
+    display: none;
+  }
 
 }

@@ -717,11 +717,20 @@ label.star:hover ~ label.star span::before {
 }
 #collapse-details #first,
 #collapse-details #last,
-#collapse-details #postcode {
-  width: 35%;
+#collapse-details #postcode,
+#collapse-details #old-password,
+#collapse-details #new-password,
+#collapse-details #new-password-confirm {
+  width: 40%;
   margin-left: 1rem;
 }
-#collapse-details #email {
-  width: 70%;
+#collapse-details #password-divider {
+  width: 40%;
+  margin: 3px 1rem;
+  border-top: #919191 1px solid;
+}
+#collapse-details #incorrect-old-password {
   margin-left: 1rem;
+  padding: 6px 18px;
+  display: none;
 }

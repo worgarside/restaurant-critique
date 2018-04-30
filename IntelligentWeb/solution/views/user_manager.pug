@@ -17,90 +17,119 @@ block content
                         .card-body
                             #details-name
                                 .row.current
-                                    .col-10
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
-                                                    p.mb-0#name Name: #{user.name.first} #{user.name.last}
-                                    .col
+                                                    p.mb-0#name-p Name: #{user.name.first} #{user.name.last}
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-name(type='button') Edit
                                 .row.new
-                                    .col-10
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
                                                 label(for='first') Name:
-                                                input.form-control.d-inline#first(type='text', value=`${user.name.first}`, autocomplete='none')
-                                                input.form-control.d-inline#last(type='text', value=`${user.name.last}`, autocomplete='none')
-                                    .col
+                                                input.form-control.d-inline#first(type='text', value=`${user.name.first}`, autocomplete='off')
+                                                input.form-control.d-inline#last(type='text', value=`${user.name.last}`, autocomplete='off')
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
-                                                button.btn.float-right#confirm-name(type='button') Confirm
+                                                .btn-group.float-right
+                                                    button.btn.btn-success#confirm-name(type='button') Confirm
+                                                    button.btn.btn-danger#cancel-name(type='button') Cancel
                             br
                             #details-email
-                                .row.current
-                                    .col-10
+                                .row
+                                    .col
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Email: #{user._id}
                                                 if (!user.verified.flag)
                                                     small
                                                         a(href='javascript:void(0)') Re-send verification email
-                                    .col
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                button.btn.float-right#edit-email(type='button') Edit
-                                .row.new
-                                    .col-10
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                label(for='email') Email:
-                                                input.form-control.d-inline#email(type='text', value=`${user._id}`, autocomplete='none')
-                                    .col
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                button.btn.float-right#confirm-email(type='button') Confirm
 
                             br
                             #details-postcode
                                 .row.current
-                                    .col-10
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
-                                                p.mb-0 Postcode: #{user.postcode}
-                                    .col
+                                                p.mb-0#postcode-p Postcode: #{user.postcode}
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-postcode(type='button') Edit
                                 .row.new
-                                    .col-10
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
                                                 label(for='postcode') Postcode:
-                                                input.form-control.d-inline#postcode(type='text', value=`${user.postcode}`, autocomplete='none')
-                                    .col
+                                                input.form-control.d-inline.upper-case#postcode(type='text', value=`${user.postcode}`, autocomplete='none')
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
-                                                button.btn.float-right#confirm-postcode(type='button') Confirm
+                                                .btn-group.float-right
+                                                    button.btn.btn-success#confirm-postcode(type='button') Confirm
+                                                    button.btn.btn-danger#cancel-postcode(type='button') Cancel
                             br
-                            .details-password
-                                .row
-                                    .col-10
+                            #details-password
+                                .row.current
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
-                                                p.mb-0 Password: &#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;
-                                    .col
+                                                p.mb-0#password-p Password: &#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;&#x0204e;
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-password(type='button') Change
+                                form#change-password-form
+                                    .row.new
+                                        .col-9
+                                            .form-row
+                                                .col-2
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            label.float-right(for='old-password') Old:
+                                                .col
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            input.form-control.d-inline#old-password(type='password', autocomplete='none', name='old-password')
+                                                            .alert.alert-danger.mb-0#incorrect-old-password
+                                                                strong Incorrect password.
+                                                            hr#password-divider
+                                            .form-row
+                                                .col-2
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            label.float-right(for='new-password') New:
+                                                .col
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            input.form-control#new-password(type='password', autocomplete='none', name='new-password')
+                                            .form-row
+                                                .col-2
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            label.float-right(for='new-password-confirm') Confirm:
+                                                .col
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            input.form-control#new-password-confirm(type='password', autocomplete='none', name='new-password-confirm')
+                                        .col-3
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                    .btn-group.float-right
+                                                        button.btn.btn-success#confirm-password(type='button') Change
+                                                        button.btn.btn-danger#cancel-password(type='button') Cancel
                             br
                             #details-image
                                 .row
-                                    .col-10
+                                    .col-9
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Update your profile picture
-                                    .col
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-image(type='button') Change
@@ -144,6 +173,7 @@ block content
                                     hr
 
     script const userVar = `!{JSON.stringify(user)}`;
+    script(type = 'text/javascript', src = "/scripts/jquery.validate.js")
     script(type='text/javascript', src='/javascripts/user_management.js')
 
     // Change name
