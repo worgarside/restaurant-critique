@@ -8,6 +8,10 @@
 $(() => {
     if (!userLoggedIn) {
         setLoginFormPosition();
+        console.log('No user logged in');
+    } else {
+        const user = JSON.parse(layoutUser);
+        console.log(`${user.name.first} ${user.name.last} (${user._id}) logged in`);
     }
 });
 
@@ -57,8 +61,6 @@ function setLoginFormPosition() {
     form.css({right: form_right});
 }
 
-console.log('Loaded layout.js');
-
 // ================ Input Formatting ================ \\
 
 /**
@@ -81,3 +83,5 @@ $('.title-case').keyup(function () {
 $('.upper-case').keyup(function () {
     $(this).val($(this).val().toUpperCase());
 });
+
+console.log('Loaded layout.js');
