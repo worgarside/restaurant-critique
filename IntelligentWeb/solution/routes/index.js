@@ -38,6 +38,14 @@ router.get('/contact', (req, res) => {
     res.render('contact', {title: title, user: req.user});
 });
 
+//TODO: do we need these?
+router.get('/images/*', (req, res) => {
+    res.render('errors/403', {title: title, user: req.user});
+});
+router.get('/javascripts/*', (req, res) => {
+    res.render('errors/403', {title: title, user: req.user});
+});
+
 router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('back');
@@ -98,10 +106,10 @@ router.get('/restaurant/:url', (req, res) => {
             Promise.all(reviewPromises).then(() => {
                 return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
             }).catch(() => {
-                return res.render('error', {title: title, user: req.user});
+                return res.render('errors/404', {title: title, user: req.user});
             })
         }else{
-            res.render('error', {title: title, user: req.user});
+            res.render('errors/404', {title: title, user: req.user});
         }
 
     });
@@ -147,11 +155,10 @@ router.get('/user/:_id', (req, res) => {
             return res.render('user_manager', {title: title, user: req.user, reviews: reviewList, restaurants: restaurantList});
         }).catch((err) => {
             console.log(err);
-            return res.render('error', {title: title, user: req.user});
+            return res.render('errors/404', {title: title, user: req.user});
         });
-
     }else{
-        res.render('error', {title: title, user: req.user});
+        res.render('errors/403', {title: title, user: req.user});
     }
 });
 
