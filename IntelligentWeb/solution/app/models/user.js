@@ -47,12 +47,12 @@ UserSchema.pre('save', function (next) {
     this.password = generateHash(this.password);
 
     // For user verification, a hash value is generated and email to the user for them to confirm their email legitimacy
-    if (!this.verified.flag && this.__v === 0) {
+    if (!this.verified.flag && (this.__v === 0 || this.__v === undefined)) {
         if (!this.verified.hash){
             this.verified.hash = crypto.randomBytes(20).toString('hex');
         }
         if (!dbRegen) {
-            sendVerificationEmail(this);
+            this.sendVerificationEmail();
         }
     }
 
@@ -84,17 +84,17 @@ function generateHash(password) {
  * Again, uses nodemailer configuration template
  * @param {User} user The User who has requested or requires a verification email
  */
-function sendVerificationEmail(user) {
-    const to = user._id;
+UserSchema.methods.sendVerificationEmail = function () {
+    const to = this._id;
     const subject = 'Restaurant Critique User Verification';
     const body = `
-        <p>${user.name.first} ${user.name.last},</p>
+        <p>${this.name.first} ${this.name.last},</p>
         <p>Please verify your new account with Restaurant Critique by clicking the link below</p>
-        <p><a href='http://localhost:3000/verify-user/${user.verified.hash}'>https://restaurantcritique.com/verify-user/${user.verified.hash}</a></p>
+        <p><a href='http://localhost:3000/verify-user/${this.verified.hash}'>https://restaurantcritique.com/verify-user/${this.verified.hash}</a></p>
     `;
 
     nodemailer.sendEmail(to, subject, body);
-}
+};
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {

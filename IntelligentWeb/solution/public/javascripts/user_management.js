@@ -35,7 +35,6 @@ editName.click(() => {
 confirmName.click(() => {
     const data = JSON.stringify(
         {
-            _id: user._id,
             name: {
                 first: $('#first').val(),
                 last: $('#last').val()
@@ -70,6 +69,26 @@ cancelName.click(() => {
     detailsName.find('.new').hide();
 });
 
+// ================ Email ================ \\
+
+$('#verify-email').click(()=>{
+    $.ajax({
+        url: '/verify_email',
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (response) => {
+            if (response){
+                alert('Verification email sent, it should arrive within the next 24 hours. If not, please check your spam folder or contact us.');
+            }else{
+                alert('Sorry, we are unable to process your request at this time. PLease try again later.');
+            }
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+});
+
 // ================ Postcode ================ \\
 
 editPostcode.click(() => {
@@ -83,7 +102,6 @@ editPostcode.click(() => {
 confirmPostcode.click(() => {
     const data = JSON.stringify(
         {
-            _id: user._id,
             postcode: $('#postcode').val()
         }
     );
@@ -153,7 +171,6 @@ $('#change-password-form').validate({
 confirmPassword.click(() => {
     const data = JSON.stringify(
         {
-            _id: user._id,
             password: {
                 old: $('#old-password').val(),
                 new: $('#new-password').val(),

@@ -125,4 +125,11 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     res.redirect('/')
 });
 
+router.post('/verify_email', (req, res) => {
+    User.findOne({_id: req.user._id}, (err, user) => {
+        user.sendVerificationEmail();
+        res.send(true);
+    });
+});
+
 module.exports = router;

@@ -30,7 +30,7 @@ const upload = multer({storage: storage});
 router.post('/update_name', (req, res) => {
     const name = req.body.name;
 
-    User.findByIdAndUpdate(req.body._id, {name: name}, {new: true}, (err, user) => {
+    User.findByIdAndUpdate(req.user._id, {name: name}, {new: true}, (err, user) => {
         if (err) {
             console.log(err);
             res.send(false);
@@ -44,7 +44,7 @@ router.post('/update_name', (req, res) => {
 router.post('/update_postcode', (req, res) => {
     const postcode = req.body.postcode;
 
-    User.findByIdAndUpdate(req.body._id, {postcode: postcode}, {new: true}, (err, user) => {
+    User.findByIdAndUpdate(req.user._id, {postcode: postcode}, {new: true}, (err, user) => {
         if (err) {
             console.log(err);
             res.send(false);
@@ -56,7 +56,7 @@ router.post('/update_postcode', (req, res) => {
 });
 
 router.post('/update_password', (req, res) => {
-    User.findOne({_id: req.body._id}, (err, user) => {
+    User.findOne({_id: req.user._id}, (err, user) => {
         user.comparePassword(req.body.password.old, (err, matched) => {
             if (err) {
                 console.log(`Error: ${err}`);

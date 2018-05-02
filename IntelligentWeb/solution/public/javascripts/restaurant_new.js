@@ -680,4 +680,22 @@ $('#publish-restaurant').click(() => {
     $('#submit').click();
 });
 
+$('#verify-email').click(()=>{
+    $.ajax({
+        url: '/verify_email',
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (response) => {
+            if (response){
+                alert('Verification email sent, it should arrive within the next 24 hours. If not, please check your spam folder or contact us.');
+            }else{
+                alert('Sorry, we are unable to process your request at this time. PLease try again later.');
+            }
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+});
+
 console.log('Loaded restaurant_new.js');

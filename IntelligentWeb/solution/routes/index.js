@@ -216,4 +216,13 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+// TODO jsdoc
+router.post('/verify_email', (req, res) => {
+    console.log('POSTED');
+    User.findOne({_id: req.user._id}, (err, user) => {
+        user.sendVerificationEmail();
+        res.send(true);
+    });
+});
+
 module.exports = router;

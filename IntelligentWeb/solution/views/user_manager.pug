@@ -47,8 +47,7 @@ block content
                                                 p.mb-0 Email: #{user._id}
                                                 if (!user.verified.flag)
                                                     small
-                                                        a(href='javascript:void(0)') Re-send verification email
-
+                                                        a#verify-email(href='javascript:void(0)') Re-send verification email
                             br
                             #details-postcode
                                 .row.current
