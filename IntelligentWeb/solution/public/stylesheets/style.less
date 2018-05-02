@@ -121,8 +121,12 @@ label.error {
   }
 }
 
-.basic-inline {
-  display: inline;
+.post-space {
+  margin-right: 0.5rem;
+}
+
+.pre-space {
+  margin-left: 0.5rem;
 }
 
 // ================ Index Head ================ \\
@@ -161,10 +165,6 @@ label.error {
   }
 
   input {
-    border-radius: 0;
-  }
-
-  select {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -378,13 +378,39 @@ footer {
 
 // ================ Index ================ \\
 
-.index-image {
+.index-image{
   width: 100%;
-  height: 200px;
+  height: 240px;
+  object-fit: cover;
 }
 
-.oi-space {
-  margin-right: 10px;
+#index-carousel {
+  margin-top: 1rem;
+  border-top: solid 1px @grey-dark;
+  border-bottom: solid 1px @grey-dark;
+
+  .carousel-item {
+    padding: 2rem;
+    span.oi-star {
+      font-size: 1.5rem;
+    }
+
+    h4.rating-value {
+      color: @grey-mid;
+      font-size: 1.25rem;
+    }
+
+    .restaurant-category {
+      font-size: 1rem;
+    }
+    img {
+      display: inline-block;
+      width: 45%;
+      height: 170px;
+      object-fit: cover;
+      margin: 0 0.5rem;
+    }
+  }
 }
 
 // ================ New Restaurant ================ \\

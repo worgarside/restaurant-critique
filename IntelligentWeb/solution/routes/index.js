@@ -20,10 +20,35 @@ const User = mongoose.model('User');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
+let previousRefresh;
+let topRestaurants;
 // ================ GET Statements ================ \\
 
 router.get('/', (req, res) => {
-    res.render('index', {title: title, user: req.user, animateLogo: true});
+    // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 30s30000
+    if ((!previousRefresh) || (new Date() - previousRefresh > 604800000)) {
+        console.log('Refreshing top restaurants');
+        Restaurant.find({}).sort({averageRating: -1}).limit(5).select({
+            'name': 1,
+            'address.formattedAddress': 1,
+            'description': 1,
+            'categories': 1,
+            'images': 1,
+            'averageRating': 1,
+            'localUrl': 1,
+        })
+            .exec()
+            .then((restaurants) => {
+                topRestaurants = restaurants;
+                res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: restaurants});
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        previousRefresh = new Date();
+    }else{
+        res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: topRestaurants});
+    }
 });
 
 router.get('/about', (req, res) => {
@@ -108,7 +133,7 @@ router.get('/restaurant/:url', (req, res) => {
             }).catch(() => {
                 return res.render('errors/404', {title: title, user: req.user});
             })
-        }else{
+        } else {
             res.render('errors/404', {title: title, user: req.user});
         }
 
@@ -128,7 +153,7 @@ router.get('/signup', (req, res) => {
 });
 
 router.get('/user/:_id', (req, res) => {
-    if ((req.user) && (req.user.reducedID === req.params._id)){
+    if ((req.user) && (req.user.reducedID === req.params._id)) {
         let restaurantList = [];
         let childrenPromises = [];
         let reviewList = [];
@@ -152,12 +177,17 @@ router.get('/user/:_id', (req, res) => {
         }
 
         Promise.all(childrenPromises).then(() => {
-            return res.render('user_manager', {title: title, user: req.user, reviews: reviewList, restaurants: restaurantList});
+            return res.render('user_manager', {
+                title: title,
+                user: req.user,
+                reviews: reviewList,
+                restaurants: restaurantList
+            });
         }).catch((err) => {
             console.log(err);
             return res.render('errors/404', {title: title, user: req.user});
         });
-    }else{
+    } else {
         res.render('errors/403', {title: title, user: req.user});
     }
 });
