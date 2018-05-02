@@ -51,6 +51,7 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-timepicker/')));
+app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-form/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-validation/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 

@@ -10,9 +10,20 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const bcrypt = require('bcrypt-nodejs');
+const multer = require('multer');
 
 router.use(bodyParser.urlencoded({extended: true}));
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, './public/images/userImages');
+    },
+    filename: (req, file, callback) => {
+        callback(null, req.user.reducedID);
+    }
+});
+const upload = multer({storage: storage});
+
 
 // ================ POST Methods ================ \\
 
@@ -45,29 +56,36 @@ router.post('/update_postcode', (req, res) => {
 });
 
 router.post('/update_password', (req, res) => {
-    User.findOne({_id: req.body._id},  (err, user) => {
-        user.comparePassword(req.body.password.old, (err, matched)=>{
-            if (err){
+    User.findOne({_id: req.body._id}, (err, user) => {
+        user.comparePassword(req.body.password.old, (err, matched) => {
+            if (err) {
                 console.log(`Error: ${err}`);
                 res.send('0');
             }
 
-            if (matched){
+            if (matched) {
                 user.password = req.body.password.new;
                 user.save()
-                    .then(()=>{
+                    .then(() => {
                         res.send('1');
                     })
-                    .catch((err)=>{
+                    .catch((err) => {
                         console.log(`Unable to save user: ${err}`);
                         res.send('2');
                     })
-            }else{
+            } else {
                 console.log('oldPassword <> user.password');
                 res.send('0');
             }
         });
     });
+});
+
+
+router.post('/update_image',  upload.single('displayImage'), (req, res) => {
+    console.log('POST Triggered');
+    // console.log(req.user);
+    res.send('hello');
 });
 
 module.exports = router;

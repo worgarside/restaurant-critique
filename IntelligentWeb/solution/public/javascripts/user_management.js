@@ -20,6 +20,7 @@ const detailsPassword = $('#details-password');
 const detailsImage = $('#details-image');
 
 const user = JSON.parse(userVar);
+let imageURL = '';
 
 // ================ Name ================ \\
 
@@ -52,6 +53,7 @@ confirmName.click(() => {
                 $('#name-p').text(`Name: ${newName.first} ${newName.last}`);
                 detailsName.find('.new').hide();
                 detailsName.find('.current').css('display', 'flex');
+                alert('Your name has been successfully updated');
             } else {
                 console.log('Unable to change postcode');
                 // TODO: name change failure handling
@@ -96,6 +98,7 @@ confirmPostcode.click(() => {
                 $('#postcode-p').text(`Postcode: ${newPostcode}`);
                 detailsPostcode.find('.current').css('display', 'flex');
                 detailsPostcode.find('.new').hide();
+                alert('Your postcode has been successfully updated');
             } else {
                 console.log('Unable to change postcode');
                 // TODO: postcode change failure handling
@@ -122,8 +125,8 @@ editPassword.click(() => {
     cancelImage.click();
 });
 
-jQuery.validator.addMethod("notEqual", function(value, element, param) {
-    return this.optional(element) || value !==  $(param).val();
+jQuery.validator.addMethod("notEqual", function (value, element, param) {
+    return this.optional(element) || value !== $(param).val();
 });
 
 $('#change-password-form').validate({
@@ -173,6 +176,7 @@ confirmPassword.click(() => {
                 $('#password-p').text('Password: Successfully changed');
                 detailsPassword.find('.current').css('display', 'flex');
                 detailsPassword.find('.new').hide();
+                alert('Your password has been successfully updated');
             } else if (result === '2') {
                 //unable to save doc
                 console.log('Error updating db');
@@ -187,6 +191,56 @@ confirmPassword.click(() => {
 cancelPassword.click(() => {
     detailsPassword.find('.current').css('display', 'flex');
     detailsPassword.find('.new').hide();
+});
+
+// ================ Image ================ \\
+
+$('#display-picture').click(() => {
+    $("#display-picture-upload").click();
+});
+
+function previewImage(imageInput) {
+    if (imageInput.files && imageInput.files[0]) {
+        imageURL = window.URL.createObjectURL(imageInput.files[0]);
+        $('#display-picture').attr('src', imageURL);
+    }
+}
+
+$('#display-picture-upload').change(function () {
+    previewImage(this);
+});
+
+editImage.click(() => {
+    detailsImage.find('.current').hide();
+    detailsImage.find('.new').css('display', 'flex');
+    cancelName.click();
+    cancelPostcode.click();
+    cancelPassword.click();
+});
+
+$('#change-image-form').submit(function () {
+    $(this).ajaxSubmit({
+        error: (xhr) => {
+            alert('Error: ' + xhr.status);
+            //  TODO change this
+        },
+        success: (response) => {
+            // Force a GET request by adding timestamp param to refresh the image source
+            $('#user-profile-image').attr('src', `/images/userImages/${user.reducedID}?` + new Date().getTime());
+            detailsImage.find('.current').css('display', 'flex');
+            detailsImage.find('.new').hide();
+            alert('Your profile picture has been successfully updated');
+            console.log('Returned');
+        }
+    });
+
+    return false; // Blocks the form's default behaviour
+});
+
+
+cancelImage.click(() => {
+    detailsImage.find('.current').css('display', 'flex');
+    detailsImage.find('.new').hide();
 });
 
 console.log('Loaded user_management.js');

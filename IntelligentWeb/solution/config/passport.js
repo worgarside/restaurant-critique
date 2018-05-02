@@ -44,7 +44,7 @@ module.exports = function (passport) {
                         return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
                     }
 
-                    console.log("User verified, logging in");
+                    console.log(`User verified and logging in at ${new Date()}`);
                     return done(null, user);
                 });
             });

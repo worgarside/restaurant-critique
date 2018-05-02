@@ -10,7 +10,7 @@ $('#display-picture').click(() => {
 
 /**
  * Shows a preview of the User's display image on the page after it is uploaded
- * @param {HTMLElement} imageInput The HTML element which alows image submission
+ * @param {HTMLElement} imageInput The HTML element which allows image submission
  */
 function previewImage(imageInput) {
     if (imageInput.files && imageInput.files[0]) {
