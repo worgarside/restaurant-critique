@@ -378,7 +378,7 @@ footer {
 
 // ================ Index ================ \\
 
-.index-image{
+.index-image {
   width: 100%;
   height: 240px;
   object-fit: cover;
@@ -415,193 +415,244 @@ footer {
 
 // ================ New Restaurant ================ \\
 
-#opening-time, #closing-time {
-  text-align: center;
-  text-align: -moz-center; // Firefox
-  padding-left: 0;
-  padding-right: 0;
-}
-
-button.btn.btn-default#add-times, #lookup-btn {
-  width: 100%;
-}
-
-.address-input {
-  &-found {
-    &-controls {
-      float: right;
-      a {
-        display: inline-block;
-        font-size: 18px;
-        color: black;
-        padding: 0 5px;
-        margin: 0 1px;
-      }
-    }
+#new-restaurant-form {
+  #opening-time, #closing-time {
+    text-align: center;
+    text-align: -moz-center; // Firefox
+    padding-left: 0;
+    padding-right: 0;
   }
-}
 
-#address {
-  &-input-choice .btn-group {
+  button.btn.btn-default#add-times, #lookup-btn {
     width: 100%;
   }
 
-  &-lookup {
-    &-button {
-      width: 50%;
-      border-right: solid black 1px;
+  .address-input {
+    &-found {
+      &-controls {
+        float: right;
+        a {
+          display: inline-block;
+          font-size: 18px;
+          color: black;
+          padding: 0 5px;
+          margin: 0 1px;
+        }
+      }
+    }
+  }
+
+  #address {
+    &-input-choice .btn-group {
+      width: 100%;
     }
 
-    &-found {
-      display: none;
-      &-confirm {
-        &-control {
-          display: none;
-          span {
-            &::before {
-              font-size: 2rem;
+    &-lookup {
+      &-button {
+        width: 50%;
+        border-right: solid black 1px;
+      }
+
+      &-found {
+        display: none;
+        &-confirm {
+          &-control {
+            display: none;
+            span {
+              &::before {
+                font-size: 2rem;
+              }
+              &:hover {
+                cursor: pointer;
+                color: @green;
+                text-decoration: none;
+              }
             }
+          }
+        }
+
+        &-edit {
+          display: none;
+
+          &-control {
             &:hover {
               cursor: pointer;
-              color: @green;
+              color: @blue;
               text-decoration: none;
             }
           }
         }
       }
+    }
 
-      &-edit {
+    &-map {
+      &-button {
+        width: 50%;
+        border-left: solid black 1px;
+      }
+
+      &-edit-control:hover {
+        cursor: pointer;
+        color: @blue;
+        text-decoration: none;
+      }
+
+      &-map {
+        width: 100%;
+        height: 300px;
+
+        &-wrapper {
+          width: 100%;
+          display: none;
+        }
+      }
+
+      &-text {
         display: none;
+      }
+    }
+  }
 
-        &-control {
-          &:hover {
-            cursor: pointer;
-            color: @blue;
-            text-decoration: none;
-          }
+  #features {
+    @selector-bg-color: @grey-lighter;
+    @selector-yes-color: @green;
+    @selector-unknown-color: @grey-mid;
+    @selector-no-color: @red;
+    @selector-height: 1.125rem;
+
+    p {
+      margin: 6px 0;
+    }
+
+    .wrapper {
+      margin: 8px 0;
+      width: 100%;
+      height: @selector-height;
+      position: relative;
+      background: @selector-bg-color;
+      border-radius: @selector-height/2;
+
+      .selected-highlight {
+        cursor: pointer;
+        border: solid 2px @selector-bg-color;
+        border-radius: 50%;
+        width: 20%;
+        height: 100%;
+        position: absolute;
+        -webkit-transition: all 0.1s ease-in-out;
+        -moz-transition: all 0.1s ease-in-out;
+        -ms-transition: all 0.1s ease-in-out;
+        -o-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+      }
+
+      label {
+        cursor: pointer;
+        width: unit(100/3, %);
+        position: absolute;
+        display: inline-block;
+      }
+
+      input {
+        display: none;
+      }
+    }
+
+    .yes-radio:checked ~ .selected-highlight {
+      background: @selector-yes-color;
+      left: 80%;
+    }
+
+    .unknown-radio:checked ~ .selected-highlight {
+      background: @selector-unknown-color;
+      left: 40%;
+    }
+    .no-radio:checked ~ .selected-highlight {
+      background: @selector-no-color;
+      left: 0;
+    }
+
+    .unknown-radio, .unknown-label {
+      left: unit(100/3, %);
+    }
+
+    .yes-radio, .yes-label {
+      left: unit(200/3, %);
+    }
+  }
+
+  .price-range-label {
+    margin: 7px 0 0 0.75rem;
+    position: absolute;
+    cursor: text;
+  }
+
+  #price {
+    &-lower {
+      display: inline-block;
+      padding-left: 1.5rem;
+      width: 40%;
+    }
+
+    &-to {
+      margin: 0 0.85rem;
+    }
+
+    &-upper {
+      display: inline-block;
+      padding-left: 1.5rem;
+      width: 40%;
+    }
+  }
+
+  #restaurant-images {
+    .input-group#image-upload-link > *{
+      cursor: pointer;
+    }
+
+    .input-group#image-upload-link{
+      button{
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    #uploaded-images {
+      //display: none;
+      .row {
+        height: 2rem;
+      }
+
+      p {
+        width: 280px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin-left: 0.5rem;
+      }
+
+      span > img {
+        display: none;
+        position: absolute;
+        width: 15rem;
+        height: auto;
+        z-index: 1000;
+        right: 0;
+      }
+      span:hover > img {
+        display: block;
+      }
+
+      span.oi.oi-image {
+        margin-right: 0.5rem;
+        &:hover {
+          color: @blue;
+          cursor: pointer;
         }
       }
     }
   }
 
-  &-map {
-    &-button {
-      width: 50%;
-      border-left: solid black 1px;
-    }
-
-    &-edit-control:hover {
-      cursor: pointer;
-      color: @blue;
-      text-decoration: none;
-    }
-
-    &-map {
-      width: 100%;
-      height: 300px;
-
-      &-wrapper {
-        width: 100%;
-        display: none;
-      }
-    }
-
-    &-text {
-      display: none;
-    }
-  }
-}
-
-#features {
-  @selector-bg-color: @grey-lighter;
-  @selector-yes-color: @green;
-  @selector-unknown-color: @grey-mid;
-  @selector-no-color: @red;
-  @selector-height: 1.125rem;
-
-  p {
-    margin: 6px 0;
-  }
-
-  .wrapper {
-    margin: 8px 0;
-    width: 100%;
-    height: @selector-height;
-    position: relative;
-    background: @selector-bg-color;
-    border-radius: @selector-height/2;
-
-    .selected-highlight {
-      cursor: pointer;
-      border: solid 2px @selector-bg-color;
-      border-radius: 50%;
-      width: 20%;
-      height: 100%;
-      position: absolute;
-      -webkit-transition: all 0.1s ease-in-out;
-      -moz-transition: all 0.1s ease-in-out;
-      -ms-transition: all 0.1s ease-in-out;
-      -o-transition: all 0.1s ease-in-out;
-      transition: all 0.1s ease-in-out;
-    }
-
-    label {
-      cursor: pointer;
-      width: unit(100/3, %);
-      position: absolute;
-      display: inline-block;
-    }
-
-    input {
-      display: none;
-    }
-  }
-
-  .yes-radio:checked ~ .selected-highlight {
-    background: @selector-yes-color;
-    left: 80%;
-  }
-
-  .unknown-radio:checked ~ .selected-highlight {
-    background: @selector-unknown-color;
-    left: 40%;
-  }
-  .no-radio:checked ~ .selected-highlight {
-    background: @selector-no-color;
-    left: 0;
-  }
-
-  .unknown-radio, .unknown-label {
-    left: unit(100/3, %);
-  }
-
-  .yes-radio, .yes-label {
-    left: unit(200/3, %);
-  }
-}
-
-.price-range-label {
-  margin: 7px 0 0 0.75rem;
-  position: absolute;
-  cursor: text;
-}
-
-#price {
-  &-lower {
-    display: inline-block;
-    padding-left: 1.5rem;
-    width: 40%;
-  }
-
-  &-to {
-    margin: 0 0.85rem;
-  }
-
-  &-upper {
-    display: inline-block;
-    padding-left: 1.5rem;
-    width: 40%;
-  }
 }
 
 // ================ Restaurants Nearby ================ \\

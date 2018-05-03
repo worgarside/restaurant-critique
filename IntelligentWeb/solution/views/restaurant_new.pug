@@ -154,28 +154,40 @@ block content
                                             #category-dropdown
 
                             .col-5.offset-1
-                                #features
-                                    .form-row
-                                        .col
-                                            p Restaurant Features
-                                    .form-row
-                                        .col-3.offset-8
-                                            p.float-left No
-                                            p.float-right Yes
-                                    each id in Object.keys(features)
-                                        - var value = features[id].name
-                                        .form-row
-                                            .col-7.text-right
-                                                p= value
-                                            .col-3.offset-1
-                                                .wrapper
-                                                    label.invisible-label.no-label(for=`no-${id}`)
-                                                    input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
-                                                    label.invisible-label.unknown-label(for=`unknown-${id}`)
-                                                    input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
-                                                    label.invisible-label.yes-label(for=`yes-${id}`)
-                                                    input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
-                                                    .selected-highlight
+                                .form-row#restaurant-images
+                                    .col
+                                        p Upload Images
+                                        .input-group#image-upload-link
+                                            input.form-control#file-count(type='text', disabled='disabled', value='Click here to upload images')
+                                            button.btn.btn-info(type='button') Browse
+                                        input.d-none#image-upload(type='file', multiple='multiple')
+                                        #uploaded-images
+
+                                br
+                                .form-row
+                                    .col
+                                        #features
+                                            .form-row
+                                                .col
+                                                    p Restaurant Features
+                                            .form-row
+                                                .col-3.offset-8
+                                                    p.float-left No
+                                                    p.float-right Yes
+                                            each id in Object.keys(features)
+                                                - var value = features[id].name
+                                                .form-row
+                                                    .col-7.text-right
+                                                        p= value
+                                                    .col-3.offset-1
+                                                        .wrapper
+                                                            label.invisible-label.no-label(for=`no-${id}`)
+                                                            input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
+                                                            label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                            input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
+                                                            label.invisible-label.yes-label(for=`yes-${id}`)
+                                                            input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
+                                                            .selected-highlight
 
                         .d-none
                             each day in daysOfWeek

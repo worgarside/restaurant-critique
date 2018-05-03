@@ -34,7 +34,7 @@ $(() => {
     categories = categoryVar;
 });
 
-$('#new-restaurant-form').on('keyup keypress', function(e) {
+$('#new-restaurant-form').on('keyup keypress', function (e) {
     const keyCode = e.keyCode || e.which;
     if (keyCode === 13) {
         e.preventDefault();
@@ -659,6 +659,54 @@ function colorPriceRangeInput() {
 
 // ================ Create Restaurant ================ \\
 
+const imageInput = $('#image-upload');
+const imageList = $('#uploaded-images');
+const imageClicker = $('#image-upload-link');
+const fileCountInput = $('#file-count');
+
+imageClicker.click(() => {
+    imageInput.click();
+});
+
+
+imageInput.change(function () {
+    imageList.empty();
+
+    for (let i = 0; i < this.files.length; i++) {
+        let newFile = {
+            name: this.files[i].name,
+            url: window.URL.createObjectURL(this.files[i])
+        };
+
+        imageList.append(`
+            <div class="row">
+              <div class="col-10">
+                <div class="vert-center-parent">
+                  <div class="vert-center-child">
+                    <p class="mb-0">${newFile.name}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="vert-center-parent">
+                  <div class="vert-center-child"><span class="oi oi-image d-inline"><img src='${newFile.url}'/></span></div>
+                </div>
+              </div>
+            </div>
+        `);
+    }
+
+    if (this.files.length === 0) {
+        fileCountInput.val('Click here to upload images');
+    }else if (this.files.length === 1){
+        fileCountInput.val('1 File Added');
+    }else{
+        fileCountInput.val(`${this.files.length} Files Added`);
+    }
+});
+
+// ================ Create Restaurant ================ \\
+
 /**
  * Submits the Restaurant immediately after setting the verification and publish flag to False on button click
  * @function saveRestaurant
@@ -680,15 +728,15 @@ $('#publish-restaurant').click(() => {
     $('#submit').click();
 });
 
-$('#verify-email').click(()=>{
+$('#verify-email').click(() => {
     $.ajax({
         url: '/verify_email',
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (response) => {
-            if (response){
+            if (response) {
                 alert('Verification email sent, it should arrive within the next 24 hours. If not, please check your spam folder or contact us.');
-            }else{
+            } else {
                 alert('Sorry, we are unable to process your request at this time. PLease try again later.');
             }
         },
