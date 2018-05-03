@@ -47,37 +47,44 @@ block content
                 .row
                     .col
                         .wrapper-gret
-                            form#review-form(action='/review' method='POST')
-                                h5 Have you been to this restaurant? Let us know what you think!
-                                .form-row
-                                    .form-group.col
-                                        .stars
-                                            input#star-5.star(type='radio', name='star')
-                                            label.star(for='star-5')
-                                                span.oi.oi-star
-                                            input#star-4.star(type='radio', name='star')
-                                            label.star(for='star-4')
-                                                span.oi.oi-star
-                                            input#star-3.star(type='radio', name='star')
-                                            label.star(for='star-3')
-                                                span.oi.oi-star
-                                            input#star-2.star(type='radio', name='star')
-                                            label.star(for='star-2')
-                                                span.oi.oi-star
-                                            input#star-1.star(type='radio', name='star')
-                                            label.star(for='star-1')
-                                                span.oi.oi-star
-                                .form-row
-                                    .form-group.col
-                                        label(for='review-title') Title
-                                        input#review-title(type='text', name='title', placeholder='Title of review' required)
-                                .form-row
-                                    .form-group.col
-                                        label(for='review-message') Review
-                                        textarea#review-message(name='message', placeholder='Your message', style='height:100px' required)
-                                .form-row
-                                    .form-group.col
-                                        input(type='submit', value='Submit')
+                            - if (user)
+                                form#review-form(action='/restaurant/add_review' method='POST')
+                                    h5 Have you been to this restaurant? Let us know what you think!
+                                    .form-row
+                                        .form-group.col
+                                            .stars
+                                                input#star-5.star(type='radio', name='star', value='5')
+                                                label.star(for='star-5')
+                                                    span.oi.oi-star
+                                                input#star-4.star(type='radio', name='star', value='4')
+                                                label.star(for='star-4')
+                                                    span.oi.oi-star
+                                                input#star-3.star(type='radio', name='star', value='3')
+                                                label.star(for='star-3')
+                                                    span.oi.oi-star
+                                                input#star-2.star(type='radio', name='star', value='2')
+                                                label.star(for='star-2')
+                                                    span.oi.oi-star
+                                                input#star-1.star(type='radio', name='star', value='1')
+                                                label.star(for='star-1')
+                                                    span.oi.oi-star
+                                    .form-row
+                                        .form-group.col
+                                            label(for='review-title') Title
+                                            input#review-title(type='text', name='title', placeholder='Title of review' required)
+                                    .form-row
+                                        .form-group.col
+                                            label(for='review-message') Review
+                                            textarea#review-message(name='message', placeholder='Your message', style='height:100px' required)
+                                    //.form-row
+                                    //    .form-group.col
+                                    //            label(for='review-images') Images
+                                    //            input#review-images(type='file', name='pic', accept='images/*' multiple)
+                                    .form-row
+                                        .form-group.col
+                                                input#submit(type='submit', value='Submit')
+
+
             .col-5
                 .row
                     .col
@@ -176,12 +183,8 @@ block content
                                         .slideshow-next#button-next
                                             span.oi.oi-check.oi-chevron-right(aria-hidden='true')
 
-
-
-
-
     script const restaurantId = `#{restaurant._id}`
     script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`)
     script(type='text/javascript', src='/javascripts/restaurant.js')
+    script(type='text/javascript', src='/javascripts/review.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
-
