@@ -324,79 +324,104 @@ footer .footer-right {
   margin: 0 0.5rem;
 }
 #new-restaurant-form #opening-time,
-#new-restaurant-form #closing-time {
+#edit-restaurant-form #opening-time,
+#new-restaurant-form #closing-time,
+#edit-restaurant-form #closing-time {
   text-align: center;
   text-align: -moz-center;
   padding-left: 0;
   padding-right: 0;
 }
+#new-restaurant-form #description,
+#edit-restaurant-form #description {
+  resize: none;
+}
 #new-restaurant-form button.btn.btn-default#add-times,
-#new-restaurant-form #lookup-btn {
+#edit-restaurant-form button.btn.btn-default#add-times,
+#new-restaurant-form #lookup-btn,
+#edit-restaurant-form #lookup-btn {
   width: 100%;
 }
-#new-restaurant-form .address-input-found-controls {
+#new-restaurant-form .address-input-found-controls,
+#edit-restaurant-form .address-input-found-controls {
   float: right;
 }
-#new-restaurant-form .address-input-found-controls a {
+#new-restaurant-form .address-input-found-controls a,
+#edit-restaurant-form .address-input-found-controls a {
   display: inline-block;
   font-size: 18px;
   color: black;
   padding: 0 5px;
   margin: 0 1px;
 }
-#new-restaurant-form #address-input-choice .btn-group {
+#new-restaurant-form #address-input-choice .btn-group,
+#edit-restaurant-form #address-input-choice .btn-group {
   width: 100%;
 }
-#new-restaurant-form #address-lookup-button {
+#new-restaurant-form #address-lookup-button,
+#edit-restaurant-form #address-lookup-button {
   width: 50%;
   border-right: solid black 1px;
 }
-#new-restaurant-form #address-lookup-found {
+#new-restaurant-form #address-lookup-found,
+#edit-restaurant-form #address-lookup-found {
   display: none;
 }
-#new-restaurant-form #address-lookup-found-confirm-control {
+#new-restaurant-form #address-lookup-found-confirm-control,
+#edit-restaurant-form #address-lookup-found-confirm-control {
   display: none;
 }
-#new-restaurant-form #address-lookup-found-confirm-control span::before {
+#new-restaurant-form #address-lookup-found-confirm-control span::before,
+#edit-restaurant-form #address-lookup-found-confirm-control span::before {
   font-size: 2rem;
 }
-#new-restaurant-form #address-lookup-found-confirm-control span:hover {
+#new-restaurant-form #address-lookup-found-confirm-control span:hover,
+#edit-restaurant-form #address-lookup-found-confirm-control span:hover {
   cursor: pointer;
   color: #00cd00;
   text-decoration: none;
 }
-#new-restaurant-form #address-lookup-found-edit {
+#new-restaurant-form #address-lookup-found-edit,
+#edit-restaurant-form #address-lookup-found-edit {
   display: none;
 }
-#new-restaurant-form #address-lookup-found-edit-control:hover {
+#new-restaurant-form #address-lookup-found-edit-control:hover,
+#edit-restaurant-form #address-lookup-found-edit-control:hover {
   cursor: pointer;
   color: #0061b4;
   text-decoration: none;
 }
-#new-restaurant-form #address-map-button {
+#new-restaurant-form #address-map-button,
+#edit-restaurant-form #address-map-button {
   width: 50%;
   border-left: solid black 1px;
 }
-#new-restaurant-form #address-map-edit-control:hover {
+#new-restaurant-form #address-map-edit-control:hover,
+#edit-restaurant-form #address-map-edit-control:hover {
   cursor: pointer;
   color: #0061b4;
   text-decoration: none;
 }
-#new-restaurant-form #address-map-map {
+#new-restaurant-form #address-map-map,
+#edit-restaurant-form #address-map-map {
   width: 100%;
   height: 300px;
 }
-#new-restaurant-form #address-map-map-wrapper {
+#new-restaurant-form #address-map-map-wrapper,
+#edit-restaurant-form #address-map-map-wrapper {
   width: 100%;
   display: none;
 }
-#new-restaurant-form #address-map-text {
+#new-restaurant-form #address-map-text,
+#edit-restaurant-form #address-map-text {
   display: none;
 }
-#new-restaurant-form #features p {
+#new-restaurant-form #features p,
+#edit-restaurant-form #features p {
   margin: 6px 0;
 }
-#new-restaurant-form #features .wrapper {
+#new-restaurant-form #features .wrapper,
+#edit-restaurant-form #features .wrapper {
   margin: 8px 0;
   width: 100%;
   height: 1.125rem;
@@ -404,7 +429,8 @@ footer .footer-right {
   background: #dbdbdb;
   border-radius: 0.5625rem;
 }
-#new-restaurant-form #features .wrapper .selected-highlight {
+#new-restaurant-form #features .wrapper .selected-highlight,
+#edit-restaurant-form #features .wrapper .selected-highlight {
   cursor: pointer;
   border: solid 2px #dbdbdb;
   border-radius: 50%;
@@ -417,71 +443,89 @@ footer .footer-right {
   -o-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
-#new-restaurant-form #features .wrapper label {
+#new-restaurant-form #features .wrapper label,
+#edit-restaurant-form #features .wrapper label {
   cursor: pointer;
   width: 33.33333333%;
   position: absolute;
   display: inline-block;
 }
-#new-restaurant-form #features .wrapper input {
+#new-restaurant-form #features .wrapper input,
+#edit-restaurant-form #features .wrapper input {
   display: none;
 }
-#new-restaurant-form #features .yes-radio:checked ~ .selected-highlight {
+#new-restaurant-form #features .yes-radio:checked ~ .selected-highlight,
+#edit-restaurant-form #features .yes-radio:checked ~ .selected-highlight {
   background: #00cd00;
   left: 80%;
 }
-#new-restaurant-form #features .unknown-radio:checked ~ .selected-highlight {
+#new-restaurant-form #features .unknown-radio:checked ~ .selected-highlight,
+#edit-restaurant-form #features .unknown-radio:checked ~ .selected-highlight {
   background: #919191;
   left: 40%;
 }
-#new-restaurant-form #features .no-radio:checked ~ .selected-highlight {
+#new-restaurant-form #features .no-radio:checked ~ .selected-highlight,
+#edit-restaurant-form #features .no-radio:checked ~ .selected-highlight {
   background: #eb0000;
   left: 0;
 }
 #new-restaurant-form #features .unknown-radio,
-#new-restaurant-form #features .unknown-label {
+#edit-restaurant-form #features .unknown-radio,
+#new-restaurant-form #features .unknown-label,
+#edit-restaurant-form #features .unknown-label {
   left: 33.33333333%;
 }
 #new-restaurant-form #features .yes-radio,
-#new-restaurant-form #features .yes-label {
+#edit-restaurant-form #features .yes-radio,
+#new-restaurant-form #features .yes-label,
+#edit-restaurant-form #features .yes-label {
   left: 66.66666667%;
 }
-#new-restaurant-form .price-range-label {
+#new-restaurant-form .price-range-label,
+#edit-restaurant-form .price-range-label {
   margin: 7px 0 0 0.75rem;
   position: absolute;
   cursor: text;
 }
-#new-restaurant-form #price-lower {
+#new-restaurant-form #price-lower,
+#edit-restaurant-form #price-lower {
   display: inline-block;
   padding-left: 1.5rem;
   width: 40%;
 }
-#new-restaurant-form #price-to {
+#new-restaurant-form #price-to,
+#edit-restaurant-form #price-to {
   margin: 0 0.85rem;
 }
-#new-restaurant-form #price-upper {
+#new-restaurant-form #price-upper,
+#edit-restaurant-form #price-upper {
   display: inline-block;
   padding-left: 1.5rem;
   width: 40%;
 }
-#new-restaurant-form #restaurant-images .input-group#image-upload-link > * {
+#new-restaurant-form #restaurant-images .input-group#image-upload-link > *,
+#edit-restaurant-form #restaurant-images .input-group#image-upload-link > * {
   cursor: pointer;
 }
-#new-restaurant-form #restaurant-images .input-group#image-upload-link button {
+#new-restaurant-form #restaurant-images .input-group#image-upload-link button,
+#edit-restaurant-form #restaurant-images .input-group#image-upload-link button {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-#new-restaurant-form #restaurant-images #uploaded-images .row {
+#new-restaurant-form #restaurant-images #uploaded-images .row,
+#edit-restaurant-form #restaurant-images #uploaded-images .row {
   height: 2rem;
 }
-#new-restaurant-form #restaurant-images #uploaded-images p {
+#new-restaurant-form #restaurant-images #uploaded-images p,
+#edit-restaurant-form #restaurant-images #uploaded-images p {
   width: 280px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   margin-left: 0.5rem;
 }
-#new-restaurant-form #restaurant-images #uploaded-images span > img {
+#new-restaurant-form #restaurant-images #uploaded-images span > img,
+#edit-restaurant-form #restaurant-images #uploaded-images span > img {
   display: none;
   position: absolute;
   width: 15rem;
@@ -489,13 +533,16 @@ footer .footer-right {
   z-index: 1000;
   right: 0;
 }
-#new-restaurant-form #restaurant-images #uploaded-images span:hover > img {
+#new-restaurant-form #restaurant-images #uploaded-images span:hover > img,
+#edit-restaurant-form #restaurant-images #uploaded-images span:hover > img {
   display: block;
 }
-#new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image {
+#new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image,
+#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image {
   margin-right: 0.5rem;
 }
-#new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover {
+#new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover,
+#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover {
   color: #0061b4;
   cursor: pointer;
 }

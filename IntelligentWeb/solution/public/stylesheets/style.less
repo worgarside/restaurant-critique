@@ -415,12 +415,16 @@ footer {
 
 // ================ New Restaurant ================ \\
 
-#new-restaurant-form {
+#new-restaurant-form, #edit-restaurant-form {
   #opening-time, #closing-time {
     text-align: center;
     text-align: -moz-center; // Firefox
     padding-left: 0;
     padding-right: 0;
+  }
+
+  #description {
+    resize: none;
   }
 
   button.btn.btn-default#add-times, #lookup-btn {
@@ -606,12 +610,12 @@ footer {
   }
 
   #restaurant-images {
-    .input-group#image-upload-link > *{
+    .input-group#image-upload-link > * {
       cursor: pointer;
     }
 
-    .input-group#image-upload-link{
-      button{
+    .input-group#image-upload-link {
+      button {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
       }
@@ -652,7 +656,6 @@ footer {
       }
     }
   }
-
 }
 
 // ================ Restaurants Nearby ================ \\

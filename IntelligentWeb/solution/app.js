@@ -60,6 +60,7 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-icon
 const index = require('./routes/index');
 const signup = require('./routes/signup');
 const restaurantNew = require('./routes/restaurant_new');
+const restaurantEdit = require('./routes/restaurant_edit');
 const restaurantsNearby = require('./routes/restaurants_nearby');
 const contact = require('./routes/contact');
 const search = require('./routes/search');
@@ -69,6 +70,7 @@ const review = require('./routes/review');
 app.use('/', index);
 app.use('/signup', signup);
 app.use('/restaurant/new', restaurantNew);
+app.use('/restaurant/edit', restaurantEdit);
 app.use('/restaurants-nearby', restaurantsNearby);
 app.use('/contact', contact);
 app.use('/search', search);

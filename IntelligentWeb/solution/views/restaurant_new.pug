@@ -25,22 +25,22 @@ block content
                     form#new-restaurant-form(action='/restaurant/new/add_restaurant', method='post', enctype="multipart/form-data")
                         .form-row
                             .col-6
-                                .form-row
-                                    .form-group.col
+                                .form-row.form-group
+                                    .col
                                         label(for='restaurantName') Restaurant Name
                                         input.form-control#restaurantName(type='text', name='restaurantName',
                                         placeholder="Tom's Bistro", required, autocomplete='none')
 
                                 #address-input-choice
-                                    .form-row
-                                        .form-group.col
+                                    .form-row.form-group
+                                        .col
                                             .btn-group
                                                 button.btn.btn-secondary.address-input.active#address-lookup-button(type='button') Address Lookup
                                                 button.btn.btn-secondary.address-input#address-map-button(type='button') Set location on map
 
                                 #address-lookup-search
-                                    .form-row
-                                        .form-group.col-5
+                                    .form-row.form-group
+                                        .col-5
                                             label(for='search-address') Address Line 1
                                             input.title-case.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
                                         .form-group.col-3
@@ -51,8 +51,8 @@ block content
                                             button.btn#lookup-btn(type='button', onclick='findAddress();') Find address
 
                                 #address-lookup-found
-                                    .form-row
-                                        .form-group.col
+                                    .form-row.form-group
+                                        .col
                                             label(for='formatted-address-lookup') Address
                                             span.oi.oi-pencil.float-right#address-lookup-found-edit-control(aria-hidden='true', onclick='editAddress();')
                                             input.form-control#formatted-address-lookup(disabled)
@@ -62,15 +62,15 @@ block content
                                                 span.oi.oi-check( aria-hidden='true', onclick='confirmEdit();')
 
                                 #address-lookup-found-edit
-                                    .form-row
-                                        .form-group.col-6
+                                    .form-row.form-group
+                                        .col-6
                                             label(for='address1') Address Line 1
                                             input.title-case.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
                                         .form-group.col-6
                                             label(for='address2') Address Line 2
                                             input.title-case.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
-                                    .form-row
-                                        .form-group.col-6
+                                    .form-row.form-group
+                                        .col-6
                                             label(for='city') City
                                             input.title-case.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
                                         .form-group.col-6
@@ -78,15 +78,15 @@ block content
                                             input.upper-case.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
 
                                 #address-map-text
-                                    .form-row
-                                        .form-group.col
+                                    .form-row.form-group
+                                        .col
                                             label(for='formatted-address-map') Address
                                             span.oi.oi-pencil.float-right#address-map-edit-control(aria-hidden='true', onclick='editMapAddress();')
                                             input.form-control#formatted-address-map(disabled, value='Drag the marker on the map to set the address')
 
                                 #address-map-map-wrapper
-                                    .form-row
-                                        .form-group.col
+                                    .form-row.form-group
+                                        .col
                                             #address-map-map
 
                                 .form-row
@@ -126,7 +126,7 @@ block content
                                             small &nbsp;&nbsp;(Max. 280 chars)
                                         textarea.form-control#description(maxlength="280", name='description',
                                         placeholder="Say some things about the restaurant's atmosphere, the kind of " +
-                                        "food served, or whatever you feel like!" , rows=4, style='resize: none')
+                                        "food served, or whatever you feel like!" , rows=4)
 
                                 .form-row
                                     .form-group.col-6

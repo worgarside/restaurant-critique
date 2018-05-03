@@ -1,5 +1,5 @@
 /**
- * restaurant_new.js
+ * restaurant_edit.js
  * Client-side JS
  * @author Will Garside
  * @param {Array} categoryVar Array of categories passed from server
@@ -65,8 +65,9 @@ function addTimes() {
         const closeTimeInt = (closeTimeString.split(':')[0] * 60) + parseInt(closeTimeString.split(':')[1]);
 
         if (openTimeInt < closeTimeInt) {
-            const dayInput = $("#days-of-week");
-            const dayString = dayInput.children("option").filter(":selected").text();
+            const dayInput = $('#days-of-week');
+            // noinspection JSValidateTypes
+            const dayString = dayInput.children('option').filter(':selected').text();
             const dayValue = dayInput.val();
             const selectedTimes = $("#selected-opening-times");
 
@@ -85,7 +86,8 @@ function addTimes() {
                 `;
 
             dayInput.find(`option[value=${dayValue}]`).remove();
-            $("#selected-times-row").prop({hidden: false});
+            $('#selected-times-row').prop({hidden: false});
+            // noinspection JSValidateTypes
             if (dayInput.children('option').length === 0) {
                 $(".opening-times-form").prop({"disabled": true, hidden: true});
             }
@@ -274,7 +276,7 @@ function findAddress() {
 // noinspection JSUnusedGlobalSymbols
 /**
  * Toggles some HTML components to allow the user to edit their address
- * @returns {HTML} changes HTML
+ * @returns {String} changes HTML
  */
 function editAddress() {
     showHTML([
@@ -314,7 +316,7 @@ function confirmEdit() {
 
 /**
  * Simply modifies the HTML when the User confirms an address edit to keep the page from being cluttered
- * @returns {HTML} changes HTML
+ * @returns {String} changes HTML
  */
 function confirmEditHTMLMod() {
     $('#formatted-address-lookup').val(formattedAddress);
@@ -697,9 +699,9 @@ imageInput.change(function () {
 
     if (this.files.length === 0) {
         fileCountInput.val('Click here to upload images');
-    }else if (this.files.length === 1){
+    } else if (this.files.length === 1) {
         fileCountInput.val('1 File Added');
-    }else{
+    } else {
         fileCountInput.val(`${this.files.length} Files Added`);
     }
 });
@@ -745,4 +747,4 @@ $('#verify-email').click(() => {
     });
 });
 
-console.log('Loaded restaurant_new.js');
+console.log('Loaded restaurant_edit.js');

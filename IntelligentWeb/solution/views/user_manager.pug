@@ -167,7 +167,7 @@ block content
                                                 .vert-center-child
                                                     .btn-group.float-right
                                                         button.btn.btn-success(id=`publish-${restaurant._id}`) Publish
-                                                        button.btn.btn-info(id=`edit-${restaurant._id}`) Edit
+                                                        a.btn.btn-info(href=`/restaurant/edit/${restaurant._id}`) Edit
                                                         button.btn.btn-danger(id=`delete-${restaurant._id}`) Delete
 
                                 if restaurantIndex < restaurants.length - 1
