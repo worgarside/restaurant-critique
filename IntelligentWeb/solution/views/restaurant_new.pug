@@ -160,21 +160,21 @@ block content
                                             p Restaurant Features
                                     .form-row
                                         .col-3.offset-8
-                                            p.float-left Yes
-                                            p.float-right No
+                                            p.float-left No
+                                            p.float-right Yes
                                     each id in Object.keys(features)
                                         - var value = features[id].name
                                         .form-row
                                             .col-7.text-right
-                                                p #{value}
+                                                p= value
                                             .col-3.offset-1
                                                 .wrapper
-                                                    label.invisible-label.yes-label(for=`yes-${id}`)
-                                                    input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
-                                                    label.invisible-label.unknown-label(for=`unknown-${id}`)
-                                                    input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
                                                     label.invisible-label.no-label(for=`no-${id}`)
                                                     input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
+                                                    label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                    input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
+                                                    label.invisible-label.yes-label(for=`yes-${id}`)
+                                                    input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
                                                     .selected-highlight
 
                         .d-none
@@ -203,7 +203,6 @@ block content
                                         .col
                                             small Publishing a new Restaurant requires a verified account. To resend the verification email click&nbsp;
                                                 a#verify-email(href='javascript:void(0)') here
-                                            // TODO implement re-send
                                 else
                                     .form-row
                                         .col
@@ -211,9 +210,7 @@ block content
                                             input.d-none#verified-flag(type='checkbox', name='verified', checked)
                                             button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
 
-            //script const userVar = `!{JSON.stringify(user)}`;
             script const categoryVar = JSON.parse(`!{categories}`);
-            //link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css')
             script(src='//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js')
             // link(rel='stylesheet',  href="/scripts/jquery.timepicker.css")
             script(type='text/javascript', src='/javascripts/restaurant_new.js')

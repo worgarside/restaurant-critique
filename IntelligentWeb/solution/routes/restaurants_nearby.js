@@ -23,8 +23,6 @@ router.use(bodyParser.urlencoded({extended: true}));
  * @function getNearbyRestaurants
  */
 router.post('/', (req, res) => {
-    console.log(`POST received ${JSON.stringify(req.body)}`);
-
     const point = {
         type: "Point",
         coordinates: [req.body.lng, req.body.lat]
@@ -48,13 +46,9 @@ router.post('/', (req, res) => {
             res.send(restaurants);
         });
 
-    restaurantPromise
-        .then(() => {
-            console.log('Return successful');
-        })
-        .catch((err) => {
-            console.log(`Restaurant aggregation failed: ${err}`);
-        });
+    restaurantPromise.catch((err) => {
+        console.log(`Restaurant aggregation failed: ${err}`);
+    });
 });
 
 module.exports = router;

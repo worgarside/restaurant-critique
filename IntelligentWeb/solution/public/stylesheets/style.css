@@ -431,7 +431,7 @@ button.btn.btn-default#add-times,
 }
 #features .yes-radio:checked ~ .selected-highlight {
   background: #00cd00;
-  left: 0;
+  left: 80%;
 }
 #features .unknown-radio:checked ~ .selected-highlight {
   background: #919191;
@@ -439,14 +439,14 @@ button.btn.btn-default#add-times,
 }
 #features .no-radio:checked ~ .selected-highlight {
   background: #eb0000;
-  left: 80%;
+  left: 0;
 }
 #features .unknown-radio,
 #features .unknown-label {
   left: 33.33333333%;
 }
-#features .no-radio,
-#features .no-label {
+#features .yes-radio,
+#features .yes-label {
   left: 66.66666667%;
 }
 .price-range-label {

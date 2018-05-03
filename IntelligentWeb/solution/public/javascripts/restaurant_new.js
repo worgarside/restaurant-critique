@@ -32,7 +32,14 @@ $(() => {
     });
 
     categories = categoryVar;
+});
 
+$('#new-restaurant-form').on('keyup keypress', function(e) {
+    const keyCode = e.keyCode || e.which;
+    if (keyCode === 13) {
+        e.preventDefault();
+        return false;
+    }
 });
 
 // ================ Opening Times ================ \\
@@ -197,13 +204,6 @@ $('#address-lookup-search').find('input').keypress((e) => {
         $('#lookup-btn').click();
         e.preventDefault()
     }
-});
-
-/**
- * Class to stop accidental submission with Enter key
- */
-$('.no-enter-submit').keypress((e) => {
-    if (e.which === 13) e.preventDefault();
 });
 
 // noinspection JSUnusedGlobalSymbols
@@ -480,6 +480,7 @@ categoryPicker.keyup(() => {
  * Checks the Category picker's contents to determine if it should be shown or not
  */
 function checkCategoryPicker() {
+    console.log('.');
     if (categoryPicker.val().length > 0) {
         const matchedCategories = matchCategories(categoryPicker.val());
 
@@ -575,7 +576,7 @@ function selectCategory(category) {
         </div>
     `);
 
-    checkCategoryPicker();
+    categoryPicker.focus();
 }
 
 /**
@@ -597,7 +598,7 @@ function removeCategory(category) {
     categories.push(category);
     categoryBodyInput.val(JSON.stringify(selectedCategories));
 
-    checkCategoryPicker();
+    categoryPicker.focus();
 }
 
 /**

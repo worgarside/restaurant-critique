@@ -44,8 +44,8 @@ RestaurantSchema = Schema({
         upper: Number,
         band: {
             type: Number,
-            min: 1,
-            max: 5
+            min: 0,
+            max: 3
         }
     },
     categories: {type: [CategorySchema]},
