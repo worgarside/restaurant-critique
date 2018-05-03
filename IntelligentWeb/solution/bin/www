@@ -10,7 +10,8 @@
 
 const app = require('../app');
 const debug = require('debug')('code:server');
-const http = require('http');
+const https = require('https');
+const fs = require('fs-extra');
 
 /**
  * Get port from environment and store in Express.
@@ -22,8 +23,12 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+var options = {
+    key: fs.readFileSync('./private_access/ca.key'),
+    cert: fs.readFileSync('./private_access/ca.crt')
+};
 
-const server = http.createServer(app);
+const server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -86,8 +91,8 @@ function onError(error) {
  */
 
 function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
+    var addr = server.address();
+    var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
