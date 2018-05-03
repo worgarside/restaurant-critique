@@ -11,10 +11,13 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Restaurant = mongoose.model('Restaurant');
 const User = mongoose.model('User');
+const fs = require('fs');
+const dateFormat = require('dateformat');
+const title = 'Restaurant Critique';
 
 const multer = require('multer');
 router.use(bodyParser.urlencoded({extended: true}));
@@ -25,12 +28,13 @@ router.use(bodyParser.urlencoded({extended: true}));
  */
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, './public/images/restaurant');
+        callback(null, './public/images/temp_images');
     },
     filename: (req, file, callback) => {
         const re = /(?:\.([^.]+))?$/;
         const extension = `.${re.exec(file.originalname)[1]}`;
-        callback(null, req.body.restaurantName.replace(/[^a-zA-Z]/g, "-") + extension);
+        const filename = crypto.randomBytes(20).toString('hex');
+        callback(null, filename + extension);
     }
 });
 
@@ -47,10 +51,9 @@ const upload = multer({storage: storage});
   * tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int, restaurantName: string,
   * priceRange: string, address1:String, address2:String, priceLower:int, priceUpper:int, priceBand:int
   * }} body The values from the input form used in setting the attributes of the Restaurant
- *
  * @function addNewRestaurant
  */
-router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
+router.post('/add_restaurant', upload.array('images', 10), (req, res) => {
     const body = req.body;
     const creator = req.user;
     let published = false;
@@ -105,6 +108,9 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
         }
     }
 
+    // Process the images before the restaurant is saved to add their paths to the objects attributes
+    processImages(req.files, newRestaurant);
+
     newRestaurant.save().then(() => {
         console.log("Restaurant added to collection");
 
@@ -125,17 +131,41 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
             res.redirect(`/user/${req.user._id}`);
         }
     }).catch((err) => {
-        console.log(`Restaurant failed to add to collection: ${err}`);
-        res.render('/errors/restaurant_new_fail')
+        console.log(`Error in saving restaurant: ${err}`);
+        res.render('errors/restaurant_new_fail', {title: title, user: req.user});
     });
-
 });
 
+// TODO check this is used and jsdoc
 router.post('/verify_email', (req, res) => {
     User.findOne({_id: req.user._id}, (err, user) => {
         user.sendVerificationEmail();
         res.send(true);
     });
 });
+
+// TODO jsdoc
+function processImages(images, newRestaurant){
+    const imageDir = `./public/images/restaurants/${newRestaurant._id}`;
+    if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir);
+    }
+
+    const re = /(?:\.([^.]+))?$/;
+    const now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
+    let imageCount = 0;
+    let imageArray = [];
+
+    images.forEach((image)=>{
+        const extension = `.${re.exec(image.path)[1]}`;
+        const filename = `${now}_${imageCount}${extension}`;
+        const destination = `${imageDir}/${filename}`;
+        fs.rename(image.path, destination);
+        imageCount ++;
+        imageArray.push(filename);
+    });
+
+    newRestaurant.images = imageArray;
+}
 
 module.exports = router;
