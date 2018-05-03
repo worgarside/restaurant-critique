@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
             res.send(restaurants);
         });
 
-    restaurantPromise.catch((err) => {
+    restaurantPromise.then(()=>{}).catch((err) => {
         console.log(`Restaurant aggregation failed: ${err}`);
     });
 });

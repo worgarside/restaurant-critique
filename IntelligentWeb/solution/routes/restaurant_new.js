@@ -40,7 +40,7 @@ const upload = multer({storage: storage});
 
 
 /**
- * Configures and adds a new Restaurant object to the database when a formis submitted
+ * Configures and adds a new Restaurant object to the database when a form is submitted
  * Also adds the Restaurant ID to the creator's restaurants attribute
  *
  * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int, monClose:int,
@@ -52,7 +52,7 @@ const upload = multer({storage: storage});
  */
 router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
     const body = req.body;
-    const creator = JSON.parse(body.user);
+    const creator = req.user;
     let published = false;
 
     if (body.verified) {
@@ -116,13 +116,19 @@ router.post('/add_restaurant', upload.single('displayPicture'), (req, res) => {
                 if (err) {
                     console.log(`Error: ${err}`);
                 }
-
             });
+
+        if (newRestaurant.published){
+            const localUrl = `${newRestaurant.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${newRestaurant.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
+            res.redirect(`/restaurant/${localUrl}`);
+        }else{
+            res.redirect(`/user/${req.user._id}`);
+        }
     }).catch((err) => {
         console.log(`Restaurant failed to add to collection: ${err}`);
+        res.render('/errors/restaurant_new_fail')
     });
 
-    res.redirect('/')
 });
 
 router.post('/verify_email', (req, res) => {

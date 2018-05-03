@@ -35,7 +35,7 @@ block content
                                     .form-row
                                         .form-group.col
                                             .btn-group
-                                                button.btn.btn-secondary.address-input#address-lookup-button(type='button') Address Lookup
+                                                button.btn.btn-secondary.address-input.active#address-lookup-button(type='button') Address Lookup
                                                 button.btn.btn-secondary.address-input#address-map-button(type='button') Set location on map
 
                                 #address-lookup-search
@@ -182,12 +182,10 @@ block content
                                 input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
                                 input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
 
-                            - var userDetails = {_id: user._id, name: {first: user.name.first, last: user.name.last}}
                             input#lat(type="number", name='lat', autocomplete='none', readonly)
                             input#lng(type="number", name='lng', autocomplete='none', readonly)
                             input#category-body(name='categories', readonly)
                             input#price-range(type='number', name='priceRange', readonly)
-                            input#price-range(type='text', name='user', readonly, value=JSON.stringify(userDetails))
                             input#publish-flag(type='checkbox', name='published')
                             input#submit(type='submit')
 
@@ -197,7 +195,7 @@ block content
                                 if (!user.verified.flag)
                                     .form-row
                                         .col
-                                            button.btn#save-restaurant(type='button') Save Restaurant
+                                            button.btn#save-restaurant(type='button') Save Restaurant for Later
                                             button.btn.float-right(type='button', disabled) Publish Restaurant
                                     .form-row
                                         .col
@@ -206,7 +204,7 @@ block content
                                 else
                                     .form-row
                                         .col
-                                            button.btn#save-restaurant(type='button') Save Restaurant
+                                            button.btn#save-restaurant(type='button') Save Restaurant for Later
                                             input.d-none#verified-flag(type='checkbox', name='verified', checked)
                                             button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
 

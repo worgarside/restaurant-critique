@@ -27,6 +27,7 @@ const ID = {
     'Pizza Express': '5ab1677c521e5430fc7d2501',
     'Las Iguanas': '5ab1677c521e5430fc7d2502',
     'California Fresh': '5ab1677c521e5430fc7d2503',
+    'Grill & Go': '5ab1677c521e5430fc7d2504',
 };
 
 // ================ Database ================ \\
@@ -101,7 +102,7 @@ function populateUsers(insertPromises) {
         postcode: 'SY14 8JU',
         reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18'],
         reducedID: 'worgarside-gmail-com',
-        restaurants: {created: [ID["Nando's"], ID['Gourmet Burger Kitchen'], ID['Istanbul Restaurant'], ID['Pizza Express']]}
+        restaurants: {created: [ID["Nando's"], ID['Gourmet Burger Kitchen'], ID['Istanbul Restaurant'], ID['Pizza Express'], ID['Grill & Go']]}
     }).save());
 
     insertPromises.push(new User({
@@ -609,7 +610,7 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1320]],
         description: 'Upscale chain restaurant with a contemporary interior and a menu of classic Italian specialities.',
-        priceRange: {lower: 8, upper: 57.75, band: 4},
+        priceRange: {lower: 8, upper: 57.75, band: 3},
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Upscale'}],
         features: {
             alcohol: {value: true},
@@ -775,6 +776,50 @@ function populateRestaurants(insertPromises) {
         reviews: ['5aad98377888995220605d20'],
         images: ['2018-03-26 20-58-00.jpg', '2018-03-26 20-58-01.jpeg', '2018-03-26 20-58-02.jpg'],
         averageRating: 3
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID['Grill & Go']),
+        name: 'Grill & Go',
+        address: {
+            line1: 'Students Union',
+            line2: 'Level 3',
+            city: 'Sheffield',
+            postcode: 'S10 2TG',
+            latitude: 53.380719,
+            longitude: -1.487872
+        },
+        contact: {
+            url: 'http://withus.com/hustleandbustle/grill-go/',
+        },
+        openingTimes: [[660, 990], [660, 990], [660, 990], [660, 990], [660, 990], [], []],
+        description: 'A campus favourite. Come and try the burritos, hot wraps and salad boxes, cooked fresh and made to order. They are healthy and packed full of flavour – perfect for those on the go!',
+        priceRange: {lower: .95, upper: 4.50, band: 0},
+        categories: [
+            {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chicken'}, {name: 'Barbecue'},
+            {name: 'Fast Food'}
+        ],
+        features: {
+            alcohol: {value: false},
+            americanExpress: {value: false},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: false},
+            glutenFree: {value: false},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: false},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: false}
+        },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
+        images: ['2018-05-03 10-25-02.jpg'],
+        published: false
     }).save());
 }
 

@@ -123,20 +123,20 @@ block content
                                                         button.btn.btn-danger#cancel-password(type='button') Cancel
                             br
                             #details-image
-                                .row
+                                .row.current
                                     .col-9
                                         .vert-center-parent
                                             .vert-center-child
                                                 p.mb-0 Update your profile picture
-                                    .col-3.current
+                                    .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 button.btn.float-right#edit-image(type='button') Change
                                 form#change-image-form(enctype='multipart/form-data', action='/user/update_image', method='post')
                                     .row.new
                                         .col-9
-                                            br
-                                            img#display-picture(src='/scripts/svg/person.svg')
+                                            p Click the image below to change your picture
+                                            img#display-picture(src=`/images/userImages/${user.reducedID}`)
                                             input#display-picture-upload(type='file', name='displayImage', accept="image/*")
                                         .col-3
                                             .vert-center-parent
@@ -153,15 +153,27 @@ block content
                         .card-body
                             each restaurant, restaurantIndex in restaurants
                                 .row
-                                    .col-10
+                                    .col-8
                                         h5.mb-0= restaurant.name
                                         p.mb-0= restaurant.address.formattedAddress
-                                    .col-2
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                a.btn.btn-info.float-right(href=`/restaurant/${restaurant.localUrl}`) View
+                                    if restaurant.published
+                                        .col-4
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                    a.btn.btn-info.float-right(href=`/restaurant/${restaurant.localUrl}`) View
+                                    else
+                                        .col-4
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                    .btn-group.float-right
+                                                        button.btn.btn-success(id=`publish-${restaurant._id}`) Publish
+                                                        button.btn.btn-info(id=`edit-${restaurant._id}`) Edit
+                                                        button.btn.btn-danger(id=`delete-${restaurant._id}`) Delete
+
                                 if restaurantIndex < restaurants.length - 1
                                     hr
+                            else
+                                h5.mb-0 You haven't submitted any restaurants yet!
                 br
                 .card
                     #header-reviews.card-header
@@ -183,6 +195,9 @@ block content
                                                     button.btn.btn-danger(id=`delete-${review._id}`) Delete
                                 if reviewIndex < reviews.length-1
                                     hr
+                            else
+                                // TODO "i'm feeling lucky'
+                                h5.mb-0 You haven't posted any reviews yet!
 
     script const userVar = `!{JSON.stringify(user)}`;
     script(type = 'text/javascript', src = "/scripts/jquery.validate.js")

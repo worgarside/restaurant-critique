@@ -351,9 +351,6 @@ button.btn.btn-default#add-times,
   width: 50%;
   border-right: solid black 1px;
 }
-#address-lookup-search {
-  display: none;
-}
 #address-lookup-found {
   display: none;
 }

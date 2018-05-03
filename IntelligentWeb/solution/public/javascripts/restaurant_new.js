@@ -147,7 +147,6 @@ $('#address-lookup-button').click(() => {
     $('#address-lookup-button').addClass('active');
     $('#address-map-button').removeClass('active');
 
-
     showHTML([$('#address-lookup-search')]);
     hideHTML([
         $('#address-map-text'),
