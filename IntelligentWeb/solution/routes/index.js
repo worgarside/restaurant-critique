@@ -130,7 +130,7 @@ router.get('/restaurant/:url', (req, res) => {
             }
 
             Promise.all(reviewPromises).then(() => {
-                return res.render('restaurant', {title: title, restaurant: restaurant, reviews: reviewList});
+                return res.render('restaurant', {title: title, user: req.user, restaurant: restaurant, reviews: reviewList});
             }).catch(() => {
                 return res.render('errors/404', {title: title, user: req.user});
             })
