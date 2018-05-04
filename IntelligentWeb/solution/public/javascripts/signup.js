@@ -11,16 +11,13 @@ $('#display-picture').click(() => {
 /**
  * Shows a preview of the User's display image on the page after it is uploaded
  * @param {HTMLElement} imageInput The HTML element which allows image submission
+ * @function previewImage
  */
-function previewImage(imageInput) {
-    if (imageInput.files && imageInput.files[0]) {
-        const imageURL = window.URL.createObjectURL(imageInput.files[0]);
+$('#display-picture-upload').change(function () {
+    if (this.files && this.files[0]) {
+        const imageURL = window.URL.createObjectURL(this.files[0]);
         $('#display-picture').attr('src', imageURL);
     }
-}
-
-$('#display-picture-upload').change(function () {
-    previewImage(this);
 });
 
 /**
