@@ -1,7 +1,7 @@
 /**
  * restaurant.js
  * Client-side JS
- * @author Greta Ramaneckaite, Will Garside
+ * @author Greta Ramaneckaite, Will Garside, Rufus Cope
  * @param {Array} coordinates
  */
 

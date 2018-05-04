@@ -181,6 +181,14 @@ block content
                                             span.oi.oi-check.oi-chevron-left(aria-hidden='true')
                                         .slideshow-next#button-next
                                             span.oi.oi-check.oi-chevron-right(aria-hidden='true')
+        .row
+            .camera
+                video#video Video stream not available.
+                button#startbutton Take photo
+            canvas#canvas
+            .output
+                img#photo(alt='The screen capture will appear in this box.')
+
 
     script const restaurantId = `#{restaurant._id}`
     script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`)
