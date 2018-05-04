@@ -1,6 +1,7 @@
 extends mixins/layout
 
 block header
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     #index-head
         .container.vert-center-parent
             .row.vert-center-child
@@ -62,7 +63,7 @@ block content
                                                         if index < 2
                                                             img(src=`/images/restaurants/${restaurant._id}/${image}`)
         br
-        .row
+        .row.index-image-set
             .col-4
                 h5.text-center
                     span.oi.oi-check.post-space(aria-hidden='true')
