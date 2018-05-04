@@ -12,70 +12,81 @@ block content
                 br
         .row
             .col-10.offset-1
-                form#edit-restaurant-form
-                    .row
+                form#edit-restaurant-form(action='/restaurant/edit/submit_edit', method='post', enctype="multipart/form-data")
+                    .form-row
                         .col-6
                             .form-row.form-group
                                 label.col-2.col-form-label(for='name') Name:
                                 .col-10
-                                    input.form-control#name(type='text' value=restaurant.name required='required')
+                                    input.form-control#name(type='text' value=restaurant.name required='required' name='restaurantName')
                             .form-row.form-group
                                 label.col-2.col-form-label(for='address-line1') Address
                                 .col-5
-                                    input.form-control.mb-2#address-line1(type='text' value=restaurant.address.line1 placeholder='Line 1')
+                                    input.form-control.mb-2#address-line1(type='text' value=restaurant.address.line1 placeholder='Line 1' name='address1')
                                 .col-5
-                                    input.form-control.mb-2#address-line2(type='text' value=restaurant.address.line2 placeholder = 'Line 2')
+                                    input.form-control.mb-2#address-line2(type='text' value=restaurant.address.line2 placeholder = 'Line 2' name='address2')
                                 .col-5.offset-2
-                                    input.form-control.mb-2#address-city(type='text' value=restaurant.address.city placeholder='City')
+                                    input.form-control.mb-2#address-city(type='text' value=restaurant.address.city placeholder='City' name='city')
                                 .col-5
-                                    input.form-control.mb-2.upper-case#address-postcode(type='text' value=restaurant.address.postcode placeholder='Postcode')
+                                    input.form-control.mb-2.upper-case#address-postcode(type='text' value=restaurant.address.postcode placeholder='Postcode' name='postcode')
                             .form-row.form-group
                                 label.col-2.col-form-label(for='url') Website:
                                 .col-10
-                                    input.form-control#url(type='text' value=restaurant.url)
+                                    input.form-control#url(type='text' value=restaurant.contact.url name='url')
                             .form-row.form-group
                                 label.col-2.col-form-label(for='name') Menu:
                                 .col-10
-                                    input.form-control#menu(type='text' value=restaurant.menu)
+                                    input.form-control#menu(type='text' value=restaurant.contact.menu name='menu')
                             .form-row.form-group
                                 label.col-2.col-form-label(for='phone') Phone:
                                 .col-10
-                                    input.form-control.no-spinner#phone(type='number' value=restaurant.phone)
+                                    input.form-control.no-spinner#phone(type='number' value=restaurant.contact.phone name='phone')
                             label(for='days-of-week') Opening Times
                             .form-row.form-group.opening-times-form
                                 .col-3
                                     select.form-control.opening-times-form#days-of-week
-                                        option(value='0') Mon
-                                        option(value='1') Tue
-                                        option(value='2') Wed
-                                        option(value='3') Thu
-                                        option(value='4') Fri
-                                        option(value='5') Sat
-                                        option(value='6') Sun
+                                        each time, index in restaurant.openingTimes
+                                            if !time[0] || !time[1]
+                                                option(value=index)= daysOfWeek[index]
                                 .col-3
                                     input.form-control.opening-times.opening-times-form#opening-time
                                 .col-3
                                     input.form-control.opening-times.opening-times-form#closing-time
                                 .col-3
-                                    button.btn.btn-default.opening-times-form#add-times(onclick="addTimes();", type="button") Add
-                            .form-row.form-group#selected-times-row(hidden=true)
+                                    // TODO: no hardcoded onclick events
+                                    button.btn.btn-default.opening-times-form#add-times(onclick='addTimes();', type='button') Add
+                            .form-row.form-group#selected-times-row
                                 .col
                                     #selected-opening-times
+                                        each time, index in restaurant.openingTimes
+                                            if time[0] && time[1]
+                                                - var openHour = Math.floor( time[0] / 60);
+                                                - var openMinute = (time[0] % 60).toString().padStart(2, '0');
+                                                - var closeHour = Math.floor( time[1] / 60);
+                                                - var closeMinute = (time[1] % 60).toString().padStart(2, '0');
+                                                .form-row(id=`selected-day-${daysOfWeek[index]}`)
+                                                    .col-3.text-center
+                                                        p.mb-2= daysOfWeek[index]
+                                                    .col-6.text-center
+                                                        p.mb-2= `${openHour}:${openMinute} - ${closeHour}:${closeMinute}`
+                                                    .col-3.text-center
+                                                        a(onclick='removeSelectedDay(this);', href='javascript:void(0);', id=daysOfWeek[index], style='padding:4px') Remove
+
                             .form-row.form-group
                                 .col
                                     label(for='description') Description
                                         small &nbsp;&nbsp;(Max. 280 chars)
                                     textarea.form-control#description(maxlength='280' name='description'
                                     placeholder="Say some things about the restaurant's atmosphere, the kind of " +
-                                    "food served, or whatever you feel like!" rows=4 value=restaurant.description)
+                                    "food served, or whatever you feel like!" rows=4)= restaurant.description
                             .form-row
                                 .form-group.col-6
                                     label.d-block Price Range
                                     label.price-range-label(for='price-lower') £
-                                    input.form-control.no-spinner#price-lower(type='number', min=0, max=1000, name='priceLower')
+                                    input.form-control.no-spinner#price-lower(type='number' name='priceLower' value=restaurant.priceRange.lower)
                                     p.d-inline#price-to to
                                     label.price-range-label(for='price-upper') £
-                                    input.form-control.no-spinner#price-upper(type='number', min=0, max=1000, name='priceUpper')
+                                    input.form-control.no-spinner#price-upper(type='number' name='priceUpper' value=restaurant.priceRange.upper)
                                 .form-group.col-6
                                     label.invisible-label(for='price-band')
                                     select.form-control#price-band(name='priceBand')
@@ -100,6 +111,18 @@ block content
                                         input.form-control#file-count(type='text', disabled='disabled', value='Click here to upload images')
                                         button.btn.btn-info(type='button') Browse
                                     input.d-none#image-upload(type='file', multiple='multiple', accept='image/*', name='images')
+                                    #existing-images
+                                        each image in restaurant.images
+                                            .row
+                                                .col-10
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            p.mb-0= image
+                                                .col-2
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            span.oi.oi-image.d-inline
+                                                                img(src=`/images/restaurants/${restaurant._id}/${image}`)
                                     #uploaded-images
                             br
                             .form-row
@@ -113,22 +136,73 @@ block content
                                                 p.float-left No
                                                 p.float-right Yes
                                         each id in Object.keys(restaurant.features)
-                                            - var value = restaurant.features[id].name
+                                            - var feature = restaurant.features[id].name
+                                            - var value = restaurant.features[id].value
                                             .form-row
                                                 .col-7.text-right
-                                                    p= value
+                                                    p= feature
                                                 .col-3.offset-1
                                                     .wrapper
-                                                        label.invisible-label.no-label(for=`no-${id}`)
-                                                        input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
-                                                        label.invisible-label.unknown-label(for=`unknown-${id}`)
-                                                        input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
-                                                        label.invisible-label.yes-label(for=`yes-${id}`)
-                                                        input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
-                                                        .selected-highlight
+                                                        case value
+                                                            when true
+                                                                label.invisible-label.no-label(for=`no-${id}`)
+                                                                input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
+                                                                label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                                input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id)
+                                                                label.invisible-label.yes-label(for=`yes-${id}`)
+                                                                input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id checked)
+                                                                .selected-highlight
+                                                            when false
+                                                                label.invisible-label.no-label(for=`no-${id}`)
+                                                                input.no-radio(id=`no-${id}` type='radio', value='0', name=id checked)
+                                                                label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                                input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id)
+                                                                label.invisible-label.yes-label(for=`yes-${id}`)
+                                                                input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
+                                                                .selected-highlight
+                                                            default
+                                                                label.invisible-label.no-label(for=`no-${id}`)
+                                                                input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
+                                                                label.invisible-label.unknown-label(for=`unknown-${id}`)
+                                                                input.unknown-radio(id=`unknown-${id}` type='radio', value='1', name=id, checked)
+                                                                label.invisible-label.yes-label(for=`yes-${id}`)
+                                                                input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
+                                                                .selected-highlight
+                    .form-row.d-none
+                        .col
+                            each day, index in daysOfWeek
+                                input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly value=restaurant.openingTimes[index][0])
+                                input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly value=restaurant.openingTimes[index][1])
 
+                            input#category-body(name='categories', readonly value=JSON.stringify(restaurant.categories))
+                            input#restaurant-id(name='restaurantId', readonly value=restaurant._id)
+                            input#existing-restaurant-images(name='restaurantImages', readonly value=restaurant.images)
+                            input#publish-flag(type='checkbox', name='published')
+                            input#submit(type='submit')
 
+                    .form-row
+                        .form-group.col.offset-7
+                            br
+                            if (!user.verified.flag)
+                                .form-row
+                                    .col
+                                        button.btn#save-restaurant(type='button') Save Restaurant for Later
+                                        button.btn.float-right(type='button', disabled) Publish Restaurant
+                                .form-row
+                                    .col
+                                        small Publishing a new Restaurant requires a verified account. To resend the verification email click&nbsp;
+                                            a#verify-email(href='javascript:void(0)') here
+                            else
+                                .form-row
+                                    .col
+                                        button.btn#save-restaurant(type='button') Save Restaurant for Later
+                                        input.d-none#verified-flag(type='checkbox', name='verified', checked)
+                                        button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
+
+    script const restaurantCategories = `!{JSON.stringify(restaurant.categories)}`;
+    script const restaurantImages = `!{JSON.stringify(restaurant.images)}`;
     script const categoryVar = JSON.parse(`!{categories}`);
+    script const restaurantId = `!{restaurant._id}`;
     script(src='//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js')
     // link(rel='stylesheet',  href="/scripts/jquery.timepicker.css")
     script(type='text/javascript', src='/javascripts/restaurant_edit.js')

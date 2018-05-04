@@ -413,7 +413,7 @@ footer {
   }
 }
 
-// ================ New Restaurant ================ \\
+// ================ New/Edit Restaurant ================ \\
 
 #new-restaurant-form, #edit-restaurant-form {
   #opening-time, #closing-time {
@@ -621,8 +621,12 @@ footer {
       }
     }
 
-    #uploaded-images {
-      //display: none;
+    #uploaded-images, #existing-images {
+
+      hr {
+        margin: 4px 0;
+      }
+
       .row {
         height: 2rem;
       }
@@ -652,6 +656,84 @@ footer {
         &:hover {
           color: @blue;
           cursor: pointer;
+        }
+      }
+    }
+  }
+
+  #category {
+    &-selected {
+      display: none;
+      border-radius: 4px 4px 0 0;
+      border: @grey-dark solid 1px;
+      background-color: white;
+      border-bottom: none;
+    }
+
+    &-selector {
+      input {
+      }
+    }
+
+    &-dropdown {
+      background-color: @background-color;
+      display: none;
+      text-align: center;
+      width: 100%;
+      border: @grey-dark solid 1px;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+    }
+  }
+
+  .category {
+    &-matched {
+      display: inline-block;
+      background-color: @grey-lighter;
+      margin: 5px 8px;
+      border-radius: 2px;
+
+      p {
+        font-size: 0.95rem;
+        padding: 3px 5px;
+        margin: 0;
+        color: @grey-dark;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &:hover {
+          cursor: pointer;
+          color: @grey-darkest;
+        }
+      }
+    }
+
+    &-selected {
+      height: 1.75rem;
+      display: inline-block;
+      background-color: @grey-lighter;
+      margin: 5px 8px;
+      border-radius: 2px;
+
+      color: @grey-dark;
+      p {
+        font-size: 0.95rem;
+        padding: 3px 0 3px 8px;
+        margin: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      span {
+        font-size: 0.8rem;
+        padding: 1px 8px;
+        cursor: pointer;
+        &:hover {
+          color: @red;
         }
       }
     }
@@ -889,87 +971,6 @@ label.star:hover ~ label.star span::before {
   transition: @map-transition;
   padding: 50px;
   display: inline-block;
-}
-
-// ================ Category Selector ================ \\
-
-#category {
-
-  &-selected {
-    display: none;
-    border-radius: 4px 4px 0 0;
-    border: @grey-dark solid 1px;
-    background-color: white;
-    border-bottom: none;
-  }
-
-  &-selector {
-    input {
-    }
-  }
-
-  &-dropdown {
-    background-color: @background-color;
-    display: none;
-    text-align: center;
-    width: 100%;
-    border: @grey-dark solid 1px;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-  }
-}
-
-.category {
-  &-matched {
-    display: inline-block;
-    background-color: @grey-lighter;
-    margin: 5px 8px;
-    border-radius: 2px;
-
-    p {
-      font-size: 0.95rem;
-      padding: 3px 5px;
-      margin: 0;
-      color: @grey-dark;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-
-      &:hover {
-        cursor: pointer;
-        color: @grey-darkest;
-      }
-    }
-  }
-
-  &-selected {
-    height: 1.75rem;
-    display: inline-block;
-    background-color: @grey-lighter;
-    margin: 5px 8px;
-    border-radius: 2px;
-
-    color: @grey-dark;
-    p {
-      font-size: 0.95rem;
-      padding: 3px 0 3px 8px;
-      margin: 0;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    span {
-      font-size: 0.8rem;
-      padding: 1px 8px;
-      cursor: pointer;
-      &:hover {
-        color: @red;
-      }
-    }
-  }
 }
 
 // ================ User Management ================ \\

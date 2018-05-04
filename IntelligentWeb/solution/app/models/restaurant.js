@@ -95,61 +95,28 @@ RestaurantSchema = Schema({
 });
 
 RestaurantSchema.pre('save', function (next) {
-    if ((this.address.latitude) && (this.address.longitude)) {
-        this.location = {
-            type: "Point",
-            coordinates: [this.address.longitude, this.address.latitude] // long THEN lat, according to geoJSON standards
-        };
-    }
+    updateDetails(this);
 
     const imageDir = `./public/images/restaurants/${this._id}`;
     if (!fs.existsSync(imageDir)) {
         fs.mkdirSync(imageDir);
     }
 
-    // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
-    this.address.postcode = this.address.postcode.toUpperCase();
-    this.address.formattedAddress = '';
-    const addressComponents = ['line1', 'line2', 'city', 'postcode'];
-    Object.keys(this.address).forEach((key, index, keys) => {
-        const value = this.address[key];
-        if (value && addressComponents.includes(key)) {
-            this.address.formattedAddress += value;
-            if (addressComponents.includes(keys[index + 1])) {
-                this.address.formattedAddress += ', ';
-            }
-        }
-    });
-
-    // Save all new categories on creation - although this is currently only used on db_regen
-    for (const category of this.categories) {
-        new Category(category).save().catch((err) => {
-            if (!err.errmsg.includes('duplicate key')) {
-                console.log(err.errmsg);
-            }
-        })
-    }
-
-    this.localUrl = `${this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${this.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
-
     // Don't send an email if the database is being generated to avoid spam
     if (!dbRegen) {
         emailCreator(this);
     }
 
-    // TODO add stemming and stoplist
-    // Searchable data has all special characters removed
-    this.searchable.name = this.name.replace(/[^\w\s]/, '');
-    this.searchable.description = this.description.replace(/[^\w\s]/, '');
-    this.searchable.formattedAddress = this.address.formattedAddress.replace(/[^\w\s]/, '');
-    this.searchable.categoryString = '';
-    for (const category of this.categories) {
-        this.searchable.categoryString += `${category.name} `;
-    }
-    this.searchable.all = `${this.searchable.name} ${this.searchable.description} ${this.searchable.formattedAddress} ${this.searchable.categoryString}`;
+    next();
+});
 
-    this.updatedAt = Date.now();
+RestaurantSchema.pre('findOneAndUpdate', function (next) {
+    updateDetails(this);
+    next();
+});
 
+RestaurantSchema.pre('update', function (next) {
+    updateDetails(this);
     next();
 });
 
@@ -167,6 +134,58 @@ function emailCreator(restaurant) {
         <p>Please note your submission may take up to 24 hours to appear on the website, if you do not see it after this time <strong>do not</strong> re-submit it. Instead please contact us <a href="www.restaurantcritique.com/contact">here</a>.</p>
     `;
     nodemailer.sendEmail(to, subject, body);
+}
+
+// TODO: jsdoc
+function updateDetails(restaurant) {
+    console.log('here1');
+
+    if ((restaurant.address.latitude) && (restaurant.address.longitude)) {
+        restaurant.location = {
+            type: "Point",
+            coordinates: [restaurant.address.longitude, restaurant.address.latitude] // long THEN lat, according to geoJSON standards
+        };
+    }
+
+    console.log('here');
+
+    // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
+    restaurant.address.postcode = restaurant.address.postcode.toUpperCase();
+    restaurant.address.formattedAddress = '';
+    const addressComponents = ['line1', 'line2', 'city', 'postcode'];
+    Object.keys(restaurant.address).forEach((key, index, keys) => {
+        const value = restaurant.address[key];
+        if (value && addressComponents.includes(key)) {
+            restaurant.address.formattedAddress += value;
+            if (addressComponents.includes(keys[index + 1])) {
+                restaurant.address.formattedAddress += ', ';
+            }
+        }
+    });
+
+    // Save all new categories on creation - although this is currently only used on db_regen
+    for (const category of restaurant.categories) {
+        new Category(category).save().catch((err) => {
+            if (!err.errmsg.includes('duplicate key')) {
+                console.log(err.errmsg);
+            }
+        })
+    }
+
+    restaurant.localUrl = `${restaurant.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${restaurant.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
+
+    // TODO add stemming and stoplist
+    // Searchable data has all special characters removed
+    restaurant.searchable.name = restaurant.name.replace(/[^\w\s]/, '');
+    restaurant.searchable.description = restaurant.description.replace(/[^\w\s]/, '');
+    restaurant.searchable.formattedAddress = restaurant.address.formattedAddress.replace(/[^\w\s]/, '');
+    restaurant.searchable.categoryString = '';
+    for (const category of restaurant.categories) {
+        restaurant.searchable.categoryString += `${category.name} `;
+    }
+    restaurant.searchable.all = `${restaurant.searchable.name} ${restaurant.searchable.description} ${restaurant.searchable.formattedAddress} ${restaurant.searchable.categoryString}`;
+
+    restaurant.updatedAt = Date.now();
 }
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);

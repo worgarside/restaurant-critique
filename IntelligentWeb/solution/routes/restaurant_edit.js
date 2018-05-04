@@ -18,6 +18,9 @@ const User = mongoose.model('User');
 const fs = require('fs');
 const dateFormat = require('dateformat');
 const title = 'Restaurant Critique';
+const googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
+});
 
 const multer = require('multer');
 router.use(bodyParser.urlencoded({extended: true}));
@@ -53,9 +56,9 @@ const upload = multer({storage: storage});
   * }} body The values from the input form used in setting the attributes of the Restaurant
  * @function addNewRestaurant
  */
-router.post('/add_restaurant', upload.array('images', 10), (req, res) => {
+router.post('/submit_edit', upload.array('images', 10), (req, res) => {
     const body = req.body;
-    const creator = req.user;
+
     let published = false;
 
     if (body.verified) {
@@ -80,73 +83,72 @@ router.post('/add_restaurant', upload.array('images', 10), (req, res) => {
         }
     }
 
-    let newRestaurant = new Restaurant({
-        _id: mongoose.Types.ObjectId(),
+    const tempRestaurant = new Restaurant
+
+    let features = tempRestaurant.features;
+    for (let key of Object.keys(tempRestaurant.features)) {
+        if (parseInt(body[key]) !== 1) {
+            features[key].value = parseInt(body[key]) === 2;
+        }
+    }
+
+    let latitude = 0;
+    let longitude = 0;
+
+    googleMapsClient.geocode({'address': `${body.postcode}, UK`}, (err, response) => {
+        if (!err) {
+            latitude = response.json.results[0].geometry.location.lat();
+            longitude = response.json.results[0].geometry.location.lng();
+            console.log(`Lat: ${latitude} & Lng: ${longitude}`);
+        } else {
+            console.log('Invalid postcode on edit submission. Please try again.');
+        }
+    });
+
+    const newImageArray = processImages(req.files, req.body.restaurantId);
+    const totalImageArray = JSON.parse(body.restaurantImages);
+    totalImageArray.push(...newImageArray);
+
+    Restaurant.findByIdAndUpdate(req.body.restaurantId, {
         name: body.restaurantName,
         address: {
             line1: body.address1,
             line2: body.address2,
             city: body.city,
             postcode: body.postcode,
-            latitude: body.lat,
-            longitude: body.lng,
+            latitude: latitude,
+            longitude: longitude,
         },
-        url: body.url,
-        menu: body.menu,
-        phone: body.phone,
+        contact: {
+            url: body.url,
+            menu: body.menu,
+            phone: body.phone
+        },
         openingTimes: openingTimes,
         description: body.description,
         priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
+        features: features,
+        images: totalImageArray,
         categories: categoryList,
-        creator: creator,
         published: published
-    });
-
-    for (let key of Object.keys(newRestaurant.features)) {
-        if (parseInt(body[key]) !== 1) {
-            newRestaurant.features[key].value = parseInt(body[key]) === 2;
-        }
-    }
-
-    // Process the images before the restaurant is saved to add their paths to the objects attributes
-    processImages(req.files, newRestaurant);
-
-    newRestaurant.save().then(() => {
-        console.log("Restaurant added to collection");
-
-        // Add the Restaurant ID to the User's attribute
-        User.findByIdAndUpdate(
-            creator._id,
-            {$push: {'restaurants.created': newRestaurant._id}},
-            (err) => {
-                if (err) {
-                    console.log(`Error: ${err}`);
-                }
-            });
-
-        if (newRestaurant.published){
-            const localUrl = `${newRestaurant.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${newRestaurant.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
-            res.redirect(`/restaurant/${localUrl}`);
-        }else{
-            res.redirect(`/user/${req.user._id}`);
-        }
-    }).catch((err) => {
-        console.log(`Error in saving restaurant: ${err}`);
-        res.render('errors/restaurant_new_fail', {title: title, user: req.user});
-    });
-});
-
-// TODO check this is used and jsdoc
-router.post('/verify_email', (req, res) => {
-    User.findOne({_id: req.user._id}, (err, user) => {
-        user.sendVerificationEmail();
-        res.send(true);
-    });
+    }, {new: true})
+        .exec()
+        .then((restaurant) => {
+            if (published) {
+                res.redirect(`/restaurant/${restaurant.localUrl}`);
+            } else {
+                res.redirect(`/user/${req.user.reducedID}`);
+            }
+        })
+        .catch((err) => {
+            console.log(`Error: ${err}`);
+            res.render('errors/500', {title: title, user: req.user});
+        });
 });
 
 // TODO jsdoc
-function processImages(images, newRestaurant){
-    const imageDir = `./public/images/restaurants/${newRestaurant._id}`;
+function processImages(images, restaurantId) {
+    const imageDir = `./public/images/restaurants/${restaurantId}`;
     if (!fs.existsSync(imageDir)) {
         fs.mkdirSync(imageDir);
     }
@@ -156,16 +158,16 @@ function processImages(images, newRestaurant){
     let imageCount = 0;
     let imageArray = [];
 
-    images.forEach((image)=>{
+    images.forEach((image) => {
         const extension = `.${re.exec(image.path)[1]}`;
         const filename = `${now}_${imageCount}${extension}`;
         const destination = `${imageDir}/${filename}`;
         fs.rename(image.path, destination);
-        imageCount ++;
+        imageCount++;
         imageArray.push(filename);
     });
 
-    newRestaurant.images = imageArray;
+    return imageArray;
 }
 
 module.exports = router;

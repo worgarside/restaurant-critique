@@ -107,7 +107,7 @@ router.get('/restaurant/edit/:_id', (req, res) => {
     /* TODO: make sure all functions of this type are unified
      e.g. Model.findById().exec().then().catch(); vs Model.findById(id, (err, model) => {});*/
 
-    const restaurantPromise = Restaurant.findById(req.params._id).exec();
+    const restaurantPromise = Restaurant.findById(req.params._id).lean().exec();
     const categoryPromise = Category.find({}).select('name _id').exec();
 
     Promise.all([restaurantPromise, categoryPromise])
@@ -115,12 +115,18 @@ router.get('/restaurant/edit/:_id', (req, res) => {
             const restaurant = results[0];
             const categories = results[1];
 
-            res.render('restaurant_edit', {
-                title: title,
-                user: req.user,
-                restaurant: restaurant,
-                categories: JSON.stringify(categories)
-            });
+            if (req.user && restaurant.creator._id === req.user._id) {
+                res.render('restaurant_edit', {
+                    title: title,
+                    user: req.user,
+                    restaurant: restaurant,
+                    categories: JSON.stringify(categories)
+                });
+            } else {
+                res.render('errors/403', {title: title, user: req.user});
+
+            }
+
         })
         .catch((err) => {
             console.log(err);
@@ -297,11 +303,14 @@ router.post('/login', (req, res, next) => {
 
 // TODO jsdoc
 router.post('/verify_email', (req, res) => {
-    console.log('POSTED');
-    User.findOne({_id: req.user._id}, (err, user) => {
-        user.sendVerificationEmail();
-        res.send(true);
-    });
+    // Check user is logged in in case session expires and then they click the link
+    if (req.user){
+        User.findOne({_id: req.user._id}, (err, user) => {
+            user.sendVerificationEmail();
+            res.send(true);
+        });
+    }
+
 });
 
 module.exports = router;

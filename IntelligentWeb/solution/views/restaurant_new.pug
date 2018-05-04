@@ -189,17 +189,17 @@ block content
                                                             input.yes-radio(id=`yes-${id}` type='radio', value='2', name=id)
                                                             .selected-highlight
 
-                        .d-none
-                            each day in daysOfWeek
-                                input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
-                                input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
+                        .row.d-none
+                            .col
+                                each day in daysOfWeek
+                                    input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
+                                    input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
 
-                            input#lat(type="number", name='lat', autocomplete='none', readonly)
-                            input#lng(type="number", name='lng', autocomplete='none', readonly)
-                            input#category-body(name='categories', readonly)
-                            input#price-range(type='number', name='priceRange', readonly)
-                            input#publish-flag(type='checkbox', name='published')
-                            input#submit(type='submit')
+                                input#lat(type="number", name='lat', autocomplete='none', readonly)
+                                input#lng(type="number", name='lng', autocomplete='none', readonly)
+                                input#category-body(name='categories', readonly)
+                                input#publish-flag(type='checkbox', name='published')
+                                input#submit(type='submit')
 
                         .form-row
                             .form-group.col.offset-7

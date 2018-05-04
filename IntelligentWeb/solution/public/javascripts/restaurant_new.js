@@ -73,13 +73,13 @@ function addTimes() {
             const newHTML = `
                 <div class='form-row' id='selected-day-${dayString}'>
                     <div class='col-3 text-center'>
-                        <p style='margin-bottom:5px'>${dayString}</p>
+                        <p class='mb-2'>${dayString}</p>
                     </div>
                     <div class='col-6 text-center'>
-                        <p style='margin-bottom:5px'>${openTimeString} - ${closeTimeString} </p>
+                        <p class='mb-2'>${openTimeString} - ${closeTimeString} </p>
                     </div>
                     <div class='col-3 text-center'>
-                        <a onclick='removeSelectedDay(this);' href='javascript:void(0);' id=${dayString} style='padding:4px'>Remove</a> 
+                        <a onclick='removeSelectedDay(this);' href='javascript:void(0);' id=${dayString} style='padding: 4px'>Remove</a> 
                     </div>
                </div>
                 `;
