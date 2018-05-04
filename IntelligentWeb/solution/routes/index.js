@@ -41,6 +41,9 @@ router.get('/', (req, res) => {
             .exec()
             .then((restaurants) => {
                 topRestaurants = restaurants;
+                res.header("Access-Control-Allow-Origin", "*");
+                //TODO- this this this
+                //TODO- check this is legit AF?
                 res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: restaurants});
             })
             .catch((err) => {
