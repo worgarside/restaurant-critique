@@ -700,6 +700,9 @@ footer .footer-right {
   padding: 20px;
   border-radius: 20px;
 }
+canvas#canvas {
+  display: none;
+}
 .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
