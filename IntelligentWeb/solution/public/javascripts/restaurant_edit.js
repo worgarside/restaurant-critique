@@ -31,7 +31,12 @@ $(() => {
         scrollbar: false
     });
 
-    categories = categoryVar;
+    allCategories = categoryVar;
+    prePickedCategories = JSON.parse(restaurantCategories);
+
+    for (const category of prePickedCategories) {
+        selectCategory(category);
+    }
 });
 
 $('#new-restaurant-form').on('keyup keypress', function (e) {
@@ -74,16 +79,16 @@ function addTimes() {
             const newHTML = `
                 <div class='form-row' id='selected-day-${dayString}'>
                     <div class='col-3 text-center'>
-                        <p style='margin-bottom:5px'>${dayString}</p>
+                        <p class='mb-2'>${dayString}</p>
                     </div>
                     <div class='col-6 text-center'>
-                        <p style='margin-bottom:5px'>${openTimeString} - ${closeTimeString} </p>
+                        <p class='mb-2'>${openTimeString} - ${closeTimeString} </p>
                     </div>
                     <div class='col-3 text-center'>
                         <a onclick='removeSelectedDay(this);' href='javascript:void(0);' id=${dayString} style='padding:4px'>Remove</a> 
                     </div>
                </div>
-                `;
+            `;
 
             dayInput.find(`option[value=${dayValue}]`).remove();
             $('#selected-times-row').prop({hidden: false});
@@ -124,226 +129,9 @@ function removeSelectedDay(button) {
     }
 }
 
-// ================ Address Lookup ================ \\
-
-let geocoder, categories;
+let allCategories, prePickedCategories;
 let formattedAddress = '';
-let currentLocation = {lat: 53.380450, lng: -1.472233};
 let selectedCategories = [];
-
-const inputAddress1 = $('#address1');
-const inputAddress2 = $('#address2');
-const inputCity = $('#city');
-const inputPostcode = $('#postcode');
-const inputLat = $('#lat');
-const inputLng = $('#lng');
-const searchAddress = $('#search-address');
-const searchPostcode = $('#search-postcode');
-
-/**
- * Toggles the HTML to show the user an address lookup form
- * @returns {HTML} changes HTML
- * @function lookupAddressToggle
- */
-$('#address-lookup-button').click(() => {
-    $('#address-lookup-button').addClass('active');
-    $('#address-map-button').removeClass('active');
-
-    showHTML([$('#address-lookup-search')]);
-    hideHTML([
-        $('#address-map-text'),
-        $('#address-map-map-wrapper')
-    ]);
-    $('#search-address').focus();
-});
-
-/**
- * Toggles the HTML to show a GMap for the user to set their address on rather than a manual form
- * @returns {HTML} changes HTML
- * @function lookupMapToggle
- */
-$('#address-map-button').click(() => {
-    $('#address-map-button').addClass('active');
-    $('#address-lookup-button').removeClass('active');
-
-    showHTML([
-        $('#address-map-text'),
-        $('#address-map-map-wrapper'),
-        $('#address-map-edit-control')
-    ]);
-    hideHTML([
-        $('#address-lookup-search'),
-        $('#address-lookup-found'),
-        $('#address-lookup-found-edit'),
-        $('#address-input-choice')
-    ]);
-});
-
-/**
- * Sets the value of the address values for submission when the User edits the form
- * @function editFoundAddress
- */
-$('#address-lookup-found-edit').on('input', () => {
-    formattedAddress = '';
-
-    $('#address-lookup-found-edit').find('input').each((index, item) => {
-        if (item.value !== '') {
-            if (index > 0) {
-                formattedAddress += ', ';
-            }
-            formattedAddress += item.value;
-        }
-    });
-    $('#formatted-address-lookup').val(formattedAddress);
-});
-
-/**
- * Prevents the user from submitting the form by accident if they confirm their address
- */
-$('#address-lookup-search').find('input').keypress((e) => {
-    if (e.which === 13) {
-        $('#lookup-btn').click();
-        e.preventDefault()
-    }
-});
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Uses Google Geolocation to find an address from the postcode
- * @returns {HTML} sets the HTML to show the found address
- */
-function findAddress() {
-    const submittedAddress1 = searchAddress.val();
-    const submittedPostcode = searchPostcode.val();
-    formattedAddress = '';
-
-    inputAddress1.val('');
-    inputAddress2.val('');
-    inputCity.val('');
-    inputPostcode.val('');
-
-    if (!submittedPostcode || !submittedAddress1) {
-        alert('Please enter a name/number and a postcode')
-    } else {
-        geocoder.geocode({'address': `${submittedPostcode}, UK`}, (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK) {
-                const lat = results[0].geometry.location.lat();
-                const lng = results[0].geometry.location.lng();
-                inputLat.val(lat.toFixed(9));
-                inputLng.val(lng.toFixed(9));
-                currentLocation = {lat: lat, lng: lng};
-
-                let foundAddress = {};
-                for (const component of results[0].address_components) {
-                    if (component.long_name) {
-                        foundAddress[`${component.types[0]}`] = component.long_name;
-                    }
-                }
-
-                inputAddress1.val(searchAddress.val());
-                formattedAddress += searchAddress.val();
-
-                if (foundAddress.route) {
-                    inputAddress2.val(foundAddress.route);
-                    formattedAddress += `, ${foundAddress.route}`;
-                }
-
-                if (foundAddress.postal_town) {
-                    inputCity.val(foundAddress.postal_town);
-                    formattedAddress += `, ${foundAddress.postal_town}`;
-                }
-
-                inputPostcode.val(foundAddress.postal_code);
-
-                formattedAddress += `, ${foundAddress.postal_code}`;
-                $('#formatted-address-lookup').val(formattedAddress);
-
-                showHTML([
-                    $('#address-lookup-found')
-                ]);
-
-                hideHTML([
-                    $('#address-input-choice'),
-                    $('#address-lookup-search')
-                ]);
-            } else {
-                alert('Invalid postcode. Please try again.');
-            }
-        });
-    }
-}
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Toggles some HTML components to allow the user to edit their address
- * @returns {String} changes HTML
- */
-function editAddress() {
-    showHTML([
-        $('#address-input-choice'),
-        $('#address-lookup-found-edit'),
-        $('#address-lookup-found-confirm-control')
-    ]);
-    hideHTML([
-        $('#address-lookup-found-edit-control')
-    ]);
-}
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Confirms a User's to their address information
- * @returns {HTML} changes HTML
- */
-function confirmEdit() {
-    const oldPostcode = searchPostcode.val().toLowerCase().replace(/ /g, '');
-    const newPostcode = inputPostcode.val().toLowerCase().replace(/ /g, '');
-
-    if (oldPostcode !== newPostcode) {
-        geocoder.geocode({'address': `${newPostcode}, UK`}, (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK) {
-                const lat = results[0].geometry.location.lat();
-                const lng = results[0].geometry.location.lng();
-                inputLat.val(lat.toFixed(9));
-                inputLng.val(lng.toFixed(9));
-                currentLocation = {lat: lat, lng: lng};
-                confirmEditHTMLMod()
-            }
-        })
-    } else {
-        confirmEditHTMLMod()
-    }
-}
-
-/**
- * Simply modifies the HTML when the User confirms an address edit to keep the page from being cluttered
- * @returns {String} changes HTML
- */
-function confirmEditHTMLMod() {
-    $('#formatted-address-lookup').val(formattedAddress);
-
-    showHTML([
-        $('#address-lookup-found-edit-control')
-    ]);
-    hideHTML([
-        $('#address-input-choice'),
-        $('#address-lookup-found-edit'),
-        $('#address-lookup-found-confirm-control')
-    ]);
-}
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Toggles HTML components for the User to edit their address after using the map to find it
- * @returns {HTML} changes HTML
- */
-function editMapAddress() {
-    showHTML([
-        $('#address-input-choice'),
-    ]);
-    hideHTML([
-        $('#address-map-edit-control')
-    ]);
-}
 
 /**
  * Helper function to iterate over an array of HTML elements and show them all on the page
@@ -365,84 +153,6 @@ function hideHTML(iterable) {
         element.hide(400);
         element.prop('readonly', true);
     }
-}
-
-// ================ Google Maps ================ \\
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Called by GMaps script after map is loaded
- * Initialises Google Map V3 attributes and markers
- */
-function initMap() {
-    geocoder = new google.maps.Geocoder();
-
-    const styles = [{
-        "featureType": "poi.business",
-        "stylers": [
-            {"visibility": "off"}
-        ]
-    }];
-
-    const map = new google.maps.Map($('#address-map-map')[0], {
-        zoom: 14,
-        center: currentLocation,
-        styles: styles,
-        mapTypeControl: false,
-        streetViewControl: false,
-    });
-
-    const marker = new google.maps.Marker({
-        map: map,
-        draggable: true,
-        position: currentLocation
-    });
-
-    google.maps.event.addListener(marker, 'dragend', () => {
-        const lat = marker.getPosition().lat();
-        const lng = marker.getPosition().lng();
-        inputLat.val(lat.toFixed(9));
-        inputLng.val(lng.toFixed(9));
-
-        geocoder.geocode({'location': {lat: lat, lng: lng}}, (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK) {
-                let foundAddress = {};
-                formattedAddress = '';
-
-                console.log(results[0]);
-
-                for (const component of results[0].address_components) {
-                    if (component.long_name) {
-                        foundAddress[`${component.types[0]}`] = component.long_name;
-                    }
-                }
-
-                if (foundAddress.street_number) {
-                    inputAddress1.val(foundAddress.street_number);
-                    formattedAddress += `${foundAddress.street_number}, `;
-                } else if (foundAddress.premise) {
-                    inputAddress1.val(foundAddress.premise);
-                    formattedAddress += `${foundAddress.premise}, `;
-                }
-
-                if (foundAddress.route) {
-                    inputAddress2.val(foundAddress.route);
-                    formattedAddress += `${foundAddress.route}, `;
-                }
-
-                if (foundAddress.postal_town) {
-                    inputCity.val(foundAddress.postal_town);
-                    formattedAddress += `${foundAddress.postal_town}, `;
-                }
-
-                inputPostcode.val(foundAddress.postal_code);
-
-                formattedAddress += foundAddress.postal_code;
-                $('#formatted-address-map').val(formattedAddress);
-            }
-        });
-
-    });
 }
 
 // ================ Category Picker ================ \\
@@ -498,7 +208,6 @@ function checkCategoryPicker() {
     } else {
         hideCategorySelected();
     }
-
 }
 
 /**
@@ -509,7 +218,7 @@ function checkCategoryPicker() {
 function matchCategories(categorySearch) {
     let matchList = [];
 
-    for (const category of categories) {
+    for (const category of allCategories) {
         if (category.name.toLowerCase().startsWith(categorySearch.toLowerCase())) {
             matchList.push(category);
         }
@@ -558,9 +267,9 @@ function selectCategory(category) {
 
     selectedCategories.push(category);
 
-    for (const [index, object] of categories.entries()) {
+    for (const [index, object] of allCategories.entries()) {
         if (object._id === category._id) {
-            categories.splice(index, 1);
+            allCategories.splice(index, 1);
             break
         }
     }
@@ -595,7 +304,7 @@ function removeCategory(category) {
         }
     }
 
-    categories.push(category);
+    allCategories.push(category);
     categoryBodyInput.val(JSON.stringify(selectedCategories));
 
     categoryPicker.focus();
@@ -610,54 +319,6 @@ function hideCategorySelected() {
     categoryPicker.css('border-top-right-radius', '4px');
 }
 
-// ================ Price Range ================ \\
-
-const priceRangeBody = $('#price-range');
-const increaseButton = $('#price-range-increase');
-const decreaseButton = $('#price-range-decrease');
-
-increaseButton.click((e) => {
-    e.preventDefault();
-
-    if (priceRangeBody.val()) {
-        if (priceRangeBody.val() < 4) {
-            priceRangeBody.val(parseInt(priceRangeBody.val()) + 1);
-        }
-    } else {
-        priceRangeBody.val(1);
-    }
-
-    colorPriceRangeInput();
-});
-
-decreaseButton.click((e) => {
-    e.preventDefault();
-
-    if (priceRangeBody.val()) {
-        if (priceRangeBody.val() > 1) {
-            priceRangeBody.val(parseInt(priceRangeBody.val()) - 1);
-        }
-    } else {
-        priceRangeBody.val(1);
-
-    }
-
-    colorPriceRangeInput();
-});
-
-/**
- * Applies colours to the Price Range input when the value is set/changed
- */
-function colorPriceRangeInput() {
-    for (let i = 0; i < 5; i++) {
-        if (i < priceRangeBody.val()) {
-            $(`#price-range-selector-${i + 1}`).css('color', 'black');
-        } else {
-            $(`#price-range-selector-${i + 1}`).css('color', '#919191');
-        }
-    }
-}
-
 // ================ Create Restaurant ================ \\
 
 const imageInput = $('#image-upload');
@@ -669,10 +330,9 @@ imageClicker.click(() => {
     imageInput.click();
 });
 
-
 imageInput.change(function () {
     imageList.empty();
-
+    imageList.append('<hr/>');
     for (let i = 0; i < this.files.length; i++) {
         let newFile = {
             name: this.files[i].name,
@@ -715,6 +375,8 @@ imageInput.change(function () {
 $('#save-restaurant').click(() => {
     $('#verified-flag').prop('checked', false);
     $('#publish-flag').prop('checked', false);
+    $('#restaurant-id').val(restaurantId);
+    $('#existing-restaurant-images').val(restaurantImages);
     $('#submit').click();
 
 });
@@ -726,6 +388,8 @@ $('#save-restaurant').click(() => {
 $('#publish-restaurant').click(() => {
     $('#verified-flag').prop('checked', true);
     $('#publish-flag').prop('checked', true);
+    $('#restaurant-id').val(restaurantId);
+    $('#existing-restaurant-images').val(restaurantImages);
     $('#submit').click();
 });
 

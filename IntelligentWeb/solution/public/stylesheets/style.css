@@ -518,12 +518,22 @@ footer .footer-right {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+#new-restaurant-form #restaurant-images #uploaded-images hr,
+#edit-restaurant-form #restaurant-images #uploaded-images hr,
+#new-restaurant-form #restaurant-images #existing-images hr,
+#edit-restaurant-form #restaurant-images #existing-images hr {
+  margin: 4px 0;
+}
 #new-restaurant-form #restaurant-images #uploaded-images .row,
-#edit-restaurant-form #restaurant-images #uploaded-images .row {
+#edit-restaurant-form #restaurant-images #uploaded-images .row,
+#new-restaurant-form #restaurant-images #existing-images .row,
+#edit-restaurant-form #restaurant-images #existing-images .row {
   height: 2rem;
 }
 #new-restaurant-form #restaurant-images #uploaded-images p,
-#edit-restaurant-form #restaurant-images #uploaded-images p {
+#edit-restaurant-form #restaurant-images #uploaded-images p,
+#new-restaurant-form #restaurant-images #existing-images p,
+#edit-restaurant-form #restaurant-images #existing-images p {
   width: 280px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -531,7 +541,9 @@ footer .footer-right {
   margin-left: 0.5rem;
 }
 #new-restaurant-form #restaurant-images #uploaded-images span > img,
-#edit-restaurant-form #restaurant-images #uploaded-images span > img {
+#edit-restaurant-form #restaurant-images #uploaded-images span > img,
+#new-restaurant-form #restaurant-images #existing-images span > img,
+#edit-restaurant-form #restaurant-images #existing-images span > img {
   display: none;
   position: absolute;
   width: 15rem;
@@ -540,17 +552,93 @@ footer .footer-right {
   right: 0;
 }
 #new-restaurant-form #restaurant-images #uploaded-images span:hover > img,
-#edit-restaurant-form #restaurant-images #uploaded-images span:hover > img {
+#edit-restaurant-form #restaurant-images #uploaded-images span:hover > img,
+#new-restaurant-form #restaurant-images #existing-images span:hover > img,
+#edit-restaurant-form #restaurant-images #existing-images span:hover > img {
   display: block;
 }
 #new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image,
-#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image {
+#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image,
+#new-restaurant-form #restaurant-images #existing-images span.oi.oi-image,
+#edit-restaurant-form #restaurant-images #existing-images span.oi.oi-image {
   margin-right: 0.5rem;
 }
 #new-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover,
-#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover {
+#edit-restaurant-form #restaurant-images #uploaded-images span.oi.oi-image:hover,
+#new-restaurant-form #restaurant-images #existing-images span.oi.oi-image:hover,
+#edit-restaurant-form #restaurant-images #existing-images span.oi.oi-image:hover {
   color: #0061b4;
   cursor: pointer;
+}
+#new-restaurant-form #category-selected,
+#edit-restaurant-form #category-selected {
+  display: none;
+  border-radius: 4px 4px 0 0;
+  border: #818181 solid 1px;
+  background-color: white;
+  border-bottom: none;
+}
+#new-restaurant-form #category-dropdown,
+#edit-restaurant-form #category-dropdown {
+  background-color: #fdfdfd;
+  display: none;
+  text-align: center;
+  width: 100%;
+  border: #818181 solid 1px;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+#new-restaurant-form .category-matched,
+#edit-restaurant-form .category-matched {
+  display: inline-block;
+  background-color: #dbdbdb;
+  margin: 5px 8px;
+  border-radius: 2px;
+}
+#new-restaurant-form .category-matched p,
+#edit-restaurant-form .category-matched p {
+  font-size: 0.95rem;
+  padding: 3px 5px;
+  margin: 0;
+  color: #818181;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#new-restaurant-form .category-matched p:hover,
+#edit-restaurant-form .category-matched p:hover {
+  cursor: pointer;
+  color: #222222;
+}
+#new-restaurant-form .category-selected,
+#edit-restaurant-form .category-selected {
+  height: 1.75rem;
+  display: inline-block;
+  background-color: #dbdbdb;
+  margin: 5px 8px;
+  border-radius: 2px;
+  color: #818181;
+}
+#new-restaurant-form .category-selected p,
+#edit-restaurant-form .category-selected p {
+  font-size: 0.95rem;
+  padding: 3px 0 3px 8px;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#new-restaurant-form .category-selected span,
+#edit-restaurant-form .category-selected span {
+  font-size: 0.8rem;
+  padding: 1px 8px;
+  cursor: pointer;
+}
+#new-restaurant-form .category-selected span:hover,
+#edit-restaurant-form .category-selected span:hover {
+  color: #eb0000;
 }
 #login-warning {
   cursor: pointer;
@@ -706,6 +794,9 @@ footer .footer-right {
   padding: 20px;
   border-radius: 20px;
 }
+canvas#canvas {
+  display: none;
+}
 .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
@@ -735,67 +826,6 @@ label.star:hover ~ label.star span::before {
   transition: all 0.25s ease-in-out;
   padding: 50px;
   display: inline-block;
-}
-#category-selected {
-  display: none;
-  border-radius: 4px 4px 0 0;
-  border: #818181 solid 1px;
-  background-color: white;
-  border-bottom: none;
-}
-#category-dropdown {
-  background-color: #fdfdfd;
-  display: none;
-  text-align: center;
-  width: 100%;
-  border: #818181 solid 1px;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-}
-.category-matched {
-  display: inline-block;
-  background-color: #dbdbdb;
-  margin: 5px 8px;
-  border-radius: 2px;
-}
-.category-matched p {
-  font-size: 0.95rem;
-  padding: 3px 5px;
-  margin: 0;
-  color: #818181;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.category-matched p:hover {
-  cursor: pointer;
-  color: #222222;
-}
-.category-selected {
-  height: 1.75rem;
-  display: inline-block;
-  background-color: #dbdbdb;
-  margin: 5px 8px;
-  border-radius: 2px;
-  color: #818181;
-}
-.category-selected p {
-  font-size: 0.95rem;
-  padding: 3px 0 3px 8px;
-  margin: 0;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.category-selected span {
-  font-size: 0.8rem;
-  padding: 1px 8px;
-  cursor: pointer;
-}
-.category-selected span:hover {
-  color: #eb0000;
 }
 .card-header {
   border-bottom: none;

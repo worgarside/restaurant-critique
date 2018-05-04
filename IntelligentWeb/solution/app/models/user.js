@@ -90,7 +90,7 @@ UserSchema.methods.sendVerificationEmail = function () {
     const body = `
         <p>${this.name.first} ${this.name.last},</p>
         <p>Please verify your new account with Restaurant Critique by clicking the link below</p>
-        <p><a href='http://localhost:3000/verify-user/${this.verified.hash}'>https://restaurantcritique.com/verify-user/${this.verified.hash}</a></p>
+        <p><a href='https://localhost:3000/verify-user/${this.verified.hash}'>https://restaurantcritique.com/verify-user/${this.verified.hash}</a></p>
     `;
 
     nodemailer.sendEmail(to, subject, body);

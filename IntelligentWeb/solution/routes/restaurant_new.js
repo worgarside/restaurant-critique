@@ -91,9 +91,11 @@ router.post('/add_restaurant', upload.array('images', 10), (req, res) => {
             latitude: body.lat,
             longitude: body.lng,
         },
-        url: body.url,
-        menu: body.menu,
-        phone: body.phone,
+        contact:{
+            url: body.url,
+            menu: body.menu,
+            phone: body.phone
+        },
         openingTimes: openingTimes,
         description: body.description,
         priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
@@ -133,14 +135,6 @@ router.post('/add_restaurant', upload.array('images', 10), (req, res) => {
     }).catch((err) => {
         console.log(`Error in saving restaurant: ${err}`);
         res.render('errors/restaurant_new_fail', {title: title, user: req.user});
-    });
-});
-
-// TODO check this is used and jsdoc
-router.post('/verify_email', (req, res) => {
-    User.findOne({_id: req.user._id}, (err, user) => {
-        user.sendVerificationEmail();
-        res.send(true);
     });
 });
 

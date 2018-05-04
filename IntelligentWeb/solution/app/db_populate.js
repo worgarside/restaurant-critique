@@ -102,6 +102,9 @@ function populateUsers(insertPromises) {
         postcode: 'SY14 8JU',
         reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18'],
         reducedID: 'worgarside-gmail-com',
+        verified: {
+            flag: true
+        },
         restaurants: {created: [ID["Nando's"], ID['Gourmet Burger Kitchen'], ID['Istanbul Restaurant'], ID['Pizza Express'], ID['Grill & Go']]}
     }).save());
 
@@ -801,11 +804,9 @@ function populateRestaurants(insertPromises) {
         ],
         features: {
             alcohol: {value: false},
-            americanExpress: {value: false},
             creditCard: {value: true},
             delivery: {value: false},
             highchairs: {value: false},
-            glutenFree: {value: false},
             mastercard: {value: true},
             outdoorSeating: {value: false},
             parking: {value: false},
