@@ -19,7 +19,8 @@ const fs = require('fs');
 const dateFormat = require('dateformat');
 const title = 'Restaurant Critique';
 const googleMapsClient = require('@google/maps').createClient({
-    key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0'
+    key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0',
+    Promise: Promise
 });
 
 const multer = require('multer');
@@ -83,7 +84,7 @@ router.post('/submit_edit', upload.array('images', 10), (req, res) => {
         }
     }
 
-    const tempRestaurant = new Restaurant
+    const tempRestaurant = new Restaurant;
 
     let features = tempRestaurant.features;
     for (let key of Object.keys(tempRestaurant.features)) {
@@ -92,58 +93,64 @@ router.post('/submit_edit', upload.array('images', 10), (req, res) => {
         }
     }
 
-    let latitude = 0;
-    let longitude = 0;
-
-    googleMapsClient.geocode({'address': `${body.postcode}, UK`}, (err, response) => {
-        if (!err) {
-            latitude = response.json.results[0].geometry.location.lat();
-            longitude = response.json.results[0].geometry.location.lng();
-            console.log(`Lat: ${latitude} & Lng: ${longitude}`);
-        } else {
-            console.log('Invalid postcode on edit submission. Please try again.');
-        }
-    });
-
     const newImageArray = processImages(req.files, req.body.restaurantId);
     const totalImageArray = JSON.parse(body.restaurantImages);
     totalImageArray.push(...newImageArray);
 
-    Restaurant.findByIdAndUpdate(req.body.restaurantId, {
-        name: body.restaurantName,
-        address: {
-            line1: body.address1,
-            line2: body.address2,
-            city: body.city,
-            postcode: body.postcode,
-            latitude: latitude,
-            longitude: longitude,
-        },
-        contact: {
-            url: body.url,
-            menu: body.menu,
-            phone: body.phone
-        },
-        openingTimes: openingTimes,
-        description: body.description,
-        priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
-        features: features,
-        images: totalImageArray,
-        categories: categoryList,
-        published: published
-    }, {new: true})
-        .exec()
-        .then((restaurant) => {
-            if (published) {
-                res.redirect(`/restaurant/${restaurant.localUrl}`);
-            } else {
-                res.redirect(`/user/${req.user.reducedID}`);
-            }
+    let latitude = 0;
+    let longitude = 0;
+
+    googleMapsClient.geocode({'address': `${body.postcode}, UK`})
+        .asPromise()
+        .then((response) => {
+            latitude = response.json.results[0].geometry.location.lat;
+            longitude = response.json.results[0].geometry.location.lng;
+            console.log(`Lat: ${latitude} & Lng: ${longitude}`);
+
+            Restaurant.findByIdAndUpdate(req.body.restaurantId, {
+                name: body.restaurantName,
+                address: {
+                    line1: body.address1,
+                    line2: body.address2,
+                    city: body.city,
+                    postcode: body.postcode,
+                    latitude: latitude,
+                    longitude: longitude,
+                },
+                contact: {
+                    url: body.url,
+                    menu: body.menu,
+                    phone: body.phone
+                },
+                openingTimes: openingTimes,
+                description: body.description,
+                priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
+                features: features,
+                images: totalImageArray,
+                categories: categoryList,
+                searchable: {},
+                published: published
+            }, {new: true})
+                .exec()
+                .then((restaurant) => {
+                    if (published) {
+                        res.redirect(`/restaurant/${restaurant.localUrl}`);
+                    } else {
+                        res.redirect(`/user/${req.user.reducedID}`);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                    res.render('errors/500', {title: title, user: req.user});
+                });
+
+
         })
         .catch((err) => {
-            console.log(`Error: ${err}`);
-            res.render('errors/500', {title: title, user: req.user});
+            console.log(`Geocode error: ${err}`);
         });
+
+
 });
 
 // TODO jsdoc
