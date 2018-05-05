@@ -202,14 +202,19 @@ block content
                                         .slideshow-prev#button-prev
                                             span.oi.oi-check.oi-chevron-left(aria-hidden='true')
                                         .slideshow-next#button-next
-                                            span.oi.oi-check.oi-chevron-right(aria-hidden='true')
+                                    span.oi.oi-check.oi-chevron-right(aria-hidden='true')
+
+
+
+
+
+
+
+
         .row
-            .camera
-                video#video Video stream not available.
-                button#startbutton Take photo
+            video(autoplay='')
+            button#takephoto Take snapshot
             canvas#canvas
-            .output
-                img#photo(alt='The screen capture will appear in this box.')
 
 
     script const restaurantId = `#{restaurant._id}`
