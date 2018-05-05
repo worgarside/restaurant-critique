@@ -262,7 +262,7 @@ function createRestaurantPreview(restaurant, index) {
 
     let htmlCategories = `
         <div class="row">
-            <div style="margin: -5px" class="col">
+            <div class="col">
     `;
 
     if (restaurant.categories.length > 0) {

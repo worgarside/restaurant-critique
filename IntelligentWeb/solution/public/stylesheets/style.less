@@ -8,7 +8,9 @@
 @navbar-height: 58;
 
 @red: #eb0000;
+@red-light: #ff6a74;
 @green: #00cd00;
+@green-dark: #009c00;
 @blue: #0061b4;
 @orange: #e69200;
 
@@ -404,37 +406,37 @@ footer {
         margin: 0 0.5rem;
       }
     }
-  }
-}
 
-.carousel-control-prev-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
-}
+    &-control {
+      &-next {
+        width: 6%;
+        right: -3%;
+        &-icon {
+          background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+        }
+      }
 
-.carousel-control-next-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
-}
-
-.carousel-control-next {
-  width: 6%;
-  right: -3%;
-}
-
-//
-.carousel-control-prev {
-  width: 6%;
-  left: -3%;
-}
-
-ol.carousel-indicators {
-  margin-bottom: 0;
-
-  & li {
-    background-color: @grey-lighter;
-    &.active {
-      background-color: @grey-mid;
+      &-prev {
+        width: 6%;
+        left: -3%;
+        &-icon {
+          background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+        }
+      }
     }
   }
+
+  ol.carousel-indicators {
+    margin-bottom: 0;
+
+    & li {
+      background-color: @grey-lighter;
+      &.active {
+        background-color: @grey-mid;
+      }
+    }
+  }
+
 }
 
 // ================================ New/Edit Restaurant ================================ \\
@@ -847,14 +849,6 @@ ol.carousel-indicators {
     }
   }
 
-  &-stars {
-    span {
-      font-size: 15pt;
-      margin-right: 5px;
-      color: @grey-mid;
-    }
-  }
-
   &-address {
     font-size: 13pt;
     font-family: 'Roboto', sans-serif;
@@ -880,6 +874,27 @@ ol.carousel-indicators {
     width: 100%;
     color: @grey-darkest;
     margin-bottom: 4px;
+  }
+
+  &-feature {
+    &-true {
+      margin: 5px;
+      padding: 5px;
+      display: inline-block;
+      border-radius: 2px;
+      background-color: @grey-lighter;
+      border: solid 1px @green;
+    }
+    &-false {
+      color: @grey-mid;
+      margin: 5px;
+      padding: 5px;
+      display: inline-block;
+      border-radius: 2px;
+      background-color: @grey-lighter;
+      border: solid 1px @red;
+
+    }
   }
 }
 
@@ -932,13 +947,88 @@ ol.carousel-indicators {
 
 // ================================ Restaurant Page ================================ \\
 
-#restaurant-page-override {
-  .restaurant-address {
-    font-size: 1.5rem;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    margin-bottom: 0;
-    color: @grey-darker;
+#restaurant {
+  &-page-override {
+    .restaurant-address {
+      font-size: 1.5rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
+      margin-bottom: 0;
+      color: @grey-darker;
+    }
+
+    #contact-info {
+      h4 {
+        margin-top: 10px;
+      }
+      p {
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+
+    #restaurant-image-carousel.carousel.slide {
+      margin-top: 10px;
+      height: 27rem;
+      .carousel-inner {
+        height: 100%;
+        background-color: black;
+        .carousel-item, .carousel-item.active {
+          height: 100%;
+          .d-flex {
+            height: 100%;
+            justify-content: center;
+            img {
+              object-fit: contain;
+            }
+          }
+        }
+      }
+    }
+
+    #reviews {
+      .review {
+        &-author-image {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+
+        &-image {
+          &-main {
+            width: 15rem;
+            height: 11.25rem;
+            background-color: black;
+            text-align: center;
+            margin: 0.125rem 0;
+            img {
+              max-width: 100%;
+              max-height: 100%;
+              object-fit: contain;
+            }
+          }
+
+          &-secondary{
+            width: 7.5rem;
+            height: 5.5rem;
+            background-color: black;
+            text-align: center;
+            margin: 0.125rem 0;
+            img {
+              max-width: 100%;
+              max-height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+
+        &-date {
+          color: @grey-mid;
+        }
+      }
+    }
+
   }
 }
 
@@ -982,11 +1072,7 @@ label.star:hover ~ label.star span::before {
 
 #restaurant-current-map {
   width: 100%;
-  @map-transition: all 0.25s ease-in-out;
-  height: 250px;
-  transition: @map-transition;
-  padding: 50px;
-  display: inline-block;
+  height: 28rem;
 }
 
 // ================================ User Management ================================ \\

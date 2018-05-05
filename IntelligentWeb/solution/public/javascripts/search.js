@@ -70,11 +70,11 @@ function getRestaurantDiv(restaurant, index) {
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlighted"></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
         }
 
         htmlStars += `</div>`;
@@ -146,10 +146,10 @@ function getRestaurantDiv(restaurant, index) {
     if (imageCount > 1) {
         htmlSlideshow += `
                 <div id="button-prev-${index}" class="slideshow-prev">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>
+                    <span aria-hidden="true" class="oi oi-chevron-left"></span>
                 </div>
                 <div id="button-next-${index}" class="slideshow-next">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-right"></span>
+                    <span aria-hidden="true" class="oi oi-chevron-right"></span>
                 </div>
         `;
     }

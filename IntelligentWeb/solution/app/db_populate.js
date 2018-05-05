@@ -800,7 +800,8 @@ function populateRestaurants(insertPromises) {
         priceRange: {lower: .95, upper: 4.50, band: 0},
         categories: [
             {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chicken'}, {name: 'Barbecue'},
-            {name: 'Fast Food'}
+            {name: 'Fast Food'}, {name: 'Asian'}, {name: 'Barbecue'}, {name: 'Contemporary'}, {name: 'Delicatessen'},
+            {name: 'Fast Food'}, {name: 'Grill'}, {name: 'International'}, {name: 'Street Food'}
         ],
         features: {
             alcohol: {value: false},

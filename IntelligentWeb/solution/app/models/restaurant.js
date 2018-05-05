@@ -53,10 +53,10 @@ RestaurantSchema = Schema({
     features: {
         alcohol: {name: {type: String, default: 'Alcohol'}, value: Boolean},
         americanExpress: {name: {type: String, default: 'Accepts American Express'}, value: Boolean},
-        creditCard: {name: {type: String, default: 'Accepts credit cards'}, value: Boolean},
+        creditCard: {name: {type: String, default: 'Accepts Credit Cards'}, value: Boolean},
         delivery: {name: {type: String, default: 'Delivery'}, value: Boolean},
         highchairs: {name: {type: String, default: 'Highchairs Available'}, value: Boolean},
-        glutenFree: {name: {type: String, default: 'Gluten Free options'}, value: Boolean},
+        glutenFree: {name: {type: String, default: 'Gluten Free Options'}, value: Boolean},
         mastercard: {name: {type: String, default: 'Accepts Mastercard'}, value: Boolean},
         outdoorSeating: {name: {type: String, default: 'Outdoor Seating'}, value: Boolean},
         parking: {name: {type: String, default: 'Dedicated Parking'}, value: Boolean},
@@ -64,10 +64,10 @@ RestaurantSchema = Schema({
         seating: {name: {type: String, default: 'Seating'}, value: Boolean},
         tableService: {name: {type: String, default: 'Table Service'}, value: Boolean},
         takeout: {name: {type: String, default: 'Takeout'}, value: Boolean},
-        vegetarian: {name: {type: String, default: 'Vegetarian options'}, value: Boolean},
-        vegan: {name: {type: String, default: 'Vegan options'}, value: Boolean},
+        vegetarian: {name: {type: String, default: 'Vegetarian Options'}, value: Boolean},
+        vegan: {name: {type: String, default: 'Vegan Options'}, value: Boolean},
         visa: {name: {type: String, default: 'Accepts Visa'}, value: Boolean},
-        wheelchairAccessible: {name: {type: String, default: 'Wheelchair accessible'}, value: Boolean},
+        wheelchairAccessible: {name: {type: String, default: 'Wheelchair Accessible'}, value: Boolean},
         wifi: {name: {type: String, default: 'Free WiFi'}, value: Boolean}
     },
     creator: { // These are of type User, but only some fields - db is not relational

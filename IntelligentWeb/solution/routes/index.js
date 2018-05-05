@@ -144,12 +144,10 @@ router.get('/restaurant/edit/:_id', (req, res) => {
  * @function loadRestaurantPage
  */
 router.get('/restaurant/:url', (req, res) => {
-    return Restaurant.findOne({localUrl: req.params.url}, (err, restaurant) => {
-        if (err) {
-            throw(err);
-        }
-
-        if (restaurant) {
+    Restaurant.findOne({localUrl: req.params.url})
+        .lean()
+        .exec()
+        .then((restaurant) => {
             const reviewIdList = restaurant.reviews;
             let reviewList = [];
             let reviewPromises = [];
@@ -166,7 +164,7 @@ router.get('/restaurant/:url', (req, res) => {
 
             Promise.all(reviewPromises)
                 .then(() => {
-                    return res.render('restaurant', {
+                    res.render('restaurant', {
                         title: title,
                         user: req.user,
                         restaurant: restaurant,
@@ -174,13 +172,14 @@ router.get('/restaurant/:url', (req, res) => {
                     });
                 })
                 .catch(() => {
-                    return res.render('errors/404', {title: title, user: req.user});
+                    res.render('errors/404', {title: title, user: req.user});
                 })
-        } else {
-            res.render('errors/404', {title: title, user: req.user});
-        }
 
-    });
+        })
+        .catch((err) => {
+            console.log(`Restaurant error: ${err}`);
+            res.render('errors/404', {title: title, user: req.user});
+        });
 });
 
 router.get('/restaurants-nearby', (req, res) => {
@@ -303,7 +302,7 @@ router.post('/login', (req, res, next) => {
 // TODO jsdoc
 router.post('/verify_email', (req, res) => {
     // Check user is logged in in case session expires and then they click the link
-    if (req.user){
+    if (req.user) {
         User.findOne({_id: req.user._id}, (err, user) => {
             user.sendVerificationEmail();
             res.send(true);

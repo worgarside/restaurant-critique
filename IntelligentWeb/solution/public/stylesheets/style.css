@@ -316,27 +316,27 @@ footer .footer-right {
   object-fit: cover;
   margin: 0 0.5rem;
 }
-.carousel-control-prev-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
-}
-.carousel-control-next-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
-}
-.carousel-control-next {
+#index-carousel .carousel-control-next {
   width: 6%;
   right: -3%;
 }
-.carousel-control-prev {
+#index-carousel .carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+}
+#index-carousel .carousel-control-prev {
   width: 6%;
   left: -3%;
 }
-ol.carousel-indicators {
+#index-carousel .carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+}
+#index-carousel ol.carousel-indicators {
   margin-bottom: 0;
 }
-ol.carousel-indicators li {
+#index-carousel ol.carousel-indicators li {
   background-color: #dbdbdb;
 }
-ol.carousel-indicators li.active {
+#index-carousel ol.carousel-indicators li.active {
   background-color: #919191;
 }
 #new-restaurant-form #opening-time,
@@ -716,11 +716,6 @@ ol.carousel-indicators li.active {
   text-decoration: none;
   color: #919191;
 }
-.restaurant-stars span {
-  font-size: 15pt;
-  margin-right: 5px;
-  color: #919191;
-}
 .restaurant-address {
   font-size: 13pt;
   font-family: 'Roboto', sans-serif;
@@ -743,6 +738,23 @@ ol.carousel-indicators li.active {
   width: 100%;
   color: #222222;
   margin-bottom: 4px;
+}
+.restaurant-feature-true {
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  border-radius: 2px;
+  background-color: #dbdbdb;
+  border: solid 1px #00cd00;
+}
+.restaurant-feature-false {
+  color: #919191;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  border-radius: 2px;
+  background-color: #dbdbdb;
+  border: solid 1px #eb0000;
 }
 .slideshow {
   width: 100%;
@@ -794,6 +806,67 @@ ol.carousel-indicators li.active {
   margin-bottom: 0;
   color: #555555;
 }
+#restaurant-page-override #contact-info h4 {
+  margin-top: 10px;
+}
+#restaurant-page-override #contact-info p {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#restaurant-page-override #restaurant-image-carousel.carousel.slide {
+  margin-top: 10px;
+  height: 27rem;
+}
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner {
+  height: 100%;
+  background-color: black;
+}
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item,
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item.active {
+  height: 100%;
+}
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item .d-flex,
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item.active .d-flex {
+  height: 100%;
+  justify-content: center;
+}
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item .d-flex img,
+#restaurant-page-override #restaurant-image-carousel.carousel.slide .carousel-inner .carousel-item.active .d-flex img {
+  object-fit: contain;
+}
+#restaurant-page-override #reviews .review-author-image {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+#restaurant-page-override #reviews .review-image-main {
+  width: 15rem;
+  height: 11.25rem;
+  background-color: black;
+  text-align: center;
+  margin: 0.125rem 0;
+}
+#restaurant-page-override #reviews .review-image-main img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+#restaurant-page-override #reviews .review-image-secondary {
+  width: 7.5rem;
+  height: 5.5rem;
+  background-color: black;
+  text-align: center;
+  margin: 0.125rem 0;
+}
+#restaurant-page-override #reviews .review-image-secondary img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+#restaurant-page-override #reviews .review-date {
+  color: #919191;
+}
 canvas#canvas {
   display: none;
 }
@@ -822,10 +895,7 @@ label.star:hover ~ label.star span::before {
 }
 #restaurant-current-map {
   width: 100%;
-  height: 250px;
-  transition: all 0.25s ease-in-out;
-  padding: 50px;
-  display: inline-block;
+  height: 28rem;
 }
 .card-header {
   border-bottom: none;
