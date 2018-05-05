@@ -4,7 +4,10 @@ block header
 
 block navbar
     nav.navbar.navbar-expand-sm.sticky
-        ul.navbar-nav.mr-auto
+        input#menu-btn.menu-btn(type='checkbox')
+        label.menu-icon(for='menu-btn')
+            span.navicon
+        ul.navbar-nav.mr-auto.menu
             if animateLogo
                 li
                     a#nav-logo-anim(href='/')
@@ -22,7 +25,7 @@ block navbar
             li.nav-item
                 a.nav-link.nav-wide(href='/restaurant/new') Add a Restaurant
 
-        ul.navbar-nav.row
+        ul.navbar-nav.row.menu
             if (!user)
                 script const userLoggedIn = false
                 li.nav-item
@@ -51,3 +54,4 @@ block navbar
                     .form-row
                         .form-group.col
                             button.btn.login-form-btn Log In
+            a.nav-link.nav-thin.icon(href='javascript:void(0);' onclick='NavButton()') &#x2630;
