@@ -14,9 +14,6 @@ h6 {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
-.full-height {
-  height: 100%;
-}
 input.no-spinner[type="number"]::-webkit-outer-spin-button,
 input.no-spinner[type="number"]::-webkit-inner-spin-button,
 input.no-spinner[type="time"]::-webkit-outer-spin-button,
@@ -78,16 +75,6 @@ label.error {
   color: #eb0000;
   font-style: italic;
 }
-.quote {
-  font-style: italic;
-  color: #818181;
-}
-.quote:before {
-  content: "\"";
-}
-.quote:after {
-  content: "\"";
-}
 .post-space {
   margin-right: 0.5rem;
 }
@@ -99,6 +86,10 @@ span.oi.oi-star {
 }
 span.oi.oi-star.star-highlight {
   color: #e69200;
+}
+.rating-value {
+  color: #919191;
+  font-size: 1.25rem;
 }
 #main-logo {
   width: 400px;
@@ -309,12 +300,11 @@ footer .footer-right {
   border-top: solid 1px #818181;
   border-bottom: solid 1px #818181;
 }
+#index-carousel .restaurant-description {
+  height: 2rem;
+}
 #index-carousel .carousel-item {
   padding: 2rem;
-}
-#index-carousel .carousel-item h4.rating-value {
-  color: #919191;
-  font-size: 1.25rem;
 }
 #index-carousel .carousel-item .restaurant-category {
   font-size: 1rem;
@@ -326,11 +316,28 @@ footer .footer-right {
   object-fit: cover;
   margin: 0 0.5rem;
 }
-@media only screen and (max-device-width: 925px) {
-  a.nav-link,
-  a.nav-link.nav-thin#btn-login {
-    font-size: 12pt;
-  }
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+}
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+}
+.carousel-control-next {
+  width: 6%;
+  right: -3%;
+}
+.carousel-control-prev {
+  width: 6%;
+  left: -3%;
+}
+ol.carousel-indicators {
+  margin-bottom: 0;
+}
+ol.carousel-indicators li {
+  background-color: #dbdbdb;
+}
+ol.carousel-indicators li.active {
+  background-color: #919191;
 }
 #new-restaurant-form #opening-time,
 #edit-restaurant-form #opening-time,
@@ -726,8 +733,11 @@ footer .footer-right {
   background: #efefef;
   border-radius: 2px;
   display: inline-block;
-  margin: 10px 5px;
+  margin: 10px 5px 10px 0;
   padding: 2px 5px;
+}
+.restaurant-category ~ .restaurant-category {
+  margin: 10px 5px;
 }
 .restaurant-description {
   width: 100%;
@@ -776,6 +786,13 @@ footer .footer-right {
 .slideshow-prev:hover,
 .slideshow-next:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+#restaurant-page-override .restaurant-address {
+  font-size: 1.5rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  margin-bottom: 0;
+  color: #555555;
 }
 canvas#canvas {
   display: none;

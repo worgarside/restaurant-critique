@@ -21,9 +21,16 @@ block content
             .col
                 br
                 h2 This Week's Top Restaurants
-        .row#index-carousel
+
+        .row
             .col
-                .carousel.slide(data-ride='carousel')
+                .carousel.slide#index-carousel(data-ride='carousel')
+                    ol.carousel-indicators
+                        li.active(data-target='#index-carousel', data-slide-to='0')
+                        li(data-target='#index-carousel', data-slide-to='1')
+                        li(data-target='#index-carousel', data-slide-to='2')
+                        li(data-target='#index-carousel', data-slide-to='3')
+                        li(data-target='#index-carousel', data-slide-to='4')
                     .carousel-inner
                         each restaurant, index in restaurants
                             div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
@@ -48,7 +55,7 @@ block content
                                             .col
                                                 p.restaurant-address= restaurant.address.formattedAddress
                                         .row
-                                            .col(style='margin-left: -5px')
+                                            .col
                                                 each category, index in restaurant.categories
                                                     if index < 5
                                                         p.restaurant-category= category.name
@@ -56,12 +63,16 @@ block content
                                             .col
                                                 p.restaurant-description= restaurant.description
                                     .col
-                                        .text-center.full-height
+                                        .text-center.h-100
                                             .vert-center-parent
                                                 .vert-center-child
                                                     each image, index in restaurant.images
                                                         if index < 2
                                                             img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                    a.carousel-control-prev(href='#index-carousel', role='button', data-slide='prev')
+                        span.carousel-control-prev-icon(aria-hidden='true')
+                    a.carousel-control-next(href='#index-carousel', role='button', data-slide='next')
+                        span.carousel-control-next-icon(aria-hidden='true')
         br
         .row.index-image-set
             .col-4
