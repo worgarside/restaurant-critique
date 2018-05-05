@@ -119,7 +119,7 @@ block content
                 h4 Reviews
                 each review in reviews
                     br
-                    .row
+                    .row.no-gutters
                         .col-lg-2.col-md-12
                             .text-center
                                 img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
@@ -147,19 +147,25 @@ block content
                                     p.mb-0 #{review.body}
                         .col-lg-4.col-md-4
                             .vert-center-parent
-                                .vert-center-child
-                                    #review-image-div
-                                        if review.images.length === 1
-                                            .review-image-main
-                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-                                        else if review.images.length > 1
-                                            .review-image-main
-                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-                                            .review-images-secondaries
-                                                each image, index in review.images
-                                                    if index > 0 && index < 3
-                                                        .review-image-secondary
-                                                            img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                                .vert-center-child#review-image-container
+                                    if review.images.length === 1
+                                        .review-image-main
+                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+
+                                    else if review.images.length > 1
+                                        table#review-image-table
+                                            tr
+                                                td(rowspan='2')
+                                                    .review-image-main
+                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                                td
+                                                    .review-image-secondary
+                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
+                                            tr
+                                                td
+                                                    .review-image-secondary(style='margin-top: 1px;')
+                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+
 
 
 

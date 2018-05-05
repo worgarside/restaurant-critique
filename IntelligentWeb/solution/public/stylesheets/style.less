@@ -1033,17 +1033,12 @@ footer {
             height: 11.25rem;
             background-color: black;
             text-align: center;
-            margin: 0.125rem 0;
             float: right;
             img {
               max-width: 100%;
               max-height: 100%;
               object-fit: contain;
             }
-          }
-
-          &-secondaries{
-            display: inline-block;
           }
 
           &-secondary {
@@ -1051,13 +1046,16 @@ footer {
             height: 5.5rem;
             background-color: black;
             text-align: center;
-            margin: 0.125rem 0;
             float: right;
             img {
               max-width: 100%;
               max-height: 100%;
               object-fit: contain;
             }
+          }
+
+          &-table{
+            float: right;
           }
         }
 
@@ -1194,8 +1192,9 @@ label.star:hover ~ label.star span::before {
   //  float: unset;
   //  margin: 0 auto;
   //}
-  #review-image-row {
+  .vert-center-child#review-image-container {
     text-align: center;
+    align-content: center;
   }
 
 }

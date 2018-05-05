@@ -140,8 +140,6 @@ span.oi.oi-star.star-highlight {
   right: 15px;
   top: 15px;
   color: white;
-  width: 64px;
-  height: 64px;
 }
 .burger-btn #bar-2 {
   position: absolute;
@@ -876,7 +874,6 @@ footer .footer-right {
   height: 11.25rem;
   background-color: black;
   text-align: center;
-  margin: 0.125rem 0;
   float: right;
 }
 #restaurant-page-override #reviews .review-image-main img {
@@ -884,21 +881,20 @@ footer .footer-right {
   max-height: 100%;
   object-fit: contain;
 }
-#restaurant-page-override #reviews .review-image-secondaries {
-  display: inline-block;
-}
 #restaurant-page-override #reviews .review-image-secondary {
   width: 7.5rem;
   height: 5.5rem;
   background-color: black;
   text-align: center;
-  margin: 0.125rem 0;
   float: right;
 }
 #restaurant-page-override #reviews .review-image-secondary img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+#restaurant-page-override #reviews .review-image-table {
+  float: right;
 }
 #restaurant-page-override #reviews .review-date {
   color: #919191;
@@ -993,8 +989,9 @@ label.star:hover ~ label.star span::before {
   .col #contact-info {
     width: 100%;
   }
-  #review-image-row {
+  .vert-center-child#review-image-container {
     text-align: center;
+    align-content: center;
   }
 }
 @media only screen and (max-device-width: 576px) {
