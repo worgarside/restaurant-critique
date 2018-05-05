@@ -877,11 +877,15 @@ footer .footer-right {
   background-color: black;
   text-align: center;
   margin: 0.125rem 0;
+  float: right;
 }
 #restaurant-page-override #reviews .review-image-main img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+#restaurant-page-override #reviews .review-image-secondaries {
+  display: inline-block;
 }
 #restaurant-page-override #reviews .review-image-secondary {
   width: 7.5rem;
@@ -889,6 +893,7 @@ footer .footer-right {
   background-color: black;
   text-align: center;
   margin: 0.125rem 0;
+  float: right;
 }
 #restaurant-page-override #reviews .review-image-secondary img {
   max-width: 100%;
@@ -987,6 +992,9 @@ label.star:hover ~ label.star span::before {
 @media only screen and (max-device-width: 768px) {
   .col #contact-info {
     width: 100%;
+  }
+  #review-image-row {
+    text-align: center;
   }
 }
 @media only screen and (max-device-width: 576px) {

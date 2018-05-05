@@ -5,7 +5,7 @@ block content
     br
     .container#restaurant-page-override
         .row
-            .col.col-lg-12
+            .col
                 h1.d-inline-block= restaurant.name
                 if restaurant.averageRating
                     .d-inline-block.ml-4
@@ -27,10 +27,10 @@ block content
                         span.oi.oi-star(aria-hidden='true')
                         h4.rating-value.d-inline.pre-space No Ratings Yet
         .row
-            .col.col-lg-12
+            .col
                 p.restaurant-address= restaurant.address.formattedAddress
         .row
-            .col.col-lg-12
+            .col
                 each category, index in restaurant.categories
                     if index < 7
                         p.restaurant-category= category.name
@@ -39,7 +39,7 @@ block content
 
         hr
         .row
-            .col-8
+            .col-lg-8.col-md-12.col-sm-12
                 // TODO no image handling
                 #restaurant-image-carousel.carousel.slide
                     .carousel-inner
@@ -52,9 +52,9 @@ block content
                     a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
                         span.carousel-control-next-icon(aria-hidden='true')
 
-            .col-4
+            .col-lg-4
                 .row
-                    .col
+                    .col-lg-12
                         #contact-info
                             h4 Contact Information
                             p
@@ -80,14 +80,14 @@ block content
                                     small.ml-1 Not added yet
                 hr
                 .row
-                    .col
+                    .col-lg-12
                         #opening-times
                             h4 Opening Times
                             each times, index in restaurant.openingTimes
                                 .row
-                                    .col-2.offset-1
+                                    .col-2.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
                                         p.mb-2= daysOfWeek[index]
-                                    .col-6.text-center
+                                    .col-4.col-sm-4.col-md-3.col-lg-6.text-center
                                         if times[0] && times[1]
                                             - var oH = Math.floor(times[0]/60);
                                             - var oM = (times[0]%60).toString().padEnd(2, '0');
@@ -98,11 +98,11 @@ block content
                                             p.mb-2 Closed
         br
         .row
-            .col-6
+            .col-lg-6
                 h4 Overview
                 p= restaurant.description
-            .col-6#features
-                h5 #{restaurant.name}'s Features:
+            .col-lg-6#features
+                h4 #{restaurant.name}'s Features:
                 each feature in restaurant.features
                     if feature.value
                         p.restaurant-feature-true= feature.name
@@ -120,7 +120,7 @@ block content
                 each review in reviews
                     br
                     .row
-                        .col-2
+                        .col-lg-2.col-md-12
                             .text-center
                                 img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
                                 h5.mb-0 #{review.author.forename} #{review.author.surname}
@@ -129,7 +129,7 @@ block content
                                 - var year = review.updatedAt.getFullYear()
                                 - var niceDate = month + "/" + day + "/" + year;
                                 p.mt-1.review-date= niceDate
-                        .col-6
+                        .col-lg-6.col-md-8
                             .row.mb-2
                                 .col
                                     - var starRating = Math.round(review.restaurantRating)
@@ -143,24 +143,22 @@ block content
                                     // TODO: make sure review title length isn't huge for wrapping
                                     h5.d-inline.ml-2 #{review.title}
                             .row
-                                .col
+                                .col-lg-12
                                     p.mb-0 #{review.body}
-                        .col-4
+                        .col-lg-4.col-md-4
                             .vert-center-parent
                                 .vert-center-child
-                                    .row
+                                    #review-image-div
                                         if review.images.length === 1
-                                            .col
-                                                .review-image-main.float-right
-                                                    img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                            .review-image-main
+                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
                                         else if review.images.length > 1
-                                            .col-8
-                                                .review-image-main.float-right
-                                                    img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-                                            .col-4
+                                            .review-image-main
+                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                            .review-images-secondaries
                                                 each image, index in review.images
                                                     if index > 0 && index < 3
-                                                        .review-image-secondary.float-right
+                                                        .review-image-secondary
                                                             img(src=`/images/restaurants/${restaurant._id}/${image}`)
 
 
