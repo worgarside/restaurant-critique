@@ -35,8 +35,10 @@ $(() => {
     prePickedCategories = JSON.parse(restaurantCategories);
 
     for (const category of prePickedCategories) {
-        selectCategory(category);
+        selectCategory(category, false);
     }
+    checkCategoryPicker();
+    categorySelected.css('border-color', '#ced4da');
 });
 
 $('#new-restaurant-form').on('keyup keypress', function (e) {
@@ -261,8 +263,9 @@ function hideCategoryDropdown() {
  * When a User clicks on a Category in the picker, it is selected and added to a list for submission
  * This function adds the selected Category to a hidden input, and move it to the selected box o the page
  * @param {String} category The selected Category's name
+ * @param {Boolean} focus flag to set user focus on input after selecting category
  */
-function selectCategory(category) {
+function selectCategory(category, focus = true) {
     categoryPicker.css('border-radius', '0');
 
     selectedCategories.push(category);
@@ -285,7 +288,7 @@ function selectCategory(category) {
         </div>
     `);
 
-    categoryPicker.focus();
+    focus && categoryPicker.focus();
 }
 
 /**

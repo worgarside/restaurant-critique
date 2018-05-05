@@ -111,12 +111,7 @@ RestaurantSchema.pre('save', function (next) {
 });
 
 RestaurantSchema.pre('findOneAndUpdate', function (next) {
-    updateDetails(this);
-    next();
-});
-
-RestaurantSchema.pre('update', function (next) {
-    updateDetails(this);
+    updateDetails(this._update);
     next();
 });
 
@@ -138,16 +133,12 @@ function emailCreator(restaurant) {
 
 // TODO: jsdoc
 function updateDetails(restaurant) {
-    console.log('here1');
-
     if ((restaurant.address.latitude) && (restaurant.address.longitude)) {
         restaurant.location = {
             type: "Point",
             coordinates: [restaurant.address.longitude, restaurant.address.latitude] // long THEN lat, according to geoJSON standards
         };
     }
-
-    console.log('here');
 
     // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
     restaurant.address.postcode = restaurant.address.postcode.toUpperCase();

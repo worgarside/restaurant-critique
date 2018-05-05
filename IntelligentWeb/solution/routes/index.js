@@ -42,7 +42,6 @@ router.get('/', (req, res) => {
             .then((restaurants) => {
                 topRestaurants = restaurants;
                 res.header("Access-Control-Allow-Origin", "*");
-                //TODO- this this this
                 //TODO- check this is legit AF?
                 res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: restaurants});
             })
@@ -159,7 +158,6 @@ router.get('/restaurant/:url', (req, res) => {
                 reviewPromises.push(Review.findOne({_id: id})
                     .then((review) => {
                         reviewList.push(review);
-                        console.log(`Pushed review #${review.title}`);
                     })
                     .catch((err) => {
                         console.log(`Error fetching review: ${err}`);
@@ -207,7 +205,6 @@ router.get('/user/:_id', (req, res) => {
             childrenPromises.push(Restaurant.findOne({_id: id})
                 .then((restaurant) => {
                     restaurantList.push(restaurant);
-                    console.log(`Pushed restaurant ${restaurant.name}`);
                 })
                 .catch((err) => {
                     console.log(`Error fetching restaurant: ${err}`);
@@ -218,7 +215,6 @@ router.get('/user/:_id', (req, res) => {
             childrenPromises.push(Review.findOne({_id: id})
                 .then((review) => {
                     reviewList.push(review);
-                    console.log(`Pushed review ${review.title}`);
                 })
                 .catch((err) => {
                     console.log(`Error fetching review: ${err}`);
