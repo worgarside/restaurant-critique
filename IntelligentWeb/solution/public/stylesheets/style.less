@@ -1003,11 +1003,16 @@ footer {
             background-color: black;
             text-align: center;
             margin: 0.125rem 0;
+            float: right;
             img {
               max-width: 100%;
               max-height: 100%;
               object-fit: contain;
             }
+          }
+
+          &-secondaries{
+            display: inline-block;
           }
 
           &-secondary {
@@ -1016,6 +1021,7 @@ footer {
             background-color: black;
             text-align: center;
             margin: 0.125rem 0;
+            float: right;
             img {
               max-width: 100%;
               max-height: 100%;
@@ -1145,12 +1151,22 @@ label.star:hover ~ label.star span::before {
   .burger-btn{
     display: block;
   }
+
 }
 
 @media only screen and (max-device-width: 768px) {
   .col #contact-info {
     width: 100%;
   }
+
+  //#restaurant-page-override #reviews .review-image-main {
+  //  float: unset;
+  //  margin: 0 auto;
+  //}
+  #review-image-row {
+    text-align: center;
+  }
+
 }
 
 @media only screen and (max-device-width: 576px) {
