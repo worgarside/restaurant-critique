@@ -164,8 +164,9 @@ block content
                                             tr
                                                 td
                                                     .review-image-secondary(style='margin-top: 1px;')
-                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
-
+                                                        if review.images[2]
+                                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+                    br
 
 
 

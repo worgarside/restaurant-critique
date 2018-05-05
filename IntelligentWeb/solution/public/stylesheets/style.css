@@ -989,9 +989,10 @@ label.star:hover ~ label.star span::before {
   .col #contact-info {
     width: 100%;
   }
-  .vert-center-child#review-image-container {
-    text-align: center;
-    align-content: center;
+  #restaurant-page-override #reviews .vert-center-child#review-image-container .review-image-main,
+  #restaurant-page-override #reviews .vert-center-child#review-image-container #review-image-table {
+    float: unset;
+    margin: 0 auto;
   }
 }
 @media only screen and (max-device-width: 576px) {
