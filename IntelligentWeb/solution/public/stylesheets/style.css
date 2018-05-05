@@ -326,6 +326,12 @@ footer .footer-right {
   object-fit: cover;
   margin: 0 0.5rem;
 }
+@media only screen and (max-device-width: 925px) {
+  a.nav-link,
+  a.nav-link.nav-thin#btn-login {
+    font-size: 12pt;
+  }
+}
 #new-restaurant-form #opening-time,
 #edit-restaurant-form #opening-time,
 #new-restaurant-form #closing-time,

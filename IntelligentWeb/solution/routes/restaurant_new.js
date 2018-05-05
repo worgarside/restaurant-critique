@@ -50,7 +50,7 @@ const upload = multer({storage: storage});
  * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int, monClose:int,
   * tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int, restaurantName: string,
   * priceRange: string, address1:String, address2:String, priceLower:int, priceUpper:int, priceBand:int
-  * }} body The values from the input form used in setting the attributes of the Restaurant
+  * }} body. The values from the input form used in setting the attributes of the Restaurant
  * @function addNewRestaurant
  */
 router.post('/add_restaurant', upload.array('images', 10), (req, res) => {

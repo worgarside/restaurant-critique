@@ -1,3 +1,9 @@
+/**
+ * Routing file for new Review upload on restaurant page
+ * Management of inserting new Review to the database and rerouting back to the page with review displayed
+ * @author Greta Ramaneckaite
+ */
+
 // ================ Middleware ================ \\
 
 const express = require('express');
@@ -12,6 +18,12 @@ const Review = mongoose.model('Review');
 router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
+
+/**
+ * Configures and adds new Review to the database when a review form is submitted
+ * Adds reviewID to the authors and restaurants list of reviews
+ * @function addNewReview
+ */
 
 console.log('review route file loaded');
 
