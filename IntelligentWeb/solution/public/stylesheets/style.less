@@ -1,4 +1,4 @@
-// ================ LESS Variables ================ \\
+// ================================ LESS Variables ================================ \\
 
 @index-head-height: 360;
 @index-head-bg-image: "/images/site/index-head-bg-image.png";
@@ -23,7 +23,7 @@
 @background-color: #fdfdfd;
 @placeholder-color: @grey-mid;
 
-// ================ Site Wide ================ \\
+// ================================ Site Wide ================================ \\
 
 body {
   font-family: 'Lato', sans-serif;
@@ -129,7 +129,14 @@ label.error {
   margin-left: 0.5rem;
 }
 
-// ================ Index Head ================ \\
+span.oi.oi-star {
+  font-size: 1.5rem;
+  &.star-highlight {
+    color: @orange;
+  }
+}
+
+// ================================ Index Head ================================ \\
 
 #main-logo {
   width: 400px;
@@ -170,7 +177,7 @@ label.error {
   }
 }
 
-// ================ NavBar ================ \\
+// ================================ NavBar ================================ \\
 
 #non-index-head {
   height: unit(@navbar-height, px);
@@ -254,7 +261,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   margin: -10px 0 0 unit(-@navbar-height, px);
 }
 
-// ================ Login Form ================ \\
+// ================================ Login Form ================================ \\
 
 @form-width: 400;
 @arrow-height: 20px;
@@ -302,7 +309,7 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
   margin-top: 15px;
 }
 
-// ================ Footer ================ \\
+// ================================ Footer ================================ \\
 
 footer {
   margin-top: 500px;
@@ -356,7 +363,7 @@ footer {
   height: 125px;
 }
 
-// ================ Signup ================ \\
+// ================================ Signup ================================ \\
 
 #display-picture {
   object-fit: cover;
@@ -376,7 +383,7 @@ footer {
   text-underline: @grey-darkest;
 }
 
-// ================ Index ================ \\
+// ================================ Index ================================ \\
 
 .index-image {
   width: 100%;
@@ -391,9 +398,6 @@ footer {
 
   .carousel-item {
     padding: 2rem;
-    span.oi-star {
-      font-size: 1.5rem;
-    }
 
     h4.rating-value {
       color: @grey-mid;
@@ -413,7 +417,7 @@ footer {
   }
 }
 
-// ================ New/Edit Restaurant ================ \\
+// ================================ New/Edit Restaurant ================================ \\
 
 #new-restaurant-form, #edit-restaurant-form {
   #opening-time, #closing-time {
@@ -740,7 +744,7 @@ footer {
   }
 }
 
-// ================ Restaurants Nearby ================ \\
+// ================================ Restaurants Nearby ================================ \\
 
 #login-warning {
   cursor: pointer;
@@ -902,39 +906,13 @@ footer {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.restaurant-rating {
-  width: 130px;
-  height: 24px;
-  background: url("/images/site/blank-stars.png");
-  background-size: contain;
+// ================================ Restaurant Page ================================ \\
+
+canvas#canvas {
+  display: none;
 }
 
-// ================ Contact Form ================ \\
-
-// ================ Restaurant Page ================ \\
-
-.price-icon {
-  vertical-align: middle;
-  margin-left: 20px;
-}
-
-.wrapper-gret {
-  text-align: center;
-}
-
-#review-form {
-  text-align: center;
-  margin: 0 100px;
-  background: @grey-light;
-  padding: 20px;
-  border-radius: 20px;
-}
-
-canvas#canvas{
-  display:none;
-}
-
-// ================ Star Icons ================ \\
+// ================================ Star Icons ================================ \\
 
 .stars {
   direction: rtl;
@@ -966,7 +944,7 @@ label.star:hover ~ label.star span::before {
   color: @orange;
 }
 
-// ================ Restaurant Map ================ \\
+// ================================ Restaurant Map ================================ \\
 
 #restaurant-current-map {
   width: 100%;
@@ -977,7 +955,7 @@ label.star:hover ~ label.star span::before {
   display: inline-block;
 }
 
-// ================ User Management ================ \\
+// ================================ User Management ================================ \\
 
 .card {
   &-header {
@@ -1030,4 +1008,12 @@ label.star:hover ~ label.star span::before {
     display: none;
   }
 
+}
+
+@media only screen and (max-device-width: 925px) {
+  footer {
+    p {
+      color: red;
+    }
+  }
 }

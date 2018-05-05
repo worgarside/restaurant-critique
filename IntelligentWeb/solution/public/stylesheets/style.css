@@ -94,6 +94,12 @@ label.error {
 .pre-space {
   margin-left: 0.5rem;
 }
+span.oi.oi-star {
+  font-size: 1.5rem;
+}
+span.oi.oi-star.star-highlight {
+  color: #e69200;
+}
 #main-logo {
   width: 400px;
   background: url('/images/site/logo-wide-white.png');
@@ -305,9 +311,6 @@ footer .footer-right {
 }
 #index-carousel .carousel-item {
   padding: 2rem;
-}
-#index-carousel .carousel-item span.oi-star {
-  font-size: 1.5rem;
 }
 #index-carousel .carousel-item h4.rating-value {
   color: #919191;
@@ -768,26 +771,6 @@ footer .footer-right {
 .slideshow-next:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
-.restaurant-rating {
-  width: 130px;
-  height: 24px;
-  background: url("/images/site/blank-stars.png");
-  background-size: contain;
-}
-.price-icon {
-  vertical-align: middle;
-  margin-left: 20px;
-}
-.wrapper-gret {
-  text-align: center;
-}
-#review-form {
-  text-align: center;
-  margin: 0 100px;
-  background: #bdbdbd;
-  padding: 20px;
-  border-radius: 20px;
-}
 canvas#canvas {
   display: none;
 }
@@ -865,4 +848,9 @@ label.star:hover ~ label.star span::before {
   margin-left: 1rem;
   padding: 6px 18px;
   display: none;
+}
+@media only screen and (max-device-width: 925px) {
+  footer p {
+    color: red;
+  }
 }

@@ -36,7 +36,7 @@ block content
                                                 - var starRating = Math.round(restaurant.averageRating);
                                                 - s = 0
                                                 while s < starRating
-                                                    span.oi.oi-star(aria-hidden='true', style='color: #e69200;')
+                                                    span.oi.oi-star.star-highlight(aria-hidden='true')
                                                      - s++
                                                 - s = 0
                                                 while s < (5 -starRating)
@@ -45,7 +45,7 @@ block content
                                                 h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
                                         .row
                                             .col
-                                                p.restaurant-address.mb-0= restaurant.address.formattedAddress
+                                                p.restaurant-address= restaurant.address.formattedAddress
                                         .row
                                             .col(style='margin-left: -5px')
                                                 each category, index in restaurant.categories
