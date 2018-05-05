@@ -4,10 +4,7 @@ block header
 
 block navbar
     nav.navbar.navbar-expand-sm.sticky
-        input#menu-btn.menu-btn(type='checkbox')
-        label.menu-icon(for='menu-btn')
-            span.navicon
-        ul.navbar-nav.mr-auto.menu
+        ul.navbar-nav.mr-auto
             if animateLogo
                 li
                     a#nav-logo-anim(href='/')
@@ -25,7 +22,7 @@ block navbar
             li.nav-item
                 a.nav-link.nav-wide(href='/restaurant/new') Add a Restaurant
 
-        ul.navbar-nav.row.menu
+        ul.navbar-nav.row
             if (!user)
                 script const userLoggedIn = false
                 li.nav-item
@@ -41,6 +38,10 @@ block navbar
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 
+        // div or input here
+        .burger-btn
+
+
     if (!user)
         #login-form(style='display: none;')
             .container
@@ -54,4 +55,3 @@ block navbar
                     .form-row
                         .form-group.col
                             button.btn.login-form-btn Log In
-            a.nav-link.nav-thin.icon(href='javascript:void(0);' onclick='NavButton()') &#x2630;
