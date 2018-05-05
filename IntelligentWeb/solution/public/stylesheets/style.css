@@ -956,5 +956,10 @@ label.star:hover ~ label.star span::before {
     display: block;
   }
 }
+@media only screen and (max-device-width: 768px) {
+  .col #contact-info {
+    width: 100%;
+  }
+}
 @media only screen and (max-device-width: 580px) {
 }

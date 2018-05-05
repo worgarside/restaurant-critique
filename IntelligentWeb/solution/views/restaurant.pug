@@ -5,7 +5,7 @@ block content
     br
     .container#restaurant-page-override
         .row
-            .col
+            .col.col-lg-12
                 h1.d-inline-block= restaurant.name
                 if restaurant.averageRating
                     .d-inline-block.ml-4
@@ -27,10 +27,10 @@ block content
                         span.oi.oi-star(aria-hidden='true')
                         h4.rating-value.d-inline.pre-space No Ratings Yet
         .row
-            .col
+            .col.col-lg-12
                 p.restaurant-address= restaurant.address.formattedAddress
         .row
-            .col
+            .col.col-lg-12
                 each category, index in restaurant.categories
                     if index < 7
                         p.restaurant-category= category.name
@@ -206,7 +206,7 @@ block content
                     //         .form-row
                     //             .form-group.col
                     //                     input#submit(type='submit', value='Submit')
-        .row
+        //.row
             video(autoplay='')
             button#takephoto Take snapshot
             canvas#canvas
