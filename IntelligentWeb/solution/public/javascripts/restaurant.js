@@ -5,9 +5,25 @@
  * @param {Array} coordinates
  */
 
+let video, canvas;
+const button = $('#takephoto');
+
 $(() => {
-    initMainSlideshow();
+    video = document.querySelector('video');
+    canvas = window.canvas = document.querySelector('canvas');
+    canvas.width = 480;
+    canvas.height = 360;
+
+    const constraints = {
+        audio: false,
+        video: true
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(handleSuccess)
+        .catch(handleError);
 });
+
 
 /**
  * Called by GMaps script after map is loaded
@@ -43,40 +59,18 @@ function initMap() {
     });
 }
 
-/**
- * Image slideshow navigation using buttons on page
- * JQuery selectors have to be re-used due to the changing classes of the images
- * @author Will Garside
- */
-function initMainSlideshow() {
-    const btnNext = $(`#button-next-rest`);
-    const btnPrev = $(`#button-prev-rest`);
+button.click(() => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+});
 
-    $(`.slide-rest`).first().addClass(`current-rest`);
-    $(`.slide-rest`).hide();
-    $(`.current-rest`).show();
+function handleSuccess(stream) {
+    window.stream = stream;
+    video.srcObject = stream;
+}
 
-    btnNext.click(() => {
-        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
-        if ($(`.previous-rest`).is(':last-child')) {
-            $(`.slide-rest`).first().addClass(`current-rest`);
-        } else {
-            $(`.previous-rest`).next().addClass(`current-rest`);
-        }
-        $(`.previous-rest`).removeClass(`previous-rest`);
-        $(`.slide-rest`).fadeOut();
-        $(`.current-rest`).fadeIn();
-    });
-
-    btnPrev.click(() => {
-        $(`.current-rest`).removeClass(`current-rest`).addClass(`previous-rest`);
-        if ($(`.previous-rest`).is(':first-child')) {
-            $(`.slide-rest`).last().addClass(`current-rest`);
-        } else {
-            $(`.previous-rest`).prev().addClass(`current-rest`);
-        }
-        $(`.previous-rest`).removeClass(`previous-rest`);
-        $(`.slide-rest`).fadeOut();
-        $(`.current-rest`).fadeIn();
-    });
+function handleError(error) {
+    console.log(`navigator.getUserMedia error: ${error}`);
+    alert(`navigator.getUserMedia error: ${error}`)
 }
