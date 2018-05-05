@@ -138,9 +138,7 @@ span.oi.oi-star {
 
 #index-head {
   width: 100%;
-  background: url(@index-head-bg-image);
-  background-repeat: no-repeat;
-  background-position: left bottom;
+  background: url(@index-head-bg-image) no-repeat left bottom;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -169,6 +167,41 @@ span.oi.oi-star {
   }
 }
 
+.burger-btn{
+  display: none;
+  height: 80px;
+  width: 80px;
+  transition: 250ms ease;
+  position: absolute;
+  top: unit(@index-head-height - 80, px);
+  right: 0;
+  #bar{
+    &-1{
+      position: absolute;
+      transition: all 250ms ease;
+      right: 15px;
+      top: 15px;
+      color: white;
+    }
+
+    &-2{
+      position: absolute;
+      transition: all 250ms ease;
+      right: 15px;
+      top: 36px;
+      color: white;
+    }
+
+    &-3{
+      position: absolute;
+      transition: all 250ms ease;
+      right: 15px;
+      top: 57px;
+      color: white;
+    }
+  }
+}
+
 // ================================ NavBar ================================ \\
 
 #non-index-head {
@@ -186,9 +219,7 @@ nav.navbar.navbar-expand-sm.sticky {
   z-index: 1000;
   height: unit(@navbar-height, px);
   margin-top: unit(-@navbar-height, px);
-  background: url(@index-head-bg-image);
-  background-repeat: no-repeat;
-  background-position: left bottom;
+  background: url(@index-head-bg-image) no-repeat left bottom;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1138,7 +1169,7 @@ label.star:hover ~ label.star span::before {
     width: 500px;
   }
   // hide navbar contents and show hamburger menu
-  nav.navbar.navbar-expand-sm.sticky ul{
+  nav.navbar.navbar-expand-sm.sticky{
     display: none;
   }
 
