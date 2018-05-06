@@ -105,7 +105,7 @@ span.oi.oi-star.star-highlight {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: 360px;
+  height: 22.5rem;
 }
 #index-search-form {
   margin-top: -29px;
@@ -125,35 +125,32 @@ span.oi.oi-star.star-highlight {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.burger-btn {
+#burger-btn {
+  cursor: pointer;
   display: none;
-  height: 80px;
-  width: 80px;
-  transition: 250ms ease;
+  height: 4rem;
+  width: 5rem;
   position: absolute;
-  top: 280px;
+  top: 18.5rem;
   right: 0;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0.75rem;
 }
-.burger-btn #bar-1 {
-  position: absolute;
+#burger-btn .bar {
+  width: 70%;
+  height: 12.5%;
   transition: all 250ms ease;
-  right: 15px;
-  top: 15px;
-  color: white;
+  background-color: white;
+  margin: 0 auto;
 }
-.burger-btn #bar-2 {
-  position: absolute;
+#burger-btn.active {
+  background-color: red;
   transition: all 250ms ease;
-  right: 15px;
-  top: 36px;
-  color: white;
 }
-.burger-btn #bar-3 {
-  position: absolute;
-  transition: all 250ms ease;
-  right: 15px;
-  top: 57px;
-  color: white;
+#burger-btn.active #bar-2 {
+  display: none;
+  transition: all 2500ms ease;
 }
 #non-index-head {
   height: 58px;
@@ -974,18 +971,18 @@ label.star:hover ~ label.star span::before {
   padding: 6px 18px;
   display: none;
 }
-@media only screen and (max-device-width: 992px) {
+@media (max-width: 992px) {
   .input-group#index-search-group {
     width: 500px;
   }
   nav.navbar.navbar-expand-sm.sticky {
     display: none;
   }
-  .burger-btn {
-    display: block;
+  #burger-btn {
+    display: flex;
   }
 }
-@media only screen and (max-device-width: 768px) {
+@media (max-width: 768px) {
   .col #contact-info {
     width: 100%;
   }
@@ -994,6 +991,9 @@ label.star:hover ~ label.star span::before {
     float: unset;
     margin: 0 auto;
   }
+  body {
+    background-color: red;
+  }
 }
-@media only screen and (max-device-width: 576px) {
+@media (max-width: 576px) {
 }

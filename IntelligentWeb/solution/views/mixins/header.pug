@@ -38,11 +38,10 @@ block navbar
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 
-    .burger-btn
-        img#bar-1(src='/scripts/svg/minus.svg')
-        img#bar-2(src='/scripts/svg/minus.svg')
-        img#bar-3(src='/scripts/svg/minus.svg')
-
+    #burger-btn
+        .bar#bar-1
+        .bar#bar-2
+        .bar#bar-3
 
     if (!user)
         #login-form(style='display: none;')

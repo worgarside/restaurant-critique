@@ -1,6 +1,6 @@
 // ================================ LESS Variables ================================ \\
 
-@index-head-height: 360;
+@index-head-height: 22.5;
 @index-head-bg-image: "/images/site/index-head-bg-image.png";
 @index-head-bg-image: "/images/site/BG1.jpg";
 @nav-thin-width: 120;
@@ -143,7 +143,7 @@ span.oi.oi-star {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: unit(@index-head-height, px);
+  height: unit(@index-head-height, rem);
 }
 
 #index-search-form {
@@ -167,37 +167,46 @@ span.oi.oi-star {
   }
 }
 
-.burger-btn{
+#burger-btn{
+  @burger-height: 4rem;
+  @burger-width: 5rem;
+
+  cursor: pointer;
   display: none;
-  height: 80px;
-  width: 80px;
-  transition: 250ms ease;
+  height: @burger-height;
+  width: @burger-width;
   position: absolute;
-  top: unit(@index-head-height - 80, px);
+  top: unit(@index-head-height - @burger-height, rem);
   right: 0;
-  #bar{
-    &-1{
-      position: absolute;
-      transition: all 250ms ease;
-      right: 15px;
-      top: 15px;
-      color: white;
-    }
+  flex-direction:column;
+  justify-content:space-around;
+  padding: 0.75rem;
 
-    &-2{
-      position: absolute;
-      transition: all 250ms ease;
-      right: 15px;
-      top: 36px;
-      color: white;
-    }
+  .bar{
+    width: 70%;
+    height: 12.5%;
+    transition: all 250ms ease;
+    background-color: white;
+    margin: 0 auto;
+  }
 
-    &-3{
-      position: absolute;
-      transition: all 250ms ease;
-      right: 15px;
-      top: 57px;
-      color: white;
+  &.active{
+    background-color: red;
+    transition: all 250ms ease;
+
+    #bar{
+      &-1{
+
+      }
+
+      &-2{
+        display: none;
+        transition: all 2500ms ease;
+      }
+
+      &-3{
+
+      }
     }
   }
 }
@@ -1168,7 +1177,7 @@ label.star:hover ~ label.star span::before {
 
 // ================================ Responsive Reflow ================================ \\
 
-@media only screen and (max-device-width: 992px) {
+@media (max-width: 992px) {
   .input-group#index-search-group {
     width: 500px;
   }
@@ -1177,30 +1186,30 @@ label.star:hover ~ label.star span::before {
     display: none;
   }
 
-  .burger-btn{
-    display: block;
+  #burger-btn{
+    display:flex;
   }
 
 }
 
-@media only screen and (max-device-width: 768px) {
+@media (max-width: 768px) {
   .col #contact-info {
     width: 100%;
   }
 
-  //#restaurant-page-override #reviews .review-image-main {
-  //  float: unset;
-  //
-  //}
   #restaurant-page-override #reviews .vert-center-child#review-image-container .review-image-main,
   #restaurant-page-override #reviews .vert-center-child#review-image-container #review-image-table {
     float: unset;
     margin: 0 auto;
   }
 
+  body{
+    background-color: red;
+  }
+
 }
 
-@media only screen and (max-device-width: 576px) {
+@media (max-width: 576px) {
   // hide navbar contents and show hamburger menu
 }
 

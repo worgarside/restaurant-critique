@@ -127,7 +127,7 @@ block content
                                 - var month = review.updatedAt.getMonth() + 1
                                 - var day = (review.updatedAt.getDate() < 10) ? "0" + review.updatedAt.getDate() : review.updatedAt.getDate()
                                 - var year = review.updatedAt.getFullYear()
-                                - var niceDate = month + "/" + day + "/" + year;
+                                - var niceDate = `${month}/${day}/${year}`;
                                 p.mt-1.review-date= niceDate
                         .col-lg-6.col-md-8
                             .row.mb-2
@@ -166,7 +166,7 @@ block content
                                                     .review-image-secondary(style='margin-top: 1px;')
                                                         if review.images[2]
                                                             img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
-                    br
+        br
         .row
             .col
                 hr

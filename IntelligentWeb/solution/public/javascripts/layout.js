@@ -15,7 +15,7 @@ $(() => {
     }
 });
 
-// ----------- Login Form ----------- \\
+// ================================ Login Form ================================ \\
 
 
 $('#btn-login').on('click', () => {
@@ -61,7 +61,7 @@ function setLoginFormPosition() {
     form.css({right: form_right});
 }
 
-// ================ Input Formatting ================ \\
+// ================================ Input Formatting ================================ \\
 
 /**
  * Automatically applies Title Case to inputs with the class '.title-case'
@@ -83,5 +83,15 @@ $('.title-case').keyup(function () {
 $('.upper-case').keyup(function () {
     $(this).val($(this).val().toUpperCase());
 });
+
+// ================================ Hamburger Menu ================================ \\
+
+const burgerButton = $('#burger-btn');
+
+burgerButton.click(()=>{
+    burgerButton.toggleClass('active');
+});
+
+
 
 console.log('Loaded layout.js');
