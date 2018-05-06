@@ -65,7 +65,7 @@ const restaurantsNearby = require('./routes/restaurants_nearby');
 const contact = require('./routes/contact');
 const search = require('./routes/search');
 const user_management = require('./routes/user_management');
-const review = require('./routes/review');
+const restaurant = require('./routes/restaurant');
 
 app.use('/', index);
 app.use('/signup', signup);
@@ -75,7 +75,7 @@ app.use('/restaurants-nearby', restaurantsNearby);
 app.use('/contact', contact);
 app.use('/search', search);
 app.use('/user', user_management);
-app.use('/restaurant', review);
+app.use('/restaurant', restaurant);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {
