@@ -200,12 +200,17 @@ block content
                             textarea.form-control#review-message(name='body', placeholder='Your message', style='height:100px' required)
                     .form-row
                         .form-group.col
+                            input#uploadedFile(type='file', name='uploadedFile', accept='image/*')
+                    .form-row
+                        .form-group.col
                             input.form-control#submit(type='submit', value='Submit')
                 hr
                 hr
         .row
-            video(autoplay='')
+            video#video(autoplay='')
             button#takephoto Take snapshot
+            button#confirmphoto Confirm taken photo
+            button#retakephoto Retake photo
             canvas#canvas
 
 
