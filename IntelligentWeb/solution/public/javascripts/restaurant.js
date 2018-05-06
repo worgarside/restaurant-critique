@@ -6,7 +6,17 @@
  */
 
 let video, canvas;
-const button = $('#takephoto');
+const takePhotoButton = $('#takephoto');
+const confirmPhotoButton = $('#confirmphoto');
+const retakePhotoButton = $('#retakephoto');
+
+const canvasContainer = $('#canvas');
+const videoContainer = $('#video');
+const formSubmit = $('#submit');
+let imageUpload = $('#uploadedFile');
+
+let images = [];
+
 
 $(() => {
     video = document.querySelector('video');
@@ -16,7 +26,7 @@ $(() => {
 
     const constraints = {
         audio: false,
-        video: true
+        video: {facingMode: "environment"}
     };
 
     navigator.mediaDevices.getUserMedia(constraints)
@@ -59,11 +69,44 @@ function initMap() {
     });
 }
 
-button.click(() => {
+
+//buttons for camera
+takePhotoButton.click(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    videoContainer.css("display", "none");
+    canvasContainer.css("display", "unset");
+    takePhotoButton.css("display", "none");
+    confirmPhotoButton.css("display", "unset");
+    retakePhotoButton.css("display", "unset");
+
 });
+
+confirmPhotoButton.click(() => {
+    console.log("clicky confirmy");
+    sendImage("22", dataURLtoBlob(canvas.toDataURL()));
+    console.log("clicky confirmy2");
+
+    videoContainer.css("display", "unset");
+    canvasContainer.css("display", "none");
+    takePhotoButton.css("display", "unset");
+    confirmPhotoButton.css("display", "none");
+    retakePhotoButton.css("display", "none");
+});
+
+retakePhotoButton.click(() => {
+    videoContainer.css("display", "unset");
+    canvasContainer.css("display", "none");
+    takePhotoButton.css("display", "unset");
+    confirmPhotoButton.css("display", "none");
+    retakePhotoButton.css("display", "none");
+});
+
+formSubmit.click(() => {
+    return false
+});
+
 
 function handleSuccess(stream) {
     window.stream = stream;
@@ -72,5 +115,50 @@ function handleSuccess(stream) {
 
 function handleError(error) {
     console.log(`navigator.getUserMedia error: ${error}`);
-    alert(`navigator.getUserMedia error: ${error}`)
+    alert(`Camera not found, or in use elsewhere`)
+}
+
+function dataURLtoBlob(dataurl) {
+    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
+}
+
+
+function sendImage(userId, imageBlob) {
+
+
+
+    const data = JSON.stringify({
+        userId: userId,
+        imageBlob: imageBlob
+    });
+
+    // let data = new FormData();
+    //
+    // data.append('userId', 'userId');
+    // data.append('imageBlob', 'imageBlob');
+
+    $.ajax({
+        url: '/restaurant/upload_picture',
+        type: "POST",
+        method: 'POST',
+        // dataType: 'application/json',
+        data: JSON.stringify(data),
+        processData: false,
+        contentType: false,
+        json: true,
+        success: (data) => {
+            // const token = data.token;
+            // location.reload();
+            console.log("Success");
+        },
+        error:
+             (err) => {
+                alert(`Error: ${err.status}: ${err.statusText}`);
+            }
+    });
 }
