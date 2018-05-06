@@ -5,7 +5,7 @@
 @index-head-bg-image: "/images/site/BG1.jpg";
 @nav-thin-width: 120;
 @nav-wide-width: 200;
-@navbar-height: 58;
+@navbar-height: 58px;
 
 @red: #eb0000;
 @red-light: #ff6a74;
@@ -33,6 +33,7 @@ body {
   min-height: 100vh;
   position: relative;
   margin: 0;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -130,9 +131,9 @@ span.oi.oi-star {
 
 #main-logo {
   width: 400px;
-  background: url('/images/site/logo-wide-white.png');
-  background-size: cover;
-  height: unit(400*(150/1080), px);
+  background: url('/images/site/logo-wide-white.png') bottom center no-repeat;
+  background-size: contain;
+  height: 60px;
   margin: 0 auto 10px auto;
 }
 
@@ -147,7 +148,7 @@ span.oi.oi-star {
 }
 
 #index-search-form {
-  margin-top: unit(-@navbar-height/2, px);
+  margin-top: -@navbar-height/2;
   text-align: center;
 }
 
@@ -167,45 +168,84 @@ span.oi.oi-star {
   }
 }
 
-#burger-btn{
-  @burger-height: 4rem;
-  @burger-width: 5rem;
+#burger-btn {
+  @burger-link-width: 16rem;
 
   cursor: pointer;
   display: none;
-  height: @burger-height;
-  width: @burger-width;
-  position: absolute;
-  top: unit(@index-head-height - @burger-height, rem);
-  right: 0;
-  flex-direction:column;
-  justify-content:space-around;
-  padding: 0.75rem;
+  height: @navbar-height;
+  width: @navbar-height;
+  top: 0;
+  margin-top: -@navbar-height;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0.75rem 0.5rem;
+  transition: all 250ms ease;
+  z-index: 10000;
+  position: -webkit-sticky;
+  position: sticky;
+  margin-left: auto;
+  background-color: black;
 
-  .bar{
+  .bar, &.active .bar {
     width: 70%;
     height: 12.5%;
-    transition: all 250ms ease;
     background-color: white;
     margin: 0 auto;
+    transition: all 250ms ease;
   }
 
-  &.active{
-    background-color: red;
+  #burger-links, &.active #burger-links {
+    width: @burger-link-width;
+    display: block;
+    position: absolute;
+    left: @navbar-height;
+    top: 0;
+    background-color: @grey-dark;
     transition: all 250ms ease;
 
-    #bar{
-      &-1{
+    ul {
+      padding-left: 0;
+      margin-bottom: 0;
+      li {
+        list-style-type: none;
+        text-align: right;
+        a {
+          white-space: nowrap;
+        }
+      }
+      hr {
+        margin: 0 5px;
+        border-color: @grey-lightest;
+      }
+    }
 
+    #burger-login {
+      background-color: @grey-darker;
+      display: none;
+      input{
+        width: 95%;
+        margin: 5px auto;
+      }
+      button{
+        margin: 0 5px 5px;
       }
 
-      &-2{
-        display: none;
-        transition: all 2500ms ease;
+    }
+  }
+
+  &.active {
+    transform: translateX(-@burger-link-width);
+    transition: all 250ms ease;
+    #bar {
+      &-1 {
+        transform: translateY(@navbar-height/5.25) rotate(-45deg);
       }
-
-      &-3{
-
+      &-2 {
+        opacity: 0;
+      }
+      &-3 {
+        transform: translateY(-@navbar-height/5.25) rotate(45deg);
       }
     }
   }
@@ -214,7 +254,7 @@ span.oi.oi-star {
 // ================================ NavBar ================================ \\
 
 #non-index-head {
-  height: unit(@navbar-height, px);
+  height: @navbar-height;
 }
 
 .sticky {
@@ -226,8 +266,8 @@ span.oi.oi-star {
 nav.navbar.navbar-expand-sm.sticky {
   width: 100%;
   z-index: 1000;
-  height: unit(@navbar-height, px);
-  margin-top: unit(-@navbar-height, px);
+  height: @navbar-height;
+  margin-top: -@navbar-height;
   background: url(@index-head-bg-image) no-repeat left bottom;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -266,13 +306,13 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 }
 
 #nav-logo {
-  height: unit(@navbar-height, px);
-  width: unit(@navbar-height, px);
+  height: @navbar-height;
+  width: @navbar-height;
   position: absolute;
   padding: 5px;
   &-anim {
-    height: unit(@navbar-height, px);
-    width: unit(@navbar-height, px);
+    height: @navbar-height;
+    width: @navbar-height;
     position: absolute;
     padding: 5px;
     display: none;
@@ -285,12 +325,12 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 }
 
 #user-profile-image {
-  height: unit(@navbar-height - 10, px);
-  width: unit(@navbar-height - 10, px);
+  height: @navbar-height - 10;
+  width: @navbar-height - 10;
   object-fit: cover;
-  border-radius: unit((@navbar-height - 10)/2, px);
+  border-radius: (@navbar-height - 10)/2;
   position: absolute;
-  margin: -10px 0 0 unit(-@navbar-height, px);
+  margin: -10px 0 0 -@navbar-height;
 }
 
 // ================================ Login Form ================================ \\
@@ -298,17 +338,15 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 @form-width: 400;
 @arrow-height: 20px;
 @form-border-width: 5px;
-@form-border-color: @grey-dark;
-@form-bg-color: @grey-dark;
 
 #login-form {
   text-align: center;
-  background-color: @form-bg-color;
+  background-color: @grey-dark;
   width: unit(@form-width, px);
   position: fixed;
-  z-index: 100000;
+  z-index: 100001;
   margin-top: unit(@arrow-height, px);
-  border: @form-border-width solid @form-border-color;
+  border: @form-border-width solid @grey-dark;
   border-radius: 10px;
 }
 
@@ -326,14 +364,14 @@ a.nav-link, a.nav-link.nav-thin#btn-login {
 // Arrow
 #login-form:after {
   border: unit(@arrow-height, px) solid transparent;
-  border-bottom-color: @form-bg-color;
+  border-bottom-color: @grey-dark;
   margin-left: unit(-@arrow-height, px);
 }
 
 // Border for arrow
 #login-form:before {
   border: unit(@arrow-height + @form-border-width, px) solid transparent;
-  border-bottom-color: @form-border-color;
+  border-bottom-color: @grey-dark;
   margin-left: unit(-(@arrow-height + @form-border-width), px);
 }
 
@@ -1063,7 +1101,7 @@ footer {
             }
           }
 
-          &-table{
+          &-table {
             float: right;
           }
         }
@@ -1082,15 +1120,15 @@ canvas#canvas {
 }
 
 button#confirmphoto {
-  display:none;
+  display: none;
 }
 
 button#retakephoto {
-  display:none;
+  display: none;
 }
 
 input#uploadedFile {
-  display:none;
+  display: none;
 }
 
 // ================================ Star Icons ================================ \\
@@ -1193,13 +1231,17 @@ label.star:hover ~ label.star span::before {
   .input-group#index-search-group {
     width: 500px;
   }
+
   // hide navbar contents and show hamburger menu
-  nav.navbar.navbar-expand-sm.sticky{
-    display: none;
+  nav.navbar.navbar-expand-sm.sticky {
+    position: unset;
+    ul {
+      display: none;
+    }
   }
 
-  #burger-btn{
-    display:flex;
+  #burger-btn {
+    display: flex;
   }
 
 }
@@ -1215,7 +1257,7 @@ label.star:hover ~ label.star span::before {
     margin: 0 auto;
   }
 
-  body{
+  body {
     background-color: red;
   }
 

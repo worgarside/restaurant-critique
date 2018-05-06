@@ -42,6 +42,37 @@ block navbar
         .bar#bar-1
         .bar#bar-2
         .bar#bar-3
+        #burger-links
+            ul
+                li
+                    a.nav-link(href='/') Restaurant Critique
+                hr
+                li
+                    a.nav-link(href='/restaurants-nearby') Restaurants near Me
+                hr
+                li
+                    a.nav-link(href='#') Write a Review
+                hr
+                li
+                    a.nav-link(href='/restaurant/new') Add a Restaurant
+                hr
+                if (!user)
+                    li.nav-item
+                        a.nav-link#burger-login-link(href='javascript:void(0)') Login
+                        form#burger-login(method="post", action='/login')
+                            hr
+                            input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
+                            input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
+                            button.btn Log In
+                    hr
+                    li.nav-item
+                        a.nav-link(href='/signup') Sign Up
+                else
+                    li.nav-item
+                        a.nav-link(href=`/user/${user.reducedID}`) Your Profile
+                    hr
+                    li.nav-item
+                        a.nav-link(href='/logout') Logout
 
     if (!user)
         #login-form(style='display: none;')

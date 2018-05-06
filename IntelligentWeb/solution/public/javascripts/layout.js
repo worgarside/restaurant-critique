@@ -87,11 +87,20 @@ $('.upper-case').keyup(function () {
 // ================================ Hamburger Menu ================================ \\
 
 const burgerButton = $('#burger-btn');
+const burgerLinks = $('#burger-links');
+const burgerLoginLink = $('#burger-login-link');
+const burgerLoginForm = $('#burger-login');
 
-burgerButton.click(()=>{
+burgerButton.click(() => {
     burgerButton.toggleClass('active');
 });
 
+burgerButton.find(burgerLinks).click((e) => {
+    e.stopPropagation();
+});
 
+burgerLoginLink.click(()=>{
+    burgerLoginForm.toggle(200);
+});
 
 console.log('Loaded layout.js');

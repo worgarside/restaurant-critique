@@ -4,6 +4,7 @@ body {
   min-height: 100vh;
   position: relative;
   margin: 0;
+  overflow-x: hidden;
 }
 h1,
 h2,
@@ -93,9 +94,9 @@ span.oi.oi-star.star-highlight {
 }
 #main-logo {
   width: 400px;
-  background: url('/images/site/logo-wide-white.png');
-  background-size: cover;
-  height: 55.55555556px;
+  background: url('/images/site/logo-wide-white.png') bottom center no-repeat;
+  background-size: contain;
+  height: 60px;
   margin: 0 auto 10px auto;
 }
 #index-head {
@@ -128,29 +129,83 @@ span.oi.oi-star.star-highlight {
 #burger-btn {
   cursor: pointer;
   display: none;
-  height: 4rem;
-  width: 5rem;
-  position: absolute;
-  top: 18.5rem;
-  right: 0;
+  height: 58px;
+  width: 58px;
+  top: 0;
+  margin-top: -58px;
   flex-direction: column;
   justify-content: space-around;
-  padding: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  transition: all 250ms ease;
+  z-index: 10000;
+  position: -webkit-sticky;
+  position: sticky;
+  margin-left: auto;
+  background-color: black;
 }
-#burger-btn .bar {
+#burger-btn .bar,
+#burger-btn.active .bar {
   width: 70%;
   height: 12.5%;
-  transition: all 250ms ease;
   background-color: white;
   margin: 0 auto;
-}
-#burger-btn.active {
-  background-color: red;
   transition: all 250ms ease;
 }
-#burger-btn.active #bar-2 {
+#burger-btn #burger-links,
+#burger-btn.active #burger-links {
+  width: 16rem;
+  display: block;
+  position: absolute;
+  left: 58px;
+  top: 0;
+  background-color: #818181;
+  transition: all 250ms ease;
+}
+#burger-btn #burger-links ul,
+#burger-btn.active #burger-links ul {
+  padding-left: 0;
+  margin-bottom: 0;
+}
+#burger-btn #burger-links ul li,
+#burger-btn.active #burger-links ul li {
+  list-style-type: none;
+  text-align: right;
+}
+#burger-btn #burger-links ul li a,
+#burger-btn.active #burger-links ul li a {
+  white-space: nowrap;
+}
+#burger-btn #burger-links ul hr,
+#burger-btn.active #burger-links ul hr {
+  margin: 0 5px;
+  border-color: #efefef;
+}
+#burger-btn #burger-links #burger-login,
+#burger-btn.active #burger-links #burger-login {
+  background-color: #555555;
   display: none;
-  transition: all 2500ms ease;
+}
+#burger-btn #burger-links #burger-login input,
+#burger-btn.active #burger-links #burger-login input {
+  width: 95%;
+  margin: 5px auto;
+}
+#burger-btn #burger-links #burger-login button,
+#burger-btn.active #burger-links #burger-login button {
+  margin: 0 5px 5px;
+}
+#burger-btn.active {
+  transform: translateX(-16rem);
+  transition: all 250ms ease;
+}
+#burger-btn.active #bar-1 {
+  transform: translateY(11.04761905px) rotate(-45deg);
+}
+#burger-btn.active #bar-2 {
+  opacity: 0;
+}
+#burger-btn.active #bar-3 {
+  transform: translateY(-11.04761905px) rotate(45deg);
 }
 #non-index-head {
   height: 58px;
@@ -231,7 +286,7 @@ a.nav-link.nav-thin#btn-login:hover {
   background-color: #818181;
   width: 400px;
   position: fixed;
-  z-index: 100000;
+  z-index: 100001;
   margin-top: 20px;
   border: 5px solid #818181;
   border-radius: 10px;
@@ -985,6 +1040,9 @@ label.star:hover ~ label.star span::before {
     width: 500px;
   }
   nav.navbar.navbar-expand-sm.sticky {
+    position: unset;
+  }
+  nav.navbar.navbar-expand-sm.sticky ul {
     display: none;
   }
   #burger-btn {
