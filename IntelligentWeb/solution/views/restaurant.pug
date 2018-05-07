@@ -85,7 +85,7 @@ block content
                             h4 Opening Times
                             each times, index in restaurant.openingTimes
                                 .row
-                                    .col-2.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
+                                    .col-2.offset-1.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
                                         p.mb-2= daysOfWeek[index]
                                     .col-4.col-sm-4.col-md-3.col-lg-6.text-center
                                         if times[0] && times[1]
@@ -206,7 +206,7 @@ block content
                             input.form-control#submit(type='submit', value='Submit')
                 hr
                 hr
-        .row
+        //.row
             video#video(autoplay='')
             button#takephoto Take snapshot
             button#confirmphoto Confirm taken photo
