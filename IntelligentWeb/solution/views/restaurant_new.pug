@@ -21,10 +21,10 @@ block content
                         | &nbsp;publishing the restaurant
         else
             .row
-                .col-10.offset-1
+                .col.col-lg-10.offset-1
                     form#new-restaurant-form(action='/restaurant/new/add_restaurant', method='post', enctype="multipart/form-data")
                         .form-row
-                            .col-6
+                            .col-12.col-lg-6
                                 .form-row.form-group
                                     .col
                                         label(for='restaurantName') Restaurant Name
@@ -40,10 +40,10 @@ block content
 
                                 #address-lookup-search
                                     .form-row.form-group
-                                        .col-5
+                                        .col.col-lg-5
                                             label(for='search-address') Address Line 1
                                             input.title-case.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
-                                        .form-group.col-3
+                                        .form-group.col-lg-3
                                             label(for='search-postcode') Post Code
                                             input.upper-case.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='none')
                                         .form-group.col
@@ -57,23 +57,23 @@ block content
                                             span.oi.oi-pencil.float-right#address-lookup-found-edit-control(aria-hidden='true', onclick='editAddress();')
                                             input.form-control#formatted-address-lookup(disabled)
                                         #address-lookup-found-confirm-control
-                                            .form-group.col-1
+                                            .form-group.col-lg-1
                                                 label.invisible-label
                                                 span.oi.oi-check( aria-hidden='true', onclick='confirmEdit();')
 
                                 #address-lookup-found-edit
                                     .form-row.form-group
-                                        .col-6
+                                        .col-lg-6
                                             label(for='address1') Address Line 1
                                             input.title-case.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
-                                        .form-group.col-6
+                                        .form-group.col-lg-6
                                             label(for='address2') Address Line 2
                                             input.title-case.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
                                     .form-row.form-group
-                                        .col-6
+                                        .col-lg-6
                                             label(for='city') City
                                             input.title-case.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
-                                        .form-group.col-6
+                                        .form-group.col-lg-6
                                             label(for='postcode') Postcode
                                             input.upper-case.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
 
@@ -90,10 +90,10 @@ block content
                                             #address-map-map
 
                                 .form-row
-                                    .form-group.col-8
+                                    .form-group.col-lg-8
                                         label(for='url') Restaurant Website
                                         input.form-control#url(type='text', name='url', placeholder='www.toms-bistro.pawnee', autocomplete='none')
-                                    .form-group.col-4
+                                    .form-group.col-lg-4
                                         label(for='phone') Phone
                                         input.form-control.no-spinner#phone(style="padding-left: 9px; padding-right: 9px;", type='number', name='phone', placeholder='07700 900461', autocomplete='none')
                                 .form-row
@@ -129,14 +129,14 @@ block content
                                         "food served, or whatever you feel like!" , rows=4)
 
                                 .form-row
-                                    .form-group.col-6
+                                    .form-group.col-12.col-lg-6
                                         label.d-block Price Range
                                         label.price-range-label(for='price-lower') £
                                         input.form-control.no-spinner#price-lower(type='number', min=0, max=1000, name='priceLower')
                                         p.d-inline#price-to to
                                         label.price-range-label(for='price-upper') £
                                         input.form-control.no-spinner#price-upper(type='number', min=0, max=1000, name='priceUpper')
-                                    .form-group.col-6
+                                    .form-group.col-12.col-lg-6
                                         label.invisible-label(for='price-band')
                                         select.form-control#price-band(name='priceBand')
                                             option(value='', disabled, selected) Price Band
@@ -153,9 +153,9 @@ block content
                                             input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
                                             #category-dropdown
 
-                            .col-5.offset-1
+                            .col.col-lg-5.offset-lg-1
                                 .form-row#restaurant-images
-                                    .col
+                                    .col-12
                                         p Upload Images
                                         .input-group#image-upload-link
                                             input.form-control#file-count(type='text', disabled='disabled', value='Click here to upload images')
@@ -171,15 +171,15 @@ block content
                                                 .col
                                                     p Restaurant Features
                                             .form-row
-                                                .col-3.offset-8
+                                                .col-3.col-md-2.col-lg-4.offset-6.offset-lg-8
                                                     p.float-left No
                                                     p.float-right Yes
                                             each id in Object.keys(features)
                                                 - var value = features[id].name
                                                 .form-row
-                                                    .col-7.text-right
+                                                    .col-6.col-lg-7.text-right
                                                         p= value
-                                                    .col-3.offset-1
+                                                    .col-3.col-md-2.col-lg-4.offset-lg-1
                                                         .wrapper
                                                             label.invisible-label.no-label(for=`no-${id}`)
                                                             input.no-radio(id=`no-${id}` type='radio', value='0', name=id)
@@ -202,7 +202,7 @@ block content
                                 input#submit(type='submit')
 
                         .form-row
-                            .form-group.col.offset-7
+                            .form-group.col.offset-4.offset-lg-7
                                 br
                                 if (!user.verified.flag)
                                     .form-row

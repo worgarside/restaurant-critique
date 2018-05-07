@@ -1048,6 +1048,19 @@ label.star:hover ~ label.star span::before {
   #burger-btn {
     display: flex;
   }
+  p.restaurant-feature-false {
+    display: none;
+  }
+  footer {
+    font-size: 10pt;
+  }
+  footer ul li.list-inline-item {
+    margin: 0 10px;
+  }
+  footer ul li.list-inline-item:not(:first-child):before {
+    content: "";
+    margin: 0;
+  }
 }
 @media (max-width: 768px) {
   .col #contact-info {
@@ -1057,9 +1070,6 @@ label.star:hover ~ label.star span::before {
   #restaurant-page-override #reviews .vert-center-child#review-image-container #review-image-table {
     float: unset;
     margin: 0 auto;
-  }
-  body {
-    background-color: red;
   }
 }
 @media (max-width: 576px) {

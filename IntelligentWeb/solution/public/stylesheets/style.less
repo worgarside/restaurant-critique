@@ -223,11 +223,11 @@ span.oi.oi-star {
     #burger-login {
       background-color: @grey-darker;
       display: none;
-      input{
+      input {
         width: 95%;
         margin: 5px auto;
       }
-      button{
+      button {
         margin: 0 5px 5px;
       }
 
@@ -1244,6 +1244,20 @@ label.star:hover ~ label.star span::before {
     display: flex;
   }
 
+  p.restaurant-feature-false {
+    display: none;
+  }
+
+  footer {
+    font-size: 10pt;
+    ul li.list-inline-item {
+      &:not(:first-child):before {
+        content: "";
+        margin: 0;
+      }
+      margin: 0 10px;
+    }
+  }
 }
 
 @media (max-width: 768px) {
@@ -1258,7 +1272,7 @@ label.star:hover ~ label.star span::before {
   }
 
   body {
-    background-color: red;
+    //background-color: red;
   }
 
 }
