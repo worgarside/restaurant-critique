@@ -520,6 +520,14 @@ footer {
 
 // ================================ New/Edit Restaurant ================================ \\
 
+a.login-helper{
+  display: inline;
+}
+
+p.login-helper{
+  display: none;
+}
+
 #new-restaurant-form, #edit-restaurant-form {
   #opening-time, #closing-time {
     text-align: center;
@@ -634,8 +642,8 @@ footer {
     }
 
     .wrapper {
-      margin: 8px 0;
-      width: 100%;
+      margin: 8px auto;
+      width: 5.5rem;
       height: @selector-height;
       position: relative;
       background: @selector-bg-color;
@@ -842,6 +850,10 @@ footer {
         }
       }
     }
+  }
+
+  #publish-restaurant{
+    margin-left: 1rem;
   }
 }
 
@@ -1240,6 +1252,14 @@ label.star:hover ~ label.star span::before {
     }
   }
 
+  a.login-helper{
+    display: none;
+  }
+
+  p.login-helper{
+    display: inline;
+  }
+
   #burger-btn {
     display: flex;
   }
@@ -1270,11 +1290,6 @@ label.star:hover ~ label.star span::before {
     float: unset;
     margin: 0 auto;
   }
-
-  body {
-    //background-color: red;
-  }
-
 }
 
 @media (max-width: 576px) {

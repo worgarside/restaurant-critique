@@ -19,6 +19,9 @@ global.dbRegen = false;
 require('./config/passport')(passport);
 const database = require('./config/database');
 
+console.log('\033c'); //Clears terminal
+console.log('\x1b[36m%s\x1b[0m', `App Started @ ${appRoot}`);
+
 // ================ Database ================ \\
 
 require('./app/models/user');
@@ -81,8 +84,5 @@ app.use('/restaurant', restaurant);
 app.use((req, res) => {
     res.render('errors/404');
 });
-
-console.log('\033c'); //Clears terminal
-console.log('\x1b[32m%s\x1b[0m', `App Started @ ${appRoot}`);
 
 module.exports = app;

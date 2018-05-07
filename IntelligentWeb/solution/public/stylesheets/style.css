@@ -420,6 +420,12 @@ footer .footer-right {
 #index-carousel ol.carousel-indicators li.active {
   background-color: #919191;
 }
+a.login-helper {
+  display: inline;
+}
+p.login-helper {
+  display: none;
+}
 #new-restaurant-form #opening-time,
 #edit-restaurant-form #opening-time,
 #new-restaurant-form #closing-time,
@@ -519,8 +525,8 @@ footer .footer-right {
 }
 #new-restaurant-form #features .wrapper,
 #edit-restaurant-form #features .wrapper {
-  margin: 8px 0;
-  width: 100%;
+  margin: 8px auto;
+  width: 5.5rem;
   height: 1.125rem;
   position: relative;
   background: #dbdbdb;
@@ -730,6 +736,10 @@ footer .footer-right {
 #new-restaurant-form .category-selected span:hover,
 #edit-restaurant-form .category-selected span:hover {
   color: #eb0000;
+}
+#new-restaurant-form #publish-restaurant,
+#edit-restaurant-form #publish-restaurant {
+  margin-left: 1rem;
 }
 #login-warning {
   cursor: pointer;
@@ -1044,6 +1054,12 @@ label.star:hover ~ label.star span::before {
   }
   nav.navbar.navbar-expand-sm.sticky ul {
     display: none;
+  }
+  a.login-helper {
+    display: none;
+  }
+  p.login-helper {
+    display: inline;
   }
   #burger-btn {
     display: flex;
