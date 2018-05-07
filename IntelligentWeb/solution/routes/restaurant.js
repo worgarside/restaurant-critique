@@ -51,10 +51,15 @@ router.post('/upload_picture', (req, res) => {
     // strip off the data: url prefix to get just the base64-encoded bytes
     let imageBlob = req.body.imageBlob.replace(/^data:image\/\w+;base64,/, "");
     let buf = new Buffer(imageBlob, 'base64');
-    fs.writeFile(targetDirectory + newString + '.png', buf);
-    let filePath = targetDirectory + newString
-    ;
-    console.log('file saved!');
+    fs.writeFile(targetDirectory + newString + '.png', buf, function(err) {
+        if(err) {
+            return console.log(err);
+        }else{
+            console.log("The file was saved!");}
+
+    });
+
+    let filePath = targetDirectory + newString;
     let data = {
         user: userId,
         filePath: filePath

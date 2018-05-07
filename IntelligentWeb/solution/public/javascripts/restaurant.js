@@ -84,12 +84,7 @@ takePhotoButton.click(() => {
 });
 
 confirmPhotoButton.click(() => {
-    console.log("clicky confirmy");
-
     sendImage("22", canvas.toDataURL());
-
-    console.log("clicky confirmy2");
-
     videoContainer.css("display", "unset");
     canvasContainer.css("display", "none");
     takePhotoButton.css("display", "unset");
@@ -122,10 +117,7 @@ function handleError(error) {
 
 
 function sendImage(userId, imageBlob) {
-
-
-    console.log("USER  "+userId);
-    console.log("IMAGE  "+imageBlob);
+    console.log("Image sendiing to Server");
 
     let data = {
         userId: userId,
