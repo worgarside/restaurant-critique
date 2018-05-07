@@ -85,7 +85,9 @@ takePhotoButton.click(() => {
 
 confirmPhotoButton.click(() => {
     console.log("clicky confirmy");
-    sendImage("22", dataURLtoBlob(canvas.toDataURL()));
+
+    sendImage("22", canvas.toDataURL());
+
     console.log("clicky confirmy2");
 
     videoContainer.css("display", "unset");
@@ -118,39 +120,24 @@ function handleError(error) {
     alert(`Camera not found, or in use elsewhere`)
 }
 
-function dataURLtoBlob(dataurl) {
-    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type: mime});
-}
-
 
 function sendImage(userId, imageBlob) {
 
 
+    console.log("USER  "+userId);
+    console.log("IMAGE  "+imageBlob);
 
-    const data = JSON.stringify({
+    let data = {
         userId: userId,
         imageBlob: imageBlob
-    });
-
-    // let data = new FormData();
-    //
-    // data.append('userId', 'userId');
-    // data.append('imageBlob', 'imageBlob');
+    };
 
     $.ajax({
         url: '/restaurant/upload_picture',
         type: "POST",
         method: 'POST',
-        // dataType: 'application/json',
-        data: JSON.stringify(data),
-        processData: false,
-        contentType: false,
-        json: true,
+        dataType: 'json',
+        data: data,
         success: (data) => {
             // const token = data.token;
             // location.reload();

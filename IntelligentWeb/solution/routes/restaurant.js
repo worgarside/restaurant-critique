@@ -37,26 +37,16 @@ router.post('/add_review', upload.array('images', 10), (req, res) => {
 
 router.post('/upload_picture', (req, res) => {
 
-    console.log(`Body pure: ${req.body}`);
-    console.log(`Files pure: ${req.files}`);
-    console.log(`Body typeof: ${typeof req.body}`);
-    console.log(`Body stringified: ${JSON.stringify(req.body)}`);
-    // console.log(`Body parsed: ${JSON.parse(req.body)}`);
-
-    console.log(`Full req: ${req}`);
-    console.log(`Full req:\n ${JSON.stringify(req)}`);
-    console.log('\n\n\n\n\n');
-
     const userId = req.body.userId;
     console.log(`userId: ${userId}`);
     const newString = new Date().getTime();
-    const targetDirectory = `./public/images/reviewTestImages/${userId}`;
+    const targetDirectory = `./public/images/reviewTestImages/`;
 
     if (!fs.existsSync(targetDirectory)) {
         fs.mkdirSync(targetDirectory);
     }
 
-    console.log(`Saving file ${targetDirectory} ${newString}`);
+    console.log(`Saving file ${targetDirectory}${newString}`);
 
     // strip off the data: url prefix to get just the base64-encoded bytes
     let imageBlob = req.body.imageBlob.replace(/^data:image\/\w+;base64,/, "");
@@ -69,13 +59,6 @@ router.post('/upload_picture', (req, res) => {
         user: userId,
         filePath: filePath
     };
-    let errX = pictureDB.insertImage(data);
-    if (errX) {
-        console.log('error in saving data: ' + err);
-        return res.status(500).send(err);
-    } else {
-        console.log('image inserted into db');
-    }
     res.end(JSON.stringify({data: ''}));
 });
 
