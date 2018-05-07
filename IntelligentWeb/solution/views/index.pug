@@ -90,6 +90,11 @@ block content
                     span.oi.oi-magnifying-glass.post-space(aria-hidden='true')
                     | Search by cuisine type
                 img.index-image.img-thumbnail(src='/images/site/index-image-3.jpg')
+        br
+        .row
+            .col-12
+                each category in categories
+                    p= category
 
 
     script(type='text/javascript', src='/javascripts/index.js')

@@ -202,7 +202,7 @@ block content
                                 input#submit(type='submit')
 
                         .form-row
-                            .form-group.col.offset-4.offset-lg-7
+                            .form-group.col
                                 br
                                 if (!user.verified.flag)
                                     .form-row
@@ -216,9 +216,9 @@ block content
                                 else
                                     .form-row
                                         .col
-                                            button.btn#save-restaurant(type='button') Save Restaurant for Later
                                             input.d-none#verified-flag(type='checkbox', name='verified', checked)
                                             button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
+                                            button.btn.float-right#save-restaurant(type='button') Save Restaurant for Later
 
             script const categoryVar = JSON.parse(`!{categories}`);
             script(src='//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js')

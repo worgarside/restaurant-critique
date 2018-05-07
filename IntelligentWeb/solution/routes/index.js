@@ -5,7 +5,7 @@
  * @author WIll Garside, Rufus Cope, Greta Ramaneckaite
  */
 
-// ================ Middleware ================ \\
+// ================================ Middleware ================================ \\
 
 const express = require('express');
 const router = express.Router();
@@ -20,37 +20,80 @@ const User = mongoose.model('User');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
-let previousRefresh;
-let topRestaurants;
+let restaurantRefresh, topRestaurants, allCategories;
 
-// ================ GET Statements ================ \\
+
+// ================================ Helper Functions ================================ \\
+
+//TODO jsdoc
+function refreshTopRestaurants() {
+    restaurantRefresh = new Date();
+    console.log('\x1b[33m%s\x1b[0m', 'refreshTopRestaurants()');
+
+    return Restaurant.find({}).sort({averageRating: -1}).limit(5).select({
+        'name': 1,
+        'address.formattedAddress': 1,
+        'description': 1,
+        'categories': 1,
+        'images': 1,
+        'averageRating': 1,
+        'localUrl': 1,
+    })
+        .exec()
+        .then((restaurants) => {
+            topRestaurants = restaurants;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+//TODO jsdoc
+function getAllCategories() {
+    console.log('\x1b[33m%s\x1b[0m', 'getAllCategories()');
+
+    return Category.find({})
+        .select('name _id')
+        .then((categories) => {
+            allCategories = categories;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+// ================================ GET Statements ================================ \\
 
 router.get('/', (req, res) => {
     // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 30s30000
-    if ((!previousRefresh) || (new Date() - previousRefresh > 604800000)) {
-        console.log('Refreshing top restaurants');
-        Restaurant.find({}).sort({averageRating: -1}).limit(5).select({
-            'name': 1,
-            'address.formattedAddress': 1,
-            'description': 1,
-            'categories': 1,
-            'images': 1,
-            'averageRating': 1,
-            'localUrl': 1,
-        })
-            .exec()
-            .then((restaurants) => {
-                topRestaurants = restaurants;
-                res.header("Access-Control-Allow-Origin", "*");
-                //TODO- check this is legit AF?
-                res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: restaurants});
+    if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 604800000)) {
+        Promise.all([refreshTopRestaurants(), getAllCategories()])
+            .then(() => {
+                res.render('index', {
+                    title: title,
+                    user: req.user,
+                    animateLogo: true,
+                    restaurants: topRestaurants,
+                    categories: allCategories
+                });
             })
             .catch((err) => {
-                console.log(err);
+                console.log(`CATCH ${err}`);
             });
-        previousRefresh = new Date();
     } else {
-        res.render('index', {title: title, user: req.user, animateLogo: true, restaurants: topRestaurants});
+        getAllCategories()
+            .then(() => {
+                res.render('index', {
+                    title: title,
+                    user: req.user,
+                    animateLogo: true,
+                    restaurants: topRestaurants,
+                    categories: allCategories
+                });
+            })
+            .catch((err) => {
+                console.log(`CATCH ${err}`);
+            });
     }
 });
 
@@ -86,22 +129,32 @@ router.get('/logout', (req, res) => {
  * @function loadNewRestaurantPage
  */
 router.get('/restaurant/new', (req, res) => {
-    const tempRestaurant = new Restaurant;
-
-    Category.find({}).select('name _id').then((categories) => {
+    if (!allCategories) {
+        getAllCategories()
+            .then(() => {
+                    const tempRestaurant = new Restaurant;
+                    res.render('restaurant_new', {
+                        title: title,
+                        user: req.user,
+                        categories: JSON.stringify(allCategories),
+                        features: tempRestaurant.features
+                    });
+                }
+            )
+            .catch((err) => {
+                console.log(err);
+            })
+    } else {
+        const tempRestaurant = new Restaurant;
         res.render('restaurant_new', {
             title: title,
             user: req.user,
-            categories: JSON.stringify(categories),
+            categories: JSON.stringify(allCategories),
             features: tempRestaurant.features
         });
-    }).catch((err) => {
-        if (err.errmsg) {
-            console.log(err.errmsg);
-        } else {
-            console.log(err);
-        }
-    });
+    }
+
+
 });
 
 // TODO: jsdoc
@@ -109,27 +162,42 @@ router.get('/restaurant/edit/:_id', (req, res) => {
     /* TODO: make sure all functions of this type are unified
      e.g. Model.findById().exec().then().catch(); vs Model.findById(id, (err, model) => {});*/
 
-    const restaurantPromise = Restaurant.findById(req.params._id).lean().exec();
-    const categoryPromise = Category.find({}).select('name _id').exec();
-
-    Promise.all([restaurantPromise, categoryPromise])
-        .then((results) => {
-            const restaurant = results[0];
-            const categories = results[1];
-
-            if (req.user && restaurant.creator._id === req.user._id) {
-                res.render('restaurant_edit', {
-                    title: title,
-                    user: req.user,
-                    restaurant: restaurant,
-                    categories: JSON.stringify(categories)
-                });
-            } else {
-                res.render('errors/403', {title: title, user: req.user});
-
+    Restaurant.findById(req.params._id)
+        .lean()
+        .exec()
+        .then((restaurant) => {
+                if (!categories) {
+                    getAllCategories()
+                        .then(() => {
+                            if (req.user && restaurant.creator._id === req.user._id) {
+                                res.render('restaurant_edit', {
+                                    title: title,
+                                    user: req.user,
+                                    restaurant: restaurant,
+                                    categories: JSON.stringify(allCategories)
+                                });
+                            } else {
+                                res.render('errors/403', {title: title, user: req.user});
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else {
+                    // TODO tidy duplicated code
+                    if (req.user && restaurant.creator._id === req.user._id) {
+                        res.render('restaurant_edit', {
+                            title: title,
+                            user: req.user,
+                            restaurant: restaurant,
+                            categories: JSON.stringify(allCategories)
+                        });
+                    } else {
+                        res.render('errors/403', {title: title, user: req.user});
+                    }
+                }
             }
-
-        })
+        )
         .catch((err) => {
             console.log(err);
             res.render('errors/500', {title: title, user: req.user});
@@ -310,5 +378,8 @@ router.post('/verify_email', (req, res) => {
     }
 
 });
+
+refreshTopRestaurants();
+getAllCategories();
 
 module.exports = router;
