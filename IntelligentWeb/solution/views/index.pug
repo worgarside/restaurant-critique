@@ -91,10 +91,26 @@ block content
                     | Search by cuisine type
                 img.index-image.img-thumbnail(src='/images/site/index-image-3.jpg')
         br
+        - var categoryCount = categories.length
+        - var categorySection = Math.ceil(categoryCount/8)
         .row
-            .col-12
-                each category in categories
-                    p= category
+            .col-3
+                - var c = 0
+                while c < categorySection
+                    p.d-block.restaurant-category= categories[c].name
+                    - c++
+            .col-3
+                while c < categorySection * 2
+                    p.d-block.restaurant-category= categories[c].name
+                    - c++
+            .col-3
+                while c < categorySection * 3
+                    p= categories[c].name
+                    - c++
+            .col-3
+                while c < categorySection * 4
+                    p= categories[c].name
+                    - c++
 
 
     script(type='text/javascript', src='/javascripts/index.js')

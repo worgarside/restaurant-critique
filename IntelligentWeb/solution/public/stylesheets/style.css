@@ -420,6 +420,12 @@ footer .footer-right {
 #index-carousel ol.carousel-indicators li.active {
   background-color: #919191;
 }
+a.login-helper {
+  display: inline;
+}
+p.login-helper {
+  display: none;
+}
 #new-restaurant-form #opening-time,
 #edit-restaurant-form #opening-time,
 #new-restaurant-form #closing-time,
@@ -1048,6 +1054,12 @@ label.star:hover ~ label.star span::before {
   }
   nav.navbar.navbar-expand-sm.sticky ul {
     display: none;
+  }
+  a.login-helper {
+    display: none;
+  }
+  p.login-helper {
+    display: inline;
   }
   #burger-btn {
     display: flex;

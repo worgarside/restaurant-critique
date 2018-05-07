@@ -11,9 +11,10 @@ block content
         if (!user)
             .row
                 .col
-                    p
+                    p.d-inline
                         | To add a new restaurant to the community, please&nbsp;
-                        a(href='javascript:void(0)' onclick=("document.getElementById('btn-login').click()")) login
+                        a.login-helper(href='javascript:void(0)' onclick=("document.getElementById('btn-login').click()")) login
+                        p.login-helper login
                         | &nbsp;or&nbsp;
                         a(href='/signup') create an account
                         | &nbsp;and verify it&nbsp;
