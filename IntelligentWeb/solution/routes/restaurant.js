@@ -38,8 +38,8 @@ router.post('/add_review', upload.array('images', 10), (req, res) => {
 router.post('/upload_picture', (req, res) => {
     console.log(req);
     console.log("------------------------------");
-    console.log(`Body pure: ${req.body}`);
-    console.log(`Files pure: ${req.files}`);
+    console.log(`Body pure: ${req.body.userId}`);
+    console.log(`Image pure: ${req.imageBlob}`);
     console.log(`Body typeof: ${typeof req.body}`);
     console.log(`Body stringified: ${JSON.stringify(req.body)}`);
     //console.log(`Body parsed: ${JSON.parse(req.body)}`);

@@ -86,8 +86,7 @@ takePhotoButton.click(() => {
 confirmPhotoButton.click(() => {
     console.log("clicky confirmy");
 
-    sendImage("22", dataURLtoBlob(canvas.toDataURL()));
-    console.log(dataURLtoBlob(canvas.toDataURL()));
+    sendImage("22", canvas.toDataURL());
 
     console.log("clicky confirmy2");
 
@@ -121,15 +120,6 @@ function handleError(error) {
     alert(`Camera not found, or in use elsewhere`)
 }
 
-function dataURLtoBlob(dataurl) {
-    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type:mime});
-}
-
 
 function sendImage(userId, imageBlob) {
 
@@ -148,8 +138,6 @@ function sendImage(userId, imageBlob) {
         method: 'POST',
         dataType: 'json',
         data: data,
-        processData: false,
-        contentType: false,
         success: (data) => {
             // const token = data.token;
             // location.reload();
