@@ -178,12 +178,18 @@ function processRestaurants(results) {
             initSlideshow(index);
 
             const infoWindowContent = `
-            <div class="container" id="info-${index}" style="max-width: 400px;">
+            <div class="container" id="info-${index}" style="max-width: 400px">
                 <div class="row">
                     <div class="col">
-                        <h5 style="font-weight: 400;" class="d-inline">${restaurant.name}</h5>
-                        <p style="font-weight: 400;" class="d-inline">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p>
-                        <p style="margin-bottom: 0;">${restaurant.description}</p>
+                        <table>
+                            <tr>
+                                <td><h5 style="font-weight: 400; max-width: 150px">${restaurant.name}</h5></td>
+                                <td style="width: 30%;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><p style="margin-bottom: 0;">${restaurant.description}</p></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <div class="row">
@@ -194,7 +200,7 @@ function processRestaurants(results) {
             </div>
         `;
 
-            const infoWindow = new google.maps.InfoWindow({
+            let infoWindow = new google.maps.InfoWindow({
                 content: infoWindowContent
             });
 
