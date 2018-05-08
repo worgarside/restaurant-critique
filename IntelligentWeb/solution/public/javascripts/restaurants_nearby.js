@@ -240,7 +240,7 @@ function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
-                <div class="col-8">
+                <div class="col-12 col-lg-8">
                     <div class="vert-center-parent">
                         <div class="vert-center-child">
                             <div class="row">
@@ -310,10 +310,10 @@ function createRestaurantPreview(restaurant, index) {
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-lg-4">
                         <div class="row">
                             <div class="col">
-                                <div class="float-right">
+                                <div class="restaurant-nearby-images">
                                     <div class="slideshow-wrapper">
         `;
 

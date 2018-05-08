@@ -520,11 +520,11 @@ footer {
 
 // ================================ New/Edit Restaurant ================================ \\
 
-a.login-helper{
+a.login-helper {
   display: inline;
 }
 
-p.login-helper{
+p.login-helper {
   display: none;
 }
 
@@ -852,7 +852,7 @@ p.login-helper{
     }
   }
 
-  #publish-restaurant{
+  #publish-restaurant {
     margin-left: 1rem;
   }
 }
@@ -986,6 +986,10 @@ p.login-helper{
       border: solid 1px @red;
 
     }
+  }
+
+  &-nearby-images {
+    float: right;
   }
 }
 
@@ -1252,11 +1256,11 @@ label.star:hover ~ label.star span::before {
     }
   }
 
-  a.login-helper{
+  a.login-helper {
     display: none;
   }
 
-  p.login-helper{
+  p.login-helper {
     display: inline;
   }
 
@@ -1278,6 +1282,14 @@ label.star:hover ~ label.star span::before {
       margin: 0 10px;
     }
   }
+
+  .restaurant-nearby-images {
+    float: none;
+    .slideshow-wrapper {
+      display: block;
+      margin: 0 auto;
+    }
+  }
 }
 
 @media (max-width: 768px) {
@@ -1289,6 +1301,10 @@ label.star:hover ~ label.star span::before {
   #restaurant-page-override #reviews .vert-center-child#review-image-container #review-image-table {
     float: unset;
     margin: 0 auto;
+  }
+
+  img #restaurant-list .slideshow-wrapper.slideshow {
+    float: none;
   }
 }
 
