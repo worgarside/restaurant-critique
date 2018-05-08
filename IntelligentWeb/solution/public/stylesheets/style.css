@@ -368,7 +368,7 @@ footer .footer-right {
   display: none;
 }
 .signup-help {
-  cursor: pointer;
+  cursor: help;
   text-underline: #222222;
 }
 .index-image {

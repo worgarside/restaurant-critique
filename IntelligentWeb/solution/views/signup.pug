@@ -8,17 +8,17 @@ block content
                 h1 Create an Account
                 br
         .row
-            .col-10.offset-1
+            .col.col-lg-10.offset-lg-1
                 form#signup-form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
-                        .form-group.col-6
+                        .form-group.col-12.col-lg-6
                             input#forename.form-control(type='text', name='forename', placeholder='First name',
                             required, autocomplete='given-name')
-                        .form-group.col-6
+                        .form-group.col-12.col-lg-6
                             input#surname.form-control(type='text', name='surname', placeholder='Surname', required,
                             autocomplete='family-name')
                     .form-row
-                        .form-group.col-6
+                        .form-group.col-12.col-lg-6
                             .form-row
                                 .form-group.col
                                     input#email.form-control(type='email', name='email', placeholder='Email Address',
