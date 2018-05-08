@@ -29,6 +29,7 @@ $(() => {
  * @param {Boolean} allowed Flag to signify whether the User has allowed geolocation or not
  */
 function allowLocation(allowed) {
+    // TODO test user in washington state??
     if (allowed) {
         const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
 
@@ -170,6 +171,10 @@ function processRestaurants(results) {
         scaledSize: new google.maps.Size(25, 42)
     };
 
+    let markerList = [];
+    let infoWindow = new google.maps.InfoWindow();
+    let contentList = [];
+
     for (const [index, restaurant] of results.entries()) {
         if (restaurant.published) {
             let restaurantContainer = document.createElement('div');
@@ -178,13 +183,13 @@ function processRestaurants(results) {
             initSlideshow(index);
 
             const infoWindowContent = `
-            <div class="container" id="info-${index}" style="max-width: 400px">
+            <div class="container" id="info-${index}" style="max-width: 400px;">
                 <div class="row">
                     <div class="col">
                         <table>
-                            <tr>
-                                <td><h5 style="font-weight: 400; max-width: 150px">${restaurant.name}</h5></td>
-                                <td style="width: 30%;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
+                            <tr">
+                                <td><h5 style="font-weight: 400; max-width: 200px; min-width: 130px;">${restaurant.name}</h5></td>
+                                <td style="width: 95px; vertical-align: bottom;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><p style="margin-bottom: 0;">${restaurant.description}</p></td>
@@ -200,9 +205,9 @@ function processRestaurants(results) {
             </div>
         `;
 
-            let infoWindow = new google.maps.InfoWindow({
-                content: infoWindowContent
-            });
+            // infoWindow.setContent(infoWindowContent);
+
+            contentList.push(infoWindowContent);
 
             const newMarker = new google.maps.Marker({
                 map: map,
@@ -210,10 +215,16 @@ function processRestaurants(results) {
                 icon: icon
             });
 
-            newMarker.addListener('click', () => {
-                infoWindow.open(map, newMarker);
-            });
+            markerList.push(newMarker);
         }
+    }
+
+    for (let i = 0, marker; marker = markerList[i]; i++) {
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.setContent(contentList[i]);
+            console.log(contentList[i]);
+            infoWindow.open(map, this);
+        });
     }
 }
 
