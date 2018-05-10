@@ -31,85 +31,89 @@ block content
                         li(data-target='#index-carousel', data-slide-to='2')
                         li(data-target='#index-carousel', data-slide-to='3')
                         li(data-target='#index-carousel', data-slide-to='4')
-                    .carousel-inner
-                        each restaurant, index in restaurants
-                            div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
-                                .row
-                                    .col-6
+                    .vert-center-parent
+                        .vert-center-child
+                            .carousel-inner
+                                each restaurant, index in restaurants
+                                    div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
                                         .row
+                                            .col-12.col-lg-6
+                                                .row
+                                                    .col
+                                                        a.restaurant-title(href=`restaurant/${restaurant.localUrl}`)= restaurant.name
+                                                .row
+                                                    .col
+                                                        - var starRating = Math.round(restaurant.averageRating);
+                                                        - s = 0
+                                                        while s < starRating
+                                                            span.oi.oi-star.star-highlight(aria-hidden='true')
+                                                             - s++
+                                                        - s = 0
+                                                        while s < (5 -starRating)
+                                                            span.oi.oi-star(aria-hidden='true')
+                                                            - s++
+                                                        h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
+                                                .row
+                                                    .col
+                                                        p.restaurant-address= restaurant.address.formattedAddress
+                                                .row
+                                                    .col
+                                                        each category, index in restaurant.categories
+                                                            if index < 5
+                                                                p.restaurant-category= category.name
+                                                .row
+                                                    .col
+                                                        p.restaurant-description= restaurant.description
                                             .col
-                                                a.restaurant-title(href=`restaurant/${restaurant.localUrl}`)= restaurant.name
-                                        .row
-                                            .col
-                                                - var starRating = Math.round(restaurant.averageRating);
-                                                - s = 0
-                                                while s < starRating
-                                                    span.oi.oi-star.star-highlight(aria-hidden='true')
-                                                     - s++
-                                                - s = 0
-                                                while s < (5 -starRating)
-                                                    span.oi.oi-star(aria-hidden='true')
-                                                    - s++
-                                                h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
-                                        .row
-                                            .col
-                                                p.restaurant-address= restaurant.address.formattedAddress
-                                        .row
-                                            .col
-                                                each category, index in restaurant.categories
-                                                    if index < 5
-                                                        p.restaurant-category= category.name
-                                        .row
-                                            .col
-                                                p.restaurant-description= restaurant.description
-                                    .col
-                                        .text-center.h-100
-                                            .vert-center-parent
-                                                .vert-center-child
-                                                    each image, index in restaurant.images
-                                                        if index < 2
-                                                            img(src=`/images/restaurants/${restaurant._id}/${image}`)
-                    a.carousel-control-prev(href='#index-carousel', role='button', data-slide='prev')
-                        span.carousel-control-prev-icon(aria-hidden='true')
-                    a.carousel-control-next(href='#index-carousel', role='button', data-slide='next')
-                        span.carousel-control-next-icon(aria-hidden='true')
+                                                .text-center.h-100
+                                                    .vert-center-parent
+                                                        .vert-center-child
+                                                            each image, index in restaurant.images
+                                                                if index < 2
+                                                                    img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                            a.carousel-control-prev(href='#index-carousel', role='button', data-slide='prev')
+                                span.carousel-control-prev-icon(aria-hidden='true')
+                            a.carousel-control-next(href='#index-carousel', role='button', data-slide='next')
+                                span.carousel-control-next-icon(aria-hidden='true')
         br
         .row.index-image-set
-            .col-4
+            .col-12.col-lg-4
                 h5.text-center
                     span.oi.oi-check.post-space(aria-hidden='true')
                     | Find the best restaurants
                 img.index-image.img-thumbnail(src='/images/site/index-image-1.jpg')
-            .col-4
+            .col-12.col-lg-4
                 h5.text-center
                     span.oi.oi-thumb-up.post-space(aria-hidden='true')
                     | Contribute your reviews
                 img.index-image.img-thumbnail(src='/images/site/index-image-2.jpg')
-            .col-4
+            .col-12.col-lg-4
                 h5.text-center
                     span.oi.oi-magnifying-glass.post-space(aria-hidden='true')
                     | Search by cuisine type
                 img.index-image.img-thumbnail(src='/images/site/index-image-3.jpg')
+
         br
+        h2 Search by Type of Cuisine
         - var categoryCount = categories.length
         - var categorySection = Math.ceil(categoryCount/8)
         .row
-            .col-3
+            .col#res-col-1
                 - var c = 0
                 while c < categorySection
                     p.d-block.restaurant-category= categories[c].name
                     - c++
-            .col-3
+            .col#res-col-2
                 while c < categorySection * 2
                     p.d-block.restaurant-category= categories[c].name
                     - c++
-            .col-3
+            .col#res-col-3
                 while c < categorySection * 3
-                    p= categories[c].name
+                    p.d-block.restaurant-category= categories[c].name
                     - c++
-            .col-3
+            .col#res-col-4
                 while c < categorySection * 4
-                    p= categories[c].name
+                    p.d-block.restaurant-category= categories[c].name
                     - c++
 
 

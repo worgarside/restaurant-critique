@@ -38,6 +38,20 @@ block navbar
                 li.nav-item
                     a.nav-link.nav-thin(href='/logout') Logout
 
+    if (!user)
+        #login-form(style='display: none;')
+            .container
+                form(method="post", action='/login')
+                    .form-row
+                        .form-group.col
+                            input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
+                    .form-row
+                        .form-group.col
+                            input.login-form-input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
+                    .form-row
+                        .form-group.col
+                            button.btn.login-form-btn Log In
+
     #burger-btn
         .bar#bar-1
         .bar#bar-2
@@ -74,16 +88,3 @@ block navbar
                     li.nav-item
                         a.nav-link(href='/logout') Logout
 
-    if (!user)
-        #login-form(style='display: none;')
-            .container
-                form(method="post", action='/login')
-                    .form-row
-                        .form-group.col
-                            input.login-form-input.form-control(type='text', placeholder='Email', name='email', required, autocomplete='email')
-                    .form-row
-                        .form-group.col
-                            input.login-form-input.form-control(type='password', placeholder='Password', name='password', required, autocomplete='current-password')
-                    .form-row
-                        .form-group.col
-                            button.btn.login-form-btn Log In

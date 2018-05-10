@@ -465,9 +465,10 @@ footer {
   margin-top: 1rem;
   border-top: solid 1px @grey-dark;
   border-bottom: solid 1px @grey-dark;
+  min-height: 18rem;
 
   .restaurant-description {
-    height: 2rem;
+    min-height: 2rem;
   }
 
   .carousel {
@@ -1290,6 +1291,14 @@ label.star:hover ~ label.star span::before {
       margin: 0 auto;
     }
   }
+
+  #res-col-4 {
+    display: none;
+  }
+
+  img.index-image {
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1306,9 +1315,16 @@ label.star:hover ~ label.star span::before {
   img #restaurant-list .slideshow-wrapper.slideshow {
     float: none;
   }
+
+  #res-col-3 {
+    display: none;
+  }
 }
 
 @media (max-width: 576px) {
   // hide navbar contents and show hamburger menu
+  #res-col-2 {
+    display: none;
+  }
 }
 
