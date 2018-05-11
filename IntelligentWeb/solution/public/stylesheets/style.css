@@ -421,6 +421,12 @@ footer .footer-right {
 #index-carousel ol.carousel-indicators li.active {
   background-color: #919191;
 }
+#res-col-1 p.d-block.restaurant-category,
+#res-col-2 p.d-block.restaurant-category,
+#res-col-3 p.d-block.restaurant-category,
+#res-col-4 p.d-block.restaurant-category {
+  margin: 10px;
+}
 a.login-helper {
   display: inline;
 }

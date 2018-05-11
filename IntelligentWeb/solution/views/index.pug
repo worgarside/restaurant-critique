@@ -92,29 +92,29 @@ block content
                     span.oi.oi-magnifying-glass.post-space(aria-hidden='true')
                     | Search by cuisine type
                 img.index-image.img-thumbnail(src='/images/site/index-image-3.jpg')
-
-        br
-        h2 Search by Type of Cuisine
-        - var categoryCount = categories.length
-        - var categorySection = Math.ceil(categoryCount/8)
         .row
-            .col#res-col-1
-                - var c = 0
-                while c < categorySection
-                    p.d-block.restaurant-category= categories[c].name
-                    - c++
-            .col#res-col-2
-                while c < categorySection * 2
-                    p.d-block.restaurant-category= categories[c].name
-                    - c++
-            .col#res-col-3
-                while c < categorySection * 3
-                    p.d-block.restaurant-category= categories[c].name
-                    - c++
-            .col#res-col-4
-                while c < categorySection * 4
-                    p.d-block.restaurant-category= categories[c].name
-                    - c++
+            .col
+                h2 Search by Type of Cuisine
+                - var categoryCount = categories.length
+                - var categorySection = Math.ceil(categoryCount/8)
+                .row
+                    .col#res-col-1
+                        - var c = 0
+                        while c < categorySection
+                            p.d-block.restaurant-category= categories[c].name
+                            - c++
+                    .col#res-col-2
+                        while c < categorySection * 2
+                            p.d-block.restaurant-category= categories[c].name
+                            - c++
+                    .col#res-col-3
+                        while c < categorySection * 3
+                            p.d-block.restaurant-category= categories[c].name
+                            - c++
+                    .col#res-col-4
+                        while c < categorySection * 4
+                            p.d-block.restaurant-category= categories[c].name
+                            - c++
 
 
     script(type='text/javascript', src='/javascripts/index.js')
