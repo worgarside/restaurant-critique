@@ -22,6 +22,17 @@ const detailsImage = $('#details-image');
 const user = JSON.parse(userVar);
 let imageURL = '';
 
+// ================ Button Alignment ================ \\
+
+$(window).resize(function() {
+    if ($(window).width() < 1080) {
+        $('.btn-group').addClass('btn-group-vertical');
+    } else {
+        $('.btn-group').removeClass('btn-group-vertical');
+    }
+});
+
+
 // ================ Name ================ \\
 
 editName.click(() => {

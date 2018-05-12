@@ -11,10 +11,10 @@ block content
                 br
                 br
         .row
-            .col-10.offset-1
+            .col.col-lg-10.offset-lg-1
                 form#edit-restaurant-form(action='/restaurant/edit/submit_edit', method='post', enctype="multipart/form-data")
                     .form-row
-                        .col-6
+                        .col-12.col-lg-6
                             .form-row.form-group
                                 label.col-2.col-form-label(for='name') Name:
                                 .col-10
@@ -103,7 +103,7 @@ block content
                                         #category-selected
                                         input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
                                         #category-dropdown
-                        .col-5.offset-1
+                        .col-12.col-lg-5.offset-lg-1
                             .form-row#restaurant-images
                                 .col
                                     p Upload Images
@@ -132,16 +132,16 @@ block content
                                             .col
                                                 p Restaurant Features
                                         .form-row
-                                            .col-3.offset-8
+                                            .col-3.col-md-2.col-lg-4.offset-6.offset-lg-8
                                                 p.float-left No
                                                 p.float-right Yes
                                         each id in Object.keys(restaurant.features)
                                             - var feature = restaurant.features[id].name
                                             - var value = restaurant.features[id].value
                                             .form-row
-                                                .col-7.text-right
+                                                .col-6.col-lg-7.text-right
                                                     p= feature
-                                                .col-3.offset-1
+                                                .col-3.col-md-2.col-lg-4.offset-lg-1
                                                     .wrapper
                                                         case value
                                                             when true
@@ -181,7 +181,7 @@ block content
                             input#submit(type='submit')
 
                     .form-row
-                        .form-group.col.offset-7
+                        .form-group.col
                             br
                             if (!user.verified.flag)
                                 .form-row
@@ -195,9 +195,9 @@ block content
                             else
                                 .form-row
                                     .col
-                                        button.btn#save-restaurant(type='button') Save Restaurant for Later
                                         input.d-none#verified-flag(type='checkbox', name='verified', checked)
                                         button.btn.float-right#publish-restaurant(type='button') Publish Restaurant
+                                        button.btn.float-right#save-restaurant(type='button') Save Restaurant for Later
 
     script const restaurantCategories = `!{JSON.stringify(restaurant.categories)}`;
     script const restaurantImages = `!{JSON.stringify(restaurant.images)}`;

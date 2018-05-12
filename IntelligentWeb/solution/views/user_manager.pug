@@ -9,7 +9,7 @@ block content
                 br
 
         .row
-            .col-8.offset-2
+            .col-12.col-lg-8.offset-lg-2
                 .card
                     #header-details.card-header
                         button.btn.btn-link.collapsed(data-toggle='collapse', data-target='#collapse-details') Details
@@ -154,8 +154,10 @@ block content
                             each restaurant, restaurantIndex in restaurants
                                 .row
                                     .col-8
-                                        h5.mb-0= restaurant.name
-                                        p.mb-0= restaurant.address.formattedAddress
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                h5.mb-0= restaurant.name
+                                                p.mb-0= restaurant.address.formattedAddress
                                     if restaurant.published
                                         .col-4
                                             .vert-center-parent

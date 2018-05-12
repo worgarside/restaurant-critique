@@ -166,7 +166,7 @@ router.get('/restaurant/edit/:_id', (req, res) => {
         .lean()
         .exec()
         .then((restaurant) => {
-                if (!categories) {
+                if (!allCategories) {
                     getAllCategories()
                         .then(() => {
                             if (req.user && restaurant.creator._id === req.user._id) {
