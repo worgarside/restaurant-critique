@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
     Restaurant.aggregate(
         [
             {
-                "$match": {'searchable.all': {$regex: re}},
+                "$match": {'published': true, 'searchable.all': {$regex: re}},
             },
             {
                 "$project": {

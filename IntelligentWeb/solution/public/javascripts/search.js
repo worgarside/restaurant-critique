@@ -70,15 +70,16 @@ function getRestaurantDiv(restaurant, index) {
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlighted"></span>`;
+            htmlStars += `<span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star"></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-check oi-star"></span>`;
         }
 
         htmlStars += `</div>`;
     }
+
 
     const htmlAddress = `
           </div>

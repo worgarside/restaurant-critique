@@ -30,7 +30,7 @@ function refreshTopRestaurants() {
     restaurantRefresh = new Date();
     console.log('\x1b[33m%s\x1b[0m', 'refreshTopRestaurants()');
 
-    return Restaurant.find({}).sort({averageRating: -1}).limit(5).select({
+    return Restaurant.find({published: true}).sort({averageRating: -1}).limit(5).select({
         'name': 1,
         'address.formattedAddress': 1,
         'description': 1,
