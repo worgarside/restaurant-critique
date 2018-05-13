@@ -131,8 +131,6 @@ function sendImage(userId, imageBlob) {
         dataType: 'json',
         data: data,
         success: (data) => {
-            // const token = data.token;
-            // location.reload();
             console.log("Success");
         },
         error:
