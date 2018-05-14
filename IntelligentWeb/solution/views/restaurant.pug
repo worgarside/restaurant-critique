@@ -1,228 +1,218 @@
 extends mixins/layout
 
 block content
-    if restaurant.published
-        #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
-        br
-        .container#restaurant-page-override
-            .row
-                .col
-                    h1.d-inline-block= restaurant.name
-                    if restaurant.averageRating
-                        .d-inline-block.ml-4
-                            - var starRating = Math.round(restaurant.averageRating)
-                            - var starCount = 0
-                            while starCount < starRating
-                                span.oi.oi-star.star-highlight(aria-hidden='true')
-                                - starCount ++
-                            while starCount < 5
-                                span.oi.oi-star(aria-hidden='true')
-                                - starCount ++
-                            h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
-                    else
-                        .d-inline-block.ml-4
-                            span.oi.oi-star(aria-hidden='true')
-                            span.oi.oi-star(aria-hidden='true')
-                            span.oi.oi-star(aria-hidden='true')
-                            span.oi.oi-star(aria-hidden='true')
-                            span.oi.oi-star(aria-hidden='true')
-                            h4.rating-value.d-inline.pre-space No Ratings Yet
-            .row
-                .col
-                    p.restaurant-address= restaurant.address.formattedAddress
-            .row
-                .col
-                    each category, index in restaurant.categories
-                        if index < 7
-                            p.restaurant-category= category.name
-                        else if index === 8
-                            a.btn.btn-link(href='#') View more...
-
-            hr
-            .row
-                .col-lg-8.col-md-12.col-sm-12
-                    // TODO no image handling
-                    #restaurant-image-carousel.carousel.slide
-                        .carousel-inner
-                            each image, index in restaurant.images
-                                div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
-                                    .d-flex
-                                        img(src=`/images/restaurants/${restaurant._id}/${image}`)
-                        a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
-                            span.carousel-control-prev-icon(aria-hidden='true')
-                        a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
-                            span.carousel-control-next-icon(aria-hidden='true')
-
-                .col-lg-4
-                    .row
-                        .col-lg-12
-                            #contact-info
-                                h4 Contact Information
-                                p
-                                    span.oi.oi-browser.post-space(aria-hidden='true')
-                                    | Official Website:&nbsp;
-                                    if restaurant.contact.url && restaurant.contact.phone !== ''
-                                        a.ml-1(href=`${restaurant.contact.url}`, target='_blank') #{restaurant.contact.url}
-                                    else
-                                        small.ml-1 Not added yet
-                                p
-                                    span.oi.oi-book.post-space(aria-hidden='true')
-                                    | Read the menu:&nbsp;
-                                    if restaurant.contact.menu
-                                        a.ml-1(href=`${restaurant.contact.menu}`, target='_blank') #{restaurant.contact.menu}
-                                    else
-                                        small.ml-1 Not added yet
-                                p.mb-0
-                                    span.oi.oi-phone.post-space(aria-hidden='true')
-                                    | Phone No.:&nbsp;
-                                    if restaurant.contact.phone
-                                        a.ml-1(href=`tel: ${restaurant.contact.phone}`) #{restaurant.contact.phone}
-                                    else
-                                        small.ml-1 Not added yet
-                    hr
-                    .row
-                        .col-lg-12
-                            #opening-times
-                                h4 Opening Times
-                                each times, index in restaurant.openingTimes
-                                    .row
-                                        .col-2.offset-1.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
-                                            p.mb-2= daysOfWeek[index]
-                                        .col-4.col-sm-4.col-md-3.col-lg-6.text-center
-                                            if times[0] && times[1]
-                                                - var oH = Math.floor(times[0]/60);
-                                                - var oM = (times[0]%60).toString().padEnd(2, '0');
-                                                - var cH = Math.floor(times[1]/60);
-                                                - var cM = (times[1]%60).toString().padEnd(2, '0');
-                                                p.mb-2 #{oH}:#{oM} - #{cH}:#{cM}
-                                            else
-                                                p.mb-2 Closed
-            br
-            .row
-                .col-lg-6
-                    h4 Overview
-                    p= restaurant.description
-                .col-lg-6#features
-                    h4 #{restaurant.name}'s Features:
-                    each feature in restaurant.features
-                        if feature.value
-                            p.restaurant-feature-true= feature.name
-                        else
-                            p.restaurant-feature-false= feature.name
-            br
-            .row
-                .col
-                    h4 Location & Directions
-                    #restaurant-current-map
-            hr
-            .row
-                .col#reviews
-                    h4 Reviews
-                    each review in reviews
-                        br
-                        .row.no-gutters
-                            .col-lg-2.col-md-12
-                                .text-center
-                                    img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
-                                    h5.mb-0 #{review.author.forename} #{review.author.surname}
-                                    - var month = review.updatedAt.getMonth() + 1
-                                    - var day = (review.updatedAt.getDate() < 10) ? "0" + review.updatedAt.getDate() : review.updatedAt.getDate()
-                                    - var year = review.updatedAt.getFullYear()
-                                    - var niceDate = `${month}/${day}/${year}`;
-                                    p.mt-1.review-date= niceDate
-                            .col-lg-6.col-md-8
-                                .row.mb-2
-                                    .col
-                                        - var starRating = Math.round(review.restaurantRating)
-                                        - var starCount = 0
-                                        while starCount < starRating
-                                            span.oi.oi-star.star-highlight(aria-hidden='true')
-                                            - starCount ++
-                                        while starCount < 5
-                                            span.oi.oi-star(aria-hidden='true')
-                                            - starCount ++
-                                        // TODO: make sure review title length isn't huge for wrapping
-                                        h5.d-inline.ml-2 #{review.title}
-                                .row
-                                    .col-lg-12
-                                        p.mb-0 #{review.body}
-                            .col-lg-4.col-md-4
-                                .vert-center-parent
-                                    .vert-center-child#review-image-container
-                                        if review.images.length === 1
-                                            .review-image-main
-                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-
-                                        else if review.images.length > 1
-                                            table#review-image-table
-                                                tr
-                                                    td(rowspan='2')
-                                                        .review-image-main
-                                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-                                                    td
-                                                        .review-image-secondary
-                                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
-                                                tr
-                                                    td
-                                                        .review-image-secondary(style='margin-top: 1px;')
-                                                            if review.images[2]
-                                                                img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
-            br
-            .row
-                .col
-                    hr
-                    hr
-                    form#review-form(action='/restaurant/add_review' method='POST' enctype='multipart/form-data')
-                        .form-row
-                            .form-group.col
-                                .stars
-                                    input#star-5.star(type='radio', name='star', value='5')
-                                    label.star(for='star-5')
-                                        span.oi.oi-star
-                                    input#star-4.star(type='radio', name='star', value='4')
-                                    label.star(for='star-4')
-                                        span.oi.oi-star
-                                    input#star-3.star(type='radio', name='star', value='3')
-                                    label.star(for='star-3')
-                                        span.oi.oi-star
-                                    input#star-2.star(type='radio', name='star', value='2')
-                                    label.star(for='star-2')
-                                        span.oi.oi-star
-                                    input#star-1.star(type='radio', name='star', value='1')
-                                    label.star(for='star-1')
-                                        span.oi.oi-star
-                        .form-row
-                            .form-group.col
-                                label(for='review-title') Title
-                                input.form-control#review-title(type='text', name='title', placeholder='Title of review' required)
-                        .form-row
-                            .form-group.col
-                                label(for='review-message') Review
-                                textarea.form-control#review-message(name='body', placeholder='Your message', style='height:100px' required)
-                        .form-row
-                            .form-group.col
-                                input#uploadedFile(type='file', name='uploadedFile', accept='image/*')
-                        .form-row
-                            .form-group.col
-                                input.form-control#submit(type='submit', value='Submit')
-                    hr
-                    hr
-            .row
-                video#video(autoplay='')
-                button#takephoto Take snapshot
-                button#confirmphoto Confirm taken photo
-                button#retakephoto Retake photo
-                canvas#canvas
-    else
+    #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+    br
+    .container#restaurant-page-override
         .row
             .col
-                .text-center
+                h1.d-inline-block= restaurant.name
+                if restaurant.averageRating
+                    .d-inline-block.ml-4
+                        - var starRating = Math.round(restaurant.averageRating)
+                        - var starCount = 0
+                        while starCount < starRating
+                            span.oi.oi-star.star-highlight(aria-hidden='true')
+                            - starCount ++
+                        while starCount < 5
+                            span.oi.oi-star(aria-hidden='true')
+                            - starCount ++
+                        h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
+                else
+                    .d-inline-block.ml-4
+                        span.oi.oi-star(aria-hidden='true')
+                        span.oi.oi-star(aria-hidden='true')
+                        span.oi.oi-star(aria-hidden='true')
+                        span.oi.oi-star(aria-hidden='true')
+                        span.oi.oi-star(aria-hidden='true')
+                        h4.rating-value.d-inline.pre-space No Ratings Yet
+        .row
+            .col
+                p.restaurant-address= restaurant.address.formattedAddress
+        .row
+            .col
+                each category, index in restaurant.categories
+                    if index < 7
+                        p.restaurant-category= category.name
+                    else if index === 8
+                        a.btn.btn-link(href='#') View more...
+
+        hr
+        .row
+            .col-lg-8.col-md-12.col-sm-12
+                // TODO no image handling
+                #restaurant-image-carousel.carousel.slide
+                    .carousel-inner
+                        each image, index in restaurant.images
+                            div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
+                                .d-flex
+                                    img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                    a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
+                        span.carousel-control-prev-icon(aria-hidden='true')
+                    a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
+                        span.carousel-control-next-icon(aria-hidden='true')
+
+            .col-lg-4
+                .row
+                    .col-lg-12
+                        #contact-info
+                            h4 Contact Information
+                            p
+                                span.oi.oi-browser.post-space(aria-hidden='true')
+                                | Official Website:&nbsp;
+                                if restaurant.contact.url && restaurant.contact.phone !== ''
+                                    a.ml-1(href=`${restaurant.contact.url}`, target='_blank') #{restaurant.contact.url}
+                                else
+                                    small.ml-1 Not added yet
+                            p
+                                span.oi.oi-book.post-space(aria-hidden='true')
+                                | Read the menu:&nbsp;
+                                if restaurant.contact.menu
+                                    a.ml-1(href=`${restaurant.contact.menu}`, target='_blank') #{restaurant.contact.menu}
+                                else
+                                    small.ml-1 Not added yet
+                            p.mb-0
+                                span.oi.oi-phone.post-space(aria-hidden='true')
+                                | Phone No.:&nbsp;
+                                if restaurant.contact.phone
+                                    a.ml-1(href=`tel: ${restaurant.contact.phone}`) #{restaurant.contact.phone}
+                                else
+                                    small.ml-1 Not added yet
+                hr
+                .row
+                    .col-lg-12
+                        #opening-times
+                            h4 Opening Times
+                            each times, index in restaurant.openingTimes
+                                .row
+                                    .col-2.offset-1.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
+                                        p.mb-2= daysOfWeek[index]
+                                    .col-4.col-sm-4.col-md-3.col-lg-6.text-center
+                                        if times[0] && times[1]
+                                            - var oH = Math.floor(times[0]/60);
+                                            - var oM = (times[0]%60).toString().padEnd(2, '0');
+                                            - var cH = Math.floor(times[1]/60);
+                                            - var cM = (times[1]%60).toString().padEnd(2, '0');
+                                            p.mb-2 #{oH}:#{oM} - #{cH}:#{cM}
+                                        else
+                                            p.mb-2 Closed
+        br
+        .row
+            .col-lg-6
+                h4 Overview
+                p= restaurant.description
+            .col-lg-6#features
+                h4 #{restaurant.name}'s Features:
+                each feature in restaurant.features
+                    if feature.value
+                        p.restaurant-feature-true= feature.name
+                    else
+                        p.restaurant-feature-false= feature.name
+        br
+        .row
+            .col
+                h4 Location & Directions
+                #restaurant-current-map
+        hr
+        .row
+            .col#reviews
+                h4 Reviews
+                each review in reviews
                     br
-                    br
-                    br
-                    br
-                    h1 404 Page Not Found
-                    h5 This URL is not available on this server.
+                    .row.no-gutters
+                        .col-lg-2.col-md-12
+                            .text-center
+                                img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
+                                h5.mb-0 #{review.author.forename} #{review.author.surname}
+                                - var month = review.updatedAt.getMonth() + 1
+                                - var day = (review.updatedAt.getDate() < 10) ? "0" + review.updatedAt.getDate() : review.updatedAt.getDate()
+                                - var year = review.updatedAt.getFullYear()
+                                - var niceDate = `${month}/${day}/${year}`;
+                                p.mt-1.review-date= niceDate
+                        .col-lg-6.col-md-8
+                            .row.mb-2
+                                .col
+                                    - var starRating = Math.round(review.restaurantRating)
+                                    - var starCount = 0
+                                    while starCount < starRating
+                                        span.oi.oi-star.star-highlight(aria-hidden='true')
+                                        - starCount ++
+                                    while starCount < 5
+                                        span.oi.oi-star(aria-hidden='true')
+                                        - starCount ++
+                                    // TODO: make sure review title length isn't huge for wrapping
+                                    h5.d-inline.ml-2 #{review.title}
+                            .row
+                                .col-lg-12
+                                    p.mb-0 #{review.body}
+                        .col-lg-4.col-md-4
+                            .vert-center-parent
+                                .vert-center-child#review-image-container
+                                    if review.images.length === 1
+                                        .review-image-main
+                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+
+                                    else if review.images.length > 1
+                                        table#review-image-table
+                                            tr
+                                                td(rowspan='2')
+                                                    .review-image-main
+                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                                td
+                                                    .review-image-secondary
+                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
+                                            tr
+                                                td
+                                                    .review-image-secondary(style='margin-top: 1px;')
+                                                        if review.images[2]
+                                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+        br
+        .row
+            .col
+                hr
+                hr
+                form#review-form(action='/restaurant/add_review' method='POST' enctype='multipart/form-data')
+                    .form-row
+                        .form-group.col
+                            .stars
+                                input#star-5.star(type='radio', name='star', value='5')
+                                label.star(for='star-5')
+                                    span.oi.oi-star
+                                input#star-4.star(type='radio', name='star', value='4')
+                                label.star(for='star-4')
+                                    span.oi.oi-star
+                                input#star-3.star(type='radio', name='star', value='3')
+                                label.star(for='star-3')
+                                    span.oi.oi-star
+                                input#star-2.star(type='radio', name='star', value='2')
+                                label.star(for='star-2')
+                                    span.oi.oi-star
+                                input#star-1.star(type='radio', name='star', value='1')
+                                label.star(for='star-1')
+                                    span.oi.oi-star
+                    .form-row
+                        .form-group.col
+                            label(for='review-title') Title
+                            input.form-control#review-title(type='text', name='title', placeholder='Title of review' required)
+                    .form-row
+                        .form-group.col
+                            label(for='review-message') Review
+                            textarea.form-control#review-message(name='body', placeholder='Your message', style='height:100px' required)
+                    .form-row
+                        .form-group.col
+                            input#uploadedFile(type='file', name='uploadedFile', accept='image/*')
+                    .form-row
+                        .form-group.col
+                            input.form-control#submit(type='submit', value='Submit')
+                hr
+                hr
+        .row
+            video#video(autoplay='')
+            button#takephoto Take snapshot
+            button#confirmphoto Confirm taken photo
+            button#retakephoto Retake photo
+            canvas#canvas
+
 
 
     script const restaurantId = `#{restaurant._id}`

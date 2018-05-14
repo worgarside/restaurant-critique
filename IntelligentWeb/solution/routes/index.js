@@ -216,33 +216,36 @@ router.get('/restaurant/:url', (req, res) => {
         .lean()
         .exec()
         .then((restaurant) => {
-            const reviewIdList = restaurant.reviews;
-            let reviewList = [];
-            let reviewPromises = [];
+            if (restaurant.published) {
+                const reviewIdList = restaurant.reviews;
+                let reviewList = [];
+                let reviewPromises = [];
 
-            for (id of reviewIdList) {
-                reviewPromises.push(Review.findOne({_id: id})
-                    .then((review) => {
-                        reviewList.push(review);
+                for (id of reviewIdList) {
+                    reviewPromises.push(Review.findOne({_id: id})
+                        .then((review) => {
+                            reviewList.push(review);
+                        })
+                        .catch((err) => {
+                            console.log(`Error fetching review: ${err}`);
+                        }));
+                }
+
+                Promise.all(reviewPromises)
+                    .then(() => {
+                        res.render('restaurant', {
+                            title: title,
+                            user: req.user,
+                            restaurant: restaurant,
+                            reviews: reviewList
+                        });
                     })
-                    .catch((err) => {
-                        console.log(`Error fetching review: ${err}`);
-                    }));
+                    .catch(() => {
+                        res.render('errors/404', {title: title, user: req.user});
+                    })
+            }else{
+                res.render('errors/404', {title: title, user: req.user});
             }
-
-            Promise.all(reviewPromises)
-                .then(() => {
-                    res.render('restaurant', {
-                        title: title,
-                        user: req.user,
-                        restaurant: restaurant,
-                        reviews: reviewList
-                    });
-                })
-                .catch(() => {
-                    res.render('errors/404', {title: title, user: req.user});
-                })
-
         })
         .catch((err) => {
             console.log(`Restaurant error: ${err}`);
