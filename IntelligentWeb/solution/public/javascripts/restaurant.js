@@ -13,25 +13,22 @@ const retakePhotoButton = $('#retakephoto');
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
 const formSubmit = $('#submit');
-let imageUpload = $('#uploadedFile');
-
-let images = [];
 
 
 $(() => {
-    video = document.querySelector('video');
-    canvas = window.canvas = document.querySelector('canvas');
-    canvas.width = 480;
-    canvas.height = 360;
-
-    const constraints = {
-        audio: false,
-        video: {facingMode: "environment"}
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(handleSuccess)
-        .catch(handleError);
+    // video = document.querySelector('video');
+    // canvas = window.canvas = document.querySelector('canvas');
+    // canvas.width = 480;
+    // canvas.height = 360;
+    //
+    // const constraints = {
+    //     audio: false,
+    //     video: {facingMode: "environment"}
+    // };
+    //
+    // navigator.mediaDevices.getUserMedia(constraints)
+    //     .then(handleSuccess)
+    //     .catch(handleError);
 });
 
 
@@ -69,6 +66,49 @@ function initMap() {
     });
 }
 
+// ================================ Image Viewer ================================ \\
+
+const imageViewer = $('#full-screen-image-viewer');
+
+$('img.pointer').click(function () {
+    const currentSource = this.src; // https://localhost:3000/images/restaurants/5ab1677c521e5430fc7d2490/2018-03-17%2022-25-18.png
+    const currentImage = currentSource.substr(currentSource.lastIndexOf('/') + 1).replace(/(%20)/, ' ');
+    const primaryPos = images.indexOf(currentImage);
+    createImageViewer(primaryPos);
+});
+
+function createImageViewer(primaryPos) {
+    const viewerImages = [];
+
+    for (let i = 0; i < images.length; i++) {
+        let pointer = (i + primaryPos) % images.length;
+        viewerImages.push(images[pointer]);
+    }
+
+    // noinspection FallThroughInSwitchStatementJS
+    switch(viewerImages.length) {
+        case 4:
+            imageViewer.find('#fourth-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[3]}`);
+        case 3:
+            imageViewer.find('#third-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[2]}`);
+        case 2:
+            imageViewer.find('#second-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[1]}`);
+        case 1:
+            imageViewer.find('#main-image').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[0]}`);
+            break;
+        case 0:
+            break;
+        default:
+            imageViewer.find('#fourth-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[3]}`);
+            imageViewer.find('#third-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[2]}`);
+            imageViewer.find('#second-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[1]}`);
+            imageViewer.find('#main-image').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[0]}`);
+    }
+
+    imageViewer.css('display', 'unset');
+}
+
+// ================================ Review Submission ================================ \\
 
 //buttons for camera
 takePhotoButton.click(() => {
@@ -117,7 +157,7 @@ function handleError(error) {
 
 
 function sendImage(userId, imageBlob) {
-    console.log("Image sendiing to Server");
+    console.log("Image sending to Server");
 
     let data = {
         userId: userId,
@@ -134,7 +174,7 @@ function sendImage(userId, imageBlob) {
             console.log("Success");
         },
         error:
-             (err) => {
+            (err) => {
                 alert(`Error: ${err.status}: ${err.statusText}`);
             }
     });

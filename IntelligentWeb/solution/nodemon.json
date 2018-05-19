@@ -1,0 +1,3 @@
+{
+  "ignore": ["public/javascripts/*", "db_regen.js", "app/dp_populate.js"]
+}

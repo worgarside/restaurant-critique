@@ -92,6 +92,9 @@ span.oi.oi-star.star-highlight {
   color: #919191;
   font-size: 1.25rem;
 }
+.pointer {
+  cursor: pointer;
+}
 #main-logo {
   width: 400px;
   background: url('/images/site/logo-wide-white.png') bottom center no-repeat;
@@ -970,6 +973,60 @@ p.login-helper {
 }
 #restaurant-page-override #reviews .review-date {
   color: #919191;
+}
+#full-screen-image-viewer {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000000;
+  display: none;
+}
+#full-screen-image-viewer table {
+  background-color: black;
+  height: 810px;
+}
+#full-screen-image-viewer table,
+#full-screen-image-viewer table td {
+  padding: 0;
+  margin: 0 auto;
+}
+#full-screen-image-viewer table td#first-image {
+  width: 1080px;
+  height: 810px;
+}
+#full-screen-image-viewer table td#first-image img#main-image {
+  height: 100%;
+}
+#full-screen-image-viewer table td#first-image #user-info {
+  position: absolute;
+  margin-top: -5rem;
+  background-color: rgba(0, 0, 0, 0.25);
+  margin-left: 1rem;
+}
+#full-screen-image-viewer table td#first-image #user-info img#user-image {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem;
+}
+#full-screen-image-viewer table td#first-image #user-info p {
+  color: white;
+  margin: 0 1rem;
+}
+#full-screen-image-viewer table td#second-image,
+#full-screen-image-viewer table td#third-image,
+#full-screen-image-viewer table td#fourth-image {
+  text-align: center;
+  height: 270px;
+  width: 360px;
+}
+#full-screen-image-viewer table td#second-image img,
+#full-screen-image-viewer table td#third-image img,
+#full-screen-image-viewer table td#fourth-image img {
+  max-height: 100%;
+  max-width: 100%;
 }
 canvas#canvas {
   display: none;

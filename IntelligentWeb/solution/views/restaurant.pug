@@ -3,6 +3,24 @@ extends mixins/layout
 block content
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     br
+    #full-screen-image-viewer
+        .vert-center-parent
+            .vert-center-child
+                table
+                    tr
+                        td.text-center#first-image(rowspan='4')
+                            img#main-image(src='')
+                            #user-info
+                                img.d-inline#user-image(src ='/images/userImages/worgarside-gmail-com')
+                                p.d-inline Will Garside
+                        td#second-image
+                            img(src='')
+                    tr
+                        td#third-image
+                            img(src='')
+                    tr
+                        td#fourth-image
+                            img(src='')
     .container#restaurant-page-override
         .row
             .col
@@ -46,7 +64,7 @@ block content
                         each image, index in restaurant.images
                             div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
                                 .d-flex
-                                    img(src=`/images/restaurants/${restaurant._id}/${image}`)
+                                    img.pointer(src=`/images/restaurants/${restaurant._id}/${image}`)
                     a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
                         span.carousel-control-prev-icon(aria-hidden='true')
                     a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
@@ -111,6 +129,7 @@ block content
         br
         .row
             .col
+                // TODO: directions on map
                 h4 Location & Directions
                 #restaurant-current-map
         hr
@@ -150,22 +169,24 @@ block content
                                 .vert-center-child#review-image-container
                                     if review.images.length === 1
                                         .review-image-main
-                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                            img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
 
                                     else if review.images.length > 1
                                         table#review-image-table
                                             tr
                                                 td(rowspan='2')
                                                     .review-image-main
-                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
                                                 td
                                                     .review-image-secondary
-                                                        img(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
+                                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
                                             tr
                                                 td
-                                                    .review-image-secondary(style='margin-top: 1px;')
-                                                        if review.images[2]
-                                                            img(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+                                                    if review.images[2]
+                                                        .review-image-secondary(style='margin-top: 1px;')
+                                                                img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+                                                    else
+                                                        .review-image-secondary.pointer(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
         br
         .row
             .col
@@ -206,17 +227,17 @@ block content
                             input.form-control#submit(type='submit', value='Submit')
                 hr
                 hr
-        .row
+
+        //.row
             video#video(autoplay='')
             button#takephoto Take snapshot
             button#confirmphoto Confirm taken photo
             button#retakephoto Retake photo
             canvas#canvas
 
-
-
-    script const restaurantId = `#{restaurant._id}`
-    script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`)
+    script const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
+    script const restaurantId = `#{restaurant._id}`;
+    script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(type='text/javascript', src='/javascripts/review.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')
