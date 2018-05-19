@@ -69,15 +69,34 @@ function initMap() {
 // ================================ Image Viewer ================================ \\
 
 const imageViewer = $('#full-screen-image-viewer');
+let primaryPos = 0;
+const prevImage = imageViewer.find('#prev-image');
+const nextImage = imageViewer.find('#next-image');
 
 $('img.pointer').click(function () {
     const currentSource = this.src; // https://localhost:3000/images/restaurants/5ab1677c521e5430fc7d2490/2018-03-17%2022-25-18.png
     const currentImage = currentSource.substr(currentSource.lastIndexOf('/') + 1).replace(/(%20)/, ' ');
-    const primaryPos = images.indexOf(currentImage);
-    createImageViewer(primaryPos);
+    primaryPos = images.indexOf(currentImage);
+    updateImageViewer();
 });
 
-function createImageViewer(primaryPos) {
+prevImage.click(() => {
+    primaryPos --;
+    if (primaryPos < 0){
+        primaryPos += images.length;
+    }
+    console.log(primaryPos);
+    updateImageViewer();
+});
+
+nextImage.click(() => {
+    primaryPos ++;
+    primaryPos = primaryPos % images.length;
+    console.log(primaryPos);
+    updateImageViewer();
+});
+
+function updateImageViewer() {
     const viewerImages = [];
 
     for (let i = 0; i < images.length; i++) {
@@ -86,7 +105,7 @@ function createImageViewer(primaryPos) {
     }
 
     // noinspection FallThroughInSwitchStatementJS
-    switch(viewerImages.length) {
+    switch (viewerImages.length) {
         case 4:
             imageViewer.find('#fourth-image img').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[3]}`);
         case 3:
