@@ -4,14 +4,15 @@ block content
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     br
     #full-screen-image-viewer
+        span.oi.oi-x#close-button
         .vert-center-parent
             .vert-center-child
                 table
                     tr
                         td.text-center#first-image(rowspan='4')
                             img#main-image(src='')
-                            #user-info
-                                img.d-inline#user-image(src ='/images/userImages/worgarside-gmail-com')
+                            #author-info
+                                img.d-inline#author-image(src ='/images/userImages/worgarside-gmail-com')
                                 p.d-inline Will Garside
                             .vert-center-parent#next-image
                                 .vert-center-child
@@ -142,7 +143,9 @@ block content
         .row
             .col#reviews
                 h4 Reviews
+                - var reviewImages = []
                 each review in reviews
+                    - reviewImages.push({author: review.author, images: review.images})
                     br
                     .row.no-gutters
                         .col-lg-2.col-md-12
@@ -241,9 +244,11 @@ block content
             button#retakephoto Retake photo
             canvas#canvas
 
-    script const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
-    script const restaurantId = `#{restaurant._id}`;
-    script const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
+    script.
+        const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};
+        const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
+        const restaurantId = `#{restaurant._id}`;
+        const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(type='text/javascript', src='/javascripts/review.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

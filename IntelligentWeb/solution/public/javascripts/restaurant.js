@@ -72,28 +72,36 @@ const imageViewer = $('#full-screen-image-viewer');
 let primaryPos = 0;
 const prevImage = imageViewer.find('#prev-image');
 const nextImage = imageViewer.find('#next-image');
+const closeButton = imageViewer.find('#close-button');
+const authorInfo = imageViewer.find('#author-info');
+const authorImage = authorInfo.find('#author-image');
+const authorName = authorInfo.find('p');
+
+console.log(reviewImages);
 
 $('img.pointer').click(function () {
-    const currentSource = this.src; // https://localhost:3000/images/restaurants/5ab1677c521e5430fc7d2490/2018-03-17%2022-25-18.png
+    const currentSource = this.src;
     const currentImage = currentSource.substr(currentSource.lastIndexOf('/') + 1).replace(/(%20)/, ' ');
     primaryPos = images.indexOf(currentImage);
     updateImageViewer();
 });
 
 prevImage.click(() => {
-    primaryPos --;
-    if (primaryPos < 0){
+    primaryPos--;
+    if (primaryPos < 0) {
         primaryPos += images.length;
     }
-    console.log(primaryPos);
     updateImageViewer();
 });
 
 nextImage.click(() => {
-    primaryPos ++;
+    primaryPos++;
     primaryPos = primaryPos % images.length;
-    console.log(primaryPos);
     updateImageViewer();
+});
+
+closeButton.click(() => {
+    imageViewer.hide();
 });
 
 function updateImageViewer() {
@@ -124,8 +132,32 @@ function updateImageViewer() {
             imageViewer.find('#main-image').attr('src', `/images/restaurants/${restaurantId}/${viewerImages[0]}`);
     }
 
-    imageViewer.css('display', 'unset');
+    for (let i = 0; i < reviewImages.length; i++) {
+        if (reviewImages[i].images.includes(viewerImages[0])) {
+            authorName.text(`${reviewImages[i].author.forename} ${reviewImages[i].author.surname}`);
+            authorImage.attr('src', `/images/userImages/${reviewImages[i].author.reducedID}`);
+            authorInfo.show();
+            break;
+        } else {
+            authorInfo.hide();
+        }
+    }
+
+    imageViewer.show();
 }
+
+$(document)
+    .mousedown((e) => {
+        if (!imageViewer.find('table').is(e.target) && imageViewer.find('table').has(e.target).length === 0) {
+            imageViewer.hide();
+        }
+    })
+    .keydown((e) => {
+        if (e.keyCode === 27) { // escape key maps to keycode `27`
+            imageViewer.hide();
+        }
+    });
+
 
 // ================================ Review Submission ================================ \\
 

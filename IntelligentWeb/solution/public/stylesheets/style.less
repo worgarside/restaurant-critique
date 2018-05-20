@@ -127,7 +127,7 @@ span.oi.oi-star {
   font-size: 1.25rem;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
@@ -1151,6 +1151,18 @@ p.login-helper {
   z-index: 1000000;
   display: none;
 
+  span.oi.oi-x#close-button {
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: white;
+    padding: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+    margin: 54px 0 1rem 0;
+    z-index: 1000001;
+  }
+
   table {
     background-color: black;
     height: 810px;
@@ -1164,13 +1176,15 @@ p.login-helper {
       height: 810px;
       img#main-image {
         height: 100%;
+        max-width: 100%;
+        object-fit: contain;
       }
-      #user-info {
+      #author-info {
         position: absolute;
         margin-top: -5rem;
         background-color: rgba(0, 0, 0, 0.25);
         margin-left: 1rem;
-        img#user-image {
+        img#author-image {
           width: 3rem;
           height: 3rem;
           margin: 0.5rem;
@@ -1181,35 +1195,35 @@ p.login-helper {
         }
       }
 
-      #next-image, #prev-image{
+      #next-image, #prev-image {
         position: absolute;
         width: 100px;
         cursor: pointer;
         height: inherit;
         margin-top: -810px;
 
-        span{
+        span {
           position: absolute;
           padding: 20px;
           margin: -10px 0 0 -20px;
         }
       }
 
-      #prev-image{
-        &:hover span{
+      #prev-image {
+        &:hover span {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdbdbd' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
         }
-        span{
+        span {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23555555' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
         }
       }
 
-      #next-image{
+      #next-image {
         margin-left: 980px;
-        &:hover span{
+        &:hover span {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdbdbd' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
         }
-        span{
+        span {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23555555' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
         }
       }
