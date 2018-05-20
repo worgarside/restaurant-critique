@@ -1142,6 +1142,11 @@ p.login-helper {
 }
 
 #full-screen-image-viewer {
+  @table-height: 810px;
+  @table-width: 1440px;
+  @first-image-width: 0.75*@table-width;
+  @secondary-image-width: 0.25*@table-width;
+
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -1165,15 +1170,15 @@ p.login-helper {
 
   table {
     background-color: black;
-    height: 810px;
+    height: @table-height;
     &, td {
       padding: 0;
       margin: 0 auto;
     }
 
     td#first-image {
-      width: 1080px;
-      height: 810px;
+      width: @first-image-width;
+      height: @table-height;
       img#main-image {
         height: 100%;
         max-width: 100%;
@@ -1200,7 +1205,7 @@ p.login-helper {
         width: 100px;
         cursor: pointer;
         height: inherit;
-        margin-top: -810px;
+        margin-top: -@table-height;
 
         span {
           position: absolute;
@@ -1219,7 +1224,7 @@ p.login-helper {
       }
 
       #next-image {
-        margin-left: 980px;
+        margin-left: @first-image-width - 100;
         &:hover span {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdbdbd' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
         }
@@ -1231,8 +1236,8 @@ p.login-helper {
     }
     td#second-image, td#third-image, td#fourth-image {
       text-align: center;
-      height: 270px;
-      width: 360px;
+      height: @table-height/3;
+      width: @secondary-image-width;
       img {
         max-height: 100%;
         max-width: 100%;
@@ -1353,6 +1358,33 @@ label.star:hover ~ label.star span::before {
 
 // ================================ Responsive Reflow ================================ \\
 
+@media (max-width: 1480px) {
+  #full-screen-image-viewer {
+    @table-height: 472px;
+    @table-width: 840px;
+    @first-image-width: 0.75*@table-width;
+    @secondary-image-width: 0.25*@table-width;
+
+    table {
+      height: @table-height;
+      td#first-image {
+        width: @first-image-width;
+        height: @table-height;
+        #next-image, #prev-image {
+          margin-top: -@table-height;
+        }
+        #next-image {
+          margin-left: @first-image-width - 100;
+        }
+      }
+      td#second-image, td#third-image, td#fourth-image {
+        height: @table-height/3;
+        width: @secondary-image-width;
+      }
+    }
+  }
+}
+
 @media (max-width: 992px) {
   .input-group#index-search-group {
     width: 500px;
@@ -1408,6 +1440,32 @@ label.star:hover ~ label.star span::before {
   img.index-image {
     margin-bottom: 20px;
   }
+
+  #full-screen-image-viewer {
+    @table-height: 236px;
+    @table-width: 480px;
+    @first-image-width: 0.75*@table-width;
+    @secondary-image-width: 0.25*@table-width;
+
+    table {
+      height: @table-height;
+      td#first-image {
+        width: @first-image-width;
+        height: @table-height;
+        #next-image, #prev-image {
+          margin-top: -@table-height;
+        }
+        #next-image {
+          margin-left: @first-image-width - 100;
+        }
+      }
+      td#second-image, td#third-image, td#fourth-image {
+        height: @table-height/3;
+        width: @secondary-image-width;
+      }
+    }
+  }
+
 }
 
 @media (max-width: 768px) {

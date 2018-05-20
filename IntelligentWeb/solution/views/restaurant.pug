@@ -65,17 +65,22 @@ block content
         hr
         .row
             .col-lg-8.col-md-12.col-sm-12
-                // TODO no image handling
-                #restaurant-image-carousel.carousel.slide
-                    .carousel-inner
-                        each image, index in restaurant.images
-                            div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
-                                .d-flex
-                                    img.pointer(src=`/images/restaurants/${restaurant._id}/${image}`)
-                    a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
-                        span.carousel-control-prev-icon(aria-hidden='true')
-                    a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
-                        span.carousel-control-next-icon(aria-hidden='true')
+                if restaurant.images.length > 0
+                    #restaurant-image-carousel.carousel.slide
+                        .carousel-inner
+                            each image, index in restaurant.images
+                                div(class=index === 0 ? 'carousel-item active' : 'carousel-item')
+                                    .d-flex
+                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${image}`)
+                        a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
+                            span.carousel-control-prev-icon(aria-hidden='true')
+                        a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
+                            span.carousel-control-next-icon(aria-hidden='true')
+                else
+                    .vert-center-parent.border.border-dark
+                        .vert-center-child
+                            .text-center
+                                p No images for this restaurant yet!
 
             .col-lg-4
                 .row
