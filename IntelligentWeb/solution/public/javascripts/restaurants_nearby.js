@@ -5,6 +5,7 @@
  */
 
 let lat, lng, map, userMarker;
+let markerList = [];
 
 $(() => {
     $('#nearby-map-wrapper').hover(
@@ -104,8 +105,6 @@ function createMap() {
         google.maps.event.addListener(userMarker, 'dragend', () => {
             lat = userMarker.getPosition().lat();
             lng = userMarker.getPosition().lng();
-            // TODO: think about this
-            // map.setCenter({lat: lat, lng: lng});
             updateList();
         });
     } else {
@@ -139,7 +138,6 @@ function createMap() {
  */
 function updateList() {
     const coordinates = JSON.stringify({lat: lat, lng: lng});
-    console.log(`Sending ${coordinates} to AJAX POST`);
 
     $.ajax({
         url: '/restaurants-nearby',
@@ -147,7 +145,7 @@ function updateList() {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (result) => {
-            console.log('AJAX Succeeded');
+            clearMarkers();
             processRestaurants(result);
         },
         error: (err) => {
@@ -171,7 +169,7 @@ function processRestaurants(results) {
         scaledSize: new google.maps.Size(25, 42)
     };
 
-    let markerList = [];
+    markerList = [];
     let infoWindow = new google.maps.InfoWindow();
     let contentList = [];
 
@@ -183,29 +181,27 @@ function processRestaurants(results) {
             initSlideshow(index);
 
             const infoWindowContent = `
-            <div class="container" id="info-${index}" style="max-width: 400px;">
-                <div class="row">
-                    <div class="col">
-                        <table>
-                            <tr">
-                                <td><h5 style="font-weight: 400; max-width: 200px; min-width: 130px;">${restaurant.name}</h5></td>
-                                <td style="width: 95px; vertical-align: bottom;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><p style="margin-bottom: 0;">${restaurant.description}</p></td>
-                            </tr>
-                        </table>
+                <div class="container" id="info-${index}" style="max-width: 400px;">
+                    <div class="row">
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td><h5 style="font-weight: 400; max-width: 200px; min-width: 130px;">${restaurant.name}</h5></td>
+                                    <td style="width: 95px; vertical-align: bottom;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><p class="mb-0">${restaurant.description}</p></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="javascript:void(0)">More info</a>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="javascript:void(0)">More info</a>
-                    </div>
-                </div>
-            </div>
-        `;
-
-            // infoWindow.setContent(infoWindowContent);
+            `;
 
             contentList.push(infoWindowContent);
 
@@ -214,7 +210,6 @@ function processRestaurants(results) {
                 position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
                 icon: icon
             });
-
             markerList.push(newMarker);
         }
     }
@@ -222,9 +217,14 @@ function processRestaurants(results) {
     for (let i = 0, marker; marker = markerList[i]; i++) {
         google.maps.event.addListener(marker, 'click', function () {
             infoWindow.setContent(contentList[i]);
-            console.log(contentList[i]);
             infoWindow.open(map, this);
         });
+    }
+}
+
+function clearMarkers(){
+    for (let i = 0; i < markerList.length; i++) {
+        markerList[i].setMap(null);
     }
 }
 
@@ -232,7 +232,7 @@ function processRestaurants(results) {
  * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
  * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
  * @param {Restaurant} restaurant The Restaurant being previewed
- * @param {Integer} index The number the Restaurant is on the page, used for setting button IDs
+ * @param {number} index The number the Restaurant is on the page, used for setting button IDs
  * @returns {string} The generated HTML to be appended to the page
  * @author Will Garside
  */
@@ -257,11 +257,11 @@ function createRestaurantPreview(restaurant, index) {
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlight"></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
         }
 
         htmlStars += `</div>`;
