@@ -159,7 +159,7 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020], [540, 1020]],
         description: 'Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards',
-        priceRange: {lower: 2.5, upper: 7, band: 1},
+        priceRange: {lower: 2.5, upper: 7, band: 0},
         categories: [
             {name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'},
             {name: 'Late Night Food'}, {name: 'Kebab'}
@@ -209,7 +209,7 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Afro-Portuguese chain restaurant serving flame-grilled chicken in spicy chilli sauce.',
-        priceRange: {lower: 3.95, upper: 15.2, band: 2},
+        priceRange: {lower: 3.95, upper: 15.2, band: 1},
         categories: [
             {name: 'Chicken'}, {name: 'Portuguese'}, {name: 'Spicy'},
             {name: 'Burgers'}, {name: 'Casual'}
@@ -399,7 +399,7 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1380], [720, 1260]],
         description: 'Chain serving specialist burgers on sourdough or brioche buns and hand-mixed milkshakes.',
-        priceRange: {lower: 5.45, upper: 10.95, band: 2},
+        priceRange: {lower: 5.45, upper: 10.95, band: 1},
         categories: [
             {name: 'Burgers'}, {name: 'Spicy'}, {name: 'Student Discount'}, {name: 'Casual'}, {name: 'American'},
             {name: 'British'}
@@ -477,7 +477,7 @@ function populateRestaurants(insertPromises) {
             latitude: 53.484547,
             longitude: -2.236922
         },
-        priceRange: {lower: 9, upper: 12, band: 2},
+        priceRange: {lower: 9, upper: 12, band: 1},
         contact: {
             url: 'www.almostfamousburgers.com',
             phone: '01612449422'
@@ -524,7 +524,7 @@ function populateRestaurants(insertPromises) {
             phone: '01142792901'
         },
         openingTimes: [[720, 1440], [720, 1440], [720, 1440], [720, 1440], [720, 90], [720, 90], [660, 1440]],
-        priceRange: {lower: 6, upper: 11.5, band: 2},
+        priceRange: {lower: 6, upper: 11.5, band: 1},
         categories: [{name: 'Burgers'}, {name: 'Casual'}],
         features: {
             alcohol: {value: true},
@@ -658,7 +658,7 @@ function populateRestaurants(insertPromises) {
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         description: 'Chefs in striped t-shirts tossing handmade pizzas where everyone can see.',
-        priceRange: {lower: 10.95, upper: 12.95, band: 3},
+        priceRange: {lower: 10.95, upper: 12.95, band: 2},
         categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Pizza'}],
         features: {
             alcohol: {value: true},

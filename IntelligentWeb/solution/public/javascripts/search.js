@@ -4,17 +4,93 @@
  * @author Rufus Cope, Will Garside
  */
 
+let matchedRestaurants = [];
+
+const searchInput = $('#search-input');
+const searchButton = $("#search-button");
+const ratingSlider = $('#rating-slider');
+const ratingSliderValue = $('#rating-slider-value');
+const distanceSlider = $('#distance-slider');
+const distanceSliderValue = $('#distance-slider-value');
+const priceRangeSlider = $('#price-range-slider');
+const priceRangeSliderValue = $('#price-range-slider-value');
+const priceRanges = ['Inexpensive', 'Medium', 'Above Average', 'Premium'];
+
+searchButton.click((e) => {
+    e.preventDefault();
+    search(searchInput.val());
+});
+
+$(() => {
+    const query = sessionStorage.getItem('query');
+    if (query) {
+        search(query);
+        searchInput.val(query);
+        sessionStorage.removeItem('query');
+    }
+});
+
+/**
+ * Sends an AJAX POST request to the server to get the User's search results
+ * @param {String} query The User's search query
+ * @see routes/search.js
+ */
+function search(query) {
+    const searchQueryData = JSON.stringify({searchQueryData: query});
+    $.ajax({
+        url: '/search',
+        data: searchQueryData,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (restaurants) => {
+            matchedRestaurants = restaurants;
+            updateDisplayedRestaurants();
+            displaySearchResults();
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+}
+
+ratingSlider.on('input', () => {
+    ratingSliderValue.text((ratingSlider.val() / 10).toString().padEnd(3, '.0'));
+    updateDisplayedRestaurants();
+});
+
+distanceSlider.on('input', () => {
+    distanceSliderValue.text(`${distanceSlider.val()}km`);
+    updateDisplayedRestaurants();
+});
+
+priceRangeSlider.on('input', () => {
+    priceRangeSliderValue.text(priceRanges[priceRangeSlider.val()]);
+    updateDisplayedRestaurants();
+});
+
+// ================================ Results HTML Management ================================ \\
+
+// TODO jsdoc
+function updateDisplayedRestaurants() {
+    for (const [index, restaurant] of matchedRestaurants.entries()) {
+        if ((restaurant.averageRating >= ratingSlider.val() / 10) && (restaurant.priceRange.band <= priceRangeSlider.val())) {
+            $(`#restaurant-container-${index}`).css('display', 'block');
+        } else {
+            $(`#restaurant-container-${index}`).css('display', 'none');
+        }
+    }
+}
+
 /**
  * Displays the list of search results on the page
- * @param {Array} restaurants The array of results returned from the AJAX request
  */
-function displaySearchResults(restaurants) {
+function displaySearchResults() {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
-    if (restaurants.length > 0) {
-        for (const [index, restaurant] of restaurants.entries()) {
-            console.log();
+    if (matchedRestaurants.length > 0) {
+        console.log(`${matchedRestaurants.length} matched`);
+        for (const [index, restaurant] of matchedRestaurants.entries()) {
             let restaurantContainer = document.createElement('div');
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
             restaurantListDOM.appendChild(restaurantContainer);
@@ -28,32 +104,18 @@ function displaySearchResults(restaurants) {
 }
 
 /**
- * Displays a 'No results found' message to the User
- * @returns {string} HTML to show no results were found
- */
-function displayNoResultsFound() {
-    return `
-        <div class="row">
-                <div class="col">
-                    <h2> No Results Found, Please Search Again</h2>
-                </div>
-        </div> `;
-}
-
-/**
  * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
  * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
  * @param {Restaurant} restaurant The Restaurant being previewed
- * @param {Integer} index The number the Restaurant is on the page, used for setting button IDs
+ * @param {Number} index The number the Restaurant is on the page, used for setting button IDs
  * @returns {string} The generated HTML to be appended to the page
  * @author Will Garside
  */
 function getRestaurantDiv(restaurant, index) {
-    console.log(`${restaurant.name} @ I${index}: S${restaurant.score}`);
     const htmlStart = `
         <div class="container nearby-restaurant" id="restaurant-container-${index}">
             <div class="row">
-                <div class="col-8">
+                <div class="col-12 col-lg-8">
                     <div class="vert-center-parent">
                         <div class="vert-center-child">
                             <div class="row">
@@ -70,16 +132,15 @@ function getRestaurantDiv(restaurant, index) {
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlight"></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-check oi-star"></span>`;
+            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
         }
 
         htmlStars += `</div>`;
     }
-
 
     const htmlAddress = `
           </div>
@@ -93,7 +154,7 @@ function getRestaurantDiv(restaurant, index) {
 
     let htmlCategories = `
         <div class="row">
-            <div style="margin: -5px" class="col">
+            <div class="col">
     `;
 
     if (restaurant.categories.length > 0) {
@@ -123,49 +184,49 @@ function getRestaurantDiv(restaurant, index) {
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="vert-center-parent">
-                    <div class="vert-center-child">
-                    <div class="row">
-                        <div class="col">
-                            <div class="float-right">
-                                <div class="slideshow-wrapper">
-                                    <div class="slideshow">
+            <div class="col-12 col-lg-4">
+                        <div class="row">
+                            <div class="col">
+                                <div class="restaurant-nearby-images">
+                                    <div class="slideshow-wrapper">
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
+        htmlSlideshow += '<div class="slideshow">';
         for (const image of restaurant.images) {
             htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
             imageCount += 1;
+            if (imageCount >= 3) {
+                // only show first 3 images
+                break;
+            }
         }
+        htmlSlideshow += "</div>";
     }
-
-    htmlSlideshow += "</div>";
 
     if (imageCount > 1) {
         htmlSlideshow += `
                 <div id="button-prev-${index}" class="slideshow-prev">
-                    <span aria-hidden="true" class="oi oi-chevron-left"></span>
+                    <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>
                 </div>
                 <div id="button-next-${index}" class="slideshow-next">
-                    <span aria-hidden="true" class="oi oi-chevron-right"></span>
+                    <span aria-hidden="true" class="oi oi-check oi-chevron-right"></span>
                 </div>
         `;
     }
 
     htmlSlideshow += "</div>";
 
-    const htmlEnd = `</div></div></div></div></div></div></div></div>`;
-
+    const htmlEnd = `</div></div></div></div></div></div>`;
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
 
 /**
  * Image slideshow navigation using buttons on page
  * JQuery selectors have to be re-used due to the changing classes of the images
- * @param {Integer} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * @param {Number} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
  * getting mixed up
  * @author Will Garside
  */
@@ -205,45 +266,18 @@ function initSlideshow(value) {
     });
 }
 
-
-$(() => {
-    const query = sessionStorage.getItem('query');
-    if (query != null) {
-        search(query);
-        $('#search-input').val(query);
-        sessionStorage.removeItem('query');
-    }
-});
-
 /**
- * Sends an AJAX POST request to the server to get the User's search results
- * @param {String} query The User's search query
- * @see routes/search.js
+ * Displays a 'No results found' message to the User
+ * @returns {string} HTML to show no results were found
  */
-function search(query) {
-    const searchQueryData = JSON.stringify({searchQueryData: query});
-    $.ajax({
-        url: '/search',
-        data: searchQueryData,
-        contentType: 'application/json; charset=utf-8',
-        type: 'POST',
-        success: (result) => {
-            displaySearchResults(result)
-        },
-        error: (err) => {
-            console.log(`Error: ${JSON.stringify(err)}`);
-        }
-    });
+function displayNoResultsFound() {
+    // TODO add a restaurant here
+    return `
+        <div class="row">
+                <div class="col">
+                    <h2> No results found, please search again</h2>
+                </div>
+        </div> `;
 }
-
-
-/**
- * Calls the search function when the button is clicked
- */
-$("#search-button").click((e) => {
-    e.preventDefault();
-    const query = $('#search-input').val();
-    search(query);
-});
 
 console.log('Loaded search.js');

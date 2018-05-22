@@ -37,7 +37,9 @@ router.post('/', (req, res) => {
                 "$project": {
                     'name': 1,
                     'address': {'formattedAddress': 1},
+                    'location.coordinates': 1,
                     'description': 1,
+                    'priceRange.band': 1,
                     'categories': 1,
                     'images': 1,
                     'averageRating': 1,
@@ -50,7 +52,6 @@ router.post('/', (req, res) => {
             if (err) {
                 console.log(`Error: ${err}`);
             }
-
             res.send(applyWeightings(restaurants, searchQueryData));
         }
     )

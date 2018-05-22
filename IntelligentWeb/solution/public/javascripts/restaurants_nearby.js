@@ -144,9 +144,9 @@ function updateList() {
         data: coordinates,
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
-        success: (result) => {
+        success: (restaurants) => {
             clearMarkers();
-            processRestaurants(result);
+            processRestaurants(restaurants);
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -222,7 +222,8 @@ function processRestaurants(results) {
     }
 }
 
-function clearMarkers(){
+// TODO jsdoc
+function clearMarkers() {
     for (let i = 0; i < markerList.length; i++) {
         markerList[i].setMap(null);
     }
@@ -305,7 +306,6 @@ function createRestaurantPreview(restaurant, index) {
         `;
     }
 
-    //TODO: only show top 5 images on nearby page?
     let htmlSlideshow = `
                     </div>
                 </div>
@@ -324,6 +324,10 @@ function createRestaurantPreview(restaurant, index) {
         for (const image of restaurant.images) {
             htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
             imageCount += 1;
+            if (imageCount >= 3) {
+                // only show first 3 images
+                break;
+            }
         }
         htmlSlideshow += "</div>";
     }

@@ -1353,7 +1353,54 @@ label.star:hover ~ label.star span::before {
     padding: 6px 18px;
     display: none;
   }
+}
 
+// ================================ Search Page ================================ \\
+
+#search {
+  &-bg-card {
+    background-color: @grey-lightest;
+  }
+  &-form {
+    margin: 1rem;
+    .input-group {
+      border: solid 1px @grey-mid;
+      border-radius: 4px;
+    }
+  }
+  &-input {
+    font-size: 1.25rem;
+  }
+  &-button {
+    width: 100px;
+  }
+}
+
+#advanced-search {
+  &-toggle {
+    font-size: 1.2rem;
+    color: @grey-darkest;
+    padding-left: 12px;
+    &:hover {
+      color: @grey-mid;
+    }
+  }
+  &-card {
+    .card-header {
+      background-color: @grey-light;
+    }
+  }
+  &-collapsible {
+    #rating-slider, #distance-slider, #price-range-slider {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    span.oi.oi-star.star-highlight.ml-1.float-right {
+      margin-top: 2px;
+      font-size: 1rem;
+    }
+  }
 }
 
 // ================================ Responsive Reflow ================================ \\

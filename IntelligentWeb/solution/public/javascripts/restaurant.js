@@ -80,10 +80,12 @@ const authorName = authorInfo.find('p');
 console.log(reviewImages);
 
 $('img.pointer').click(function () {
-    const currentSource = this.src;
-    const currentImage = currentSource.substr(currentSource.lastIndexOf('/') + 1).replace(/(%20)/, ' ');
-    primaryPos = images.indexOf(currentImage);
-    updateImageViewer();
+    if ($(window).width() > 700) {
+        const currentSource = this.src;
+        const currentImage = currentSource.substr(currentSource.lastIndexOf('/') + 1).replace(/(%20)/, ' ');
+        primaryPos = images.indexOf(currentImage);
+        updateImageViewer();
+    }
 });
 
 prevImage.click(() => {

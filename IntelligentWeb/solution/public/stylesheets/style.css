@@ -1154,6 +1154,43 @@ label.star:hover ~ label.star span::before {
   padding: 6px 18px;
   display: none;
 }
+#search-bg-card {
+  background-color: #efefef;
+}
+#search-form {
+  margin: 1rem;
+}
+#search-form .input-group {
+  border: solid 1px #919191;
+  border-radius: 4px;
+}
+#search-input {
+  font-size: 1.25rem;
+}
+#search-button {
+  width: 100px;
+}
+#advanced-search-toggle {
+  font-size: 1.2rem;
+  color: #222222;
+  padding-left: 12px;
+}
+#advanced-search-toggle:hover {
+  color: #919191;
+}
+#advanced-search-card .card-header {
+  background-color: #bdbdbd;
+}
+#advanced-search-collapsible #rating-slider,
+#advanced-search-collapsible #distance-slider,
+#advanced-search-collapsible #price-range-slider {
+  padding-left: 0;
+  padding-right: 0;
+}
+#advanced-search-collapsible span.oi.oi-star.star-highlight.ml-1.float-right {
+  margin-top: 2px;
+  font-size: 1rem;
+}
 @media (max-width: 1480px) {
   #full-screen-image-viewer table {
     height: 472px;

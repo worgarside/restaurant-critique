@@ -26,11 +26,8 @@ loginBtn.on('click', () => {
 });
 
 if (!userLoggedIn) {
-
     $(document)
         .mousedown((e) => {
-
-
             // check mouse loc isn't form, button or descendant of form
             if (!loginForm.is(e.target) && !loginBtn.is(e.target) && !loginWarning.is(e.target) && loginForm.has(e.target).length === 0) {
                 loginForm.fadeOut();
@@ -102,7 +99,7 @@ burgerButton.find(burgerLinks).click((e) => {
     e.stopPropagation();
 });
 
-burgerLoginLink.click(()=>{
+burgerLoginLink.click(() => {
     burgerLoginForm.toggle(200);
 });
 

@@ -91,14 +91,14 @@ block content
                                 span.oi.oi-browser.post-space(aria-hidden='true')
                                 | Official Website:&nbsp;
                                 if restaurant.contact.url && restaurant.contact.phone !== ''
-                                    a.ml-1(href=`${restaurant.contact.url}`, target='_blank') #{restaurant.contact.url}
+                                    a.ml-1(href=`//${restaurant.contact.url}` target='_blank') #{restaurant.contact.url}
                                 else
                                     small.ml-1 Not added yet
                             p
                                 span.oi.oi-book.post-space(aria-hidden='true')
                                 | Read the menu:&nbsp;
                                 if restaurant.contact.menu
-                                    a.ml-1(href=`${restaurant.contact.menu}`, target='_blank') #{restaurant.contact.menu}
+                                    a.ml-1(href=`${restaurant.contact.menu}` target='_blank') #{restaurant.contact.menu}
                                 else
                                     small.ml-1 Not added yet
                             p.mb-0
