@@ -191,7 +191,7 @@ function updateDisplayedRestaurants() {
                         break;
                     }
                 }
-                if (!categoryMatch){
+                if (!categoryMatch) {
                     // selected category hasn't been found, so break the loop and the restaurant will be hidden
                     break;
                 }
@@ -208,14 +208,20 @@ function updateDisplayedRestaurants() {
             }
         }
 
+        // noinspection EqualityComparisonWithCoercionJS
         if (
-            (restaurant.averageRating >= ratingSlider.val() / 10) &&
+            ( // no average rating, so only display when rating slider is 0 || rating is greater than the slider value
+                (!restaurant.averageRating && ratingSlider.val() == 0) ||
+                (restaurant.averageRating >= ratingSlider.val() / 10)
+            ) &&
             (restaurant.priceRange.band <= priceRangeSlider.val()) &&
             categoryMatch &&
             featureMatch
         ) {
             $(`#restaurant-container-${index}`).css('display', 'block');
         } else {
+            // noinspection EqualityComparisonWithCoercionJS
+            console.log(`Hiding ${restaurant.name}: ${(!restaurant.averageRating && ratingSlider.val() == 0) || (restaurant.averageRating >= ratingSlider.val() / 10)} + ${restaurant.priceRange.band <= priceRangeSlider.val()} + ${categoryMatch} + ${featureMatch}`);
             $(`#restaurant-container-${index}`).css('display', 'none');
         }
     }
