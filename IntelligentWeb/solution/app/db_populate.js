@@ -37,7 +37,7 @@ const ID = {
  * @param {Array} insertPromises An array of Promises which all have to be fulfilled before disconnecting from the database
  */
 const populateFunction = function populateDatabase(insertPromises) {
-    populateCategories(insertPromises);
+    // populateCategories(insertPromises);
     populateUsers(insertPromises);
     populateRestaurants(insertPromises);
     populateReviews(insertPromises);
@@ -49,17 +49,11 @@ const populateFunction = function populateDatabase(insertPromises) {
  */
 function populateCategories(insertPromises) {
     const categories = [
-        'African', 'American', 'Arabic', 'Argentinian', 'Asian', 'Australian', 'Balti', 'Bangladeshi', 'Bar',
-        'Barbecue', 'Brazilian', 'Brew Pub', 'British', 'Cafe', 'Canadian', 'Cantonese', 'Caribbean',
-        'Central American', 'Central European', 'Chinese', 'Colombian', 'Contemporary', 'Cuban', 'Delicatessen',
-        'Diner', 'Eastern European', 'Egyptian', 'Ethiopian', 'European', 'Fast Food', 'French', 'Fusion',
-        'Gastropub', 'Georgian', 'German', 'Greek', 'Grill', 'Healthy', 'Hong Kong', 'Hungarian', 'Indian',
-        'International', 'Italian', 'Jamaican', 'Japanese', 'Korean', 'Latin', 'Lebanese', 'Malaysian',
-        'Mediterranean', 'Mexican', 'Middle Eastern', 'Minority Chinese', 'Moroccan', 'Nepalese', 'New Zealand',
-        'North Eastern Chinese', 'Pakistani', 'Persian', 'Peruvian', 'Pizza', 'Polish', 'Portuguese', 'Pub',
-        'Romanian', 'Russian', 'Scandinavian', 'Seafood', 'Shanghai', 'Soups', 'South American', 'Southwestern',
-        'Spanish', 'Sri Lankan', 'Steakhouse', 'Street Food', 'Sushi', 'Szechuan', 'Taiwanese', 'Thai', 'Tunisian',
-        'Turkish', 'Vietnamese', 'Wine Bar'
+        'American', 'Asian', 'Barbecue', 'British',
+        'Chinese', 'European', 'Fast Food', 'French', 'Fusion',
+        'Greek', 'Grilled', 'Healthy', 'Indian',
+        'Italian', 'Japanese', 'Latin', 'Mediterranean', 'Mexican',
+        'Pizza', 'Seafood', 'Spanish', 'Steakhouse', 'Street Food', 'Thai'
     ];
 
     for (let i = 0; i < categories.length; i++) {
@@ -161,8 +155,7 @@ function populateRestaurants(insertPromises) {
         description: 'Local kebab house with mixed reviews. A favourite with students and people with low hygiene standards',
         priceRange: {lower: 2.5, upper: 7, band: 0},
         categories: [
-            {name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'},
-            {name: 'Late Night Food'}, {name: 'Kebab'}
+            {name: 'Fast Food'}, {name: 'Chicken'}, {name: 'Convenient'}, {name: 'Inexpensive'}, {name: 'Kebab'}
         ],
         features: {
             alcohol: {value: false},
@@ -614,7 +607,7 @@ function populateRestaurants(insertPromises) {
         openingTimes: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1320]],
         description: 'Upscale chain restaurant with a contemporary interior and a menu of classic Italian specialities.',
         priceRange: {lower: 8, upper: 57.75, band: 3},
-        categories: [{name: 'Italian'}, {name: 'Premium'}, {name: 'Upscale'}],
+        categories: [{name: 'Italian'}, {name: 'Premium'}],
         features: {
             alcohol: {value: true},
             americanExpress: {value: true},
@@ -801,7 +794,7 @@ function populateRestaurants(insertPromises) {
         categories: [
             {name: 'Burrito'}, {name: 'Mexican'}, {name: 'Salad'}, {name: 'Chicken'}, {name: 'Barbecue'},
             {name: 'Fast Food'}, {name: 'Asian'}, {name: 'Barbecue'}, {name: 'Contemporary'}, {name: 'Delicatessen'},
-            {name: 'Fast Food'}, {name: 'Grill'}, {name: 'International'}, {name: 'Street Food'}
+            {name: 'Fast Food'}, {name: 'Grilled'}, {name: 'International'}, {name: 'Street Food'}
         ],
         features: {
             alcohol: {value: false},

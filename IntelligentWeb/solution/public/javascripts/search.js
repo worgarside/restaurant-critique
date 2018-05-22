@@ -5,7 +5,9 @@
  */
 
 let matchedRestaurants = [];
+let selectedCategories = [];
 
+const advancedSearchDiv = $('#advanced-search-collapsible');
 const searchInput = $('#search-input');
 const searchButton = $("#search-button");
 const ratingSlider = $('#rating-slider');
@@ -15,6 +17,8 @@ const distanceSliderValue = $('#distance-slider-value');
 const priceRangeSlider = $('#price-range-slider');
 const priceRangeSliderValue = $('#price-range-slider-value');
 const priceRanges = ['Inexpensive', 'Medium', 'Above Average', 'Premium'];
+const catNoneCheckbox = $('#cat-check-none');
+const catAllCheckbox = $('#cat-check-all');
 
 searchButton.click((e) => {
     e.preventDefault();
@@ -28,6 +32,10 @@ $(() => {
         searchInput.val(query);
         sessionStorage.removeItem('query');
     }
+
+    // for (const category of categories) {
+    //     selectedCategories.push(category);
+    // }
 });
 
 /**
@@ -44,8 +52,8 @@ function search(query) {
         type: 'POST',
         success: (restaurants) => {
             matchedRestaurants = restaurants;
-            updateDisplayedRestaurants();
             displaySearchResults();
+            updateDisplayedRestaurants();
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -68,12 +76,79 @@ priceRangeSlider.on('input', () => {
     updateDisplayedRestaurants();
 });
 
+advancedSearchDiv.find('input[type=checkbox]').change(function () {
+    if ((this.id !== 'cat-check-all') && (this.id !== 'cat-check-none')) {
+        if (this.checked) {
+            const categoryIndex = categories.map((cat) => {
+                return cat._id;
+            }).indexOf(this.id);
+            const objectFound = categories[categoryIndex];
+            selectedCategories.push(objectFound);
+        } else {
+            for (let i = 0; i < selectedCategories.length; i++) {
+                if (selectedCategories[i]._id === this.id) {
+                    selectedCategories.splice(i, 1);
+                }
+            }
+        }
+
+        if (selectedCategories.length === 0) {
+            catNoneCheckbox.prop('checked', true);
+            catAllCheckbox.prop('checked', false);
+        } else if (selectedCategories.length === categories.length) {
+            catNoneCheckbox.prop('checked', false);
+            catAllCheckbox.prop('checked', true);
+        } else {
+            catNoneCheckbox.prop('checked', false);
+            catAllCheckbox.prop('checked', false);
+        }
+    } else if (this.id === 'cat-check-all') {
+        selectedCategories= [];
+        for (const category of categories) {
+            $(`#${category._id}`).prop('checked', true);
+            const categoryIndex = categories.map((cat) => {
+                return cat._id;
+            }).indexOf(category._id);
+            const objectFound = categories[categoryIndex];
+            selectedCategories.push(objectFound);
+        }
+        catNoneCheckbox.prop('checked', false);
+    } else if (this.id === 'cat-check-none') {
+        for (const category of categories) {
+            $(`#${category._id}`).prop('checked', false);
+        }
+        selectedCategories= [];
+        catAllCheckbox.prop('checked', false);
+    }
+    console.log(selectedCategories);
+    updateDisplayedRestaurants();
+});
+
 // ================================ Results HTML Management ================================ \\
 
 // TODO jsdoc
 function updateDisplayedRestaurants() {
     for (const [index, restaurant] of matchedRestaurants.entries()) {
-        if ((restaurant.averageRating >= ratingSlider.val() / 10) && (restaurant.priceRange.band <= priceRangeSlider.val())) {
+
+        // TODO currently OR-ing categories - is this right?
+        let categoryMatch = false;
+        for (const category of selectedCategories) {
+            for (const restaurantCategory of restaurant.categories) {
+                categoryMatch = (category._id === restaurantCategory._id);
+                if (categoryMatch) {
+                    break;
+                }
+            }
+            if (categoryMatch) {
+                break;
+            }
+        }
+
+        if (
+            (restaurant.averageRating >= ratingSlider.val() / 10) &&
+            (restaurant.priceRange.band <= priceRangeSlider.val()) &&
+            categoryMatch
+        ) {
             $(`#restaurant-container-${index}`).css('display', 'block');
         } else {
             $(`#restaurant-container-${index}`).css('display', 'none');

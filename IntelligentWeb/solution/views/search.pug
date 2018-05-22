@@ -23,7 +23,7 @@ block content
                                 .card-body
                                     .row
                                         .col
-                                            label#rating-slider-label(for='rating-slider') Minimum Rating
+                                            h6.d-inline#rating-slider-label(for='rating-slider') Minimum Rating
                                             span.oi.oi-star.star-highlight.ml-1.float-right
                                             p.float-right.mb-0#rating-slider-value 0.0
                                             input.form-control#rating-slider(type='range' min='0' max='50' value='0')
@@ -32,13 +32,26 @@ block content
                                             p.float-right.mb-0#distance-slider-value 50km
                                             input.form-control#distance-slider(type='range' min='0' max='50' value='50')
                                         .col
-                                            label#price-range-slider-label(for='rating-slider') Price Range
+                                            h6.d-inline#price-range-slider-label(for='rating-slider') Price Range
                                             p.float-right.mb-0#price-range-slider-value Premium
                                             p.small.float-right.mb-0.mr-1.mt-1 Up to
                                             input.form-control#price-range-slider(type='range' min='0' max='3' value='3')
+                                    br
                                     .row
                                         .col
-                                            // category
+                                            h6 Categories
+                                            .row
+                                                .col-3
+                                                    input(type='checkbox' id=`cat-check-none` checked='checked')
+                                                    label.pre-space(for=`cat-check-none`) (Select none)
+                                                .col-3
+                                                    input(type='checkbox' name='categories' id=`cat-check-all`)
+                                                    label.pre-space(for=`cat-check-all`) (Select all)
+                                                each category in categories.sort()
+                                                    .col-3
+                                                        input(type='checkbox' id=`${category._id}`)
+                                                        label.pre-space(for=`${category._id}`) #{category.name}
+
                                     .row
                                         .col
                                             // features
@@ -46,4 +59,5 @@ block content
             .col
                 #restaurant-list
 
+    script const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
     script(type='text/javascript', src='/javascripts/search.js')

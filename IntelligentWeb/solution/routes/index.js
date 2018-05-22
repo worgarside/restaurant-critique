@@ -258,7 +258,7 @@ router.get('/restaurants-nearby', (req, res) => {
 });
 
 router.get('/search', (req, res) => {
-    res.render('search', {title: title, user: req.user});
+    res.render('search', {title: title, user: req.user, categories: allCategories});
 });
 
 router.get('/signup', (req, res) => {
