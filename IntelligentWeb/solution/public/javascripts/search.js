@@ -6,6 +6,7 @@
 
 let matchedRestaurants = [];
 let selectedCategories = [];
+let selectedFeatures = [];
 
 const advancedSearchDiv = $('#advanced-search-collapsible');
 const searchInput = $('#search-input');
@@ -19,6 +20,8 @@ const priceRangeSliderValue = $('#price-range-slider-value');
 const priceRanges = ['Inexpensive', 'Medium', 'Above Average', 'Premium'];
 const catNoneCheckbox = $('#cat-check-none');
 const catAllCheckbox = $('#cat-check-all');
+const featureNoneCheckbox = $('#feature-check-none');
+const featureAllCheckbox = $('#feature-check-all');
 
 searchButton.click((e) => {
     e.preventDefault();
@@ -76,7 +79,8 @@ priceRangeSlider.on('input', () => {
     updateDisplayedRestaurants();
 });
 
-advancedSearchDiv.find('input[type=checkbox]').change(function () {
+// TODO jsdoc
+advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
     if ((this.id !== 'cat-check-all') && (this.id !== 'cat-check-none')) {
         if (this.checked) {
             const categoryIndex = categories.map((cat) => {
@@ -103,7 +107,7 @@ advancedSearchDiv.find('input[type=checkbox]').change(function () {
             catAllCheckbox.prop('checked', false);
         }
     } else if (this.id === 'cat-check-all') {
-        selectedCategories= [];
+        selectedCategories = [];
         for (const category of categories) {
             $(`#${category._id}`).prop('checked', true);
             const categoryIndex = categories.map((cat) => {
@@ -117,10 +121,57 @@ advancedSearchDiv.find('input[type=checkbox]').change(function () {
         for (const category of categories) {
             $(`#${category._id}`).prop('checked', false);
         }
-        selectedCategories= [];
+        selectedCategories = [];
         catAllCheckbox.prop('checked', false);
     }
-    console.log(selectedCategories);
+    updateDisplayedRestaurants();
+});
+
+// TODO jsdoc
+advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
+    if ((this.id !== 'feature-check-all') && (this.id !== 'feature-check-none')) {
+        if (this.checked) {
+            const featureIndex = features.map((feature) => {
+                return feature.id;
+            }).indexOf(this.id);
+            const objectFound = features[featureIndex];
+            selectedFeatures.push(objectFound);
+        } else {
+            for (let i = 0; i < selectedFeatures.length; i++) {
+                if (selectedFeatures[i].id === this.id) {
+                    selectedFeatures.splice(i, 1);
+                }
+            }
+        }
+
+        if (selectedFeatures.length === 0) {
+            featureNoneCheckbox.prop('checked', true);
+            featureAllCheckbox.prop('checked', false);
+        } else if (selectedFeatures.length === features.length) {
+            featureNoneCheckbox.prop('checked', false);
+            featureAllCheckbox.prop('checked', true);
+        } else {
+            featureNoneCheckbox.prop('checked', false);
+            featureAllCheckbox.prop('checked', false);
+        }
+    } else if (this.id === 'feature-check-all') {
+        selectedFeatures = [];
+        for (const feature of features) {
+            $(`#${feature.id}`).prop('checked', true);
+            const featureIndex = features.map((feature) => {
+                return feature.id;
+            }).indexOf(feature.id);
+            const objectFound = features[featureIndex];
+            selectedFeatures.push(objectFound);
+        }
+        featureNoneCheckbox.prop('checked', false);
+    } else if (this.id === 'feature-check-none') {
+        for (const feature of features) {
+            $(`#${feature.id}`).prop('checked', false);
+        }
+        selectedFeatures = [];
+        featureAllCheckbox.prop('checked', false);
+    }
     updateDisplayedRestaurants();
 });
 
@@ -130,24 +181,38 @@ advancedSearchDiv.find('input[type=checkbox]').change(function () {
 function updateDisplayedRestaurants() {
     for (const [index, restaurant] of matchedRestaurants.entries()) {
 
-        // TODO currently OR-ing categories - is this right?
-        let categoryMatch = false;
-        for (const category of selectedCategories) {
-            for (const restaurantCategory of restaurant.categories) {
-                categoryMatch = (category._id === restaurantCategory._id);
-                if (categoryMatch) {
+        let categoryMatch = true;
+        if (!catNoneCheckbox.is(':checked')) {
+            for (const category of selectedCategories) {
+                for (const restaurantCategory of restaurant.categories) {
+                    categoryMatch = (category._id === restaurantCategory._id);
+                    if (categoryMatch) {
+                        // selected category has been found in restaurant, so move on to next selected category
+                        break;
+                    }
+                }
+                if (!categoryMatch){
+                    // selected category hasn't been found, so break the loop and the restaurant will be hidden
                     break;
                 }
             }
-            if (categoryMatch) {
-                break;
+        }
+
+        let featureMatch = true;
+        if (!featureNoneCheckbox.is(':checked')) {
+            for (const feature of selectedFeatures) {
+                featureMatch = (restaurant.features[feature.id].value);
+                if (!featureMatch) {
+                    break;
+                }
             }
         }
 
         if (
             (restaurant.averageRating >= ratingSlider.val() / 10) &&
             (restaurant.priceRange.band <= priceRangeSlider.val()) &&
-            categoryMatch
+            categoryMatch &&
+            featureMatch
         ) {
             $(`#restaurant-container-${index}`).css('display', 'block');
         } else {

@@ -37,7 +37,7 @@ block content
                                             p.small.float-right.mb-0.mr-1.mt-1 Up to
                                             input.form-control#price-range-slider(type='range' min='0' max='3' value='3')
                                     br
-                                    .row
+                                    .row#categories
                                         .col
                                             h6 Categories
                                             .row
@@ -45,19 +45,35 @@ block content
                                                     input(type='checkbox' id=`cat-check-none` checked='checked')
                                                     label.pre-space(for=`cat-check-none`) (Select none)
                                                 .col-3
-                                                    input(type='checkbox' name='categories' id=`cat-check-all`)
+                                                    input(type='checkbox' id=`cat-check-all`)
                                                     label.pre-space(for=`cat-check-all`) (Select all)
                                                 each category in categories.sort()
                                                     .col-3
                                                         input(type='checkbox' id=`${category._id}`)
                                                         label.pre-space(for=`${category._id}`) #{category.name}
-
-                                    .row
+                                    br
+                                    .row#features
                                         .col
-                                            // features
-        .row
+                                            h6 Features
+                                            .row
+                                                .col-3
+                                                    input(type='checkbox' id=`feature-check-none` checked='checked')
+                                                    label.pre-space(for=`feature-check-none`) (Select none)
+                                                .col-3
+                                                    input(type='checkbox' id=`feature-check-all`)
+                                                    label.pre-space(for=`feature-check-all`) (Select all)
+
+                                                // each key in Object.keys(features)
+                                                //    - var value = features[key].name
+                                                each feature in features
+                                                    .col-3
+                                                        input(type='checkbox' id=feature.id)
+                                                        label.pre-space(for=feature.id) #{feature.name}
+                .row
             .col
                 #restaurant-list
 
-    script const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
+    script.
+        const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
+        const features = !{JSON.stringify(features).replace(/<\//g, '<\\/')};
     script(type='text/javascript', src='/javascripts/search.js')

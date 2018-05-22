@@ -258,7 +258,14 @@ router.get('/restaurants-nearby', (req, res) => {
 });
 
 router.get('/search', (req, res) => {
-    res.render('search', {title: title, user: req.user, categories: allCategories});
+    const tempRestaurant = new Restaurant;
+
+    let featureArray = [];
+    for (const key of Object.keys(tempRestaurant.features)){
+        let value = tempRestaurant.features[key].name;
+        featureArray.push({id: key, name: value})
+    }
+    res.render('search', {title: title, user: req.user, categories: allCategories, features: featureArray});
 });
 
 router.get('/signup', (req, res) => {

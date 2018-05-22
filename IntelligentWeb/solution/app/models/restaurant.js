@@ -52,7 +52,7 @@ RestaurantSchema = Schema({
     // Features are boolean attributes, with friendly names set with default values
     features: {
         alcohol: {name: {type: String, default: 'Alcohol'}, value: Boolean},
-        americanExpress: {name: {type: String, default: 'Accepts American Express'}, value: Boolean},
+        americanExpress: {name: {type: String, default: 'Accepts Amex'}, value: Boolean},
         creditCard: {name: {type: String, default: 'Accepts Credit Cards'}, value: Boolean},
         delivery: {name: {type: String, default: 'Delivery'}, value: Boolean},
         highchairs: {name: {type: String, default: 'Highchairs Available'}, value: Boolean},
