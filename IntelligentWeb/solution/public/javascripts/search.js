@@ -305,7 +305,7 @@ function displaySearchResults() {
 
             initSlideshow(index);
 
-            if ((index + 1) % pageLength === 0 || index === ) {
+            if ((index + 1) % pageLength === 0 || index === queryMatches.length-1) {
                 htmlString += '</div>';
                 pageCount++;
             }
