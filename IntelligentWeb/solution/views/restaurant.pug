@@ -147,7 +147,7 @@ block content
             .col
                 .vert-center-parent
                     .vert-center-child
-                        button.float-right.btn.btn-outline-primary#dir-btn(type='button', onclick=`window.open('https://www.google.com/maps/dir/?api=1&destination=${restaurant.location.coordinates[1]},${restaurant.location.coordinates[0]}', '_blank');`) Get Directions
+                        button.float-right.btn.btn-outline-primary#get-directions(type='button', onclick=`window.open('https://www.google.com/maps/dir/?api=1&destination=${restaurant.location.coordinates[1]},${restaurant.location.coordinates[0]}', '_blank');`) Get Directions
         .row
             .col
                 #restaurant-current-map
@@ -250,24 +250,23 @@ block content
                 hr
 
         .row
-            video#video(autoplay='')
-            button#takephoto Take snapshot
-            button#confirmphoto Confirm taken photo
-            button#retakephoto Retake photo
-            canvas#canvas
+            video#live-video(autoplay='')
+            button#take-photo Take snapshot
+            button#confirm-photo(style='display: none;') Confirm taken photo
+            button#retake-photo(style='display: none;') Retake photo
+            canvas#new-image(style='display: none;')
         .row
-            canvas#storecanvas5
-            button#deletestorecanvas5 Delete 0
-        .row
-            canvas#storecanvas1
-            button#deletestorecanvas1 Delete 1
-            canvas#storecanvas2
-            button#deletestorecanvas2 Delete 2
-            canvas#storecanvas3
-            button#deletestorecanvas3 Delete 3
-            canvas#storecanvas4
-            button#deletestorecanvas4 Delete 4
-            button#uploadpics Upload
+            canvas.user-review-image#image-0
+            button.delete-image#delete-image-0 Delete 0
+            canvas.user-review-image#image-1
+            button.delete-image#delete-image-1 Delete 1
+            canvas.user-review-image#image-2
+            button.delete-image#delete-image-2 Delete 2
+            canvas.user-review-image#image-3
+            button.delete-image#delete-image-3 Delete 3
+            canvas.user-review-image#image-4
+            button.delete-image#delete-image-4 Delete 4
+            button#upload-pics Upload
 
 
 

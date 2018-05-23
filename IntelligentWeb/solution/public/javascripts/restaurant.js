@@ -5,58 +5,8 @@
  * @param {Array} coordinates
  */
 
-let video, canvas;
-const takePhotoButton = $('#takephoto');
-const confirmPhotoButton = $('#confirmphoto');
-const retakePhotoButton = $('#retakephoto');
 
-const uploadPictures = $('#uploadpics');
-
-const deleteCanvas0 = $('#deletestorecanvas5');
-const deleteCanvas1 = $('#deletestorecanvas1');
-const deleteCanvas2 = $('#deletestorecanvas2');
-const deleteCanvas3 = $('#deletestorecanvas3');
-const deleteCanvas4 = $('#deletestorecanvas4');
-
-
-const canvasContainer = $('#canvas');
-const videoContainer = $('#video');
-const formSubmit = $('#submit');
-let canvasContents = new Array(5).fill(false);
-
-const canvasStore0 = document.getElementById("storecanvas5");
-const canvasStore0Context = canvasStore0.getContext('2d');
-const canvasStore1 = document.getElementById("storecanvas1");
-const canvasStore1Context = canvasStore1.getContext('2d');
-const canvasStore2 = document.getElementById("storecanvas2");
-const canvasStore2Context = canvasStore2.getContext('2d');
-const canvasStore3 = document.getElementById("storecanvas3");
-const canvasStore3Context = canvasStore3.getContext('2d');
-const canvasStore4 = document.getElementById("storecanvas4");
-const canvasStore4Context = canvasStore4.getContext('2d');
-
-for (let i=0; i < canvasContents.length; i++){
-    eval("canvasStore"+i).width = 640;
-    eval("canvasStore"+i).height = 480;
-}
-
-
-$(() => {
-    video = document.querySelector('video');
-    canvas = window.canvas = document.querySelector('canvas');
-    canvas.width = 480;
-    canvas.height = 360;
-
-    const constraints = {
-        audio: false,
-        video: {facingMode: "environment"}
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(handleSuccess)
-        .catch(handleError);
-});
-
+// ================================ Google Maps ================================ \\
 
 /**
  * Called by GMaps script after map is loaded
@@ -102,8 +52,6 @@ const closeButton = imageViewer.find('#close-button');
 const authorInfo = imageViewer.find('#author-info');
 const authorImage = authorInfo.find('#author-image');
 const authorName = authorInfo.find('p');
-
-console.log(reviewImages);
 
 $('img.pointer').click(function () {
     if ($(window).width() > 700) {
@@ -187,145 +135,125 @@ $(document)
     });
 
 
-// ================================ Camera Functions ================================ \\
+// ================================ WebRTC ================================ \\
 
-deleteCanvas0.click(() => {
-    canvasStore0Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[0] = false;
-    videoContainer.css("display", "unset");
-    takePhotoButton.css("display", "unset");
-});
-deleteCanvas1.click(() => {
-    canvasStore1Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[1] = false;
-    videoContainer.css("display", "unset");
-    takePhotoButton.css("display", "unset");
-});
-deleteCanvas2.click(() => {
-    canvasStore2Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[2] = false;
-    videoContainer.css("display", "unset");
-    takePhotoButton.css("display", "unset");
-});
-deleteCanvas3.click(() => {
-    canvasStore3Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[3] = false;
-    videoContainer.css("display", "unset");
-    takePhotoButton.css("display", "unset");
+const maxImageCount = 5;
+
+
+let video, canvas, canvasDOM;
+const canvasWidth = 640;
+const canvasHeight = 480;
+const takePhotoButton = $('#take-photo');
+const confirmPhotoButton = $('#confirm-photo');
+const retakePhotoButton = $('#retake-photo');
+const uploadPictures = $('#upload-pics');
+const canvasContainer = $('#new-image');
+const videoContainer = $('#live-video');
+const formSubmit = $('#submit');
+let canvasContents = new Array(maxImageCount).fill(false);
+
+let canvasArr = [];
+let canvasCtx = [];
+let deleteButton = [];
+
+for (let i = 0; i < maxImageCount; i++) {
+    const canvasStore = $(`#image-${i}`)[0];
+    canvasStore.width = canvasWidth;
+    canvasStore.height = canvasHeight;
+    canvasArr.push(canvasStore);
+    canvasCtx.push(canvasStore.getContext('2d'));
+
+    deleteButton.push($(`#delete-canvas${i}`));
+}
+
+$(() => {
+    video = $('video')[0];
+    canvas = $('#new-image');
+    canvasDOM = canvas[0];
+    canvasDOM.width = canvasWidth;
+    canvasDOM.height = canvasHeight;
+
+    const constraints = {
+        audio: false,
+        video: {facingMode: 'environment'}
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            window.stream = stream;
+            video.srcObject = stream;
+        })
+        .catch((err) => {
+            alert(`Camera not found, or in use elsewhere`)
+        });
 });
 
-deleteCanvas4.click(() => {
-    canvasStore4Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[4] = false;
-    videoContainer.css("display", "unset");
-    takePhotoButton.css("display", "unset");
+$('.delete-image').click(function () {
+    const imageNumber = parseInt(this.id.split('-').pop());
+    canvasCtx[imageNumber].clearRect(0, 0, canvasWidth, canvasHeight);
+    canvasContents[imageNumber] = false;
+    showHTML([takePhotoButton, videoContainer]);
 });
 
 takePhotoButton.click(() => {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    videoContainer.css("display", "none");
-    canvasContainer.css("display", "unset");
-    takePhotoButton.css("display", "none");
-    confirmPhotoButton.css("display", "unset");
-    retakePhotoButton.css("display", "unset");
-
+    canvasDOM.getContext('2d').drawImage(video, 0, 0, canvasWidth, canvasHeight);
+    showHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
+    hideHTML([videoContainer, takePhotoButton]);
 });
-
-
-//Checks to see if all Canvas' contain pictures, to hide take picture when 5 pictures are taken.
-function arrayTrue(array) {
-    for(let i = 0; i < array.length; i++) {
-        if(array[i] === false) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
-function numberOfTrue(array){
-    let trueNumber = 0;
-    for(let i = 0; i < array.length; i++) {
-        if(array[i] === true) {
-            trueNumber++;
-        }
-    }
-    return trueNumber;
-}
-
 
 confirmPhotoButton.click(() => {
     for (let i = 0; i < canvasContents.length; i++) {
-        if (!canvasContents[i]){
-            eval("canvasStore"+i+"Context").drawImage(canvas, 0, 0, canvas.width, canvas.height);
-            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        if (!canvasContents[i]) {
+            canvasCtx[i].drawImage(canvasDOM, 0, 0, canvasWidth, canvasHeight);
+            canvasDOM.getContext('2d').clearRect(0, 0, canvasWidth, canvasHeight);
             canvasContents[i] = true;
             break;
         }
     }
 
-    videoContainer.css("display", "unset");
-    canvasContainer.css("display", "none");
-    takePhotoButton.css("display", "unset");
-    confirmPhotoButton.css("display", "none");
-    retakePhotoButton.css("display", "none");
-    if (arrayTrue(canvasContents)){
-        videoContainer.css("display", "none");
-        canvasContainer.css("display", "none");
-        takePhotoButton.css("display", "none");
-    }
+    showHTML([videoContainer, takePhotoButton]);
+    hideHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
 
+    if (canvasContents.every(x => x)) {
+        hideHTML([videoContainer, canvasContainer, takePhotoButton]);
+    }
 });
 
 retakePhotoButton.click(() => {
-    videoContainer.css("display", "unset");
-    canvasContainer.css("display", "none");
-    takePhotoButton.css("display", "unset");
-    confirmPhotoButton.css("display", "none");
-    retakePhotoButton.css("display", "none");
+    hideHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
+    showHTML([videoContainer, takePhotoButton]);
 });
 
+function hideHTML(array) {
+    array.forEach(x => x.hide());
+}
 
-
+function showHTML(array) {
+    array.forEach(x => x.show());
+}
 
 // ================================ Review Submission ================================ \\
 
 uploadPictures.click(() => {
- sendImage(22);
+    sendImage(22);
 });
 
 formSubmit.click(() => {
-
-
     return false;
 });
 
-
-function handleSuccess(stream) {
-    window.stream = stream;
-    video.srcObject = stream;
-}
-
-function handleError(error) {
-    console.log(`navigator.getUserMedia error: ${error}`);
-    alert(`Camera not found, or in use elsewhere`)
-}
-
-
 function sendImage(userId) {
-    console.log("Image sending to Server");
+    let imageCount = 0;
+    canvasContents.forEach(x => x ? imageCount++ : x);
 
-    let noOfImages = numberOfTrue(canvasContents);
     let data = {
         userId: userId,
-        noOfImages: noOfImages
+        noOfImages: imageCount
     };
 
-    for (let i = 0; i < canvasContents.length; i++) {
-        if (canvasContents[i] = true){
-            data["imageBlob"+i] = eval("canvasStore"+i).toDataURL();
+    for (let i = 0; i < maxImageCount; i++) {
+        if (canvasContents[i]) {
+            data[`imageBlob${i}`] = canvasArr[i].toDataURL();
         }
     }
 
