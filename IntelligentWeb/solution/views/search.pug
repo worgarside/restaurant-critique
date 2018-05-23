@@ -23,7 +23,7 @@ block content
                                 .card-body
                                     .row
                                         .col
-                                            h6.d-inline#rating-slider-label(for='rating-slider') Minimum Rating
+                                            h6.d-inline#rating-slider-label Minimum Rating
                                             span.oi.oi-star.star-highlight.ml-1.float-right
                                             p.float-right.mb-0#rating-slider-value 0.0
                                             input.form-control#rating-slider(type='range' min='0' max='50' value='0')
@@ -32,7 +32,7 @@ block content
                                             p.float-right.mb-0#distance-slider-value 50km
                                             input.form-control#distance-slider(type='range' min='0' max='50' value='50')
                                         .col
-                                            h6.d-inline#price-range-slider-label(for='rating-slider') Price Range
+                                            h6.d-inline#price-range-slider-label Price Range
                                             p.float-right.mb-0#price-range-slider-value Premium
                                             p.small.float-right.mb-0.mr-1.mt-1 Up to
                                             input.form-control#price-range-slider(type='range' min='0' max='3' value='3')
@@ -85,6 +85,9 @@ block content
 
         br
         #search-results
+        .row
+            .col
+                #pagination-links
 
     script.
         const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
