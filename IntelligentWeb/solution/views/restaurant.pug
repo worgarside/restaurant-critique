@@ -88,7 +88,7 @@ block content
                         #contact-info
                             h4 Contact Information
                             p
-                                span.oi.oi-browser.post-space(aria-hidden='true')
+                                span.oi.oi-external-link.post-space(aria-hidden='true')
                                 | Official Website:&nbsp;
                                 if restaurant.contact.url && restaurant.contact.phone !== ''
                                     a.ml-1(href=`//${restaurant.contact.url}` target='_blank') #{restaurant.contact.url}
@@ -249,14 +249,16 @@ block content
                 hr
                 hr
 
-        .row
+        //.row
             video#video(autoplay='')
             button#takephoto Take snapshot
             button#confirmphoto Confirm taken photo
             button#retakephoto Retake photo
             canvas#canvas
+        .row
             canvas#storecanvas5
             button#deletestorecanvas5 Delete 0
+        .row
             canvas#storecanvas1
             button#deletestorecanvas1 Delete 1
             canvas#storecanvas2
@@ -265,6 +267,7 @@ block content
             button#deletestorecanvas3 Delete 3
             canvas#storecanvas4
             button#deletestorecanvas4 Delete 4
+            button#uploadpics Upload
 
 
 
