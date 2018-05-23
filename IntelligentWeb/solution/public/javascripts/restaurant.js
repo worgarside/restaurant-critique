@@ -9,11 +9,15 @@ let video, canvas;
 const takePhotoButton = $('#takephoto');
 const confirmPhotoButton = $('#confirmphoto');
 const retakePhotoButton = $('#retakephoto');
+
+const uploadPictures = $('#uploadpics');
+
 const deleteCanvas0 = $('#deletestorecanvas5');
 const deleteCanvas1 = $('#deletestorecanvas1');
 const deleteCanvas2 = $('#deletestorecanvas2');
 const deleteCanvas3 = $('#deletestorecanvas3');
 const deleteCanvas4 = $('#deletestorecanvas4');
+
 
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
@@ -21,15 +25,15 @@ const formSubmit = $('#submit');
 let canvasContents = Array(5).fill(false);
 
 const canvasStore0 = document.getElementById("storecanvas5");
-canvasStore0Context = canvasStore0.getContext('2d');
+const canvasStore0Context = canvasStore0.getContext('2d');
 const canvasStore1 = document.getElementById("storecanvas1");
-canvasStore1Context = canvasStore1.getContext('2d');
+const canvasStore1Context = canvasStore1.getContext('2d');
 const canvasStore2 = document.getElementById("storecanvas2");
-canvasStore2Context = canvasStore2.getContext('2d');
+const canvasStore2Context = canvasStore2.getContext('2d');
 const canvasStore3 = document.getElementById("storecanvas3");
-canvasStore3Context = canvasStore3.getContext('2d');
+const canvasStore3Context = canvasStore3.getContext('2d');
 const canvasStore4 = document.getElementById("storecanvas4");
-canvasStore4Context = canvasStore4.getContext('2d');
+const canvasStore4Context = canvasStore4.getContext('2d');
 
 for (let i=0; i < canvasContents.length; i++){
     eval("canvasStore"+i).width = 640;
@@ -241,6 +245,16 @@ function arrayTrue(array) {
 }
 
 
+function numberOfTrue(array){
+    let trueNumber = 0;
+    for(let i = 0; i < array.length; i++) {
+        if(array[i] === true) {
+            trueNumber++;
+        }
+    }
+    return trueNumber;
+}
+
 
 confirmPhotoButton.click(() => {
     for (let i = 0; i < canvasContents.length; i++) {
@@ -278,14 +292,13 @@ retakePhotoButton.click(() => {
 
 // ================================ Review Submission ================================ \\
 
+uploadPictures.click(() => {
+ sendImage(22);
+});
+
 formSubmit.click(() => {
 
-    //LOOPS THROUGH IMAGES WHICH ARE TRUE AND SENDS IMAGES WHICH ARE TRUE*****************************
-    for (let i = 0; i < canvasContents.length; i++) {
-        if (canvasContents[i] = true){
-            sendImage(22, eval(("canvasStore"+i)).toDataURL());
-        }
-    }
+
     return false;
 });
 
@@ -301,13 +314,20 @@ function handleError(error) {
 }
 
 
-function sendImage(userId, imageBlob) {
+function sendImage(userId) {
     console.log("Image sending to Server");
 
+    let noOfImages = numberOfTrue(canvasContents);
     let data = {
         userId: userId,
-        imageBlob: imageBlob
+        noOfImages: noOfImages
     };
+
+    for (let i = 0; i < canvasContents.length; i++) {
+        if (canvasContents[i] = true){
+            data["imageBlob"+i] = eval("canvasStore"+i).toDataURL();
+        }
+    }
 
     $.ajax({
         url: '/restaurant/upload_picture',
