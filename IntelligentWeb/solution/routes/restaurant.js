@@ -37,41 +37,31 @@ router.post('/add_review', upload.array('images', 10), (req, res) => {
 
 router.post('/upload_picture', (req, res) => {
 
-    const userId = req.body.userId;
     const numberOfImages = req.body.noOfImages;
-    console.log(`userId: ${userId}`);
     const newString = new Date().getTime();
-    const targetDirectory = `./public/images/reviewTestImages/`;
+    const targetDirectory = './public/images/reviewTestImages/';
 
     if (!fs.existsSync(targetDirectory)) {
         fs.mkdirSync(targetDirectory);
     }
+
     console.log(`Saving files ${targetDirectory}${newString}`);
 
-
-
-    for (let i = 0; i < numberOfImages; i++){
-        let image = eval("req.body.imageBlob"+i);
+    for (let i = 0; i < numberOfImages; i++) {
+        let image = eval(`'req.body.imageBlob${i}`);
         // strip off the data: url prefix to get just the base64-encoded bytes
         let imageBlob = image.replace(/^data:image\/\w+;base64,/, "");
         let buf = new Buffer(imageBlob, 'base64');
-        fs.writeFile(targetDirectory + newString + i + '.png', buf, function(err) {
-            if(err) {
+        fs.writeFile(`${targetDirectory}${newString}${i}.png`, buf, (err) => {
+            if (err) {
                 return console.log(err);
-            }else{
-                console.log("The file was saved!");}
+            } else {
+                console.log("The file was saved!");
+            }
         });
-
     }
 
-
-
-    let filePath = targetDirectory + newString;
-    let data = {
-        user: userId,
-        filePath: filePath
-    };
-    res.end(JSON.stringify({data: ''}));
+    res.end();
 });
 
 module.exports = router;

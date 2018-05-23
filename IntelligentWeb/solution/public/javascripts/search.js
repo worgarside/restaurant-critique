@@ -297,7 +297,7 @@ function updateDisplayFlags() {
 function displaySearchResults() {
     searchResultsDiv.innerHTML = null;
     let searchResultsHTML = '';
-    const pageLength = 4;
+    const pageLength = 5;
     let displayCount = 0;
     let pageCount = 0;
 
@@ -316,13 +316,13 @@ function displaySearchResults() {
                            <div class='search-results-page' id='search-results-page-${pageCount + 1}' style='display: none;'>
                        `;
                     }
+                    pageCount++;
                 }
 
                 searchResultsHTML += getRestaurantDiv(restaurant, index);
 
                 if ((displayCount + 1) % pageLength === 0) {
                     searchResultsHTML += '</div>';
-                    pageCount++;
                 }
                 displayCount++;
             }
@@ -351,6 +351,7 @@ function displaySearchResults() {
 }
 
 function createPaginationLinks(pageCount) {
+    paginationLinksDiv.innerHTML = null;
     let paginationHTML = '';
 
     if (pageCount > 1) {

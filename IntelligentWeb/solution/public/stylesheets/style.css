@@ -1176,9 +1176,6 @@ label.star:hover ~ label.star span::before {
 #search-results-header {
   display: none;
 }
-.search-results-page {
-  border: solid 2px red;
-}
 #advanced-search-toggle {
   font-size: 1.2rem;
   color: #222222;
