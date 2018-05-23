@@ -298,17 +298,28 @@ function displaySearchResults() {
             searchResultsDiv.appendChild(restaurantContainer);
             initSlideshow(index);
         }
-
+        let addRestaurantMsg = document.createElement('div');
+        addRestaurantMsg.innerHTML = `
+                <div class='row'>
+                    <div class='col offset-1'>
+                        <small>If you have not found the restaurant you are searching for, click <a href='/restaurant/new'>here</a> to add it to the site.</small>
+                    </div>
+            </div>
+            `;
+        searchResultsDiv.appendChild(addRestaurantMsg);
     } else {
-        let restaurantContainer = document.createElement('div');
+        $('#search-results-header').css('display', 'none');
+        let defaultMsg = document.createElement('div');
         // TODO add a restaurant option here
-        restaurantContainer.innerHTML = `
-        <div class="row">
-                <div class="col">
-                    <h2> No results found, please search again</h2>
-                </div>
-        </div> `;
-        searchResultsDiv.appendChild(restaurantContainer);
+        defaultMsg.innerHTML = `
+            <div class='row'>
+                    <div class='col-10 offset-1'>
+                        <h4> No results found, please search again</h4>
+                        <p>If you would like to add a new restaurant to the site, click <a href='/restaurant/new'>here</a>.</p>
+                    </div>
+            </div>
+        `;
+        searchResultsDiv.appendChild(defaultMsg);
     }
 }
 
