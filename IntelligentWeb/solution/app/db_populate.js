@@ -837,7 +837,7 @@ function populateRestaurants(insertPromises) {
         priceRange: {lower: 5.50, upper: 19.90, band: 2},
         categories: [
             {name: 'Italian'}, {name: 'Dessert'}, {name: 'Casual'}, {name: 'International'}, {name: 'Chicken'},
-            {name: 'Pasta'}, {name: 'Risotto'}, , {name: 'Pizza'}, {name: 'Steak'}, {name: 'Vegetarian'}, {name: 'Dessert'}
+            {name: 'Pasta'}, {name: 'Risotto'}, {name: 'Pizza'}, {name: 'Steak'}, {name: 'Vegetarian'}, {name: 'Dessert'}
         ],
         features: {
             alcohol: {value: true},
@@ -926,7 +926,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
-        restaurant: {_id: ID['Piccolino'], name: 'Piccolino'},
+        restaurant: {_id: ID["Piccolino's Italian Restaurant"], name: "Piccolino's Italian Restaurant"},
         title: 'Reasonable food at a reasonable price',
         body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a
         bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very
@@ -1045,7 +1045,7 @@ function populateReviews(insertPromises) {
             surname: 'Cope',
             reducedID: 'copeyrufus-gmail-com',
         },
-        images: ['2018-05-23 12-52-00.jpg', '2018-05-23 12-52-01.jpg'],
+        images: ['2018-05-23 12-52-00.jpg', '2018-05-23 12-52-01.jpg', '2018-05-23 12-52-02.jpg', '2018-05-23 12-52-04.jpg'],
         restaurantRating: 5
     }).save());
 }
