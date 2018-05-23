@@ -48,7 +48,7 @@ router.post('/upload_picture', (req, res) => {
     console.log(`Saving files ${targetDirectory}${newString}`);
 
     for (let i = 0; i < numberOfImages; i++) {
-        let image = eval(`'req.body.imageBlob${i}`);
+        let image = eval(`req.body.imageBlob${i}`);
         // strip off the data: url prefix to get just the base64-encoded bytes
         let imageBlob = image.replace(/^data:image\/\w+;base64,/, "");
         let buf = new Buffer(imageBlob, 'base64');
