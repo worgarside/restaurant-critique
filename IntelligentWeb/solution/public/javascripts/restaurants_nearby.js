@@ -239,7 +239,7 @@ function clearMarkers() {
  */
 function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
-        <div class="container nearby-restaurant" id="restaurant-container-${index}">
+        <div class="container restaurant-card" id="restaurant-container-${index}">
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div class="vert-center-parent">
