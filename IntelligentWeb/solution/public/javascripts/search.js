@@ -7,7 +7,10 @@
 let matchedRestaurants = [];
 let selectedCategories = [];
 let selectedFeatures = [];
+let resultSortField = $('#sort-by');
+let resultSortOrder = $('#sort-order');
 
+const searchResultsDiv = $('#search-results')[0];
 const advancedSearchDiv = $('#advanced-search-collapsible');
 const searchInput = $('#search-input');
 const searchButton = $("#search-button");
@@ -35,10 +38,6 @@ $(() => {
         searchInput.val(query);
         sessionStorage.removeItem('query');
     }
-
-    // for (const category of categories) {
-    //     selectedCategories.push(category);
-    // }
 });
 
 /**
@@ -175,12 +174,68 @@ advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
     updateDisplayedRestaurants();
 });
 
+resultSortField.change(() => {
+    sortResults();
+});
+
+resultSortOrder.change(() => {
+    sortResults();
+});
+
+// TODO jsdoc
+function sortResults() {
+    switch (resultSortOrder.find("option:selected").attr('value')) {
+        case 'descending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    matchedRestaurants.sort((a, b) => {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    matchedRestaurants.sort((a, b) => {
+                        return b.averageRating - a.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    matchedRestaurants.sort((a, b) => {
+                        return b.weight - a.weight;
+                    });
+                    break;
+            }
+            break;
+        case 'ascending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    matchedRestaurants.sort((a, b) => {
+                        if (a.name < b.name) return 1;
+                        if (a.name > b.name) return -1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    matchedRestaurants.sort((a, b) => {
+                        return a.averageRating - b.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    matchedRestaurants.sort((a, b) => {
+                        return a.weight - b.weight;
+                    });
+                    break;
+            }
+            break;
+    }
+    displaySearchResults();
+}
+
 // ================================ Results HTML Management ================================ \\
 
 // TODO jsdoc
 function updateDisplayedRestaurants() {
     for (const [index, restaurant] of matchedRestaurants.entries()) {
-
         let categoryMatch = true;
         if (!catNoneCheckbox.is(':checked')) {
             for (const category of selectedCategories) {
@@ -231,21 +286,40 @@ function updateDisplayedRestaurants() {
  * Displays the list of search results on the page
  */
 function displaySearchResults() {
-    const restaurantListDOM = $('#restaurant-list')[0];
-    restaurantListDOM.innerHTML = null;
+
+    searchResultsDiv.innerHTML = null;
 
     if (matchedRestaurants.length > 0) {
+        $('#search-results-header').css('display', 'block');
         console.log(`${matchedRestaurants.length} matched`);
         for (const [index, restaurant] of matchedRestaurants.entries()) {
             let restaurantContainer = document.createElement('div');
             restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
-            restaurantListDOM.appendChild(restaurantContainer);
+            searchResultsDiv.appendChild(restaurantContainer);
             initSlideshow(index);
         }
+        let addRestaurantMsg = document.createElement('div');
+        addRestaurantMsg.innerHTML = `
+                <div class='row'>
+                    <div class='col offset-1'>
+                        <small>If you have not found the restaurant you are searching for, click <a href='/restaurant/new'>here</a> to add it to the site.</small>
+                    </div>
+            </div>
+            `;
+        searchResultsDiv.appendChild(addRestaurantMsg);
     } else {
-        let restaurantContainer = document.createElement('div');
-        restaurantContainer.innerHTML = displayNoResultsFound();
-        restaurantListDOM.appendChild(restaurantContainer);
+        $('#search-results-header').css('display', 'none');
+        let defaultMsg = document.createElement('div');
+        // TODO add a restaurant option here
+        defaultMsg.innerHTML = `
+            <div class='row'>
+                    <div class='col-10 offset-1'>
+                        <h4> No results found, please search again</h4>
+                        <p>If you would like to add a new restaurant to the site, click <a href='/restaurant/new'>here</a>.</p>
+                    </div>
+            </div>
+        `;
+        searchResultsDiv.appendChild(defaultMsg);
     }
 }
 
@@ -270,7 +344,7 @@ function getRestaurantDiv(restaurant, index) {
 
     let htmlStars = '';
 
-    if (restaurant.averageRating) {
+    if (restaurant.reviews.length > 0) {
         const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
@@ -410,20 +484,6 @@ function initSlideshow(value) {
         $(`.slide-${value}`).fadeOut();
         $(`.current-${value}`).fadeIn();
     });
-}
-
-/**
- * Displays a 'No results found' message to the User
- * @returns {string} HTML to show no results were found
- */
-function displayNoResultsFound() {
-    // TODO add a restaurant here
-    return `
-        <div class="row">
-                <div class="col">
-                    <h2> No results found, please search again</h2>
-                </div>
-        </div> `;
 }
 
 console.log('Loaded search.js');

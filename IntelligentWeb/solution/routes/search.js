@@ -43,6 +43,7 @@ router.post('/', (req, res) => {
                     'categories._id': 1,
                     'categories.name': 1,
                     'features': 1,
+                    'reviews': 1,
                     'images': 1,
                     'averageRating': 1,
                     'localUrl': 1,
