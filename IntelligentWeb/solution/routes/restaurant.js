@@ -53,11 +53,8 @@ router.post('/upload_picture', (req, res) => {
         let imageBlob = image.replace(/^data:image\/\w+;base64,/, "");
         let buf = new Buffer(imageBlob, 'base64');
         fs.writeFile(`${targetDirectory}${newString}${i}.png`, buf, (err) => {
-            if (err) {
-                return console.log(err);
-            } else {
-                console.log("The file was saved!");
-            }
+            if (err) throw err;
+            console.log('The file has been saved!');
         });
     }
 

@@ -22,7 +22,7 @@ const deleteCanvas4 = $('#deletestorecanvas4');
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
 const formSubmit = $('#submit');
-let canvasContents = Array(5).fill(false);
+let canvasContents = new Array(5).fill(false);
 
 const canvasStore0 = document.getElementById("storecanvas5");
 const canvasStore0Context = canvasStore0.getContext('2d');
