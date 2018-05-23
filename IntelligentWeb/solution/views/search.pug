@@ -63,15 +63,27 @@ block content
                                                     input(type='checkbox' id=`feature-check-all`)
                                                     label.pre-space(for=`feature-check-all`) (Select all)
 
-                                                // each key in Object.keys(features)
-                                                //    - var value = features[key].name
                                                 each feature in features
                                                     .col-3
                                                         input(type='checkbox' id=feature.id)
                                                         label.pre-space(for=feature.id) #{feature.name}
-                .row
-            .col
-                #restaurant-list
+        br
+        .row#search-results-header
+            .col-10.offset-1
+                h4.d-inline.mb-0.mt-2 Search Results
+                .float-right.form-inline
+                    label.post-space(for='sort-by') Sort by
+                    select.form-control.post-space#sort-by
+                        option(value='relevance') Relevance
+                        option(value='name') Name
+                        option(value='rating') Rating
+                    label.post-space.pre-space(for='sort-order') Order
+                    select.form-control#sort-order
+                        option(value='descending') High to Low
+                        option(value='ascending') Low to High
+
+        br
+        #search-results
 
     script.
         const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
