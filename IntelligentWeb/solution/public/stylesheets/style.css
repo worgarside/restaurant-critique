@@ -787,7 +787,7 @@ p.login-helper {
 }
 #restaurant-overlay-confirmation {
   background-color: #fdfdfd;
-  width: 25%;
+  width: 40%;
   border-radius: 10px;
   margin: 0 auto;
   text-align: center;
@@ -796,7 +796,7 @@ p.login-helper {
   padding: 10px;
 }
 #restaurant-overlay-confirmation button {
-  width: 25%;
+  min-width: 7rem;
   margin: 10px;
 }
 #restaurant-result-header {
