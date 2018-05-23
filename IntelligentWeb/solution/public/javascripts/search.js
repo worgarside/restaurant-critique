@@ -10,8 +10,9 @@ let selectedFeatures = [];
 let displayFlags = [];
 let resultSortField = $('#sort-by');
 let resultSortOrder = $('#sort-order');
-
+let currentPage = 1;
 const searchResultsDiv = $('#search-results')[0];
+const paginationLinksDiv = $('#pagination-links')[0];
 const advancedSearchDiv = $('#advanced-search-collapsible');
 const searchInput = $('#search-input');
 const searchButton = $("#search-button");
@@ -305,9 +306,16 @@ function displaySearchResults() {
         for (const [index, restaurant] of queryMatches.entries()) {
             if (displayFlags[index]) {
                 if (displayCount % pageLength === 0) {
-                    searchResultsHTML += `
-                       <div class='search-results-page' id='search-results-page-${pageCount}'>
+                    if (pageCount === 0) {
+                        searchResultsHTML += `
+                       <div class='search-results-page' id='search-results-page-${pageCount + 1}'>
                    `;
+                    } else {
+                        // hide other pages
+                        searchResultsHTML += `
+                           <div class='search-results-page' id='search-results-page-${pageCount + 1}' style='display: none;'>
+                       `;
+                    }
                 }
 
                 searchResultsHTML += getRestaurantDiv(restaurant, index);
@@ -349,15 +357,15 @@ function createPaginationLinks(pageCount) {
         paginationHTML = `
             <nav>
                 <ul class='pagination justify-content-center'>
-                    <li class='page-item'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-left'></span></a></li>
+                    <li class='page-item disabled' id='page-link-prev'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-left'></span></a></li>
         `;
 
-        for (let p = 0; p < pageCount; p++){
-            paginationHTML += `<li class='page-item'><a href='javascript:void(0)' class='page-link'>${p}</a></li>`;
+        for (let p = 1; p < pageCount + 1; p++) {
+            paginationHTML += `<li class='page-item' id='page-link-${p}'><a href='javascript:void(0)' class='page-link'>${p}</a></li>`;
         }
 
         paginationHTML += `
-                    <li class='page-item'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-right'></span></a></li>
+                    <li class='page-item' id='page-link-next'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-right'></span></a></li>
                 </ul>
             </nav>
         `;
@@ -365,8 +373,55 @@ function createPaginationLinks(pageCount) {
 
     let paginationDivContent = document.createElement('div');
     paginationDivContent.innerHTML = paginationHTML;
-    searchResultsDiv.appendChild(paginationDivContent);
+    paginationLinksDiv.appendChild(paginationDivContent);
+
+    $(`#page-link-${currentPage}`).addClass('active');
+
+    $('.page-link').click(function () {
+        let page = $(this).parent().attr('id').split('-').pop();
+
+        let currentPageLink = $(`#page-link-${currentPage}`);
+        let newPageLink = $(`#page-link-${page}`);
+        let currentPageDiv = $(`#search-results-page-${currentPage}`);
+        let newPageDiv = $(`#search-results-page-${page}`);
+
+        switch (page) {
+            case 'prev':
+                currentPageLink.removeClass('active');
+                $(`#page-link-${currentPage - 1}`).addClass('active');
+                currentPageDiv.css('display', 'none');
+                $(`#search-results-page-${currentPage - 1}`).css('display', 'block');
+                currentPage -= 1;
+                break;
+            case 'next':
+                currentPageLink.removeClass('active');
+                $(`#page-link-${currentPage + 1}`).addClass('active');
+                currentPageDiv.css('display', 'none');
+                $(`#search-results-page-${currentPage + 1}`).css('display', 'block');
+                currentPage += 1;
+                break;
+            default:
+                currentPageLink.removeClass('active');
+                newPageLink.addClass('active');
+                currentPageDiv.css('display', 'none');
+                newPageDiv.css('display', 'block');
+                currentPage = parseInt(page);
+                break;
+        }
+
+        if (currentPage === 1){
+            $('#page-link-prev').addClass('disabled');
+            $('#page-link-next').removeClass('disabled');
+        }else if (currentPage === pageCount){
+            $('#page-link-prev').removeClass('disabled');
+            $('#page-link-next').addClass('disabled');
+        }else{
+            $('#page-link-prev').removeClass('disabled');
+            $('#page-link-next').removeClass('disabled');
+        }
+    });
 }
+
 
 /**
  * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info

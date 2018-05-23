@@ -837,7 +837,7 @@ function populateRestaurants(insertPromises) {
         priceRange: {lower: 5.50, upper: 19.90, band: 2},
         categories: [
             {name: 'Italian'}, {name: 'Dessert'}, {name: 'Casual'}, {name: 'International'}, {name: 'Chicken'},
-            {name: 'Pasta'}, {name: 'Risotto'}, {name: 'Pizza'}, {name: 'Steak'}, {name: 'Vegetarian'}, {name: 'Dessert'}
+            {name: 'Pasta'}, {name: 'Risotto'}, {name: 'Pizza'}, {name: 'Steak'}
         ],
         features: {
             alcohol: {value: true},
