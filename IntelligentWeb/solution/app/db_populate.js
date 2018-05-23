@@ -29,6 +29,7 @@ const ID = {
     'California Fresh': '5ab1677c521e5430fc7d2503',
     'Grill & Go': '5ab1677c521e5430fc7d2504',
     "Piccolo's Italian Restaurant": '5ab1677c521e5430fc7d2505',
+    'ASK Italian': '5ab1677c521e5430fc7d2506'
 };
 
 // ================ Database ================ \\
@@ -73,7 +74,7 @@ function populateUsers(insertPromises) {
         name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
-        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21'],
+        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22'],
         reducedID: 'copeyrufus-gmail-com',
         restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"], ID["Piccolino's Italian Restaurant"]]}
     }).save());
@@ -86,7 +87,7 @@ function populateUsers(insertPromises) {
         postcode: 'S10 2FL',
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d15'],
         reducedID: 'greta-veronika-gmail-com',
-        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"]]}
+        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"], ID['ASK Italian']]}
     }).save());
 
     insertPromises.push(new User({
@@ -95,7 +96,7 @@ function populateUsers(insertPromises) {
         name: {first: 'Will', last: 'Garside'},
         ageCategory: 2,
         postcode: 'SY14 8JU',
-        reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18'],
+        reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18', '5aad98377888995220605d23'],
         reducedID: 'worgarside-gmail-com',
         verified: {
             flag: true
@@ -860,6 +861,53 @@ function populateRestaurants(insertPromises) {
         images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg'],
         averageRating: 4
     }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID['ASK Italian']),
+        name: 'ASK Italian',
+        address: {
+            line1: '8/10 Cambridge Street',
+            city: 'Sheffield',
+            postcode: 'S1 4HP',
+            latitude: 53.379853,
+            longitude: -1.472572
+        },
+        contact: {
+            url: 'https://askitalian.co.uk',
+            menu: 'https://www.askitalian.co.uk/menu/',
+            phone: '01142730073'
+        },
+        openingTimes: [[660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260]],
+        description: 'Modern Italian restaurant chain serving long, stone-baked pizzas and antipasto on wooden boards.',
+        priceRange: {lower: 4.75, upper: 14.95, band: 2},
+        categories: [
+            {name: 'Italian'}, {name: 'Pizza'}, {name: 'Pasta'}, {name: 'Calzone'}, {name: 'Lasagne'}, {name: 'Spaghetti'}
+        ],
+        features: {
+            alcohol: {value: true},
+            creditCard: {value: true},
+            delivery: {value: true},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
+        },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
+        owner: 'greta.veronika@gmail.com',
+        reviews: ['5aad98377888995220605d22', '5aad98377888995220605d23'],
+        images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg'],
+        averageRating: 4
+    }).save());
 }
 
 /**
@@ -1046,6 +1094,37 @@ function populateReviews(insertPromises) {
             reducedID: 'copeyrufus-gmail-com',
         },
         images: ['2018-05-23 12-52-00.jpg', '2018-05-23 12-52-01.jpg', '2018-05-23 12-52-02.jpg', '2018-05-23 12-52-04.jpg'],
+        restaurantRating: 5
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d22'),
+        restaurant: {_id: ID['ASK Italian'], name: 'ASK Italian'},
+        title: "Pizza heaven",
+        body: 'Honestly, the food here changed my life. I think the lasagne changed my perception of life. I became ' +
+        'inspired to become a chef thanks to ASK Italian!',
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            reducedID: 'copeyrufus-gmail-com',
+        },
+        images: ['2018-05-23 15-57-03.jpg'],
+        restaurantRating: 5
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d23'),
+        restaurant: {_id: ID['ASK Italian'], name: 'ASK Italian'},
+        title: "Tasty but expensive!",
+        body: 'The food was great, but as a student, I was not able to afford all the delicious food. If you are going' +
+        ' on a date, better go someplace cheaper since they do not accept any vouchers and do not give student discounts.' +
+        ' My poor wallet feels empty now.',
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            reducedID: 'worgarside-gmail-com',
+        },
+        images: ['2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
         restaurantRating: 5
     }).save());
 }

@@ -88,7 +88,7 @@ block content
                         #contact-info
                             h4 Contact Information
                             p
-                                span.oi.oi-browser.post-space(aria-hidden='true')
+                                span.oi.oi-external-link.post-space(aria-hidden='true')
                                 | Official Website:&nbsp;
                                 if restaurant.contact.url && restaurant.contact.phone !== ''
                                     a.ml-1(href=`//${restaurant.contact.url}` target='_blank') #{restaurant.contact.url}
@@ -249,7 +249,7 @@ block content
                 hr
                 hr
 
-        .row
+        //.row
             video#video(autoplay='')
             button#takephoto Take snapshot
             button#confirmphoto Confirm taken photo
