@@ -56,7 +56,7 @@ function allowLocation(allowed) {
  */
 function initMap() {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address': postcode}, (results, status) => {
+    geocoder.geocode({'address': `${postcode}, UK`}, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
             lat = results[0].geometry.location.lat();
             lng = results[0].geometry.location.lng();
@@ -239,7 +239,7 @@ function clearMarkers() {
  */
 function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
-        <div class="container nearby-restaurant" id="restaurant-container-${index}">
+        <div class="container restaurant-card" id="restaurant-container-${index}">
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div class="vert-center-parent">

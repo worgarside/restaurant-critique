@@ -4,10 +4,14 @@
  * @author Rufus Cope, Will Garside
  */
 
-let matchedRestaurants = [];
+let queryMatches = [];
 let selectedCategories = [];
 let selectedFeatures = [];
+let displayFlags = [];
+let resultSortField = $('#sort-by');
+let resultSortOrder = $('#sort-order');
 
+const searchResultsDiv = $('#search-results')[0];
 const advancedSearchDiv = $('#advanced-search-collapsible');
 const searchInput = $('#search-input');
 const searchButton = $("#search-button");
@@ -23,6 +27,22 @@ const catAllCheckbox = $('#cat-check-all');
 const featureNoneCheckbox = $('#feature-check-none');
 const featureAllCheckbox = $('#feature-check-all');
 
+const notFoundRestaurantHTML = `
+            <div class='row'>
+                <div class='col offset-1'>
+                    <small>If you have not found the restaurant you are searching for, click <a href='/restaurant/new'>here</a> to add it to the site.</small>
+                </div>
+            </div>
+        `;
+const noResultsHTML = `
+            <div class='row'>
+                <div class='col-10 offset-1'>
+                    <h4> No results found, please search again</h4>
+                    <p>If you would like to add a new restaurant to the site, click <a href='/restaurant/new'>here</a>.</p>
+                </div>
+            </div>
+        `;
+
 searchButton.click((e) => {
     e.preventDefault();
     search(searchInput.val());
@@ -35,10 +55,6 @@ $(() => {
         searchInput.val(query);
         sessionStorage.removeItem('query');
     }
-
-    // for (const category of categories) {
-    //     selectedCategories.push(category);
-    // }
 });
 
 /**
@@ -54,9 +70,9 @@ function search(query) {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (restaurants) => {
-            matchedRestaurants = restaurants;
-            displaySearchResults();
-            updateDisplayedRestaurants();
+            queryMatches = restaurants;
+            displayFlags = Array(queryMatches.length).fill(true);
+            updateDisplayFlags();
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -66,17 +82,17 @@ function search(query) {
 
 ratingSlider.on('input', () => {
     ratingSliderValue.text((ratingSlider.val() / 10).toString().padEnd(3, '.0'));
-    updateDisplayedRestaurants();
+    updateDisplayFlags();
 });
 
 distanceSlider.on('input', () => {
     distanceSliderValue.text(`${distanceSlider.val()}km`);
-    updateDisplayedRestaurants();
+    updateDisplayFlags();
 });
 
 priceRangeSlider.on('input', () => {
     priceRangeSliderValue.text(priceRanges[priceRangeSlider.val()]);
-    updateDisplayedRestaurants();
+    updateDisplayFlags();
 });
 
 // TODO jsdoc
@@ -124,7 +140,7 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
         selectedCategories = [];
         catAllCheckbox.prop('checked', false);
     }
-    updateDisplayedRestaurants();
+    updateDisplayFlags();
 });
 
 // TODO jsdoc
@@ -172,15 +188,71 @@ advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
         selectedFeatures = [];
         featureAllCheckbox.prop('checked', false);
     }
-    updateDisplayedRestaurants();
+    updateDisplayFlags();
 });
+
+resultSortField.change(() => {
+    sortResults();
+});
+
+resultSortOrder.change(() => {
+    sortResults();
+});
+
+// TODO jsdoc
+function sortResults() {
+    switch (resultSortOrder.find("option:selected").attr('value')) {
+        case 'descending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    queryMatches.sort((a, b) => {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    queryMatches.sort((a, b) => {
+                        return b.averageRating - a.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    queryMatches.sort((a, b) => {
+                        return b.weight - a.weight;
+                    });
+                    break;
+            }
+            break;
+        case 'ascending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    queryMatches.sort((a, b) => {
+                        if (a.name < b.name) return 1;
+                        if (a.name > b.name) return -1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    queryMatches.sort((a, b) => {
+                        return a.averageRating - b.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    queryMatches.sort((a, b) => {
+                        return a.weight - b.weight;
+                    });
+                    break;
+            }
+            break;
+    }
+    displaySearchResults();
+}
 
 // ================================ Results HTML Management ================================ \\
 
 // TODO jsdoc
-function updateDisplayedRestaurants() {
-    for (const [index, restaurant] of matchedRestaurants.entries()) {
-
+function updateDisplayFlags() {
+    for (const [index, restaurant] of queryMatches.entries()) {
         let categoryMatch = true;
         if (!catNoneCheckbox.is(':checked')) {
             for (const category of selectedCategories) {
@@ -209,43 +281,42 @@ function updateDisplayedRestaurants() {
         }
 
         // noinspection EqualityComparisonWithCoercionJS
-        if (
-            ( // no average rating, so only display when rating slider is 0 || rating is greater than the slider value
-                (!restaurant.averageRating && ratingSlider.val() == 0) ||
-                (restaurant.averageRating >= ratingSlider.val() / 10)
-            ) &&
+        displayFlags[index] = (
+            (restaurant.averageRating >= ratingSlider.val() / 10) &&
             (restaurant.priceRange.band <= priceRangeSlider.val()) &&
             categoryMatch &&
-            featureMatch
-        ) {
-            $(`#restaurant-container-${index}`).css('display', 'block');
-        } else {
-            // noinspection EqualityComparisonWithCoercionJS
-            console.log(`Hiding ${restaurant.name}: ${(!restaurant.averageRating && ratingSlider.val() == 0) || (restaurant.averageRating >= ratingSlider.val() / 10)} + ${restaurant.priceRange.band <= priceRangeSlider.val()} + ${categoryMatch} + ${featureMatch}`);
-            $(`#restaurant-container-${index}`).css('display', 'none');
-        }
+            featureMatch);
     }
+    displaySearchResults();
 }
 
 /**
  * Displays the list of search results on the page
  */
 function displaySearchResults() {
-    const restaurantListDOM = $('#restaurant-list')[0];
-    restaurantListDOM.innerHTML = null;
+    searchResultsDiv.innerHTML = null;
+    let searchResultsHTML = '';
 
-    if (matchedRestaurants.length > 0) {
-        console.log(`${matchedRestaurants.length} matched`);
-        for (const [index, restaurant] of matchedRestaurants.entries()) {
-            let restaurantContainer = document.createElement('div');
-            restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
-            restaurantListDOM.appendChild(restaurantContainer);
-            initSlideshow(index);
+    if (queryMatches.length > 0) {
+        $('#search-results-header').css('display', 'block');
+        for (const [index, restaurant] of queryMatches.entries()) {
+            if (displayFlags[index]) {
+                searchResultsHTML += getRestaurantDiv(restaurant, index);
+            }
         }
+        searchResultsHTML += notFoundRestaurantHTML;
     } else {
-        let restaurantContainer = document.createElement('div');
-        restaurantContainer.innerHTML = displayNoResultsFound();
-        restaurantListDOM.appendChild(restaurantContainer);
+        $('#search-results-header').css('display', 'none');
+        searchResultsHTML = noResultsHTML;
+    }
+
+    let searchResultContent = document.createElement('div');
+    searchResultContent.innerHTML = searchResultsHTML;
+    searchResultsDiv.appendChild(searchResultContent);
+
+    for (let i = 0; i < queryMatches.length; i++) {
+        // Must be called AFTER content is added to page
+        initSlideshow(i);
     }
 }
 
@@ -259,30 +330,30 @@ function displaySearchResults() {
  */
 function getRestaurantDiv(restaurant, index) {
     const htmlStart = `
-        <div class="container nearby-restaurant" id="restaurant-container-${index}">
-            <div class="row">
-                <div class="col-12 col-lg-8">
-                    <div class="vert-center-parent">
-                        <div class="vert-center-child">
-                            <div class="row">
-                               <div class="col"><a href='restaurant/${restaurant.localUrl}' class="restaurant-title d-inline">${restaurant.name}</a>
+        <div class='container restaurant-card' id='restaurant-container-${index}'>
+            <div class='row'>
+                <div class='col-12 col-lg-8'>
+                    <div class='vert-center-parent'>
+                        <div class='vert-center-child'>
+                            <div class='row'>
+                               <div class='col'><a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}</a>
     `;
 
     let htmlStars = '';
 
-    if (restaurant.averageRating) {
+    if (restaurant.reviews.length > 0) {
         const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
-            <div class="restaurant-stars">
+            <div class='restaurant-stars'>
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlight"></span>`;
+            htmlStars += `<span class='oi oi-star star-highlight'></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
+            htmlStars += `<span class='oi oi-star'></span>`;
         }
 
         htmlStars += `</div>`;
@@ -291,21 +362,21 @@ function getRestaurantDiv(restaurant, index) {
     const htmlAddress = `
           </div>
       </div>
-      <div class="row">
-          <div class="col">
-              <p class="restaurant-address">${restaurant.address.formattedAddress}</p>
+      <div class='row'>
+          <div class='col'>
+              <p class='restaurant-address'>${restaurant.address.formattedAddress}</p>
           </div>
       </div>
     `;
 
     let htmlCategories = `
-        <div class="row">
-            <div class="col">
+        <div class='row'>
+            <div class='col'>
     `;
 
     if (restaurant.categories.length > 0) {
         for (const category of restaurant.categories) {
-            htmlCategories += `<p class="restaurant-category">${category.name}</p>`;
+            htmlCategories += `<p class='restaurant-category'>${category.name}</p>`;
         }
     }
 
@@ -318,9 +389,9 @@ function getRestaurantDiv(restaurant, index) {
 
     if (restaurant.description !== 'No description currently available.') {
         htmlDescription = `
-            <div class="row">
-                <div class="col">
-                    <p class="restaurant-description">${restaurant.description}</p>
+            <div class='row'>
+                <div class='col'>
+                    <p class='restaurant-description'>${restaurant.description}</p>
                 </div>
             </div>
         `;
@@ -330,42 +401,41 @@ function getRestaurantDiv(restaurant, index) {
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-4">
-                        <div class="row">
-                            <div class="col">
-                                <div class="restaurant-nearby-images">
-                                    <div class="slideshow-wrapper">
+            <div class='col-12 col-lg-4'>
+                <div class='row'>
+                    <div class='col'>
+                        <div class='restaurant-nearby-images'>
+                            <div class='slideshow-wrapper'>
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
-        htmlSlideshow += '<div class="slideshow">';
+        htmlSlideshow += "<div class='slideshow'>";
         for (const image of restaurant.images) {
-            htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+            htmlSlideshow += `<img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
             imageCount += 1;
             if (imageCount >= 3) {
                 // only show first 3 images
                 break;
             }
         }
-        htmlSlideshow += "</div>";
+        htmlSlideshow += '</div>';
     }
 
     if (imageCount > 1) {
         htmlSlideshow += `
-                <div id="button-prev-${index}" class="slideshow-prev">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>
+                <div id='button-prev-${index}' class='slideshow-prev'>
+                    <span class='oi oi-chevron-left'></span>
                 </div>
-                <div id="button-next-${index}" class="slideshow-next">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-right"></span>
+                <div id='button-next-${index}' class='slideshow-next'>
+                    <span class='oi oi-chevron-right'></span>
                 </div>
         `;
     }
+    htmlSlideshow += '</div>';
 
-    htmlSlideshow += "</div>";
-
-    const htmlEnd = `</div></div></div></div></div></div>`;
+    const htmlEnd = '</div></div></div></div></div></div>';
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
 
@@ -380,50 +450,45 @@ function initSlideshow(value) {
     const btnNext = $(`#button-next-${value}`);
     const btnPrev = $(`#button-prev-${value}`);
 
+    // noinspection JSJQueryEfficiency
     $(`.slide-${value}`).first().addClass(`current-${value}`);
+    // noinspection JSJQueryEfficiency
     $(`.slide-${value}`).hide();
     $(`.current-${value}`).show();
 
-    // noinspection JSJQueryEfficiency
     btnNext.click(() => {
+        // noinspection JSJQueryEfficiency
         $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
         if ($(`.previous-${value}`).is(':last-child')) {
             $(`.slide-${value}`).first().addClass(`current-${value}`);
-        }
-        else {
+        } else {
             $(`.previous-${value}`).next().addClass(`current-${value}`);
         }
+        // noinspection JSJQueryEfficiency
         $(`.previous-${value}`).removeClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
         $(`.slide-${value}`).fadeOut();
+        // noinspection JSJQueryEfficiency
         $(`.current-${value}`).fadeIn();
     });
 
     btnPrev.click(() => {
+        // noinspection JSJQueryEfficiency
         $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
         if ($(`.previous-${value}`).is(':first-child')) {
             $(`.slide-${value}`).last().addClass(`current-${value}`);
-        }
-        else {
+        } else {
             $(`.previous-${value}`).prev().addClass(`current-${value}`);
         }
+        // noinspection JSJQueryEfficiency
         $(`.previous-${value}`).removeClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
         $(`.slide-${value}`).fadeOut();
+        // noinspection JSJQueryEfficiency
         $(`.current-${value}`).fadeIn();
     });
-}
-
-/**
- * Displays a 'No results found' message to the User
- * @returns {string} HTML to show no results were found
- */
-function displayNoResultsFound() {
-    // TODO add a restaurant here
-    return `
-        <div class="row">
-                <div class="col">
-                    <h2> No results found, please search again</h2>
-                </div>
-        </div> `;
 }
 
 console.log('Loaded search.js');

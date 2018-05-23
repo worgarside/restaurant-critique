@@ -878,7 +878,7 @@ p.login-helper {
   height: 725px;
 }
 
-.nearby-restaurant {
+.restaurant-card {
   width: 80%;
 
   &:after {
@@ -910,7 +910,7 @@ p.login-helper {
 
     &-confirmation {
       background-color: @background-color;
-      width: 25%;
+      width: 40%;
       border-radius: 10px;
       margin: 0 auto;
       text-align: center;
@@ -920,7 +920,7 @@ p.login-helper {
       }
 
       button {
-        width: 25%;
+        min-width: 7rem;
         margin: 10px;
       }
     }
@@ -1262,6 +1262,10 @@ input#uploadedFile {
   display: none;
 }
 
+button#dir-btn {
+  margin: 0.5rem 0;
+}
+
 // ================================ Star Icons ================================ \\
 
 .stars {
@@ -1374,6 +1378,14 @@ label.star:hover ~ label.star span::before {
   &-button {
     width: 100px;
   }
+
+  &-results-header{
+      display: none;
+  }
+}
+
+.search-results-page{
+  border: solid 2px red;
 }
 
 #advanced-search {

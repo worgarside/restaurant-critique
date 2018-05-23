@@ -56,7 +56,6 @@ router.post('/upload_picture', (req, res) => {
             return console.log(err);
         }else{
             console.log("The file was saved!");}
-
     });
 
     let filePath = targetDirectory + newString;

@@ -81,7 +81,7 @@ RestaurantSchema = Schema({
     ownerMessage: {type: String},
     reviews: {type: [String], default: []},
     images: {type: [String], default: []},
-    averageRating: {type: Number, min: 0, max: 5},
+    averageRating: {type: Number, min: 0, max: 5, default: 0},
     published: {type: Boolean, default: true},
     updatedAt: Date,
     // Searchable object used to improve search effectiveness

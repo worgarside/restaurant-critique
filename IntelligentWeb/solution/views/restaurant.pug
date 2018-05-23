@@ -32,7 +32,7 @@ block content
         .row
             .col
                 h1.d-inline-block= restaurant.name
-                if restaurant.averageRating
+                if restaurant.reviews.length > 0
                     .d-inline-block.ml-4
                         - var starRating = Math.round(restaurant.averageRating)
                         - var starCount = 0
@@ -40,17 +40,17 @@ block content
                             span.oi.oi-star.star-highlight(aria-hidden='true')
                             - starCount ++
                         while starCount < 5
-                            span.oi.oi-star(aria-hidden='true')
+                            span.oi.oi-star
                             - starCount ++
                         h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)
                 else
                     .d-inline-block.ml-4
-                        span.oi.oi-star(aria-hidden='true')
-                        span.oi.oi-star(aria-hidden='true')
-                        span.oi.oi-star(aria-hidden='true')
-                        span.oi.oi-star(aria-hidden='true')
-                        span.oi.oi-star(aria-hidden='true')
-                        h4.rating-value.d-inline.pre-space No Ratings Yet
+                        span.oi.oi-star
+                        span.oi.oi-star
+                        span.oi.oi-star
+                        span.oi.oi-star
+                        span.oi.oi-star
+                        h4.rating-value.d-inline.pre-space No reviews yet
         .row
             .col
                 p.restaurant-address= restaurant.address.formattedAddress
@@ -141,8 +141,15 @@ block content
         br
         .row
             .col
-                // TODO: directions on map
-                h4 Location & Directions
+                .vert-center-parent
+                    .vert-center-child
+                        h4.d-inline Location
+            .col
+                .vert-center-parent
+                    .vert-center-child
+                        button.float-right.btn.btn-outline-primary#dir-btn(type='button', onclick=`window.open('https://www.google.com/maps/dir/?api=1&destination=${restaurant.location.coordinates[1]},${restaurant.location.coordinates[0]}', '_blank');`) Get Directions
+        .row
+            .col
                 #restaurant-current-map
         hr
         .row

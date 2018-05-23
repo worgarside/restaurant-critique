@@ -758,10 +758,10 @@ p.login-helper {
   width: 100%;
   height: 725px;
 }
-.nearby-restaurant {
+.restaurant-card {
   width: 80%;
 }
-.nearby-restaurant:after {
+.restaurant-card:after {
   margin: 0 -5%;
   content: ' ';
   display: block;
@@ -787,7 +787,7 @@ p.login-helper {
 }
 #restaurant-overlay-confirmation {
   background-color: #fdfdfd;
-  width: 25%;
+  width: 40%;
   border-radius: 10px;
   margin: 0 auto;
   text-align: center;
@@ -796,7 +796,7 @@ p.login-helper {
   padding: 10px;
 }
 #restaurant-overlay-confirmation button {
-  width: 25%;
+  min-width: 7rem;
   margin: 10px;
 }
 #restaurant-result-header {
@@ -1082,6 +1082,9 @@ button#retakephoto {
 input#uploadedFile {
   display: none;
 }
+button#dir-btn {
+  margin: 0.5rem 0;
+}
 .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
@@ -1169,6 +1172,12 @@ label.star:hover ~ label.star span::before {
 }
 #search-button {
   width: 100px;
+}
+#search-results-header {
+  display: none;
+}
+.search-results-page {
+  border: solid 2px red;
 }
 #advanced-search-toggle {
   font-size: 1.2rem;
