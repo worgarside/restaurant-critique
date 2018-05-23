@@ -855,7 +855,7 @@ function populateRestaurants(insertPromises) {
             wheelchairAccessible: {value: true},
             wifi: {value: true}
         },
-        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         reviews: ['5aad98377888995220605d21'],
         images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg'],
         averageRating: 4
@@ -923,10 +923,10 @@ function populateReviews(insertPromises) {
         images: ['2018-03-20 20-08-00.jpg'],
         restaurantRating: 5
     }).save());
-
+    //
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
-        restaurant: {_id: ID["Piccolino's Italian Restaurant"], name: "Piccolino's Italian Restaurant"},
+        restaurant: {_id: ID["Piccolino"], name: "Piccolino"},
         title: 'Reasonable food at a reasonable price',
         body: `The food is a solid mediocre 7 out of 10. Sometimes the portions are too small, the pizza cheese is a
         bit moist, etc. etc. Also the kitchen appears to be open plan which means that the dining area can be very
@@ -1039,7 +1039,7 @@ function populateReviews(insertPromises) {
         _id: mongoose.Types.ObjectId('5aad98377888995220605d21'),
         restaurant: {_id: ID["Piccolo's Italian Restaurant"], name: "Piccolo's Italian Restaurant"},
         title: "Food Coma",
-        body: "The food was so amazing that I passed out right after dessert!",
+        body: 'The food was so amazing that I passed out right after dessert!',
         author: {
             forename: 'Rufus',
             surname: 'Cope',
