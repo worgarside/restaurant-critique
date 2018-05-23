@@ -75,7 +75,7 @@ function populateUsers(insertPromises) {
         postcode: 'S10 2DN',
         reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21'],
         reducedID: 'copeyrufus-gmail-com',
-        restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"]]}
+        restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"], ID["Piccolino's Italian Restaurant"]]}
     }).save());
 
     insertPromises.push(new User({
