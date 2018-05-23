@@ -1082,6 +1082,9 @@ button#retakephoto {
 input#uploadedFile {
   display: none;
 }
+button#dir-btn {
+  margin: 0.5rem 0;
+}
 .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
