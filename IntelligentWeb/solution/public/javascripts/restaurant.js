@@ -9,26 +9,44 @@ let video, canvas;
 const takePhotoButton = $('#takephoto');
 const confirmPhotoButton = $('#confirmphoto');
 const retakePhotoButton = $('#retakephoto');
+const deleteCanvas1 = $('#deletestorecanvas1');
+const deleteCanvas2 = $('#deletestorecanvas2');
+const deleteCanvas3 = $('#deletestorecanvas3');
+const deleteCanvas4 = $('#deletestorecanvas4');
+const deleteCanvas5 = $('#deletestorecanvas5');
 
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
 const formSubmit = $('#submit');
+let canvasContents = [false, false, false, false, false];
+
+const canvasStore1 = document.getElementById("storecanvas1");
+canvasStore1Context = canvasStore1.getContext('2d');
+const canvasStore2 = document.getElementById("storecanvas2");
+canvasStore2Context = canvasStore2.getContext('2d');
+const canvasStore3 = document.getElementById("storecanvas3");
+canvasStore3Context = canvasStore3.getContext('2d');
+const canvasStore4 = document.getElementById("storecanvas4");
+canvasStore4Context = canvasStore4.getContext('2d');
+const canvasStore0 = document.getElementById("storecanvas5");
+canvasStore0Context = canvasStore0.getContext('2d');
+
 
 
 $(() => {
-    // video = document.querySelector('video');
-    // canvas = window.canvas = document.querySelector('canvas');
-    // canvas.width = 480;
-    // canvas.height = 360;
-    //
-    // const constraints = {
-    //     audio: false,
-    //     video: {facingMode: "environment"}
-    // };
-    //
-    // navigator.mediaDevices.getUserMedia(constraints)
-    //     .then(handleSuccess)
-    //     .catch(handleError);
+    video = document.querySelector('video');
+    canvas = window.canvas = document.querySelector('canvas');
+    canvas.width = 480;
+    canvas.height = 360;
+
+    const constraints = {
+        audio: false,
+        video: {facingMode: "environment"}
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(handleSuccess)
+        .catch(handleError);
 });
 
 
@@ -161,9 +179,30 @@ $(document)
     });
 
 
-// ================================ Review Submission ================================ \\
+// ================================ Camera Functions ================================ \\
 
-//buttons for camera
+deleteCanvas1.click(() => {
+    canvasStore1Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[1] = false;
+});
+deleteCanvas2.click(() => {
+    canvasStore2Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[2] = false;
+});
+deleteCanvas3.click(() => {
+    canvasStore3Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[3] = false;
+});
+deleteCanvas4.click(() => {
+    canvasStore4Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[4] = false;
+});
+
+deleteCanvas5.click(() => {
+    canvasStore0Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[0] = false;
+});
+
 takePhotoButton.click(() => {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -177,12 +216,20 @@ takePhotoButton.click(() => {
 });
 
 confirmPhotoButton.click(() => {
-    sendImage("22", canvas.toDataURL());
+    for (let i = 0; i < canvasContents.length; i++) {
+        if (!canvasContents[i]){
+            eval("canvasStore"+i+"Context").drawImage(canvas, 0, 0);
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            canvasContents[i] = true;
+            break;
+        }
+    }
     videoContainer.css("display", "unset");
     canvasContainer.css("display", "none");
     takePhotoButton.css("display", "unset");
     confirmPhotoButton.css("display", "none");
     retakePhotoButton.css("display", "none");
+
 });
 
 retakePhotoButton.click(() => {
@@ -193,8 +240,17 @@ retakePhotoButton.click(() => {
     retakePhotoButton.css("display", "none");
 });
 
+
+
+
+// ================================ Review Submission ================================ \\
+
 formSubmit.click(() => {
-    return false
+    for (let i = 0; i < canvasContents.length; i++) {
+        if (canvasContents[i] = true){
+            sendImage(22, eval(("canvasStore"+i)).toDataURL());
+        }
+    }
 });
 
 

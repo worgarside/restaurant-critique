@@ -242,12 +242,23 @@ block content
                 hr
                 hr
 
-        //.row
+        .row
             video#video(autoplay='')
             button#takephoto Take snapshot
             button#confirmphoto Confirm taken photo
             button#retakephoto Retake photo
             canvas#canvas
+            canvas#storecanvas1
+            button#deletestorecanvas1 Delete 1
+            canvas#storecanvas2
+            button#deletestorecanvas2 Delete 2
+            canvas#storecanvas3
+            button#deletestorecanvas3 Delete 3
+            canvas#storecanvas4
+            button#deletestorecanvas4 Delete 4
+            canvas#storecanvas5
+            button#deletestorecanvas5 Delete 0
+
 
     script.
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};
