@@ -141,8 +141,15 @@ block content
         br
         .row
             .col
-                // TODO: directions on map
-                h4 Location & Directions
+                .vert-center-parent
+                    .vert-center-child
+                        h4.d-inline Location
+            .col
+                .vert-center-parent
+                    .vert-center-child
+                        button.float-right.btn.btn-outline-primary#dir-btn(type='button', onclick=`window.open('https://www.google.com/maps/dir/?api=1&destination=${restaurant.location.coordinates[1]},${restaurant.location.coordinates[0]}', '_blank');`) Get Directions
+        .row
+            .col
                 #restaurant-current-map
         hr
         .row
