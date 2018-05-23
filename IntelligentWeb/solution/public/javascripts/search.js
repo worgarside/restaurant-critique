@@ -4,7 +4,7 @@
  * @author Rufus Cope, Will Garside
  */
 
-let queryMatches = [];
+let matchedRestaurants = [];
 let selectedCategories = [];
 let selectedFeatures = [];
 let resultSortField = $('#sort-by');
@@ -53,7 +53,7 @@ function search(query) {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (restaurants) => {
-            queryMatches = restaurants;
+            matchedRestaurants = restaurants;
             displaySearchResults();
             updateDisplayedRestaurants();
         },
@@ -188,19 +188,19 @@ function sortResults() {
         case 'descending':
             switch (resultSortField.find("option:selected").attr('value')) {
                 case 'name':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;
                     });
                     break;
                 case 'rating':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         return b.averageRating - a.averageRating;
                     });
                     break;
                 case 'relevance':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         return b.weight - a.weight;
                     });
                     break;
@@ -209,19 +209,19 @@ function sortResults() {
         case 'ascending':
             switch (resultSortField.find("option:selected").attr('value')) {
                 case 'name':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         if (a.name < b.name) return 1;
                         if (a.name > b.name) return -1;
                         return 0;
                     });
                     break;
                 case 'rating':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         return a.averageRating - b.averageRating;
                     });
                     break;
                 case 'relevance':
-                    queryMatches.sort((a, b) => {
+                    matchedRestaurants.sort((a, b) => {
                         return a.weight - b.weight;
                     });
                     break;
@@ -235,7 +235,7 @@ function sortResults() {
 
 // TODO jsdoc
 function updateDisplayedRestaurants() {
-    for (const [index, restaurant] of queryMatches.entries()) {
+    for (const [index, restaurant] of matchedRestaurants.entries()) {
         let categoryMatch = true;
         if (!catNoneCheckbox.is(':checked')) {
             for (const category of selectedCategories) {
@@ -286,35 +286,18 @@ function updateDisplayedRestaurants() {
  * Displays the list of search results on the page
  */
 function displaySearchResults() {
-    const pageLength = 10;
+
     searchResultsDiv.innerHTML = null;
 
-    if (queryMatches.length > 0) {
+    if (matchedRestaurants.length > 0) {
         $('#search-results-header').css('display', 'block');
-
-        let pageCount = 0;
-        let htmlString = '';
-        for (const [index, restaurant] of queryMatches.entries()) {
-            if (index % pageLength === 0) {
-                htmlString += `
-                    <div class='search-results-page' id='search-results-page-${pageCount}'>
-                `;
-            }
-
-            htmlString += getRestaurantDiv(restaurant, index);
-
+        console.log(`${matchedRestaurants.length} matched`);
+        for (const [index, restaurant] of matchedRestaurants.entries()) {
+            let restaurantContainer = document.createElement('div');
+            restaurantContainer.innerHTML = getRestaurantDiv(restaurant, index);
+            searchResultsDiv.appendChild(restaurantContainer);
             initSlideshow(index);
-
-            if ((index + 1) % pageLength === 0 || index === queryMatches.length-1) {
-                htmlString += '</div>';
-                pageCount++;
-            }
-
         }
-        let resultContainer = document.createElement('div');
-        resultContainer.innerHTML = htmlString;
-        searchResultsDiv.appendChild(resultContainer);
-
         let addRestaurantMsg = document.createElement('div');
         addRestaurantMsg.innerHTML = `
                 <div class='row'>
@@ -422,10 +405,10 @@ function getRestaurantDiv(restaurant, index) {
                 </div>
             </div>
             <div class="col-12 col-lg-4">
-                <div class="row">
-                    <div class="col">
-                        <div class="restaurant-nearby-images">
-                            <div class="slideshow-wrapper">
+                        <div class="row">
+                            <div class="col">
+                                <div class="restaurant-nearby-images">
+                                    <div class="slideshow-wrapper">
         `;
 
     let imageCount = 0;
@@ -446,10 +429,10 @@ function getRestaurantDiv(restaurant, index) {
     if (imageCount > 1) {
         htmlSlideshow += `
                 <div id="button-prev-${index}" class="slideshow-prev">
-                    <span aria-hidden="true" class="oi oi-chevron-left"></span>
+                    <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>
                 </div>
                 <div id="button-next-${index}" class="slideshow-next">
-                    <span aria-hidden="true" class="oi oi-chevron-right"></span>
+                    <span aria-hidden="true" class="oi oi-check oi-chevron-right"></span>
                 </div>
         `;
     }
