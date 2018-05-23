@@ -23,9 +23,9 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-var options = {
-    key: fs.readFileSync('./private_access/ca.key'),
-    cert: fs.readFileSync('./private_access/ca.crt')
+const options = {
+    key: fs.readFileSync(`${appRoot}/private_access/ca.key`),
+    cert: fs.readFileSync(`${appRoot}/private_access/ca.crt`)
 };
 
 const server = https.createServer(options, app);
