@@ -296,15 +296,37 @@ function updateDisplayFlags() {
 function displaySearchResults() {
     searchResultsDiv.innerHTML = null;
     let searchResultsHTML = '';
+    const pageLength = 4;
+    let displayCount = 0;
+    let pageCount = 0;
 
     if (queryMatches.length > 0) {
         $('#search-results-header').css('display', 'block');
         for (const [index, restaurant] of queryMatches.entries()) {
             if (displayFlags[index]) {
+                if (displayCount % pageLength === 0) {
+                    searchResultsHTML += `
+                       <div class='search-results-page' id='search-results-page-${pageCount}'>
+                   `;
+                }
+
                 searchResultsHTML += getRestaurantDiv(restaurant, index);
+
+                if ((displayCount + 1) % pageLength === 0) {
+                    searchResultsHTML += '</div>';
+                    pageCount++;
+                }
+                displayCount++;
+            }
+
+            // If the page hasn't already been ended, end it here
+            if (((displayCount + 1) % pageLength !== 0) && (index === queryMatches.length)) {
+                searchResultsHTML += '</div>';
             }
         }
         searchResultsHTML += notFoundRestaurantHTML;
+
+        createPaginationLinks(pageCount);
     } else {
         $('#search-results-header').css('display', 'none');
         searchResultsHTML = noResultsHTML;
@@ -318,6 +340,32 @@ function displaySearchResults() {
         // Must be called AFTER content is added to page
         initSlideshow(i);
     }
+}
+
+function createPaginationLinks(pageCount) {
+    let paginationHTML = '';
+
+    if (pageCount > 1) {
+        paginationHTML = `
+            <nav>
+                <ul class='pagination justify-content-center'>
+                    <li class='page-item'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-left'></span></a></li>
+        `;
+
+        for (let p = 0; p < pageCount; p++){
+            paginationHTML += `<li class='page-item'><a href='javascript:void(0)' class='page-link'>${p}</a></li>`;
+        }
+
+        paginationHTML += `
+                    <li class='page-item'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-right'></span></a></li>
+                </ul>
+            </nav>
+        `;
+    }
+
+    let paginationDivContent = document.createElement('div');
+    paginationDivContent.innerHTML = paginationHTML;
+    searchResultsDiv.appendChild(paginationDivContent);
 }
 
 /**
