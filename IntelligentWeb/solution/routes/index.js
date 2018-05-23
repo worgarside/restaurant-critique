@@ -72,7 +72,7 @@ router.get('/', (req, res) => {
                 res.render('index', {
                     title: title,
                     user: req.user,
-                    animateLogo: true,
+                    indexPage: true,
                     restaurants: topRestaurants,
                     categories: allCategories
                 });
@@ -86,7 +86,7 @@ router.get('/', (req, res) => {
                 res.render('index', {
                     title: title,
                     user: req.user,
-                    animateLogo: true,
+                    indexPage: true,
                     restaurants: topRestaurants,
                     categories: allCategories
                 });
@@ -243,7 +243,7 @@ router.get('/restaurant/:url', (req, res) => {
                     .catch(() => {
                         res.render('errors/404', {title: title, user: req.user});
                     })
-            }else{
+            } else {
                 res.render('errors/404', {title: title, user: req.user});
             }
         })
@@ -261,11 +261,17 @@ router.get('/search', (req, res) => {
     const tempRestaurant = new Restaurant;
 
     let featureArray = [];
-    for (const key of Object.keys(tempRestaurant.features)){
+    for (const key of Object.keys(tempRestaurant.features)) {
         let value = tempRestaurant.features[key].name;
         featureArray.push({id: key, name: value})
     }
-    res.render('search', {title: title, user: req.user, categories: allCategories, features: featureArray});
+    res.render('search', {
+        title: title,
+        user: req.user,
+        categories: allCategories,
+        features: featureArray,
+        searchPage: true
+    });
 });
 
 router.get('/signup', (req, res) => {

@@ -14,6 +14,7 @@ let currentPage = 1;
 const searchResultsDiv = $('#search-results')[0];
 const paginationLinksDiv = $('#pagination-links')[0];
 const advancedSearchDiv = $('#advanced-search-collapsible');
+const searchResultsHeader = $('#search-results-header');
 const searchInput = $('#search-input');
 const searchButton = $("#search-button");
 const ratingSlider = $('#rating-slider');
@@ -302,7 +303,7 @@ function displaySearchResults() {
     let pageCount = 0;
 
     if (queryMatches.length > 0) {
-        $('#search-results-header').css('display', 'block');
+        searchResultsHeader.css('display', 'block');
         for (const [index, restaurant] of queryMatches.entries()) {
             if (displayFlags[index]) {
                 if (displayCount % pageLength === 0) {
@@ -334,9 +335,11 @@ function displaySearchResults() {
         }
         searchResultsHTML += notFoundRestaurantHTML;
 
+        searchResultsHeader.find('h4').text(`Search Results - ${displayCount} found`);
+
         createPaginationLinks(pageCount);
     } else {
-        $('#search-results-header').css('display', 'none');
+        searchResultsHeader.css('display', 'none');
         searchResultsHTML = noResultsHTML;
     }
 

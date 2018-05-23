@@ -32,7 +32,6 @@ if (!userLoggedIn) {
             if (!loginForm.is(e.target) && !loginBtn.is(e.target) && !loginWarning.is(e.target) && loginForm.has(e.target).length === 0) {
                 loginForm.fadeOut();
             }
-
         })
         .keydown((e) => {
             if (!userLoggedIn) {
@@ -104,3 +103,23 @@ burgerLoginLink.click(() => {
 });
 
 console.log('Loaded layout.js');
+
+const navbarSearchBtn = $('#navbar-search-button');
+const navbarSearchInput = $('#navbar-search-input');
+navbarSearchBtn.click(() => {
+    if (!navbarSearchInput.hasClass('active')) {
+        navbarSearchInput.addClass('active');
+        navbarSearchBtn.addClass('active');
+    } else {
+        sessionStorage.setItem('query', $('#navbar-search-input').val());
+        window.location.replace('/search');
+    }
+});
+
+navbarSearchInput.keypress((e) => {
+    if (e.which === 13) {
+        sessionStorage.setItem('query', $('#navbar-search-input').val());
+        window.location.replace('/search');
+    }
+});
+

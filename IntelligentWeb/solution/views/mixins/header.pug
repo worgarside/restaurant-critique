@@ -5,7 +5,7 @@ block header
 block navbar
     nav.navbar.navbar-expand-sm.sticky
         ul.navbar-nav.mr-auto
-            if animateLogo
+            if indexPage
                 li
                     a#nav-logo-anim(href='/')
                         img(src="/images/site/logo-square-white.png")
@@ -18,9 +18,14 @@ block navbar
                 li.nav-item(style='margin-left: 60px;')
                     a.nav-link.nav-wide(href='/restaurants-nearby') Restaurants near Me
             li.nav-item
-                a.nav-link.nav-wide(href='#') Write a Review
-            li.nav-item
-                a.nav-link.nav-wide(href='/restaurant/new') Add a Restaurant
+                a.nav-link.nav-wide(href='https://www.sheffield.ac.uk/polopoly_fs/1.662638!/image/TonyCWeb.jpg') ANOTHER LINK
+            if !indexPage && !searchPage
+                li
+                    .vert-center-parent
+                        .vert-center-child#navbar-search
+                            input#navbar-search-input(type='text', placeholder='Search for restaurants')
+                            #navbar-search-button
+                                span.oi.oi-magnifying-glass
 
         ul.navbar-nav.row
             if (!user)

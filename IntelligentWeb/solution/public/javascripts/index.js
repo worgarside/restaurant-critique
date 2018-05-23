@@ -34,8 +34,8 @@ $(window).scroll(() => {
 
 $("#search-button").click((e) => {
     e.preventDefault();
-    sessionStorage.setItem("query", $('#search-input').val());
-    window.location.replace("/search");
+    sessionStorage.setItem('query', $('#search-input').val());
+    window.location.replace('/search');
 });
 
 console.log('Loaded index.js');

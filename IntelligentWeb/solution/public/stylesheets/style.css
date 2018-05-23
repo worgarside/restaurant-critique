@@ -95,6 +95,46 @@ span.oi.oi-star.star-highlight {
 .pointer {
   cursor: pointer;
 }
+#navbar-search {
+  width: 20rem;
+}
+#navbar-search input#navbar-search-input {
+  margin-top: 4px;
+  height: 2.5rem;
+  display: inline-block;
+  width: 2.5rem;
+  border-radius: 1.25rem;
+  padding-left: 1.25rem;
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  position: absolute;
+  outline: none;
+}
+#navbar-search input#navbar-search-input.active {
+  width: 20rem;
+  transition: all ease .5s;
+}
+#navbar-search-button {
+  margin-top: 4px;
+  left: 0;
+  display: inline-block;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 1.25rem;
+}
+#navbar-search-button span {
+  margin: 24%;
+  position: absolute;
+  font-size: 1.25rem;
+}
+#navbar-search-button.active {
+  left: 17.5rem;
+  transition: all ease .5s;
+}
 #main-logo {
   width: 400px;
   background: url('/images/site/logo-wide-white.png') bottom center no-repeat;

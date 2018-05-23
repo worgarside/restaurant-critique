@@ -9,10 +9,10 @@ block header
                     form#index-search-form
                         #main-logo
                         .input-group#index-search-group
-                            input#search-input.form-control.no-border(name='searchQuery' type='text', placeholder='Search by Cuisine, Keyword, Location etc.', aria-label='Text input with dropdown button')
+                            input#search-input.form-control.no-border(name='searchQuery' type='text' placeholder='Search by Cuisine, Keyword, Location etc.')
                             .input-group-append
                                 button.btn#search-button
-                                    span.oi.oi-magnifying-glass(aria-hidden='true')
+                                    span.oi.oi-magnifying-glass
 
 block content
     br
@@ -47,9 +47,9 @@ block content
                                                         - s = 0
                                                         while s < starRating
                                                             span.oi.oi-star.star-highlight(aria-hidden='true')
-                                                             - s++
+                                                                - s++
                                                         - s = 0
-                                                        while s < (5 -starRating)
+                                                        while s < (5 - starRating)
                                                             span.oi.oi-star(aria-hidden='true')
                                                             - s++
                                                         h4.rating-value.d-inline.pre-space= restaurant.averageRating.toFixed(1)

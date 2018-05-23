@@ -131,6 +131,48 @@ span.oi.oi-star {
   cursor: pointer;
 }
 
+#navbar-search {
+  width: 20rem;
+  input#navbar-search-input {
+    margin-top: 4px;
+    height: 2.5rem;
+    display: inline-block;
+    width: 2.5rem;
+    border-radius: 1.25rem;
+    padding-left: 1.25rem;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    position: absolute;
+    outline: none;
+
+    &.active {
+      width: 20rem;
+      transition: all ease .5s;
+    }
+  }
+  &-button {
+    margin-top: 4px;
+    left: 0;
+    display: inline-block;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+    span {
+      margin: 24%;
+      position: absolute;
+      font-size: 1.25rem;
+    }
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 1.25rem;
+    &.active {
+      left: 17.5rem;
+      transition: all ease .5s;
+    }
+  }
+}
+
 // ================================ Index Head ================================ \\
 
 #main-logo {
@@ -1379,8 +1421,8 @@ label.star:hover ~ label.star span::before {
     width: 100px;
   }
 
-  &-results-header{
-      display: none;
+  &-results-header {
+    display: none;
   }
 }
 
