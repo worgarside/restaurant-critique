@@ -28,6 +28,7 @@ const ID = {
     'Las Iguanas': '5ab1677c521e5430fc7d2502',
     'California Fresh': '5ab1677c521e5430fc7d2503',
     'Grill & Go': '5ab1677c521e5430fc7d2504',
+    "Piccolo's Italian Restaurant": '5ab1677c521e5430fc7d2505',
 };
 
 // ================ Database ================ \\
@@ -72,7 +73,7 @@ function populateUsers(insertPromises) {
         name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
-        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19'],
+        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21'],
         reducedID: 'copeyrufus-gmail-com',
         restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"]]}
     }).save());
@@ -816,6 +817,49 @@ function populateRestaurants(insertPromises) {
         images: ['2018-05-03 10-25-02.jpg'],
         published: false
     }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID["Piccolo's Italian Restaurant"]),
+        name: "Piccolo's Italian Restaurant",
+        address: {
+            line1: '3 Convent Walk',
+            city: 'Sheffield',
+            postcode: 'S3 7RX',
+            latitude: 53.379900,
+            longitude: -1.480613
+        },
+        contact: {
+            url: 'http://www.piccolositalian.co.uk/',
+            phone: '0114 249 5040'
+        },
+        openingTimes: [[1020, 1380], [1020, 1380], [1020, 1380], [1020, 1380], [1020, 1410], [1020, 1410], [1020, 1320]],
+        description: 'Relaxed, family-run eatery over 2 storeys, offering a menu of classic Italian dishes.',
+        priceRange: {lower: 5.50, upper: 19.90, band: 2},
+        categories: [
+            {name: 'Italian'}, {name: 'Dessert'}, {name: 'Casual'}, {name: 'International'}, {name: 'Chicken'},
+            {name: 'Pasta'}, {name: 'Risotto'}, , {name: 'Pizza'}, {name: 'Steak'}, {name: 'Vegetarian'}, {name: 'Dessert'}
+        ],
+        features: {
+            alcohol: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: false},
+            mastercard: {value: true},
+            outdoorSeating: {value: false},
+            parking: {value: false},
+            reservations: {value: true},
+            tableService: {value: false},
+            takeout: {value: false},
+            vegetarian: {value: true},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
+        },
+        creator: {_id: 'worgarside@gmail.com', name: {first: 'Will', last: 'Garside'}},
+        reviews: ['5aad98377888995220605d21'],
+        images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg'],
+        averageRating: 4
+    }).save());
 }
 
 /**
@@ -989,6 +1033,20 @@ function populateReviews(insertPromises) {
             reducedID: 'copeyrufus-gmail-com',
         },
         restaurantRating: 3
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d21'),
+        restaurant: {_id: ID["Piccolo's Italian Restaurant"], name: "Piccolo's Italian Restaurant"},
+        title: "Food Coma",
+        body: "The food was so amazing that I passed out right after dessert!",
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            reducedID: 'copeyrufus-gmail-com',
+        },
+        images: ['2018-05-23 12-52-00.jpg', '2018-05-23 12-52-01.jpg'],
+        restaurantRating: 5
     }).save());
 }
 
