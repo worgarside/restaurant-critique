@@ -9,17 +9,19 @@ let video, canvas;
 const takePhotoButton = $('#takephoto');
 const confirmPhotoButton = $('#confirmphoto');
 const retakePhotoButton = $('#retakephoto');
-const deleteCanvas1 = $('#deletestorecanvas1');
-const deleteCanvas2 = $('#deletestorecanvas2');
-const deleteCanvas3 = $('#deletestorecanvas3');
-const deleteCanvas4 = $('#deletestorecanvas4');
-const deleteCanvas5 = $('#deletestorecanvas5');
+const deleteCanvas0 = $('#deletestorecanvas1');
+const deleteCanvas1 = $('#deletestorecanvas2');
+const deleteCanvas2 = $('#deletestorecanvas3');
+const deleteCanvas3 = $('#deletestorecanvas4');
+const deleteCanvas4 = $('#deletestorecanvas5');
 
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
 const formSubmit = $('#submit');
-let canvasContents = [false, false, false, false, false];
+let canvasContents = Array(5).fill(false);
 
+const canvasStore0 = document.getElementById("storecanvas5");
+canvasStore0Context = canvasStore0.getContext('2d');
 const canvasStore1 = document.getElementById("storecanvas1");
 canvasStore1Context = canvasStore1.getContext('2d');
 const canvasStore2 = document.getElementById("storecanvas2");
@@ -28,9 +30,6 @@ const canvasStore3 = document.getElementById("storecanvas3");
 canvasStore3Context = canvasStore3.getContext('2d');
 const canvasStore4 = document.getElementById("storecanvas4");
 canvasStore4Context = canvasStore4.getContext('2d');
-const canvasStore0 = document.getElementById("storecanvas5");
-canvasStore0Context = canvasStore0.getContext('2d');
-
 
 
 $(() => {
@@ -181,26 +180,36 @@ $(document)
 
 // ================================ Camera Functions ================================ \\
 
+deleteCanvas0.click(() => {
+    canvasStore0Context.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContents[0] = false;
+    videoContainer.css("display", "unset");
+    takePhotoButton.css("display", "unset");
+});
 deleteCanvas1.click(() => {
     canvasStore1Context.clearRect(0, 0, canvas.width, canvas.height);
     canvasContents[1] = false;
+    videoContainer.css("display", "unset");
+    takePhotoButton.css("display", "unset");
 });
 deleteCanvas2.click(() => {
     canvasStore2Context.clearRect(0, 0, canvas.width, canvas.height);
     canvasContents[2] = false;
+    videoContainer.css("display", "unset");
+    takePhotoButton.css("display", "unset");
 });
 deleteCanvas3.click(() => {
     canvasStore3Context.clearRect(0, 0, canvas.width, canvas.height);
     canvasContents[3] = false;
+    videoContainer.css("display", "unset");
+    takePhotoButton.css("display", "unset");
 });
+
 deleteCanvas4.click(() => {
     canvasStore4Context.clearRect(0, 0, canvas.width, canvas.height);
     canvasContents[4] = false;
-});
-
-deleteCanvas5.click(() => {
-    canvasStore0Context.clearRect(0, 0, canvas.width, canvas.height);
-    canvasContents[0] = false;
+    videoContainer.css("display", "unset");
+    takePhotoButton.css("display", "unset");
 });
 
 takePhotoButton.click(() => {
@@ -215,6 +224,19 @@ takePhotoButton.click(() => {
 
 });
 
+
+//Checks to see if all Canvas' contain pictures, to hide take picture when 5 pictures are taken.
+function arrayTrue(array) {
+    for(let i = 0; i < array.length; i++) {
+        if(array[i] === false) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 confirmPhotoButton.click(() => {
     for (let i = 0; i < canvasContents.length; i++) {
         if (!canvasContents[i]){
@@ -224,11 +246,17 @@ confirmPhotoButton.click(() => {
             break;
         }
     }
+
     videoContainer.css("display", "unset");
     canvasContainer.css("display", "none");
     takePhotoButton.css("display", "unset");
     confirmPhotoButton.css("display", "none");
     retakePhotoButton.css("display", "none");
+    if (arrayTrue(canvasContents)){
+        videoContainer.css("display", "none");
+        canvasContainer.css("display", "none");
+        takePhotoButton.css("display", "none");
+    }
 
 });
 
@@ -246,11 +274,14 @@ retakePhotoButton.click(() => {
 // ================================ Review Submission ================================ \\
 
 formSubmit.click(() => {
+
+    //LOOPS THROUGH IMAGES WHICH ARE TRUE AND SENDS IMAGES WHICH ARE TRUE*****************************
     for (let i = 0; i < canvasContents.length; i++) {
         if (canvasContents[i] = true){
             sendImage(22, eval(("canvasStore"+i)).toDataURL());
         }
     }
+    return false;
 });
 
 
