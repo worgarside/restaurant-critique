@@ -56,7 +56,7 @@ function allowLocation(allowed) {
  */
 function initMap() {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address': postcode}, (results, status) => {
+    geocoder.geocode({'address': `${postcode}, UK`}, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
             lat = results[0].geometry.location.lat();
             lng = results[0].geometry.location.lng();
