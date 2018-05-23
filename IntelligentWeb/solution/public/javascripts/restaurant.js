@@ -9,11 +9,11 @@ let video, canvas;
 const takePhotoButton = $('#takephoto');
 const confirmPhotoButton = $('#confirmphoto');
 const retakePhotoButton = $('#retakephoto');
-const deleteCanvas0 = $('#deletestorecanvas1');
-const deleteCanvas1 = $('#deletestorecanvas2');
-const deleteCanvas2 = $('#deletestorecanvas3');
-const deleteCanvas3 = $('#deletestorecanvas4');
-const deleteCanvas4 = $('#deletestorecanvas5');
+const deleteCanvas0 = $('#deletestorecanvas5');
+const deleteCanvas1 = $('#deletestorecanvas1');
+const deleteCanvas2 = $('#deletestorecanvas2');
+const deleteCanvas3 = $('#deletestorecanvas3');
+const deleteCanvas4 = $('#deletestorecanvas4');
 
 const canvasContainer = $('#canvas');
 const videoContainer = $('#video');
@@ -30,6 +30,11 @@ const canvasStore3 = document.getElementById("storecanvas3");
 canvasStore3Context = canvasStore3.getContext('2d');
 const canvasStore4 = document.getElementById("storecanvas4");
 canvasStore4Context = canvasStore4.getContext('2d');
+
+for (let i=0; i < canvasContents.length; i++){
+    eval("canvasStore"+i).width = 640;
+    eval("canvasStore"+i).height = 480;
+}
 
 
 $(() => {
@@ -240,7 +245,7 @@ function arrayTrue(array) {
 confirmPhotoButton.click(() => {
     for (let i = 0; i < canvasContents.length; i++) {
         if (!canvasContents[i]){
-            eval("canvasStore"+i+"Context").drawImage(canvas, 0, 0);
+            eval("canvasStore"+i+"Context").drawImage(canvas, 0, 0, canvas.width, canvas.height);
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             canvasContents[i] = true;
             break;
