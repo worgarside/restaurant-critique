@@ -30,7 +30,8 @@ const ID = {
     'Grill & Go': '5ab1677c521e5430fc7d2504',
     "Piccolo's Italian Restaurant": '5ab1677c521e5430fc7d2505',
     'ASK Italian': '5ab1677c521e5430fc7d2506',
-    'Falafel King': '5ab1677c521e5430fc7d2507'
+    'Falafel King': '5ab1677c521e5430fc7d2507',
+    "The Doctor's Orders": '5ab1677c521e5430fc7d2508'
 };
 
 // ================ Database ================ \\
@@ -88,7 +89,7 @@ function populateUsers(insertPromises) {
         postcode: 'S10 2FL',
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d15'],
         reducedID: 'greta-veronika-gmail-com',
-        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"], ID['ASK Italian'], ID['Falafel King']]}
+        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"], ID['ASK Italian'], ID['Falafel King'], ID["The Doctor's Orders"]]}
     }).save());
 
     insertPromises.push(new User({
@@ -926,7 +927,6 @@ function populateRestaurants(insertPromises) {
             phone: '01142493159'
         },
         openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320]],
-        description: '',
         priceRange: {lower: 1, upper: 8, band: 1},
         categories: [
             {name: 'Falafel'}, {name: 'Wraps'}, {name: 'Hommous'}, {name: 'Salad'}, {name: 'Inexpensive'},
@@ -955,6 +955,55 @@ function populateRestaurants(insertPromises) {
         owner: 'greta.veronika@gmail.com',
         reviews: ['5aad98377888995220605d24', '5aad98377888995220605d25'],
         images: ['2018-05-24 11-57-02.jpeg', '2018-05-24 11-57-03.jpeg', '2018-05-24 11-57-04.jpeg', '2018-05-24 11-57-05.jpg', '2018-05-24 11-57-01.jpeg', '2018-05-24 11-57-00.jpeg'],
+        averageRating: 4
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID["The Doctor's Orders"]),
+        name: "The Doctor's Orders",
+        address: {
+            line1: '412',
+            line2: 'Glossop Road',
+            city: 'Sheffield',
+            postcode: 'S10 2JD',
+            latitude: 53.379334,
+            longitude: -1.489588
+        },
+        contact: {
+            url: 'http://thedoctorsorders.pub/',
+            menu: 'http://thedoctorsorders.pub/food/',
+            phone: '0114 272 1214'
+        },
+        openingTimes: [[720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1380], [720, 1140]],
+        description: 'Traditional boozer offering cask ales and a menu of pub favourites in a simple, casual space.',
+        priceRange: {lower: 3.95, upper: 18.95, band: 2},
+        categories: [
+            {name: 'Beer'}, {name: 'Cocktails'}, {name: 'Wine'}, {name: 'Steak'}, {name: 'Salad'},
+            {name: 'Burger'}
+        ],
+        features: {
+            alcohol: {value: true},
+            creditCard: {value: true},
+            delivery: {value: false},
+            highchairs: {value: true},
+            glutenFree: {value: true},
+            mastercard: {value: true},
+            outdoorSeating: {value: true},
+            parking: {value: false},
+            reservations: {value: true},
+            seating: {value: true},
+            tableService: {value: true},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: true},
+            wheelchairAccessible: {value: true},
+            wifi: {value: true}
+        },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
+        owner: 'greta.veronika@gmail.com',
+        reviews: [],
+        images: ['2018-05-24 14-09-00.jpeg', '2018-05-24 14-09-01.jpeg', '2018-05-24 14-09-02.jpg'],
         averageRating: 4
     }).save());
 }
