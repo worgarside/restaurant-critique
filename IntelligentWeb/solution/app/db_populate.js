@@ -29,7 +29,8 @@ const ID = {
     'California Fresh': '5ab1677c521e5430fc7d2503',
     'Grill & Go': '5ab1677c521e5430fc7d2504',
     "Piccolo's Italian Restaurant": '5ab1677c521e5430fc7d2505',
-    'ASK Italian': '5ab1677c521e5430fc7d2506'
+    'ASK Italian': '5ab1677c521e5430fc7d2506',
+    'Falafel King': '5ab1677c521e5430fc7d2507'
 };
 
 // ================ Database ================ \\
@@ -74,7 +75,7 @@ function populateUsers(insertPromises) {
         name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
-        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22'],
+        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22', '5aad98377888995220605d25'],
         reducedID: 'copeyrufus-gmail-com',
         restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"], ID["Piccolino's Italian Restaurant"]]}
     }).save());
@@ -87,7 +88,7 @@ function populateUsers(insertPromises) {
         postcode: 'S10 2FL',
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d15'],
         reducedID: 'greta-veronika-gmail-com',
-        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"], ID['ASK Italian']]}
+        restaurants: {created: [ID['Handmade Burger Co.'], ID['Almost Famous'], ID['Piccolino'], ID["Las Iguanas"], ID['ASK Italian'], ID['Falafel King']]}
     }).save());
 
     insertPromises.push(new User({
@@ -96,7 +97,7 @@ function populateUsers(insertPromises) {
         name: {first: 'Will', last: 'Garside'},
         ageCategory: 2,
         postcode: 'SY14 8JU',
-        reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18', '5aad98377888995220605d23'],
+        reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18', '5aad98377888995220605d23', '5aad98377888995220605d24'],
         reducedID: 'worgarside-gmail-com',
         verified: {
             flag: true
@@ -905,7 +906,55 @@ function populateRestaurants(insertPromises) {
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         owner: 'greta.veronika@gmail.com',
         reviews: ['5aad98377888995220605d22', '5aad98377888995220605d23'],
-        images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg'],
+        images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
+        averageRating: 4
+    }).save());
+
+    insertPromises.push(new Restaurant({
+        _id: mongoose.Types.ObjectId(ID['Falafel King']),
+        name: 'Falafel King',
+        address: {
+            line1: '323',
+            line2: 'Glossop Road',
+            city: 'Sheffield',
+            postcode: 'S10 2HP',
+            latitude: 53.379118,
+            longitude: -1.489175
+        },
+        contact: {
+            menu: 'https://take-a-way.co.uk/menu/6990/falafel-king-sheffield',
+            phone: '01142493159'
+        },
+        openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320]],
+        description: '',
+        priceRange: {lower: 1, upper: 8, band: 1},
+        categories: [
+            {name: 'Falafel'}, {name: 'Wraps'}, {name: 'Hommous'}, {name: 'Salad'}, {name: 'Inexpensive'},
+            {name: 'Burger'}, {name: 'Chicken'}, {name: 'Salad'}, {name: 'Soup'}, {name: 'Curry'}, {name: 'Rice'}
+        ],
+        features: {
+            alcohol: {value: false},
+            creditCard: {value: false},
+            delivery: {value: true},
+            highchairs: {value: false},
+            glutenFree: {value: false},
+            mastercard: {value: false},
+            outdoorSeating: {value: true},
+            parking: {value: false},
+            reservations: {value: false},
+            seating: {value: true},
+            tableService: {value: false},
+            takeout: {value: true},
+            vegetarian: {value: true},
+            vegan: {value: false},
+            visa: {value: false},
+            wheelchairAccessible: {value: false},
+            wifi: {value: false}
+        },
+        creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
+        owner: 'greta.veronika@gmail.com',
+        reviews: ['5aad98377888995220605d24', '5aad98377888995220605d25'],
+        images: ['2018-05-24 11-57-02.jpeg', '2018-05-24 11-57-03.jpeg', '2018-05-24 11-57-04.jpeg', '2018-05-24 11-57-05.jpg', '2018-05-24 11-57-01.jpeg', '2018-05-24 11-57-00.jpeg'],
         averageRating: 4
     }).save());
 }
@@ -1126,6 +1175,34 @@ function populateReviews(insertPromises) {
         },
         images: ['2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
         restaurantRating: 5
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d24'),
+        restaurant: {_id: ID['Falafel King'], name: 'Falafel King'},
+        title: "Cheap and tasty wraps!",
+        body: 'Love them! I eat them everyday!',
+        author: {
+            forename: 'Will',
+            surname: 'Garside',
+            reducedID: 'worgarside-gmail-com',
+        },
+        images: ['2018-05-24 11-57-01.jpeg', '2018-05-24 11-57-00.jpeg'],
+        restaurantRating: 5
+    }).save());
+
+    insertPromises.push(new Review({
+        _id: mongoose.Types.ObjectId('5aad98377888995220605d25'),
+        restaurant: {_id: ID['Falafel King'], name: 'Falafel King'},
+        title: "Don't have the soup",
+        body: 'I did not like the soup, so do not get it',
+        author: {
+            forename: 'Rufus',
+            surname: 'Cope',
+            reducedID: 'copeyrufus-gmail-com',
+        },
+        images: ['2018-05-24 11-57-05.jpg'],
+        restaurantRating: 3
     }).save());
 }
 
