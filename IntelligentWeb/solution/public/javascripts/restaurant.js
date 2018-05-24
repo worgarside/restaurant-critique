@@ -286,3 +286,23 @@ $('form#review-form').submit((e) => {
     });
 
 });
+
+// ================================ Category List Toggle ================================ \\
+
+function toggleView() {
+    let x = document.getElementById("view-toggle");
+    let btn = document.getElementById("toggle-btn");
+
+    if (x.style.display === "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+
+    if (btn.text === "View more...") {
+        btn.text = "View less...";
+    } else {
+        btn.text = "View more...";
+    }
+
+}

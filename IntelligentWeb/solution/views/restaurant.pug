@@ -60,8 +60,9 @@ block content
                     if index < 7
                         p.restaurant-category= category.name
                     else if index === 8
-                        // TODO this needs plugging in or removing
-                        a.btn.btn-link(href='#') View more...
+                        a.btn.btn-link#toggle-btn(onclick='toggleView()') View more...
+                        #view-toggle(style='display: none;')
+                            p.restaurant-category= category.name
 
         hr
         .row
