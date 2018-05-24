@@ -209,69 +209,13 @@ block content
                                             td
                                                 if review.images[2]
                                                     .review-image-secondary(style='margin-top: 1px;')
-                                                            img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+                                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
                                                 else
                                                     .review-image-secondary.pointer(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
         br
         .row
             .col
                 hr
-                hr
-                form#review-form(action='/restaurant/add_review' method='POST' enctype='multipart/form-data')
-                    .form-row
-                        .form-group.col
-                            .stars
-                                input#star-5.star(type='radio', name='star', value='5')
-                                label.star(for='star-5')
-                                    span.oi.oi-star
-                                input#star-4.star(type='radio', name='star', value='4')
-                                label.star(for='star-4')
-                                    span.oi.oi-star
-                                input#star-3.star(type='radio', name='star', value='3')
-                                label.star(for='star-3')
-                                    span.oi.oi-star
-                                input#star-2.star(type='radio', name='star', value='2')
-                                label.star(for='star-2')
-                                    span.oi.oi-star
-                                input#star-1.star(type='radio', name='star', value='1')
-                                label.star(for='star-1')
-                                    span.oi.oi-star
-                    .form-row
-                        .form-group.col
-                            label(for='review-title') Title
-                            input.form-control#review-title(type='text', name='title', placeholder='Title of review' required)
-                    .form-row
-                        .form-group.col
-                            label(for='review-message') Review
-                            textarea.form-control#review-message(name='body', placeholder='Your message', style='height:100px' required)
-                    .form-row
-                        .form-group.col
-                            input#uploadedFile(type='file', name='uploadedFile', accept='image/*')
-                    .form-row
-                        .form-group.col
-                            input.form-control#submit(type='submit', value='Submit')
-                hr
-                hr
-
-        .row
-            video#live-video(autoplay='')
-            button#take-photo Take snapshot
-            button#confirm-photo(style='display: none;') Confirm taken photo
-            button#retake-photo(style='display: none;') Retake photo
-            canvas#new-image(style='display: none;')
-        .row
-            canvas.user-review-image#image-0
-            button.delete-image#delete-image-0 Delete 0
-            canvas.user-review-image#image-1
-            button.delete-image#delete-image-1 Delete 1
-            canvas.user-review-image#image-2
-            button.delete-image#delete-image-2 Delete 2
-            canvas.user-review-image#image-3
-            button.delete-image#delete-image-3 Delete 3
-            canvas.user-review-image#image-4
-            button.delete-image#delete-image-4 Delete 4
-            button#upload-pics Upload
-
                 h4 Have you been to #{restaurant.name}? Leave your review!
                 br
                 if (user)
