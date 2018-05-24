@@ -58,7 +58,7 @@ router.post('/upload_picture', (req, res) => {
         });
     }
 
-    res.end();
+    res.send('done');
 });
 
 module.exports = router;

@@ -1110,35 +1110,122 @@ p.login-helper {
   max-height: 100%;
   max-width: 100%;
 }
-.user-review-image {
-  width: 128px;
-  height: 96px;
-}
-button#get-directions {
-  margin: 0.5rem 0;
-}
-.stars {
+#review-form .stars {
   direction: rtl;
   unicode-bidi: bidi-override;
   color: #919191;
   font-size: 30px;
 }
-.stars label {
+#review-form .stars label {
   margin: 0;
 }
-.stars label.star {
-  padding: 6px;
+#review-form .stars label.star {
+  padding: 0 3px;
 }
-input.star {
+#review-form .stars label.star span.oi.oi-star {
+  top: -1px;
+}
+#review-form input.star {
   display: none;
 }
-input.star:checked label.star span::before,
-input.star:checked ~ label.star span::before {
+#review-form input.star:checked label.star span::before,
+#review-form input.star:checked ~ label.star span::before {
   color: #e69200;
 }
-label.star:hover,
-label.star:hover ~ label.star span::before {
+#review-form label.star:hover,
+#review-form label.star:hover ~ label.star span::before {
   color: #e69200;
+}
+#review-form #review-title {
+  width: 100%;
+}
+#review-form #review-body {
+  height: 6rem;
+}
+#review-form #review-video-div video#live-video {
+  width: 100%;
+}
+#review-form #review-video-div button.camera-controls {
+  position: absolute;
+  bottom: 1rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 30px;
+  outline: none;
+  margin: 0 auto;
+  border: solid 2px;
+  cursor: pointer;
+}
+#review-form #review-video-div button.camera-controls#take-photo {
+  border-color: #3497b4;
+  background-color: rgba(0, 0, 0, 0.2);
+  left: 0;
+  right: 0;
+}
+#review-form #review-video-div button.camera-controls#take-photo:active {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-color: #0061b4;
+}
+#review-form #review-video-div button.camera-controls#confirm-photo {
+  display: none;
+  border-color: #82d284;
+  background-color: rgba(0, 205, 0, 0.3);
+  left: 0;
+  right: 4rem;
+}
+#review-form #review-video-div button.camera-controls#confirm-photo:active {
+  background-color: rgba(0, 205, 0, 0.8);
+  border-color: #00cd00;
+}
+#review-form #review-video-div button.camera-controls#cancel-photo {
+  display: none;
+  border-color: #ff6a74;
+  background-color: rgba(205, 0, 0, 0.3);
+  left: 4rem;
+  right: 0;
+}
+#review-form #review-video-div button.camera-controls#cancel-photo:active {
+  background-color: rgba(205, 0, 0, 0.8);
+  border-color: #eb0000;
+}
+#review-form #review-video-div button.camera-controls span {
+  color: white;
+}
+#review-form #review-images-taken {
+  display: flex;
+  justify-content: space-between;
+}
+#review-form #review-images-taken .review-image-container {
+  width: 30%;
+  display: none;
+}
+#review-form #review-images-taken .review-image-container .user-review-image {
+  width: 100%;
+  height: auto;
+  background-color: black;
+}
+#review-form #review-images-taken .review-image-container .delete-button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  position: absolute;
+  background-color: #dbdbdb;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  top: -0.75rem;
+  margin-left: -0.75rem;
+}
+#review-form #review-images-taken .review-image-container .delete-button:active {
+  background-color: #919191;
+}
+#review-form #review-images-taken .review-image-container .delete-button span {
+  top: -2px;
+  font-size: .8rem;
+  color: black;
+}
+button#get-directions {
+  margin: 0.5rem 0;
 }
 #restaurant-current-map {
   width: 100%;
