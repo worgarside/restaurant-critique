@@ -9,40 +9,77 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const multer = require('multer');
 const fs = require('fs');
 const dateFormat = require('dateformat');
-
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, './public/images/reviewTestImages');
-    },
-    filename: (req, file, callback) => {
-        const re = /(?:\.([^.]+))?$/;
-        const extension = `.${re.exec(file.originalname)[1]}`;
-        const filename = crypto.randomBytes(20).toString('hex');
-        callback(null, filename + extension);
-    }
-});
-
-const upload = multer({storage: storage});
+const mongoose = require('mongoose');
+const Restaurant = mongoose.model('Restaurant');
+const User = mongoose.model('User');
+const Review = mongoose.model('Review');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
-// ================ POST Method ================ \\
+// ================================ POST Method ================================ \\
 
-// router.post('/upload_picture', upload.array('images', 5), (req, res) => {
 router.post('/submit_review', (req, res) => {
     console.log(`Review:
     Title: ${req.body.title}
     Rating: ${req.body.rating}
     Body: ${req.body.body}
-    Restaurant: ${req.body.restaurantId}
+    Restaurant: ${req.body.restaurantId}  
+                ${req.body.restaurantName}
     User: ${req.user._id}
     imageBlob.length: ${req.body['imageBlob[]'].length}
     `);
 
-    processImages(req.body['imageBlob[]'], req.body.restaurantId);
+    let review = new Review({
+        restaurant: {
+            _id: req.body.restaurantId,
+            name: req.body.restaurantName
+        },
+        title: req.body.title,
+        body: req.body.body,
+        author: {
+            forename: req.user.name.first,
+            surname: req.user.name.last,
+            reducedID: req.user.reducedID
+        },
+        restaurantRating: req.body.rating,
+    });
+
+    const reviewImages = processImages(req.body['imageBlob[]'], req.body.restaurantId);
+    review.images = reviewImages;
+
+    review.save()
+        .then(() => {
+            console.log('Review added to collection');
+
+            // Add the Restaurant ID to the User's attribute
+            User.findByIdAndUpdate(
+                req.user._id,
+                {$push: {reviews: review._id.toString()}},
+                (err) => {
+                    if (err) {
+                        console.log(`User error: ${err}`);
+                    }else{
+                        console.log('User fields updated');
+                    }
+                });
+
+            Restaurant.findByIdAndUpdate(
+                req.body.restaurantId,
+                {$push: {images: {$each: reviewImages}, reviews: review._id.toString()}},
+                (err) => {
+                    if (err) {
+                        console.log(`Restaurant error: ${err}`);
+                    }else{
+                        console.log('Restaurant fields updated');
+                    }
+                });
+        })
+        .catch((err) => {
+            console.log(`Error saving review: ${err}`);
+        });
+
 
     res.send('done');
 });
@@ -50,22 +87,31 @@ router.post('/submit_review', (req, res) => {
 // TODO jsdoc
 function processImages(imageArray, restaurantId) {
     const now = dateFormat(new Date(), 'yyyy-mm-dd HH-MM-ss');
-    const targetDirectory = `./public/images/reviewTest/${restaurantId}/`;
+    const targetDirectory = `./public/images/restaurants/${restaurantId}/`;
 
     if (!fs.existsSync(targetDirectory)) {
         fs.mkdirSync(targetDirectory);
     }
 
-    for (let i = 0; i < imageArray.length-1; i++) {
+    let imageNames = [];
+
+    for (let i = 0; i < imageArray.length - 1; i++) {
         let image = imageArray[i];
         // strip off the data: url prefix to get just the base64-encoded bytes
         let imageBlob = image.replace(/^data:image\/\w+;base64,/, '');
         let buf = new Buffer(imageBlob, 'base64');
-        fs.writeFile(`${targetDirectory}${now}_${i}.png`, buf, (err) => {
+        const imageName = `${now}_${i}.png`;
+        const filePath = targetDirectory + imageName;
+
+        fs.writeFile(filePath, buf, (err) => {
             if (err) throw err;
         });
+
+        imageNames.push(imageName);
     }
 
+    console.log(`Saved ${imageNames.length} images`);
+    return imageNames;
 }
 
 module.exports = router;

@@ -288,6 +288,7 @@ block content
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};
         const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
         const restaurantId = `#{restaurant._id}`;
+        const restaurantName = `#{restaurant.name}`;
         const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(type='text/javascript', src='/javascripts/review.js')
