@@ -74,7 +74,7 @@ router.post('/submit_review', (req, res) => {
                         req.body.restaurantId,
                         {
                             $push: {images: {$each: reviewImages}, reviews: review._id.toString()},
-                        $set: {averageRating: newRating}
+                            $set: {averageRating: newRating}
                         },
                         (err) => {
                             if (err) {
