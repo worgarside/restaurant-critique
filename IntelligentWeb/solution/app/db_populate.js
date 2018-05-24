@@ -926,7 +926,6 @@ function populateRestaurants(insertPromises) {
             phone: '01142493159'
         },
         openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320]],
-        description: '',
         priceRange: {lower: 1, upper: 8, band: 1},
         categories: [
             {name: 'Falafel'}, {name: 'Wraps'}, {name: 'Hommous'}, {name: 'Salad'}, {name: 'Inexpensive'},
