@@ -993,7 +993,7 @@ p.login-helper {
 }
 #restaurant-page-override #reviews .review-image-main img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 11.25rem;
   object-fit: contain;
 }
 #restaurant-page-override #reviews .review-image-secondary {
@@ -1196,7 +1196,7 @@ p.login-helper {
   justify-content: space-between;
 }
 #review-form #review-images-taken .review-image-container {
-  width: 30%;
+  width: 17.5%;
   display: none;
 }
 #review-form #review-images-taken .review-image-container .user-review-image {

@@ -60,20 +60,32 @@ router.post('/submit_review', (req, res) => {
                 (err) => {
                     if (err) {
                         console.log(`User error: ${err}`);
-                    }else{
+                    } else {
                         console.log('User fields updated');
                     }
                 });
+            Restaurant.findOne({_id: req.body.restaurantId})
+                .then((restaurant) => {
+                    const reviewCount = restaurant.reviews.length;
+                    const oldRating = restaurant.averageRating;
+                    const newRating = ((oldRating * reviewCount) + review.restaurantRating) / (reviewCount + 1);
 
-            Restaurant.findByIdAndUpdate(
-                req.body.restaurantId,
-                {$push: {images: {$each: reviewImages}, reviews: review._id.toString()}},
-                (err) => {
-                    if (err) {
-                        console.log(`Restaurant error: ${err}`);
-                    }else{
-                        console.log('Restaurant fields updated');
-                    }
+                    Restaurant.findByIdAndUpdate(
+                        req.body.restaurantId,
+                        {
+                            $push: {images: {$each: reviewImages}, reviews: review._id.toString()},
+                        $set: {averageRating: newRating}
+                        },
+                        (err) => {
+                            if (err) {
+                                console.log(`Restaurant update error: ${err}`);
+                            } else {
+                                console.log('Restaurant fields updated');
+                            }
+                        });
+                })
+                .catch((err) => {
+                    console.log(`Restaurant lookup error: ${err}`);
                 });
         })
         .catch((err) => {
