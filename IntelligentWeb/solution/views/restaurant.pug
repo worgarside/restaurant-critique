@@ -218,72 +218,71 @@ block content
                 hr
                 h4 Have you been to #{restaurant.name}? Leave your review!
                 br
-                form#review-form
-                    .row
-                        .col-lg-6.col-md-12.col-sm-12.col-12
-                            .form-row.mb-2
-                                .col-3
-                                    .vert-center-parent
-                                        .vert-center-child
-                                            label.float-right.mb-0(for='review-title') Title
-                                .col-9.form-group.form-inline.mb-0
-                                    input.form-control#review-title(type='text', name='title', placeholder='Title' required)
-                            .form-row.mb-2
-                                .col-3
-                                    .vert-center-parent
-                                        .vert-center-child
-                                            p.mb-0.float-right Rating
-                                .col-9.form-group.mb-0
-                                    .stars
-                                        - var starCount = 1
-                                        while starCount < 6
-                                            input.star(type='radio', name='star', value=starCount id=`star-${starCount}`)
-                                            label.star(for=`star-${starCount}`)
-                                                span.oi.oi-star
-                                            - starCount ++
-
-                            .form-row.mb-2
-                                .col-3
-                                    .vert-center-parent
-                                        .vert-center-child
-                                            p.mb-0.float-right Review
-                                .col-9.form-group.mb-0
-                                    textarea.form-control#review-body(name='body' placeholder='Write the body of your review here' required)
-                            .form-row
-                                .col-3
-                                    .vert-center-parent
-                                        .vert-center-child
-                                            label.float-right.mb-0(for='image-upload') Image Upload
-                                .col-9.form-group.mb-0
-                                    input.form-control#image-upload(type='file' name='image-upload' accept='image/*' multiple='multiple')
-                            br
-                        .col-lg-6.col-md-12.col-sm-12.col-12
-                            .row.mb-4
-                                .col
-                                    #review-video-div
-                                        video#live-video(autoplay='')
-                                        button.camera-controls#take-photo(type='button')
-                                            span.oi.oi-camera-slr
-                                        button.camera-controls#confirm-photo(type='button' )
-                                            span.oi.oi-check
-                                        button.camera-controls#cancel-photo(type='button' )
-                                            span.oi.oi-x
-                                        canvas#new-image(style='display: none;')
-                            .row
-                                .col#review-images-taken
-                                    - var imageCount = 0
-                                    while imageCount < 5
-                                        .review-image-container(id=`image-container-${imageCount}`)
-                                            canvas.user-review-image(id=`image-${imageCount}`)
-                                            button.delete-button(type='button' id=`delete-image-${imageCount}`)
+                if (user)
+                    form#review-form
+                        .row
+                            .col-lg-6.col-md-12.col-sm-12.col-12
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label.float-right.mb-0(for='review-title') Title
+                                    .col-9.form-group.form-inline.mb-0
+                                        input.form-control#review-title(type='text', name='title', placeholder='Title' required)
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                p.mb-0.float-right Rating
+                                    .col-9.form-group.mb-0
+                                        .stars
+                                            - var starCount = 5
+                                            while starCount >= 1
+                                                input.star(type='radio', name='star', value=starCount id=`star-${starCount}`)
+                                                label.star(for=`star-${starCount}`)
+                                                    span.oi.oi-star
+                                                - starCount --
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                p.mb-0.float-right Review
+                                    .col-9.form-group.mb-0
+                                        textarea.form-control#review-body(name='body' placeholder='Write the body of your review here' required)
+                                //.form-row
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label.float-right.mb-0(for='image-upload') Image Upload
+                                    .col-9.form-group.mb-0
+                                        input.form-control#image-upload(type='file' name='image-upload' accept='image/*' multiple='multiple')
+                                br
+                            .col-lg-6.col-md-12.col-sm-12.col-12
+                                .row.mb-4
+                                    .col
+                                        #review-video-div
+                                            video#live-video(autoplay='')
+                                            button.camera-controls#take-photo(type='button')
+                                                span.oi.oi-camera-slr
+                                            button.camera-controls#confirm-photo(type='button' )
+                                                span.oi.oi-check
+                                            button.camera-controls#cancel-photo(type='button' )
                                                 span.oi.oi-x
-                                        - imageCount ++;
-                    .row
-                        .col
-                            button.btn.float-right#submit-review Submit Review
-
-
-
+                                            canvas#new-image(style='display: none;')
+                                .row
+                                    .col#review-images-taken
+                                        - var imageCount = 0
+                                        while imageCount < 5
+                                            .review-image-container(id=`image-container-${imageCount}`)
+                                                canvas.user-review-image(id=`image-${imageCount}`)
+                                                button.delete-button(type='button' id=`delete-image-${imageCount}`)
+                                                    span.oi.oi-x
+                                            - imageCount ++;
+                        .row
+                            .col
+                                button.btn.float-right#submit-review Submit Review
+                else
+                    p Log in to leave a review
 
     script.
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};

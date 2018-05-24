@@ -246,43 +246,42 @@ function showHTML(array) {
 
 // ================================ Review Submission ================================ \\
 
-
+// TODO jsdoc
 $('form#review-form').submit((e) => {
     e.preventDefault();
-
-    // let imageCount = 0;
-    // canvasContents.forEach(x => x ? imageCount++ : x);
 
     let imageBlob = [];
     for (let i = 0; i < maxImageCount; i++) {
         if (canvasContents[i]) {
             imageBlob.push(canvasArr[i].toDataURL());
-            // imageBlob.push(`canvasArr[${i}].toDataURL()`);
         }
     }
 
+    // Push empty string to ensure array has at least 2 elements for parsing - weird bug, easy fix
+    imageBlob.push('');
+
+    console.log($('#image-upload').files);
     let data = {
         title: $('#review-title').val(),
+        rating: $('input.star:checked').val(),
         body: $('#review-body').val(),
-        // imageCount: imageCount,
-        imageBlob: imageBlob
+        imageBlob: imageBlob,
+        restaurantId: restaurantId,
     };
-
 
     $.ajax({
         url: '/restaurant/submit_review',
-        type: "POST",
+        type: 'POST',
         method: 'POST',
         dataType: 'json',
         data: data,
-        success: (data) => {
-            alert('data');
-            console.log("Success");
+        success: (result) => {
+            alert(result);
+            console.log('Success');
         },
-        error:
-            (err) => {
-                alert(`Error: ${err.status}: ${err.statusText}`);
-            }
+        error: (err) => {
+            alert(`Error: ${err.status}: ${err.statusText}`);
+        }
     });
 
 });

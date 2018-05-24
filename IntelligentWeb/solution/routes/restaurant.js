@@ -33,29 +33,39 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // router.post('/upload_picture', upload.array('images', 5), (req, res) => {
 router.post('/submit_review', (req, res) => {
-    console.log(`Review:\n    Title: ${req.body.title}\n    Body: ${req.body.body}\n    Files: ${req.files}`);
+    console.log(`Review:
+    Title: ${req.body.title}
+    Rating: ${req.body.rating}
+    Body: ${req.body.body}
+    Restaurant: ${req.body.restaurantId}
+    User: ${req.user._id}
+    imageBlob.length: ${req.body['imageBlob[]'].length}
+    `);
 
-    const now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
+    processImages(req.body['imageBlob[]'], req.body.restaurantId);
 
-    const targetDirectory = './public/images/reviewTestImages/';
+    res.send('done');
+});
+
+// TODO jsdoc
+function processImages(imageArray, restaurantId) {
+    const now = dateFormat(new Date(), 'yyyy-mm-dd HH-MM-ss');
+    const targetDirectory = `./public/images/reviewTest/${restaurantId}/`;
 
     if (!fs.existsSync(targetDirectory)) {
         fs.mkdirSync(targetDirectory);
     }
 
-    for (let i = 0; i < req.body['imageBlob[]'].length; i++) {
-        let image = req.body['imageBlob[]'][i];
-
+    for (let i = 0; i < imageArray.length-1; i++) {
+        let image = imageArray[i];
         // strip off the data: url prefix to get just the base64-encoded bytes
         let imageBlob = image.replace(/^data:image\/\w+;base64,/, '');
         let buf = new Buffer(imageBlob, 'base64');
         fs.writeFile(`${targetDirectory}${now}_${i}.png`, buf, (err) => {
             if (err) throw err;
-            // console.log('The file has been saved!');
         });
     }
 
-    res.send('done');
-});
+}
 
 module.exports = router;
