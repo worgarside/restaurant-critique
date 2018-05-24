@@ -152,50 +152,52 @@ let canvasCtx = [];
 let deleteButton = [];
 
 $(() => {
-    liveVideo = $('#live-video');
-    liveVideoContent = liveVideo[0];
-    newImgCanvas = $('#new-image');
-    newImgCanvasContent = newImgCanvas[0];
+    if (userLoggedIn) {
+        liveVideo = $('#live-video');
+        liveVideoContent = liveVideo[0];
+        newImgCanvas = $('#new-image');
+        newImgCanvasContent = newImgCanvas[0];
 
-    liveVideoContent.onloadeddata = function () {
-        origVidWidth = liveVideoContent.videoWidth;
-        origVidHeight = liveVideoContent.videoHeight;
+        liveVideoContent.onloadeddata = function () {
+            origVidWidth = liveVideoContent.videoWidth;
+            origVidHeight = liveVideoContent.videoHeight;
 
-        // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
+            // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
 
-        newImgCanvas.width(liveVideo.width());
-        newImgCanvas.height(liveVideo.height());
+            newImgCanvas.width(liveVideo.width());
+            newImgCanvas.height(liveVideo.height());
 
-        newImgCanvasContent.width = origVidWidth;
-        newImgCanvasContent.height = origVidHeight;
+            newImgCanvasContent.width = origVidWidth;
+            newImgCanvasContent.height = origVidHeight;
 
-        for (let i = 0; i < maxImageCount; i++) {
-            const canvasContent = $(`#image-${i}`)[0];
-            canvasContent.width = origVidWidth;
-            canvasContent.height = origVidHeight;
-            canvasArr.push(canvasContent);
-            canvasCtx.push(canvasContent.getContext('2d'));
-            deleteButton.push($(`#delete-canvas${i}`));
-        }
-    };
+            for (let i = 0; i < maxImageCount; i++) {
+                const canvasContent = $(`#image-${i}`)[0];
+                canvasContent.width = origVidWidth;
+                canvasContent.height = origVidHeight;
+                canvasArr.push(canvasContent);
+                canvasCtx.push(canvasContent.getContext('2d'));
+                deleteButton.push($(`#delete-canvas${i}`));
+            }
+        };
 
-    const constraints = {
-        audio: false,
-        video: {
-            facingMode: 'environment',// change to user for front facing
-            width: {min: 960, ideal: 1920, max: 1920},
-            height: {min: 540, ideal: 1080, max: 1080},
-        }
-    };
+        const constraints = {
+            audio: false,
+            video: {
+                facingMode: 'environment',// TODO change to user for front facing
+                width: {min: 960, ideal: 1920, max: 1920},
+                height: {min: 540, ideal: 1080, max: 1080},
+            }
+        };
 
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then((stream) => {
-            window.stream = stream;
-            liveVideoContent.srcObject = stream;
-        })
-        .catch((err) => {
-            alert(`getUserMedia Error: ${err}`);
-        });
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+                window.stream = stream;
+                liveVideoContent.srcObject = stream;
+            })
+            .catch((err) => {
+                alert(`getUserMedia Error: ${err}`);
+            });
+    }
 });
 
 $('.delete-button').click(function () {
