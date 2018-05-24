@@ -140,88 +140,100 @@ $(document)
 const maxImageCount = 5;
 
 
-let video, canvas, canvasDOM;
-const canvasWidth = 640;
-const canvasHeight = 480;
+let liveVideo, liveVideoContent, newImgCanvas, newImgCanvasContent, origVidWidth, origVidHeight;
 const takePhotoButton = $('#take-photo');
 const confirmPhotoButton = $('#confirm-photo');
-const retakePhotoButton = $('#retake-photo');
-const uploadPictures = $('#upload-pics');
-const canvasContainer = $('#new-image');
-const videoContainer = $('#live-video');
-const formSubmit = $('#submit');
+const cancelPhotoButton = $('#cancel-photo');
+const reviewSubmitBtn = $('#submit-review');
 let canvasContents = new Array(maxImageCount).fill(false);
 
 let canvasArr = [];
 let canvasCtx = [];
 let deleteButton = [];
 
-for (let i = 0; i < maxImageCount; i++) {
-    const canvasStore = $(`#image-${i}`)[0];
-    canvasStore.width = canvasWidth;
-    canvasStore.height = canvasHeight;
-    canvasArr.push(canvasStore);
-    canvasCtx.push(canvasStore.getContext('2d'));
-
-    deleteButton.push($(`#delete-canvas${i}`));
-}
-
 $(() => {
-    video = $('video')[0];
-    canvas = $('#new-image');
-    canvasDOM = canvas[0];
-    canvasDOM.width = canvasWidth;
-    canvasDOM.height = canvasHeight;
+    liveVideo = $('#live-video');
+    liveVideoContent = liveVideo[0];
+    newImgCanvas = $('#new-image');
+    newImgCanvasContent = newImgCanvas[0];
+
+    liveVideoContent.onloadeddata = function () {
+        origVidWidth = liveVideoContent.videoWidth;
+        origVidHeight = liveVideoContent.videoHeight;
+
+        // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
+
+        newImgCanvas.width(liveVideo.width());
+        newImgCanvas.height(liveVideo.height());
+
+        newImgCanvasContent.width = origVidWidth;
+        newImgCanvasContent.height = origVidHeight;
+
+        for (let i = 0; i < maxImageCount; i++) {
+            const canvasContent = $(`#image-${i}`)[0];
+            canvasContent.width = origVidWidth;
+            canvasContent.height = origVidHeight;
+            canvasArr.push(canvasContent);
+            canvasCtx.push(canvasContent.getContext('2d'));
+            deleteButton.push($(`#delete-canvas${i}`));
+        }
+    };
 
     const constraints = {
         audio: false,
-        video: {facingMode: 'environment'}
+        video: {
+            facingMode: 'environment',// change to user for front facing
+            width: {min: 960, ideal: 1920, max: 1920},
+            height: {min: 540, ideal: 1080, max: 1080},
+        }
     };
 
     navigator.mediaDevices.getUserMedia(constraints)
         .then((stream) => {
             window.stream = stream;
-            video.srcObject = stream;
+            liveVideoContent.srcObject = stream;
         })
         .catch((err) => {
-            alert(`Camera not found, or in use elsewhere`)
+            alert(`getUserMedia Error: ${err}`);
         });
 });
 
-$('.delete-image').click(function () {
+$('.delete-button').click(function () {
     const imageNumber = parseInt(this.id.split('-').pop());
-    canvasCtx[imageNumber].clearRect(0, 0, canvasWidth, canvasHeight);
+    canvasCtx[imageNumber].clearRect(0, 0, origVidWidth, origVidHeight);
     canvasContents[imageNumber] = false;
-    showHTML([takePhotoButton, videoContainer]);
+    showHTML([takePhotoButton, liveVideo]);
+    hideHTML([$(`#image-container-${imageNumber}`), newImgCanvas, confirmPhotoButton, cancelPhotoButton]);
 });
 
 takePhotoButton.click(() => {
-    canvasDOM.getContext('2d').drawImage(video, 0, 0, canvasWidth, canvasHeight);
-    showHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
-    hideHTML([videoContainer, takePhotoButton]);
+    newImgCanvasContent.getContext('2d').drawImage(liveVideoContent, 0, 0, origVidWidth, origVidHeight);
+    showHTML([newImgCanvas, confirmPhotoButton, cancelPhotoButton]);
+    hideHTML([liveVideo, takePhotoButton]);
 });
 
 confirmPhotoButton.click(() => {
     for (let i = 0; i < canvasContents.length; i++) {
         if (!canvasContents[i]) {
-            canvasCtx[i].drawImage(canvasDOM, 0, 0, canvasWidth, canvasHeight);
-            canvasDOM.getContext('2d').clearRect(0, 0, canvasWidth, canvasHeight);
+            canvasCtx[i].drawImage(newImgCanvasContent, 0, 0, origVidWidth, origVidHeight);
+            showHTML([$(`#image-container-${i}`)]);
+            newImgCanvasContent.getContext('2d').clearRect(0, 0, origVidWidth, origVidHeight);
             canvasContents[i] = true;
             break;
         }
     }
 
-    showHTML([videoContainer, takePhotoButton]);
-    hideHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
+    showHTML([liveVideo, takePhotoButton]);
+    hideHTML([newImgCanvas, confirmPhotoButton, cancelPhotoButton]);
 
     if (canvasContents.every(x => x)) {
-        hideHTML([videoContainer, canvasContainer, takePhotoButton]);
+        hideHTML([liveVideo, newImgCanvas, takePhotoButton]);
     }
 });
 
-retakePhotoButton.click(() => {
-    hideHTML([canvasContainer, confirmPhotoButton, retakePhotoButton]);
-    showHTML([videoContainer, takePhotoButton]);
+cancelPhotoButton.click(() => {
+    hideHTML([newImgCanvas, confirmPhotoButton, cancelPhotoButton]);
+    showHTML([liveVideo, takePhotoButton]);
 });
 
 function hideHTML(array) {
@@ -234,41 +246,43 @@ function showHTML(array) {
 
 // ================================ Review Submission ================================ \\
 
-uploadPictures.click(() => {
-    sendImage(22);
-});
+// TODO jsdoc
+$('form#review-form').submit((e) => {
+    e.preventDefault();
 
-formSubmit.click(() => {
-    return false;
-});
-
-function sendImage(userId) {
-    let imageCount = 0;
-    canvasContents.forEach(x => x ? imageCount++ : x);
-
-    let data = {
-        userId: userId,
-        noOfImages: imageCount
-    };
-
+    let imageBlob = [];
     for (let i = 0; i < maxImageCount; i++) {
         if (canvasContents[i]) {
-            data[`imageBlob${i}`] = canvasArr[i].toDataURL();
+            imageBlob.push(canvasArr[i].toDataURL());
         }
     }
 
+    // Push empty string to ensure array has at least 2 elements for parsing - weird bug, easy fix
+    imageBlob.push('');
+
+    console.log($('#image-upload').files);
+    let data = {
+        title: $('#review-title').val(),
+        rating: $('input.star:checked').val(),
+        body: $('#review-body').val(),
+        imageBlob: imageBlob,
+        restaurantId: restaurantId,
+        restaurantName: restaurantName
+    };
+
     $.ajax({
-        url: '/restaurant/upload_picture',
-        type: "POST",
+        url: '/restaurant/submit_review',
+        type: 'POST',
         method: 'POST',
         dataType: 'json',
         data: data,
-        success: (data) => {
-            console.log("Success");
+        success: (result) => {
+            alert(result);
+            console.log('Success');
         },
-        error:
-            (err) => {
-                alert(`Error: ${err.status}: ${err.statusText}`);
-            }
+        error: (err) => {
+            alert(`Error: ${err.status}: ${err.statusText}`);
+        }
     });
-}
+
+});

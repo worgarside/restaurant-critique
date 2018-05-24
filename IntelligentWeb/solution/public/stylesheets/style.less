@@ -11,7 +11,9 @@
 @red-light: #ff6a74;
 @green: #00cd00;
 @green-dark: #009c00;
+@green-light: #82d284;
 @blue: #0061b4;
+@blue-light: #3497b4;
 @orange: #e69200;
 
 @grey-lightest: #efefef;
@@ -1288,45 +1290,149 @@ p.login-helper {
   }
 }
 
-.user-review-image{
-  width: 128px;
-  height: 96px;
-}
+#review-form {
 
-button#get-directions {
-  margin: 0.5rem 0;
-}
+  .stars {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    color: @grey-mid;
+    font-size: 30px;
 
-// ================================ Star Icons ================================ \\
+    label {
+      margin: 0;
+      &.star {
+        padding: 0 3px;
+        span.oi.oi-star {
+          top: -1px;
+        }
+      }
+    }
+  }
 
-.stars {
-  direction: rtl;
-  unicode-bidi: bidi-override;
-  color: @grey-mid;
-  font-size: 30px;
+  input.star {
+    display: none;
+  }
+  // Selected star and all ancestors
+  input.star:checked label.star span::before,
+  input.star:checked ~ label.star span::before {
+    color: @orange;
+  }
 
-  label {
-    margin: 0;
-    &.star {
-      padding: 6px;
+  // Hover star and all ancestors
+  label.star:hover,
+  label.star:hover ~ label.star span::before {
+    color: @orange;
+  }
+
+  #review {
+    &-title {
+      width: 100%;
+    }
+    &-body {
+      height: 6rem;
+    }
+    &-video-div {
+
+      video#live-video {
+        width: 100%;
+      }
+
+      button.camera-controls {
+        position: absolute;
+        bottom: 1rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 30px;
+        outline: none;
+        margin: 0 auto;
+        border: solid 2px;
+        cursor: pointer;
+
+        &#take-photo {
+          border-color: @blue-light;
+          background-color: rgba(0, 0, 0, 0.2);
+          left: 0;
+          right: 0;
+          &:active {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-color: @blue;
+          }
+        }
+
+        &#confirm-photo {
+          display: none;
+          border-color: @green-light;
+          background-color: rgba(0, 205, 0, 0.3);
+          left: 0;
+          right: 4rem;
+          &:active {
+            background-color: rgba(0, 205, 0, 0.8);
+            border-color: @green;
+          }
+        }
+
+        &#cancel-photo {
+          display: none;
+          border-color: @red-light;
+          background-color: rgba(205, 0, 0, 0.3);
+          left: 4rem;
+          right: 0;
+          &:active {
+            background-color: rgba(205, 0, 0, 0.8);
+            border-color: @red;
+          }
+        }
+
+        span {
+          color: white;
+        }
+      }
+    }
+
+    &-images-taken {
+      display: flex;
+      justify-content: space-between;
+
+      .review-image-container{
+        width: 17.5%;
+        display: none;
+        .user-review-image {
+          width: 100%;
+          height: auto;
+          background-color: black;
+        }
+
+        .delete-button {
+          cursor: pointer;
+
+          outline: none;
+          border: none;
+          position: absolute;
+          background-color: @grey-lighter;
+          border-radius: 50%;
+          width: 1.5rem;
+          height: 1.5rem;
+          top: -0.75rem;
+          //right: -0.75rem;
+          margin-left: -.75rem;
+          &:active {
+            background-color: @grey-mid;
+          }
+
+          span {
+            top: -2px;
+            font-size: .8rem;
+            color: black;
+          }
+        }
+      }
+
     }
   }
 }
 
-input.star {
-  display: none;
-}
-
-// Current star and all ancestors
-input.star:checked label.star span::before,
-input.star:checked ~ label.star span::before {
-  color: @orange;
-}
-
-// Hover star and all ancestors
-label.star:hover,
-label.star:hover ~ label.star span::before {
-  color: @orange;
+button#get-directions {
+  margin: 0.5rem 0;
 }
 
 // ================================ Restaurant Map ================================ \\

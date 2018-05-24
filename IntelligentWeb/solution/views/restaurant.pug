@@ -161,53 +161,57 @@ block content
                     br
                     .row.no-gutters
                         .col-lg-2.col-md-12
-                            .text-center
-                                img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
-                                h5.mb-0 #{review.author.forename} #{review.author.surname}
-                                - var month = review.updatedAt.getMonth() + 1
-                                - var day = (review.updatedAt.getDate() < 10) ? "0" + review.updatedAt.getDate() : review.updatedAt.getDate()
-                                - var year = review.updatedAt.getFullYear()
-                                - var niceDate = `${month}/${day}/${year}`;
-                                p.mt-1.review-date= niceDate
-                        .col-lg-6.col-md-8
-                            .row.mb-2
-                                .col
-                                    - var starRating = Math.round(review.restaurantRating)
-                                    - var starCount = 0
-                                    while starCount < starRating
-                                        span.oi.oi-star.star-highlight(aria-hidden='true')
-                                        - starCount ++
-                                    while starCount < 5
-                                        span.oi.oi-star(aria-hidden='true')
-                                        - starCount ++
-                                    // TODO: make sure review title length isn't huge for wrapping
-                                    h5.d-inline.ml-2 #{review.title}
-                            .row
-                                .col-lg-12
-                                    p.mb-0 #{review.body}
-                        .col-lg-4.col-md-4
                             .vert-center-parent
-                                .vert-center-child#review-image-container
-                                    if review.images.length === 1
-                                        .review-image-main
+                                .vert-center-child
+                                    .text-center
+                                        img.mb-2.review-author-image(src=`/images/userImages/${review.author.reducedID}`)
+                                        h5.mb-0 #{review.author.forename} #{review.author.surname}
+                                        - var month = review.updatedAt.getMonth() + 1
+                                        - var day = (review.updatedAt.getDate() < 10) ? "0" + review.updatedAt.getDate() : review.updatedAt.getDate()
+                                        - var year = review.updatedAt.getFullYear()
+                                        - var niceDate = `${month}/${day}/${year}`;
+                                        p.mt-1.review-date= niceDate
+                        .col-lg-6.col-md-8
+                            .vert-center-parent
+                                .vert-center-child
+                                    .row.mb-2
+                                        .col
+                                            - var starRating = Math.round(review.restaurantRating)
+                                            - var starCount = 0
+                                            while starCount < starRating
+                                                span.oi.oi-star.star-highlight(aria-hidden='true')
+                                                - starCount ++
+                                            while starCount < 5
+                                                span.oi.oi-star(aria-hidden='true')
+                                                - starCount ++
+                                            // TODO: make sure review title length isn't huge for wrapping
+                                            h5.d-inline.ml-2 #{review.title}
+                                    .row
+                                        .col-lg-12
+                                            p.mb-0 #{review.body}
+                        .col-lg-4.col-md-4
+                            #review-image-container
+                                if review.images.length === 1
+                                    .review-image-main.vert-center-parent
+                                        .vert-center-child
                                             img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
 
-                                    else if review.images.length > 1
-                                        table#review-image-table
-                                            tr
-                                                td(rowspan='2')
-                                                    .review-image-main
-                                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
-                                                td
-                                                    .review-image-secondary
-                                                        img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
-                                            tr
-                                                td
-                                                    if review.images[2]
-                                                        .review-image-secondary(style='margin-top: 1px;')
-                                                                img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
-                                                    else
-                                                        .review-image-secondary.pointer(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
+                                else if review.images.length > 1
+                                    table#review-image-table
+                                        tr
+                                            td(rowspan='2')
+                                                .review-image-main
+                                                    img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[0]}`)
+                                            td
+                                                .review-image-secondary
+                                                    img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[1]}`)
+                                        tr
+                                            td
+                                                if review.images[2]
+                                                    .review-image-secondary(style='margin-top: 1px;')
+                                                            img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
+                                                else
+                                                    .review-image-secondary.pointer(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
         br
         .row
             .col
@@ -249,7 +253,7 @@ block content
                 hr
                 hr
 
-        //.row
+        .row
             video#live-video(autoplay='')
             button#take-photo Take snapshot
             button#confirm-photo(style='display: none;') Confirm taken photo
@@ -268,12 +272,79 @@ block content
             button.delete-image#delete-image-4 Delete 4
             button#upload-pics Upload
 
-
+                h4 Have you been to #{restaurant.name}? Leave your review!
+                br
+                if (user)
+                    form#review-form
+                        .row
+                            .col-lg-6.col-md-12.col-sm-12.col-12
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label.float-right.mb-0(for='review-title') Title
+                                    .col-9.form-group.form-inline.mb-0
+                                        input.form-control#review-title(type='text', name='title', placeholder='Title' required)
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                p.mb-0.float-right Rating
+                                    .col-9.form-group.mb-0
+                                        .stars
+                                            - var starCount = 5
+                                            while starCount >= 1
+                                                input.star(type='radio', name='star', value=starCount id=`star-${starCount}`)
+                                                label.star(for=`star-${starCount}`)
+                                                    span.oi.oi-star
+                                                - starCount --
+                                .form-row.mb-2
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                p.mb-0.float-right Review
+                                    .col-9.form-group.mb-0
+                                        textarea.form-control#review-body(name='body' placeholder='Write the body of your review here' required)
+                                //.form-row
+                                    .col-3
+                                        .vert-center-parent
+                                            .vert-center-child
+                                                label.float-right.mb-0(for='image-upload') Image Upload
+                                    .col-9.form-group.mb-0
+                                        input.form-control#image-upload(type='file' name='image-upload' accept='image/*' multiple='multiple')
+                                br
+                            .col-lg-6.col-md-12.col-sm-12.col-12
+                                .row.mb-4
+                                    .col
+                                        #review-video-div
+                                            video#live-video(autoplay='')
+                                            button.camera-controls#take-photo(type='button')
+                                                span.oi.oi-camera-slr
+                                            button.camera-controls#confirm-photo(type='button' )
+                                                span.oi.oi-check
+                                            button.camera-controls#cancel-photo(type='button' )
+                                                span.oi.oi-x
+                                            canvas#new-image(style='display: none;')
+                                .row
+                                    .col#review-images-taken
+                                        - var imageCount = 0
+                                        while imageCount < 5
+                                            .review-image-container(id=`image-container-${imageCount}`)
+                                                canvas.user-review-image(id=`image-${imageCount}`)
+                                                button.delete-button(type='button' id=`delete-image-${imageCount}`)
+                                                    span.oi.oi-x
+                                            - imageCount ++;
+                        .row
+                            .col
+                                button.btn.float-right#submit-review Submit Review
+                else
+                    p Log in to leave a review
 
     script.
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};
         const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
         const restaurantId = `#{restaurant._id}`;
+        const restaurantName = `#{restaurant.name}`;
         const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(type='text/javascript', src='/javascripts/review.js')

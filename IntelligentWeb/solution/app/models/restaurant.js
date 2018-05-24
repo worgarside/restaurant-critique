@@ -133,49 +133,57 @@ function emailCreator(restaurant) {
 
 // TODO: jsdoc
 function updateDetails(restaurant) {
-    if ((restaurant.address.latitude) && (restaurant.address.longitude)) {
-        restaurant.location = {
-            type: "Point",
-            coordinates: [restaurant.address.longitude, restaurant.address.latitude] // long THEN lat, according to geoJSON standards
-        };
-    }
-
-    // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
-    restaurant.address.postcode = restaurant.address.postcode.toUpperCase();
-    restaurant.address.formattedAddress = '';
-    const addressComponents = ['line1', 'line2', 'city', 'postcode'];
-    Object.keys(restaurant.address).forEach((key, index, keys) => {
-        const value = restaurant.address[key];
-        if (value && addressComponents.includes(key)) {
-            restaurant.address.formattedAddress += value;
-            if (addressComponents.includes(keys[index + 1])) {
-                restaurant.address.formattedAddress += ', ';
-            }
+    if (restaurant.address) {
+        if ((restaurant.address.latitude) && (restaurant.address.longitude)) {
+            restaurant.location = {
+                type: "Point",
+                coordinates: [restaurant.address.longitude, restaurant.address.latitude] // long THEN lat, according to geoJSON standards
+            };
         }
-    });
 
-    // Save all new categories on creation - although this is currently only used on db_regen
-    for (const category of restaurant.categories) {
-        new Category(category).save().catch((err) => {
-            if (!err.errmsg.includes('duplicate key')) {
-                console.log(err.errmsg);
+        // Format the address fields to site-wide standards, and create formattedAddress field for nicer outputs
+        restaurant.address.postcode = restaurant.address.postcode.toUpperCase();
+        restaurant.address.formattedAddress = '';
+        const addressComponents = ['line1', 'line2', 'city', 'postcode'];
+        Object.keys(restaurant.address).forEach((key, index, keys) => {
+            const value = restaurant.address[key];
+            if (value && addressComponents.includes(key)) {
+                restaurant.address.formattedAddress += value;
+                if (addressComponents.includes(keys[index + 1])) {
+                    restaurant.address.formattedAddress += ', ';
+                }
             }
-        })
+        });
+
+        if (restaurant.name) {
+            restaurant.localUrl = `${restaurant.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${restaurant.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
+        }
+
     }
 
-    restaurant.localUrl = `${restaurant.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}-${restaurant.address.postcode.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`;
-
-    // TODO add stemming and stoplist
-    // Searchable data has all special characters removed
-    restaurant.searchable.name = restaurant.name.replace(/[^\w\s]/, '');
-    restaurant.searchable.description = restaurant.description.replace(/[^\w\s]/, '');
-    restaurant.searchable.formattedAddress = restaurant.address.formattedAddress.replace(/[^\w\s]/, '');
-    restaurant.searchable.categoryString = '';
-    for (const category of restaurant.categories) {
-        restaurant.searchable.categoryString += `${category.name} `;
+    if (restaurant.categories) {
+        // Save all new categories on creation - although this is currently only used on db_regen
+        for (const category of restaurant.categories) {
+            new Category(category).save().catch((err) => {
+                if (!err.errmsg.includes('duplicate key')) {
+                    console.log(err.errmsg);
+                }
+            })
+        }
     }
-    restaurant.searchable.all = `${restaurant.searchable.name} ${restaurant.searchable.description} ${restaurant.searchable.formattedAddress} ${restaurant.searchable.categoryString}`;
 
+    if (restaurant.name && restaurant.description && restaurant.address && restaurant.categories) {
+        // TODO add stemming and stoplist
+        // Searchable data has all special characters removed
+        restaurant.searchable.name = restaurant.name.replace(/[^\w\s]/, '');
+        restaurant.searchable.description = restaurant.description.replace(/[^\w\s]/, '');
+        restaurant.searchable.formattedAddress = restaurant.address.formattedAddress.replace(/[^\w\s]/, '');
+        restaurant.searchable.categoryString = '';
+        for (const category of restaurant.categories) {
+            restaurant.searchable.categoryString += `${category.name} `;
+        }
+        restaurant.searchable.all = `${restaurant.searchable.name} ${restaurant.searchable.description} ${restaurant.searchable.formattedAddress} ${restaurant.searchable.categoryString}`;
+    }
     restaurant.updatedAt = Date.now();
 }
 
