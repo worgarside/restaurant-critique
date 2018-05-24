@@ -250,22 +250,27 @@ function showHTML(array) {
 $('form#review-form').submit((e) => {
     e.preventDefault();
 
-    let imageCount = 0;
-    canvasContents.forEach(x => x ? imageCount++ : x);
+    // let imageCount = 0;
+    // canvasContents.forEach(x => x ? imageCount++ : x);
 
-    let data = {
-        userId: 'hello',
-        noOfImages: imageCount
-    };
-
+    let imageBlob = [];
     for (let i = 0; i < maxImageCount; i++) {
         if (canvasContents[i]) {
-            data[`imageBlob${i}`] = canvasArr[i].toDataURL();
+            imageBlob.push(canvasArr[i].toDataURL());
+            // imageBlob.push(`canvasArr[${i}].toDataURL()`);
         }
     }
 
+    let data = {
+        title: $('#review-title').val(),
+        body: $('#review-body').val(),
+        // imageCount: imageCount,
+        imageBlob: imageBlob
+    };
+
+
     $.ajax({
-        url: '/restaurant/upload_picture',
+        url: '/restaurant/submit_review',
         type: "POST",
         method: 'POST',
         dataType: 'json',

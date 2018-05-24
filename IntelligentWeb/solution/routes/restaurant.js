@@ -11,6 +11,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs');
+const dateFormat = require('dateformat');
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -30,31 +31,27 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================ POST Method ================ \\
 
-router.post('/add_review', upload.array('images', 10), (req, res) => {
+// router.post('/upload_picture', upload.array('images', 5), (req, res) => {
+router.post('/submit_review', (req, res) => {
     console.log(`Review:\n    Title: ${req.body.title}\n    Body: ${req.body.body}\n    Files: ${req.files}`);
-    res.redirect('back');
-});
 
-router.post('/upload_picture', (req, res) => {
+    const now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
 
-    const numberOfImages = req.body.noOfImages;
-    const newString = new Date().getTime();
     const targetDirectory = './public/images/reviewTestImages/';
 
     if (!fs.existsSync(targetDirectory)) {
         fs.mkdirSync(targetDirectory);
     }
 
-    console.log(`Saving files ${targetDirectory}${newString}`);
+    for (let i = 0; i < req.body['imageBlob[]'].length; i++) {
+        let image = req.body['imageBlob[]'][i];
 
-    for (let i = 0; i < numberOfImages; i++) {
-        let image = eval(`req.body.imageBlob${i}`);
         // strip off the data: url prefix to get just the base64-encoded bytes
-        let imageBlob = image.replace(/^data:image\/\w+;base64,/, "");
+        let imageBlob = image.replace(/^data:image\/\w+;base64,/, '');
         let buf = new Buffer(imageBlob, 'base64');
-        fs.writeFile(`${targetDirectory}${newString}${i}.png`, buf, (err) => {
+        fs.writeFile(`${targetDirectory}${now}_${i}.png`, buf, (err) => {
             if (err) throw err;
-            console.log('The file has been saved!');
+            // console.log('The file has been saved!');
         });
     }
 
