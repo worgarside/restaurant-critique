@@ -860,7 +860,7 @@ function populateRestaurants(insertPromises) {
         },
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         reviews: ['5aad98377888995220605d21'],
-        images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg'],
+        images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg', '2018-05-23 12-52-03.jpg' , '2018-05-23 12-52-04.jpg', '2018-05-23 12-52-05.jpg', '2018-05-23 12-52-06.jpg'],
         averageRating: 4
     }).save());
 
@@ -1191,7 +1191,7 @@ function populateReviews(insertPromises) {
             surname: 'Cope',
             reducedID: 'copeyrufus-gmail-com',
         },
-        images: ['2018-05-23 12-52-00.jpg', '2018-05-23 12-52-01.jpg', '2018-05-23 12-52-02.jpg', '2018-05-23 12-52-04.jpg'],
+        images: ['2018-05-23 12-52-04.jpg', '2018-05-23 12-52-05.jpg', '2018-05-23 12-52-06.jpg'],
         restaurantRating: 5
     }).save());
 
