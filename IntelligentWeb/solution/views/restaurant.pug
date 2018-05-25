@@ -57,12 +57,14 @@ block content
         .row
             .col
                 each category, index in restaurant.categories
-                    if index < 7
+                    if index <= 7
                         p.restaurant-category= category.name
-                    else if index === 8
-                        a.pre-space(href='javascript:void(0)')#toggle-btn View more...
+                    else if index > 7
                         #view-toggle(style='display: none;')
                             p.restaurant-category= category.name
+                        if index === 8
+                            a.pre-space(href='javascript:void(0)')#toggle-btn View more...
+
 
         hr
         .row
