@@ -38,45 +38,56 @@ const ID = {
 
 /**
  * Calls each Schema's population function
- * @param {Array} insertPromises An array of Promises which all have to be fulfilled before disconnecting from the database
  */
-const populateFunction = function populateDatabase(insertPromises) {
-    // populateCategories(insertPromises);
-    populateUsers(insertPromises);
-    populateRestaurants(insertPromises);
-    populateReviews(insertPromises);
+const populateFunction = function populateDatabase(conn) {
+    let primaryPromises = [];
+    let secondaryPromises = [];
+    populateUsers(primaryPromises);
+    populateRestaurants(primaryPromises);
+
+    Promise.all(primaryPromises)
+        .catch((err) => {
+            console.log(`First round of population failed: ${err}`);
+        })
+        .then(() => {
+            console.log('Populating reviews');
+            populateReviews(secondaryPromises);
+
+            Promise.all(secondaryPromises)
+                .catch((err) => {
+                    console.log(`Error on population: ${err}`);
+                })
+                .then(() => {
+                    conn.close()
+                        .then(() => {
+                            console.log('DB populated');
+                        })
+                        .catch((err) => {
+                            console.log(`Unable to close connection: ${err}`);
+                        });
+                });
+
+
+        });
+
+
 };
 
-/**
- * Populates the 'Categories' collection of the database
- * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
- */
-function populateCategories(insertPromises) {
-    const categories = [
-        'American', 'Asian', 'Barbecue', 'British',
-        'Chinese', 'European', 'Fast Food', 'French', 'Fusion',
-        'Greek', 'Grilled', 'Healthy', 'Indian',
-        'Italian', 'Japanese', 'Latin', 'Mediterranean', 'Mexican',
-        'Pizza', 'Seafood', 'Spanish', 'Steakhouse', 'Street Food', 'Thai'
-    ];
-
-    for (let i = 0; i < categories.length; i++) {
-        insertPromises.push(new Category({name: categories[i]}).save());
-    }
-}
 
 /**
  * Populates the 'Users' collection in the database with test data
  * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateUsers(insertPromises) {
+    console.log('Populating users');
+
     insertPromises.push(new User({
         _id: 'copeyrufus@gmail.com',
         password: 'Caddy1',
         name: {first: 'Rufus', last: 'Cope'},
         ageCategory: 2,
         postcode: 'S10 2DN',
-        reviews: ['5aad98377888995220605d16','5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22', '5aad98377888995220605d25'],
+        reviews: ['5aad98377888995220605d16', '5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22', '5aad98377888995220605d25'],
         reducedID: 'copeyrufus-gmail-com',
         restaurants: {created: [ID['Wagamama'], ID['Siam Thai and Teppanyaki'], ID['Miller & Carter'], ID['Bungalows & Bears'], ID["California Fresh"], ID["Piccolino's Italian Restaurant"]]}
     }).save());
@@ -141,6 +152,9 @@ function populateUsers(insertPromises) {
  * @param {Array} insertPromises Array of Model.Save() Promises to be fulfilled before database disconnection
  */
 function populateRestaurants(insertPromises) {
+    console.log('Populating restaurants');
+
+
     insertPromises.push(new Restaurant({
         _id: mongoose.Types.ObjectId(ID["Aslan's"]),
         name: "Aslan's Kebab",
@@ -860,7 +874,7 @@ function populateRestaurants(insertPromises) {
         },
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         reviews: ['5aad98377888995220605d21'],
-        images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg', '2018-05-23 12-52-03.jpg' , '2018-05-23 12-52-04.jpg', '2018-05-23 12-52-05.jpg', '2018-05-23 12-52-06.jpg'],
+        images: ['2018-05-23 12-45-00.jpg', '2018-05-23 12-45-01.jpg', '2018-05-23 12-45-02.jpg', '2018-05-23 12-52-03.jpg', '2018-05-23 12-52-04.jpg', '2018-05-23 12-52-05.jpg', '2018-05-23 12-52-06.jpg'],
         averageRating: 4
     }).save());
 
@@ -1015,7 +1029,7 @@ function populateRestaurants(insertPromises) {
 function populateReviews(insertPromises) {
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d09'),
-        restaurant: {_id: ID["Aslan's"], name: "Aslan's"},
+        restaurant: {_id: ID["Aslan's"]},
         title: "Aslan's Sucks",
         body: "I got food poisoning here, don't eat the turkey burgers",
         author: {
@@ -1029,7 +1043,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d10'),
-        restaurant: {_id: ID["Aslan's"], name: "Aslan's"},
+        restaurant: {_id: ID["Aslan's"]},
         title: 'Greatest Kebab of All Time!!!',
         body: `This is, without doubt, the GOAT when it comes to kebabs. Even Adnan's doesn't
          stand up to the might that is ASLAN'S KEBAB HOUSE!!!`,
@@ -1058,7 +1072,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d12'),
-        restaurant: {_id: ID['Siam Thai and Teppanyaki'], name: 'Siam Thai and Teppanyaki'},
+        restaurant: {_id: ID['Siam Thai and Teppanyaki']},
         title: 'The Teppanyaki is amazing!',
         body: 'I went here for my 15th birthday and even though I had a broken arm at the time, they let me have a go doing the Teppanyaki and were so helpful and friendly',
         author: {
@@ -1088,7 +1102,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d14'),
-        restaurant: {_id: ID['Bungalows & Bears'], name: 'Bungalows & Bears'},
+        restaurant: {_id: ID['Bungalows & Bears']},
         title: 'Where are the bears?',
         body: `I've been here 3 times now but I've only seen a bear once?? And even then that was when my mom
         showed me a picture on her phone`,
@@ -1102,7 +1116,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d15'),
-        restaurant: {_id: ID['Istanbul Restaurant'], name: 'Istanbul Restaurant'},
+        restaurant: {_id: ID['Istanbul Restaurant']},
         title: 'More of a takeaway!',
         body: 'Title says it all, pretty standard take out food with a nice front',
         author: {
@@ -1116,7 +1130,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d16'),
-        restaurant: {_id: ID["Nando's"], name: "Nando's"},
+        restaurant: {_id: ID["Nando's"]},
         title: "Definitely a 'mild' on my spice scale",
         body: `Food is meh, don't understand all the hype. Maybe it's those damn millennials. Also i ate my food
         before i took a picture, but that's what was left`,
@@ -1131,7 +1145,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d17'),
-        restaurant: {_id: ID["Pizza Express"], name: "Pizza Express"},
+        restaurant: {_id: ID["Pizza Express"]},
         title: 'Expensive pizza',
         body: 'The pizza is nice but can be quite expensive and the sides are small',
         author: {
@@ -1157,7 +1171,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d19'),
-        restaurant: {_id: ID["Las Iguanas"], name: "Las Iguanas"},
+        restaurant: {_id: ID["Las Iguanas"]},
         title: 'Amazing drinks!',
         body: 'I have to say that the cocktails made in this restaurant are unbelievably tasty! I drank every last drop. The food was decent, but I was too drunk to care',
         author: {
@@ -1183,7 +1197,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d21'),
-        restaurant: {_id: ID["Piccolo's Italian Restaurant"], name: "Piccolo's Italian Restaurant"},
+        restaurant: {_id: ID["Piccolo's Italian Restaurant"]},
         title: "Food Coma",
         body: 'The food was so amazing that I passed out right after dessert!',
         author: {
@@ -1197,7 +1211,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d22'),
-        restaurant: {_id: ID['ASK Italian'], name: 'ASK Italian'},
+        restaurant: {_id: ID['ASK Italian']},
         title: "Pizza heaven",
         body: 'Honestly, the food here changed my life. I think the lasagne changed my perception of life. I became ' +
         'inspired to become a chef thanks to ASK Italian!',
@@ -1212,7 +1226,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d23'),
-        restaurant: {_id: ID['ASK Italian'], name: 'ASK Italian'},
+        restaurant: {_id: ID['ASK Italian']},
         title: "Tasty but expensive!",
         body: 'The food was great, but as a student, I was not able to afford all the delicious food. If you are going' +
         ' on a date, better go someplace cheaper since they do not accept any vouchers and do not give student discounts.' +
@@ -1242,7 +1256,7 @@ function populateReviews(insertPromises) {
 
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d25'),
-        restaurant: {_id: ID['Falafel King'], name: 'Falafel King'},
+        restaurant: {_id: ID['Falafel King']},
         title: "Don't have the soup",
         body: 'I did not like the soup, so do not get it',
         author: {

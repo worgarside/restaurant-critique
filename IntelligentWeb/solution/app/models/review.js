@@ -9,13 +9,15 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Restaurant = mongoose.model('Restaurant');
 
 // ================ Review Schema Definition ================ \\
 
 ReviewSchema = Schema({
     restaurant: {
         _id: {type: String, required: true},
-        name: {type: String, required: true}
+        name: {type: String},
+        localUrl: {type: String}
     },
     title: {type: String, required: true},
     body: {type: String, required: true},
@@ -31,8 +33,18 @@ ReviewSchema = Schema({
 });
 
 ReviewSchema.pre('save', function (next) {
-    this.updatedAt = Date.now();
-    next();
+    Restaurant.findOne({_id: this.restaurant._id})
+        .then((restaurant) => {
+            this.restaurant.name = restaurant.name;
+            this.restaurant.localUrl = restaurant.localUrl;
+            this.updatedAt = Date.now();
+            next();
+        })
+        .catch((err) => {
+            console.log(`Unable to get Restaurant (ID ${this.restaurant._id}) details: ${err}`);
+            this.updatedAt = Date.now();
+            next();
+        });
 });
 
 module.exports = mongoose.model('Review', ReviewSchema);

@@ -26,15 +26,13 @@ router.post('/submit_review', (req, res) => {
     Rating: ${req.body.rating}
     Body: ${req.body.body}
     Restaurant: ${req.body.restaurantId}  
-                ${req.body.restaurantName}
     User: ${req.user._id}
     imageBlob.length: ${req.body['imageBlob[]'].length}
     `);
 
     let review = new Review({
         restaurant: {
-            _id: req.body.restaurantId,
-            name: req.body.restaurantName
+            _id: req.body.restaurantId
         },
         title: req.body.title,
         body: req.body.body,

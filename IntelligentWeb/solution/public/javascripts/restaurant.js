@@ -269,7 +269,6 @@ $('form#review-form').submit((e) => {
         body: $('#review-body').val(),
         imageBlob: imageBlob,
         restaurantId: restaurantId,
-        restaurantName: restaurantName
     };
 
     $.ajax({

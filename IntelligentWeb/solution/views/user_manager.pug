@@ -186,19 +186,18 @@ block content
                                 // TODO add score
                                 .row
                                     .col-9
-                                        h5.mb-0.quote #{review.title}
+                                        h5.mb-0.quote "#{review.title}"
                                         p.mb-0 #{review.restaurant.name}
                                         p.mb-0= review.updatedAt.toUTCString()
                                     .col-3
                                         .vert-center-parent
                                             .vert-center-child
                                                 .btn-group.float-right
-                                                    a.btn.btn-info(href='#') View
+                                                    a.btn.btn-info(href=`/restaurant/${review.restaurant.localUrl}/#${review._id}`) View
                                                     button.btn.btn-danger(id=`delete-${review._id}`) Delete
                                 if reviewIndex < reviews.length-1
                                     hr
                             else
-                                // TODO "i'm feeling lucky'
                                 h5.mb-0 You haven't posted any reviews yet!
 
     script const userVar = `!{JSON.stringify(user)}`;
@@ -206,11 +205,3 @@ block content
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js')
     // TODO script(src='/scripts/jquery.form.min.js')
     script(type='text/javascript', src='/javascripts/user_management.js')
-
-    // Change name
-    // Change password
-    // Change address
-    // Change image
-    // Send verification email
-    // View saved restaurants - not published
-    // View all submitted reviews

@@ -193,8 +193,7 @@ block content
                                             while starCount < 5
                                                 span.oi.oi-star(aria-hidden='true')
                                                 - starCount ++
-                                            // TODO: make sure review title length isn't huge for wrapping
-                                            h5.d-inline.ml-2 #{review.title}
+                                            h5.d-inline.ml-2(id=review._id) #{review.title}
                                     .row
                                         .col-lg-12
                                             p.mb-0 #{review.body}
@@ -297,7 +296,6 @@ block content
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};
         const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
         const restaurantId = `#{restaurant._id}`;
-        const restaurantName = `#{restaurant.name}`;
         const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
     script(type='text/javascript', src='/javascripts/restaurant.js')
     script(type='text/javascript', src='/javascripts/review.js')
