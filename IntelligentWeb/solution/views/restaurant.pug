@@ -16,10 +16,10 @@ block content
                                 p.d-inline Will Garside
                             .vert-center-parent#next-image
                                 .vert-center-child
-                                    span.carousel-control-next-icon(aria-hidden='true')
+                                    span.carousel-control-next-icon
                             .vert-center-parent#prev-image
                                 .vert-center-child
-                                    span.carousel-control-prev-icon(aria-hidden='true')
+                                    span.carousel-control-prev-icon
                         td#second-image
                             img(src='')
                     tr
@@ -37,7 +37,7 @@ block content
                         - var starRating = Math.round(restaurant.averageRating)
                         - var starCount = 0
                         while starCount < starRating
-                            span.oi.oi-star.star-highlight(aria-hidden='true')
+                            span.oi.oi-star.star-highlight
                             - starCount ++
                         while starCount < 5
                             span.oi.oi-star
@@ -59,12 +59,10 @@ block content
                 each category, index in restaurant.categories
                     if index <= 7
                         p.restaurant-category= category.name
-                    else if index > 7
+                    else
                         p.restaurant-category.hidden-category= category.name
                 if restaurant.categories.length > 7
                     a.pre-space(href='javascript:void(0)')#toggle-btn View more...
-
-
         hr
         .row
             .col-lg-8.col-md-12.col-sm-12
@@ -76,9 +74,9 @@ block content
                                     .d-flex
                                         img.pointer(src=`/images/restaurants/${restaurant._id}/${image}`)
                         a.carousel-control-prev(href='#restaurant-image-carousel', role='button', data-slide='prev')
-                            span.carousel-control-prev-icon(aria-hidden='true')
+                            span.carousel-control-prev-icon
                         a.carousel-control-next(href='#restaurant-image-carousel', role='button', data-slide='next')
-                            span.carousel-control-next-icon(aria-hidden='true')
+                            span.carousel-control-next-icon
                 else
                     .vert-center-parent.border.border-dark
                         .vert-center-child
@@ -91,21 +89,21 @@ block content
                         #contact-info
                             h4 Contact Information
                             p
-                                span.oi.oi-external-link.post-space(aria-hidden='true')
+                                span.oi.oi-external-link.post-space
                                 | Official Website:&nbsp;
                                 if restaurant.contact.url && restaurant.contact.phone !== ''
                                     a.ml-1(href=`//${restaurant.contact.url}` target='_blank') #{restaurant.contact.url}
                                 else
                                     small.ml-1 Not added yet
                             p
-                                span.oi.oi-book.post-space(aria-hidden='true')
+                                span.oi.oi-book.post-space
                                 | Read the menu:&nbsp;
                                 if restaurant.contact.menu
                                     a.ml-1(href=`${restaurant.contact.menu}` target='_blank') #{restaurant.contact.menu}
                                 else
                                     small.ml-1 Not added yet
                             p.mb-0
-                                span.oi.oi-phone.post-space(aria-hidden='true')
+                                span.oi.oi-phone.post-space
                                 | Phone No.:&nbsp;
                                 if restaurant.contact.phone
                                     a.ml-1(href=`tel: ${restaurant.contact.phone}`) #{restaurant.contact.phone}
@@ -189,10 +187,10 @@ block content
                                             - var starRating = Math.round(review.restaurantRating)
                                             - var starCount = 0
                                             while starCount < starRating
-                                                span.oi.oi-star.star-highlight(aria-hidden='true')
+                                                span.oi.oi-star.star-highlight
                                                 - starCount ++
                                             while starCount < 5
-                                                span.oi.oi-star(aria-hidden='true')
+                                                span.oi.oi-star
                                                 - starCount ++
                                             h5.d-inline.ml-2(id=review._id) #{review.title}
                                     .row
@@ -220,7 +218,7 @@ block content
                                                     .review-image-secondary(style='margin-top: 1px;')
                                                         img.pointer(src=`/images/restaurants/${restaurant._id}/${review.images[2]}`)
                                                 else
-                                                    .review-image-secondary.pointer(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
+                                                    .review-image-secondary(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
         br
         .row
             .col
@@ -237,7 +235,7 @@ block content
                                             .vert-center-child
                                                 label.float-right.mb-0(for='review-title') Title
                                     .col-9.form-group.form-inline.mb-0
-                                        input.form-control#review-title(type='text', name='title', placeholder='Title' required)
+                                        input.form-control#review-title(type='text', name='title', placeholder='Title' required='required')
                                 .form-row.mb-2
                                     .col-3
                                         .vert-center-parent
@@ -247,7 +245,7 @@ block content
                                         .stars
                                             - var starCount = 5
                                             while starCount >= 1
-                                                input.star(type='radio', name='star', value=starCount id=`star-${starCount}`)
+                                                input.star(type='radio', name='star', value=starCount id=`star-${starCount}` required='required')
                                                 label.star(for=`star-${starCount}`)
                                                     span.oi.oi-star
                                                 - starCount --
@@ -257,16 +255,16 @@ block content
                                             .vert-center-child
                                                 p.mb-0.float-right Review
                                     .col-9.form-group.mb-0
-                                        textarea.form-control#review-body(name='body' placeholder='Write the body of your review here' required)
-                                //.form-row
-                                    .col-3
-                                        .vert-center-parent
-                                            .vert-center-child
-                                                label.float-right.mb-0(for='image-upload') Image Upload
-                                    .col-9.form-group.mb-0
-                                        input.form-control#image-upload(type='file' name='image-upload' accept='image/*' multiple='multiple')
+                                        textarea.form-control#review-body(name='body' placeholder='Write the body of your review here' required='required')
                                 br
-                            .col-lg-6.col-md-12.col-sm-12.col-12
+                            .col-lg-6.col-md-12.col-sm-12.col-12#pre-webRTC-col
+                                .row
+                                    .col
+                                        .text-center#add-photo-btn
+                                            .vert-center-parent
+                                                .vert-center-child
+                                                    button.btn.btn-default(role='button') Add photographs
+                            .col-lg-6.col-md-12.col-sm-12.col-12#webRTC-col
                                 .row.mb-4
                                     .col
                                         #review-video-div
@@ -292,6 +290,10 @@ block content
                                 button.btn.float-right#submit-review Submit Review
                 else
                     p Log in to leave a review
+                #submitting-div
+                    #loading-div
+                        h3 Submitting Review
+                        .loader
 
     script.
         const reviewImages = !{JSON.stringify(reviewImages).replace(/<\//g, '<\\/')};

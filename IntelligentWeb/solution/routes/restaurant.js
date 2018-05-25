@@ -81,6 +81,7 @@ router.post('/submit_review', (req, res) => {
                                 console.log('Restaurant fields updated');
                             }
                         });
+                    res.send({success: true});
                 })
                 .catch((err) => {
                     console.log(`Restaurant lookup error: ${err}`);
@@ -88,9 +89,8 @@ router.post('/submit_review', (req, res) => {
         })
         .catch((err) => {
             console.log(`Error saving review: ${err}`);
+            res.end();
         });
-
-    res.send({success: true});
 });
 
 // TODO jsdoc

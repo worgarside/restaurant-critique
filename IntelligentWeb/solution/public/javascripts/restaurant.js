@@ -151,53 +151,56 @@ let canvasArr = [];
 let canvasCtx = [];
 let deleteButton = [];
 
-$(() => {
-    if (userLoggedIn) {
-        liveVideo = $('#live-video');
-        liveVideoContent = liveVideo[0];
-        newImgCanvas = $('#new-image');
-        newImgCanvasContent = newImgCanvas[0];
+$('#add-photo-btn').find('button').click(() => {
+    $('#pre-webRTC-col').hide();
 
-        liveVideoContent.onloadeddata = function () {
-            origVidWidth = liveVideoContent.videoWidth;
-            origVidHeight = liveVideoContent.videoHeight;
+    liveVideo = $('#live-video');
+    liveVideoContent = liveVideo[0];
+    newImgCanvas = $('#new-image');
+    newImgCanvasContent = newImgCanvas[0];
 
-            // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
+    liveVideoContent.onloadeddata = function () {
+        console.log('Video stream active');
+        origVidWidth = liveVideoContent.videoWidth;
+        origVidHeight = liveVideoContent.videoHeight;
 
-            newImgCanvas.width(liveVideo.width());
-            newImgCanvas.height(liveVideo.height());
+        // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
 
-            newImgCanvasContent.width = origVidWidth;
-            newImgCanvasContent.height = origVidHeight;
+        newImgCanvas.width(liveVideo.width());
+        newImgCanvas.height(liveVideo.height());
 
-            for (let i = 0; i < maxImageCount; i++) {
-                const canvasContent = $(`#image-${i}`)[0];
-                canvasContent.width = origVidWidth;
-                canvasContent.height = origVidHeight;
-                canvasArr.push(canvasContent);
-                canvasCtx.push(canvasContent.getContext('2d'));
-                deleteButton.push($(`#delete-canvas${i}`));
-            }
-        };
+        newImgCanvasContent.width = origVidWidth;
+        newImgCanvasContent.height = origVidHeight;
 
-        const constraints = {
-            audio: false,
-            video: {
-                facingMode: 'environment',// TODO change to user for front facing
-                width: {min: 960, ideal: 1920, max: 1920},
-                height: {min: 540, ideal: 1080, max: 1080},
-            }
-        };
+        for (let i = 0; i < maxImageCount; i++) {
+            const canvasContent = $(`#image-${i}`)[0];
+            canvasContent.width = origVidWidth;
+            canvasContent.height = origVidHeight;
+            canvasArr.push(canvasContent);
+            canvasCtx.push(canvasContent.getContext('2d'));
+            deleteButton.push($(`#delete-canvas${i}`));
+        }
+    };
 
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then((stream) => {
-                window.stream = stream;
-                liveVideoContent.srcObject = stream;
-            })
-            .catch((err) => {
-                alert(`getUserMedia Error: ${err}`);
-            });
-    }
+    const constraints = {
+        audio: false,
+        video: {
+            facingMode: 'environment',// TODO change to user for front facing
+            width: {min: 960, ideal: 1920, max: 1920},
+            height: {min: 540, ideal: 1080, max: 1080},
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            window.stream = stream;
+            liveVideoContent.srcObject = stream;
+        })
+        .catch((err) => {
+            alert(`getUserMedia Error: ${err}`);
+        });
+
+    $('#webRTC-col').show();
 });
 
 $('.delete-button').click(function () {
@@ -251,6 +254,7 @@ function showHTML(array) {
 // TODO jsdoc
 $('form#review-form').submit((e) => {
     e.preventDefault();
+    $('#submitting-div').show();
 
     let imageBlob = [];
     for (let i = 0; i < maxImageCount; i++) {
@@ -279,12 +283,13 @@ $('form#review-form').submit((e) => {
         data: data,
         success: (result) => {
             if (result.success) {
-                alert(result);
-                console.log('Success');
+                location.reload();
             }
         },
         error: (err) => {
-            alert(`Error: ${err.status}: ${err.statusText}`);
+            alert('Review submission failed. Please try again later.');
+            console.log(`Review error: ${err}`);
+            location.reload();
         }
     });
 });
@@ -296,21 +301,13 @@ const hiddenCategories = $('.hidden-category');
 
 $('#toggle-btn').click(function () {
     categoriesHidden = !categoriesHidden;
-
-    if (categoriesHidden){
+    if (categoriesHidden) {
         hiddenCategories.css('display', 'none');
-    }else{
-        hiddenCategories.css('display', 'inline');
-    }
-
-
-
-    if (this.text === "View more...") {
-        this.text = "View less...";
+        this.text = 'View more...';
     } else {
-        this.text = "View more...";
+        hiddenCategories.css('display', 'inline');
+        this.text = 'View less...';
     }
-
 });
 
 console.log('Loaded restaurant.js');

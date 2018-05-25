@@ -1182,7 +1182,7 @@ p.login-helper {
       }
     }
 
-    .hidden-category{
+    .hidden-category {
       display: none;
     }
 
@@ -1314,7 +1314,11 @@ p.login-helper {
   }
 
   input.star {
-    display: none;
+    position: absolute;
+    top: 1.25rem;
+    margin-right: 0.75rem;
+    height: 5px;
+    width: 5px;
   }
   // Selected star and all ancestors
   input.star:checked label.star span::before,
@@ -1397,7 +1401,7 @@ p.login-helper {
       display: flex;
       justify-content: space-between;
 
-      .review-image-container{
+      .review-image-container {
         width: 17.5%;
         display: none;
         .user-review-image {
@@ -1433,6 +1437,21 @@ p.login-helper {
 
     }
   }
+
+  #add-photo-btn{
+    width: 100%;
+    height: 12rem;
+    background-color: @grey-lighter;
+    button{
+      border: solid 1px @grey-darkest;
+      background-color: @blue-light;
+    }
+  }
+
+  #webRTC-col{
+    display: none;
+  }
+
 }
 
 button#get-directions {
@@ -1443,12 +1462,52 @@ p#current-day {
   font-weight: 600;
 }
 
-// ================================ Restaurant Map ================================ \\
-
 #restaurant-current-map {
   width: 100%;
   height: 28rem;
 }
+
+#submitting-div {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: inherit;
+  height: 105%;
+  top: 0;
+  left: 0;
+
+  #loading-div{
+    width: 40%;
+    left: 30%;
+    position: absolute;
+    background-color: @grey-lightest;
+    top: 35%;
+    height: 30%;
+    text-align: center;
+    h3{
+      padding: 1rem;
+    }
+    .loader {
+      margin: 1rem auto;
+      border: .25rem solid @grey-lighter;
+      border-top: .25rem solid @grey-mid;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      animation: spin 1s linear infinite;
+
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+
+  }
+}
+
+
 
 // ================================ User Management ================================ \\
 
