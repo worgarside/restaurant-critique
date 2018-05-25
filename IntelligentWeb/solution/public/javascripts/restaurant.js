@@ -279,32 +279,29 @@ $('form#review-form').submit((e) => {
         dataType: 'json',
         data: data,
         success: (result) => {
-            alert(result);
-            console.log('Success');
+            if (result.success) {
+                alert(result);
+                console.log('Success');
+            }
         },
         error: (err) => {
             alert(`Error: ${err.status}: ${err.statusText}`);
         }
     });
-
 });
 
 // ================================ Category List Toggle ================================ \\
 
-function toggleView() {
-    let x = document.getElementById("view-toggle");
-    let btn = document.getElementById("toggle-btn");
+$('#toggle-btn').click(function () {
+    const hiddenCategories = $('#view-toggle');
+    hiddenCategories.toggle();
 
-    if (x.style.display === "block") {
-        x.style.display = "none";
+    if (this.text === "View more...") {
+        this.text = "View less...";
     } else {
-        x.style.display = "block";
+        this.text = "View more...";
     }
 
-    if (btn.text === "View more...") {
-        btn.text = "View less...";
-    } else {
-        btn.text = "View more...";
-    }
+});
 
-}
+console.log('Loaded restaurant.js');
