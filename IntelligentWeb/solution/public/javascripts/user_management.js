@@ -14,7 +14,6 @@ const cancelPassword = $('#cancel-password');
 const cancelImage = $('#cancel-image');
 
 const detailsName = $('#details-name');
-const detailsEmail = $('#details-email');
 const detailsPostcode = $('#details-postcode');
 const detailsPassword = $('#details-password');
 const detailsImage = $('#details-image');
@@ -22,9 +21,9 @@ const detailsImage = $('#details-image');
 const user = JSON.parse(userVar);
 let imageURL = '';
 
-// ================ Button Alignment ================ \\
+// ================================ Button Alignment ================================ \\
 
-$(window).resize(function() {
+$(window).resize(() => {
     if ($(window).width() < 1080) {
         $('.btn-group').addClass('btn-group-vertical');
     } else {
@@ -33,7 +32,7 @@ $(window).resize(function() {
 });
 
 
-// ================ Name ================ \\
+// ================================ Name ================================ \\
 
 editName.click(() => {
     detailsName.find('.current').hide();
@@ -80,17 +79,17 @@ cancelName.click(() => {
     detailsName.find('.new').hide();
 });
 
-// ================ Email ================ \\
+// ================================ Email ================================ \\
 
-$('#verify-email').click(()=>{
+$('#verify-email').click(() => {
     $.ajax({
         url: '/verify_email',
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (response) => {
-            if (response){
+            if (response) {
                 alert('Verification email sent, it should arrive within the next 24 hours. If not, please check your spam folder or contact us.');
-            }else{
+            } else {
                 alert('Sorry, we are unable to process your request at this time. PLease try again later.');
             }
         },
@@ -100,7 +99,7 @@ $('#verify-email').click(()=>{
     });
 });
 
-// ================ Postcode ================ \\
+// ================================ Postcode ================================ \\
 
 editPostcode.click(() => {
     detailsPostcode.find('.current').hide();
@@ -144,7 +143,7 @@ cancelPostcode.click(() => {
     detailsPostcode.find('.new').hide();
 });
 
-// ================ Password ================ \\
+// ================================ Password ================================ \\
 
 editPassword.click(() => {
     detailsPassword.find('.current').hide();
@@ -154,7 +153,7 @@ editPassword.click(() => {
     cancelImage.click();
 });
 
-jQuery.validator.addMethod("notEqual", function (value, element, param) {
+jQuery.validator.addMethod('notEqual', function (value, element, param) {
     return this.optional(element) || value !== $(param).val();
 });
 
@@ -221,21 +220,17 @@ cancelPassword.click(() => {
     detailsPassword.find('.new').hide();
 });
 
-// ================ Image ================ \\
+// ================================ Image ================================ \\
 
 $('#display-picture').click(() => {
     $("#display-picture-upload").click();
 });
 
-function previewImage(imageInput) {
-    if (imageInput.files && imageInput.files[0]) {
-        imageURL = window.URL.createObjectURL(imageInput.files[0]);
+$('#display-picture-upload').change(function () {
+    if (this.files && this.files[0]) {
+        imageURL = window.URL.createObjectURL(this.files[0]);
         $('#display-picture').attr('src', imageURL);
     }
-}
-
-$('#display-picture-upload').change(function () {
-    previewImage(this);
 });
 
 editImage.click(() => {
@@ -248,27 +243,51 @@ editImage.click(() => {
 
 $('#change-image-form').submit(function () {
     $(this).ajaxSubmit({
-        error: (xhr) => {
-            alert('Error: ' + xhr.status);
-            //  TODO change this
+        error: (err) => {
+            alert('Unable to change your profile image at this time. Please try again later.');
+            console.log(`AJAX Error: ${err.status}`);
         },
-        success: (response) => {
+        success: () => {
             // Force a GET request by adding timestamp param to refresh the image source
             $('#user-profile-image').attr('src', `/images/userImages/${user.reducedID}?` + new Date().getTime());
             detailsImage.find('.current').css('display', 'flex');
             detailsImage.find('.new').hide();
             alert('Your profile picture has been successfully updated');
-            console.log('Returned');
         }
     });
 
     return false; // Blocks the form's default behaviour
 });
 
-
 cancelImage.click(() => {
     detailsImage.find('.current').css('display', 'flex');
     detailsImage.find('.new').hide();
 });
 
+// ================================ Review Deletion ================================ \\
+
+$('.delete-review').click(function() {
+    const reviewID = this.id.split('-').pop();
+    if (confirm('Are you sure you want to delete your review?')){
+        const data = JSON.stringify({reviewID: reviewID});
+
+        $.ajax({
+            url: '/user/delete_review',
+            data: data,
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST',
+            success: (result) => {
+                if (result){
+                    $(`#row-${reviewID}`).hide();
+                    alert('Review deleted successfully!');
+                }
+            },
+            error: (err) => {
+                console.log(`Error: ${JSON.stringify(err)}`);
+            }
+        });
+    }
+});
+
 console.log('Loaded user_management.js');
+

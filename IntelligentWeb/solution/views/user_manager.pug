@@ -184,7 +184,7 @@ block content
                         .card-body
                             each review, reviewIndex in reviews
                                 // TODO add score
-                                .row
+                                .row(id=`row-${review._id}`)
                                     .col-9
                                         h5.mb-0.quote "#{review.title}"
                                         p.mb-0 #{review.restaurant.name}
@@ -194,7 +194,7 @@ block content
                                             .vert-center-child
                                                 .btn-group.float-right
                                                     a.btn.btn-info(href=`/restaurant/${review.restaurant.localUrl}/#${review._id}`) View
-                                                    button.btn.btn-danger(id=`delete-${review._id}`) Delete
+                                                    button.btn.btn-danger.delete-review(id=`delete-${review._id}`) Delete
                                 if reviewIndex < reviews.length-1
                                     hr
                             else

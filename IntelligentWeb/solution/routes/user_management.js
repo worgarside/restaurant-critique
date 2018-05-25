@@ -10,6 +10,8 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Review = mongoose.model('Review');
+const Restaurant = mongoose.model('Restaurant');
 const multer = require('multer');
 
 router.use(bodyParser.urlencoded({extended: true}));
@@ -25,67 +27,110 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 
-// ================ POST Methods ================ \\
+// ================================ POST Methods ================================ \\
 
 router.post('/update_name', (req, res) => {
-    const name = req.body.name;
-
-    User.findByIdAndUpdate(req.user._id, {name: name}, {new: true}, (err, user) => {
-        if (err) {
-            console.log(err);
-            res.send(false);
-        } else {
+    User.findByIdAndUpdate(req.user._id, {name: req.body.name}, {new: true})
+        .then((user) => {
             console.log(`Name updated successfully: '${user.name.first} ${user.name.last}'`);
             res.send(user.name);
-        }
-    });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.send(false);
+        });
 });
 
 router.post('/update_postcode', (req, res) => {
-    const postcode = req.body.postcode;
-
-    User.findByIdAndUpdate(req.user._id, {postcode: postcode}, {new: true}, (err, user) => {
-        if (err) {
-            console.log(err);
-            res.send(false);
-        } else {
+    User.findByIdAndUpdate(req.user._id, {postcode: req.body.postcode}, {new: true})
+        .then(() => {
             console.log(`Postcode updated successfully: '${user.postcode}'`);
             res.send(user.postcode);
-        }
-    });
+        })
+        .catch(() => {
+            console.log(err);
+            res.send(false);
+        });
 });
 
 router.post('/update_password', (req, res) => {
-    User.findOne({_id: req.user._id}, (err, user) => {
-        user.comparePassword(req.body.password.old, (err, matched) => {
-            if (err) {
-                console.log(`Error: ${err}`);
-                res.send('0');
-            }
+    User.findOne({_id: req.user._id})
+        .then((user) => {
+            user.comparePassword(req.body.password.old, (err, matched) => {
+                if (err) {
+                    console.log(`Error: ${err}`);
+                    res.send('0');
+                }
 
-            if (matched) {
-                user.password = req.body.password.new;
-                user.save()
-                    .then(() => {
-                        res.send('1');
-                    })
-                    .catch((err) => {
-                        console.log(`Unable to save user: ${err}`);
-                        res.send('2');
-                    })
-            } else {
-                console.log('oldPassword <> user.password');
-                res.send('0');
-            }
+                if (matched) {
+                    user.password = req.body.password.new;
+                    user.save()
+                        .then(() => {
+                            res.send('1');
+                        })
+                        .catch((err) => {
+                            console.log(`Unable to save user: ${err}`);
+                            res.send('2');
+                        })
+                } else {
+                    console.log('oldPassword <> user.password');
+                    res.send('0');
+                }
+            });
+        })
+        .catch((err) => {
+            console.log(`Error: ${err}`);
+            res.send('0');
         });
-    });
+
+})
+;
+
+router.post('/update_image', upload.single('displayImage'), (req, res) => {
+    res.send('');
 });
 
+router.post('/delete_review', (req, res) => {
+    console.log(`Deleting review ${req.body.reviewID} by ${req.user.reducedID}`);
 
-router.post('/update_image',  upload.single('displayImage'), (req, res) => {
-    console.log('POST Triggered');
-    // console.log(req.user);
-    res.send('hello');
+    Review.findOne({
+        _id: req.body.reviewID,
+        'author.reducedID': req.user.reducedID
+    })
+        .then((review) => {
+            const restaurantPromise = Restaurant.findByIdAndUpdate(review.restaurant._id, {
+                $pull: {
+                    images: {$in: review.images},
+                    reviews: review._id
+                }
+            }).exec();
+
+            const userPromise = User.update({reducedID: review.author.reducedID}, {
+                $pull: {
+                    images: {$in: review.images},
+                }
+            }).exec();
+
+            Promise.all([restaurantPromise, userPromise])
+                .then(() => {
+                    review.remove()
+                        .then(() => {
+                            console.log('Review deleted successfully');
+                            res.send(true);
+                        }).catch((err) => {
+                        console.log(`Review deletion failed: ${err}`);
+                        res.send(false);
+                    });
+                })
+                .catch((err) => {
+                    console.log(`Document updates failed: ${err}`);
+                    res.send(false);
+                });
+        })
+        .catch((err) => {
+            console.log(`Review lookup failed: ${err}`);
+            res.send(false);
+        });
 });
 
 module.exports = router;
