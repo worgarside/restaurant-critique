@@ -943,7 +943,7 @@ function populateRestaurants(insertPromises) {
         openingTimes: [[660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320], [660, 1320]],
         priceRange: {lower: 1, upper: 8, band: 1},
         categories: [
-            {name: 'Falafel'}, {name: 'Wraps'}, {name: 'Hommous'}, {name: 'Salad'}, {name: 'Inexpensive'},
+            {name: 'Falafel'}, {name: 'Wraps'}, {name: 'Hummus'}, {name: 'Salad'}, {name: 'Inexpensive'},
             {name: 'Burger'}, {name: 'Chicken'}, {name: 'Salad'}, {name: 'Soup'}, {name: 'Curry'}, {name: 'Rice'}
         ],
         features: {

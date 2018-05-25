@@ -291,9 +291,19 @@ $('form#review-form').submit((e) => {
 
 // ================================ Category List Toggle ================================ \\
 
+let categoriesHidden = true;
+const hiddenCategories = $('.hidden-category');
+
 $('#toggle-btn').click(function () {
-    const hiddenCategories = $('#view-toggle');
-    hiddenCategories.toggle();
+    categoriesHidden = !categoriesHidden;
+
+    if (categoriesHidden){
+        hiddenCategories.css('display', 'none');
+    }else{
+        hiddenCategories.css('display', 'inline');
+    }
+
+
 
     if (this.text === "View more...") {
         this.text = "View less...";
