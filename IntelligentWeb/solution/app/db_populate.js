@@ -60,17 +60,13 @@ const populateFunction = function populateDatabase(conn) {
                 .then(() => {
                     conn.close()
                         .then(() => {
-                            console.log('DB populated');
+                            console.log('DB populated. Great success!');
                         })
                         .catch((err) => {
                             console.log(`Unable to close connection: ${err}`);
                         });
                 });
-
-
         });
-
-
 };
 
 
@@ -921,8 +917,8 @@ function populateRestaurants(insertPromises) {
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
         owner: 'greta.veronika@gmail.com',
         reviews: ['5aad98377888995220605d22', '5aad98377888995220605d23'],
-        images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
-        averageRating: 4
+        images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
+        averageRating: 5
     }).save());
 
     insertPromises.push(new Restaurant({
@@ -1212,15 +1208,14 @@ function populateReviews(insertPromises) {
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d22'),
         restaurant: {_id: ID['ASK Italian']},
-        title: "Pizza heaven",
-        body: 'Honestly, the food here changed my life. I think the lasagne changed my perception of life. I became ' +
-        'inspired to become a chef thanks to ASK Italian!',
+        title: 'Pizza heaven',
+        body: `Honestly, the food here changed my life. I think the lasagne changed my perception of life. I became 
+        inspired to become a chef thanks to ASK Italian!`,
         author: {
             forename: 'Rufus',
             surname: 'Cope',
             reducedID: 'copeyrufus-gmail-com',
         },
-        images: ['2018-05-23 15-57-03.jpg'],
         restaurantRating: 5
     }).save());
 
@@ -1228,9 +1223,9 @@ function populateReviews(insertPromises) {
         _id: mongoose.Types.ObjectId('5aad98377888995220605d23'),
         restaurant: {_id: ID['ASK Italian']},
         title: "Tasty but expensive!",
-        body: 'The food was great, but as a student, I was not able to afford all the delicious food. If you are going' +
-        ' on a date, better go someplace cheaper since they do not accept any vouchers and do not give student discounts.' +
-        ' My poor wallet feels empty now.',
+        body: `The food was great, but as a student, I was not able to afford all the delicious food. If you are going
+         on a date, better go someplace cheaper since they do not accept any vouchers and do not give student 
+         discounts. My poor wallet feels empty now.`,
         author: {
             forename: 'Will',
             surname: 'Garside',

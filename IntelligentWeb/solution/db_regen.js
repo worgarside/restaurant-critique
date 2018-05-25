@@ -59,6 +59,6 @@ function initialiseDatabase() {
  * @see app/db_populate.js
  */
 function populateCollections(conn) {
-    console.log('Populating collections');
+    console.log('Running population functions...');
     DatabasePopulation.populateFunction(conn);
 }
