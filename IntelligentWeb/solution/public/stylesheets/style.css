@@ -1227,6 +1227,9 @@ p.login-helper {
 button#get-directions {
   margin: 0.5rem 0;
 }
+p#current-day {
+  font-weight: 600;
+}
 #restaurant-current-map {
   width: 100%;
   height: 28rem;
