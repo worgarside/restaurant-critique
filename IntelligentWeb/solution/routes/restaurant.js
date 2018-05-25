@@ -92,8 +92,7 @@ router.post('/submit_review', (req, res) => {
             console.log(`Error saving review: ${err}`);
         });
 
-
-    res.send('done');
+    res.send({success: true});
 });
 
 // TODO jsdoc

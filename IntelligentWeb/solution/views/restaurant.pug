@@ -118,7 +118,7 @@ block content
                             each times, index in restaurant.openingTimes
                                 .row
                                     .col-2.offset-1.col-sm-2.col-md-2.col-lg-2.offset-md-2.offset-lg-1
-                                        - var today = new Date.getDay();
+                                        - var today = new Date().getDay();
                                         if (today - 1) === index
                                             p.mb-2#current-day= daysOfWeek[index]
                                         else
