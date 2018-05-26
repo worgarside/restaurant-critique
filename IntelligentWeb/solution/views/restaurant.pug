@@ -4,12 +4,6 @@ block content
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     br
 
-    ul#messages
-    form#socket-form(action='')
-        input#m(autocomplete='off')
-        button Send
-
-
     #full-screen-image-viewer
         span.oi.oi-x#close-button
         .vert-center-parent
@@ -227,7 +221,7 @@ block content
                                                 else
                                                     .review-image-secondary(style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);')
         br
-        .row
+        .row#review-submission-div
             .col
                 hr
                 h4 Have you been to #{restaurant.name}? Leave your review!
