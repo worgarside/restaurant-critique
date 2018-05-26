@@ -7,6 +7,10 @@
 let lat, lng, map, userMarker;
 let markerList = [];
 
+$('#login-warning').click(() => {
+    $('#btn-login').click();
+});
+
 $(() => {
     $('#nearby-map-wrapper').hover(
         () => {
@@ -15,14 +19,14 @@ $(() => {
             $('#nearby-map').addClass('map-shrink');
         }
     );
+});
 
-    if (!userLoggedIn) {
-        $('#login-warning').click(() => {
-            $('#btn-login').click();
-        });
-    } else {
-        $('#restaurant-overlay').css('display', 'block');
-    }
+$('#allow-location').click(() => {
+    allowLocation(true);
+});
+
+$('#deny-location').click(() => {
+    allowLocation(false);
 });
 
 /**
@@ -32,8 +36,9 @@ $(() => {
 function allowLocation(allowed) {
     // TODO test user in washington state??
     if (allowed) {
-        const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
+        sessionStorage.setItem('allowLocation', true);
 
+        const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
         navigator.geolocation.getCurrentPosition((position) => {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
@@ -45,9 +50,30 @@ function allowLocation(allowed) {
         }, () => {
             console.log('Geolocation failed :(');
         }, options)
+    } else {
+        sessionStorage.setItem('allowLocation', false);
     }
 
-    $('#restaurant-overlay').css('display', 'none');
+    $('#restaurant-location-overlay').css('display', 'none');
+}
+
+// TODO jsdoc
+function manageGeolocation(){
+    if (userLoggedIn)  {
+        const locFlag = sessionStorage.getItem('allowLocation');
+        console.log(typeof locFlag);
+
+        if (locFlag === 'true') {
+            console.log('Location already allowed');
+            allowLocation(true);
+        } else if (locFlag === 'false') {
+            console.log('Location already denied');
+            allowLocation(false);
+        } else {
+            console.log('Location permissions not set');
+            $('#restaurant-location-overlay').css('display', 'block');
+        }
+    }
 }
 
 /**
@@ -129,7 +155,10 @@ function createMap() {
             $('#btn-login').click();
         });
     }
+    manageGeolocation();
     updateList();
+
+
 }
 
 /**

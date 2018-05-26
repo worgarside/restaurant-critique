@@ -1,13 +1,13 @@
 extends mixins/layout
 
 block content
-    #restaurant-overlay
+    #restaurant-location-overlay
         .vert-center-parent
             .vert-center-child
-                #restaurant-overlay-confirmation
+                #restaurant-location-overlay-confirmation
                     h5 To give you the most accurate results, allow us to access your current location
-                    button.btn.btn-danger(type='button', onclick='allowLocation(false);') No thanks
-                    button.btn.btn-success(type='button', onclick='allowLocation(true);') Sure!
+                    button.btn.btn-danger#deny-location(type='button') No thanks
+                    button.btn.btn-success#allow-location(type='button') Sure!
 
 
     if (!user)
