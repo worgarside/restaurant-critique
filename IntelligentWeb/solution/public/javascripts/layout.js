@@ -13,6 +13,7 @@ $(() => {
         const user = JSON.parse(layoutUser);
         console.log(`${user.name.first} ${user.name.last} (${user._id}) logged in`);
     }
+    updateCategoryClickables();
 });
 
 // ================================ Login Form ================================ \\
@@ -102,7 +103,7 @@ burgerLoginLink.click(() => {
     burgerLoginForm.toggle(200);
 });
 
-console.log('Loaded layout.js');
+// ================================ NavBar Search ================================ \\
 
 const navbarSearchBtn = $('#navbar-search-button');
 const navbarSearchInput = $('#navbar-search-input');
@@ -123,3 +124,19 @@ navbarSearchInput.keypress((e) => {
     }
 });
 
+// ================================ Categories ================================ \\
+
+function updateCategoryClickables() {
+    $('p.restaurant-category, .restaurant-category').click(function () {
+        const catName = $(this).text();
+        const catID = catName.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+
+        console.log(`Selected category ${catID}`);
+
+        sessionStorage.setItem('query', catName);
+        sessionStorage.setItem('catID', catID);
+        window.location.replace('/search');
+    });
+}
+
+console.log('Loaded layout.js');

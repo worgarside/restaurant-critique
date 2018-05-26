@@ -57,6 +57,11 @@ $(() => {
         searchInput.val(query);
         sessionStorage.removeItem('query');
     }
+    const catID = sessionStorage.getItem('catID');
+    if (catID) {
+        $(`#${catID}`).click();
+        sessionStorage.removeItem('catID');
+    }
 });
 
 /**
@@ -298,7 +303,7 @@ function updateDisplayFlags() {
 function displaySearchResults() {
     searchResultsDiv.innerHTML = null;
     let searchResultsHTML = '';
-    const pageLength = 5;
+    const pageLength = 10;
     let displayCount = 0;
     let pageCount = 0;
 
@@ -347,10 +352,11 @@ function displaySearchResults() {
     searchResultContent.innerHTML = searchResultsHTML;
     searchResultsDiv.appendChild(searchResultContent);
 
+    // JS functionality must be added AFTER the content is added to the page
     for (let i = 0; i < queryMatches.length; i++) {
-        // Must be called AFTER content is added to page
         initSlideshow(i);
     }
+    updateCategoryClickables();
 }
 
 function createPaginationLinks(pageCount) {
@@ -413,13 +419,13 @@ function createPaginationLinks(pageCount) {
                 break;
         }
 
-        if (currentPage === 1){
+        if (currentPage === 1) {
             $('#page-link-prev').addClass('disabled');
             $('#page-link-next').removeClass('disabled');
-        }else if (currentPage === pageCount){
+        } else if (currentPage === pageCount) {
             $('#page-link-prev').removeClass('disabled');
             $('#page-link-next').addClass('disabled');
-        }else{
+        } else {
             $('#page-link-prev').removeClass('disabled');
             $('#page-link-next').removeClass('disabled');
         }
@@ -482,8 +488,13 @@ function getRestaurantDiv(restaurant, index) {
     `;
 
     if (restaurant.categories.length > 0) {
+        let catCount = 0;
         for (const category of restaurant.categories) {
             htmlCategories += `<p class='restaurant-category'>${category.name}</p>`;
+            catCount++;
+            if (catCount > 6) {
+                break;
+            }
         }
     }
 

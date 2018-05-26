@@ -871,6 +871,7 @@ p.login-helper {
   display: inline-block;
   margin: 10px 5px 10px 0;
   padding: 2px 5px;
+  cursor: pointer;
 }
 .restaurant-category ~ .restaurant-category {
   margin: 10px 5px;

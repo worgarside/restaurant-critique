@@ -179,6 +179,7 @@ function processRestaurants(results) {
             restaurantContainer.innerHTML = createRestaurantPreview(restaurant, index);
             restaurantListDOM.appendChild(restaurantContainer);
             initSlideshow(index);
+            updateCategoryClickables();
 
             const infoWindowContent = `
                 <div class="container" id="info-${index}" style="max-width: 400px;">
