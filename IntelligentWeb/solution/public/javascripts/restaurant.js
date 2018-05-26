@@ -152,36 +152,6 @@ let canvasCtx = [];
 let deleteButton = [];
 
 $('#add-photo-btn').find('button').click(() => {
-    $('#pre-webRTC-col').hide();
-
-    liveVideo = $('#live-video');
-    liveVideoContent = liveVideo[0];
-    newImgCanvas = $('#new-image');
-    newImgCanvasContent = newImgCanvas[0];
-
-    liveVideoContent.onloadeddata = function () {
-        console.log('Video stream active');
-        origVidWidth = liveVideoContent.videoWidth;
-        origVidHeight = liveVideoContent.videoHeight;
-
-        // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
-
-        newImgCanvas.width(liveVideo.width());
-        newImgCanvas.height(liveVideo.height());
-
-        newImgCanvasContent.width = origVidWidth;
-        newImgCanvasContent.height = origVidHeight;
-
-        for (let i = 0; i < maxImageCount; i++) {
-            const canvasContent = $(`#image-${i}`)[0];
-            canvasContent.width = origVidWidth;
-            canvasContent.height = origVidHeight;
-            canvasArr.push(canvasContent);
-            canvasCtx.push(canvasContent.getContext('2d'));
-            deleteButton.push($(`#delete-canvas${i}`));
-        }
-    };
-
     const constraints = {
         audio: false,
         video: {
@@ -195,12 +165,44 @@ $('#add-photo-btn').find('button').click(() => {
         .then((stream) => {
             window.stream = stream;
             liveVideoContent.srcObject = stream;
+
+            $('#pre-webRTC-col').hide();
+
+            liveVideo = $('#live-video');
+            liveVideoContent = liveVideo[0];
+            newImgCanvas = $('#new-image');
+            newImgCanvasContent = newImgCanvas[0];
+
+            liveVideoContent.onloadeddata = function () {
+                console.log('Video stream active');
+                origVidWidth = liveVideoContent.videoWidth;
+                origVidHeight = liveVideoContent.videoHeight;
+
+                // alert(`Camera res: ${origVidWidth} x ${origVidHeight}`);
+
+                newImgCanvas.width(liveVideo.width());
+                newImgCanvas.height(liveVideo.height());
+
+                newImgCanvasContent.width = origVidWidth;
+                newImgCanvasContent.height = origVidHeight;
+
+                for (let i = 0; i < maxImageCount; i++) {
+                    const canvasContent = $(`#image-${i}`)[0];
+                    canvasContent.width = origVidWidth;
+                    canvasContent.height = origVidHeight;
+                    canvasArr.push(canvasContent);
+                    canvasCtx.push(canvasContent.getContext('2d'));
+                    deleteButton.push($(`#delete-canvas${i}`));
+                }
+            };
+
+            $('#webRTC-col').show();
         })
         .catch((err) => {
-            alert(`getUserMedia Error: ${err}`);
+            alert('There was an error connecting to your webcam. Please ensure it is connected and try again, or try again later.');
+            console.log(`getUserMedia Error: ${err}`);
         });
 
-    $('#webRTC-col').show();
 });
 
 $('.delete-button').click(function () {
