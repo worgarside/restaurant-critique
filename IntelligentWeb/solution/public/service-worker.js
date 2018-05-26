@@ -15,10 +15,13 @@
 const dataCacheName = 'restaurantData-v1';
 const cacheName = 'restaurantCritique-1';
 const filesToCache = [
-    '/',
+    '/contact',
     './javascripts/*',
     './stylesheets/style.css',
-    './scripts/*'
+    './scripts/js/bootstrap.min.js',
+    './scripts/css/bootstrap.min.css',
+    './scripts/popper.js',
+    './scripts/jquery.min.js'
 ];
 
 
@@ -81,6 +84,8 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('fetch', function (event) {
     event.respondWith(
+        //First fetch live data from web, if this fails fall back to cache.
+        //NOTE this is not best practice, but just trying to get it up and running
         caches.match(event.request)
             .then(function (response) {
                 // Cache hit - return response
@@ -123,5 +128,7 @@ self.addEventListener('fetch', function (event) {
             })
             .catch((err) => {
                     console.log("Error22" + err);
+                    //if page can't be got online, plus not in cache, serve offline page
             }));
+
 });
