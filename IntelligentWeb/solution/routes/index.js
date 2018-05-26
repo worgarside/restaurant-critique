@@ -355,7 +355,7 @@ router.get('/verify-user/:hash', (req, res) => {
     });
 });
 
-// ================ POST Statements ================ \\
+// ================================ POST Statements ================================ \\
 
 /**
  * When the User attempts to log in, the Passport configuration ensures that their password is correct and starts a

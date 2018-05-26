@@ -3,6 +3,13 @@ extends mixins/layout
 block content
     #{daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
     br
+
+    ul#messages
+    form#socket-form(action='')
+        input#m(autocomplete='off')
+        button Send
+
+
     #full-screen-image-viewer
         span.oi.oi-x#close-button
         .vert-center-parent
@@ -300,6 +307,6 @@ block content
         const images = !{JSON.stringify(restaurant.images).replace(/<\//g, '<\\/')};
         const restaurantId = `#{restaurant._id}`;
         const coordinates = JSON.parse(`[#{restaurant.location.coordinates}]`);
+    script(src = 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js')
     script(type='text/javascript', src='/javascripts/restaurant.js')
-    script(type='text/javascript', src='/javascripts/review.js')
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0&callback=initMap')

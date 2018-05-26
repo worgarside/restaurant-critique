@@ -123,4 +123,12 @@ function processImages(imageArray, restaurantId) {
     return imageNames;
 }
 
-module.exports = router;
+module.exports = function (io) {
+    io.on('connection', (socket) => {
+        socket.on('chat message', (msg) => {
+            console.log(`Message received: ${msg}`);
+            io.emit('chat message', msg);
+        });
+    });
+    return router;
+};

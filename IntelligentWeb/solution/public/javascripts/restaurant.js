@@ -312,4 +312,19 @@ $('#toggle-btn').click(function () {
     }
 });
 
+// ================================ Socket IO ================================ \\
+
+const socket = io();
+$('#socket-form').submit(() => {
+    socket.emit('chat message', $('#m').val());
+    console.log(`Emitting 'chat message' with "${$('#m').val()}"`);
+    $('#m').val('');
+    return false;
+});
+
+socket.on('chat message', (msg) => {
+    $('#messages').append($('<li>').text(msg));
+    console.log(`Received "${msg}"`);
+});
+
 console.log('Loaded restaurant.js');
