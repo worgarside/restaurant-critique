@@ -4,6 +4,7 @@
  * @author Rufus Cope, Will Garside
  */
 
+let pageCount = 0;
 let queryMatches = [];
 let selectedCategories = [];
 let selectedFeatures = [];
@@ -252,6 +253,7 @@ function sortResults() {
             }
             break;
     }
+    $('#page-link-1').find('a.page-link').click();
     displaySearchResults();
 }
 
@@ -303,9 +305,9 @@ function updateDisplayFlags() {
 function displaySearchResults() {
     searchResultsDiv.innerHTML = null;
     let searchResultsHTML = '';
-    const pageLength = 10;
+    const pageLength = 4;
     let displayCount = 0;
-    let pageCount = 0;
+    pageCount = 0;
 
     if (queryMatches.length > 0) {
         searchResultsHeader.css('display', 'block');
@@ -342,7 +344,7 @@ function displaySearchResults() {
 
         searchResultsHeader.find('h4').text(`Search Results - ${displayCount} found`);
 
-        createPaginationLinks(pageCount);
+        createPaginationLinks();
     } else {
         searchResultsHeader.css('display', 'none');
         searchResultsHTML = noResultsHTML;
@@ -359,7 +361,7 @@ function displaySearchResults() {
     updateCategoryClickables();
 }
 
-function createPaginationLinks(pageCount) {
+function createPaginationLinks() {
     paginationLinksDiv.innerHTML = null;
     let paginationHTML = '';
 
@@ -430,6 +432,7 @@ function createPaginationLinks(pageCount) {
             $('#page-link-next').removeClass('disabled');
         }
     });
+    console.log('Created pagination links');
 }
 
 

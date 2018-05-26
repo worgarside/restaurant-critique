@@ -782,6 +782,7 @@ p.login-helper {
   font-size: 0.8rem;
   padding: 1px 8px;
   cursor: pointer;
+  top: -1px;
 }
 #new-restaurant-form .category-selected span:hover,
 #edit-restaurant-form .category-selected span:hover {
