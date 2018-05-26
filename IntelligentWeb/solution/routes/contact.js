@@ -26,23 +26,26 @@ router.use(bodyParser.urlencoded({extended: true}));
  * @function postContactForm
  */
 router.post('/', (req, res) => {
-    const reference = new Date().getTime();
-    sendSupportRequest(req,reference);
-    sendConfirmationEmail(req, reference);
+    let refNum;
+    if (!req.body.reference) {
+        refNum = new Date().getTime();
+    } else {
+        refNum = req.body.reference;
+    }
+
+    sendSupportRequest(req, refNum);
+    sendConfirmationEmail(req, refNum);
 
     User.findByIdAndUpdate(
         req.body.email,
-        {$push: {'supportRequests': {reference: reference, content: req.body.message}}},
+        {$push: {'supportRequests': {reference: refNum, content: req.body.message}}},
         (err) => {
             if (err) {
                 console.log(`Error: ${err}`);
             }
         });
-
     res.render('contact_submitted');
 });
-
-// TODO: change email bodies
 
 /**
  * Send the support request email to Restaurant Critique with request details
@@ -52,7 +55,7 @@ router.post('/', (req, res) => {
 function sendSupportRequest(req, reference) {
     const to = 'worgarside.dev@gmail.com'; // This would be e.g. support@restaurantcritique.com
     const subject = `Support Request: ${req.body.email}`;
-    const body = `<p>Name: ${req.body.name} </p> <p>Message: ${req.body.message}</p><p>Ref: ${reference}</p>`;
+    const body = `<p>Name: ${req.body.name}</p> <p>Message: ${req.body.message}</p><p>Ref: ${reference}</p>`;
     const from = `"${req.body.name}" <${req.body.email}>`;
 
     nodemailer.sendEmail(to, subject, body, from);

@@ -15,19 +15,19 @@ block content
                             .form-row
                                 .form-group.col
                                     label(for='contact-name') Name
-                                    input#contact-name(type='text', name='name', placeholder='Your name' required)
+                                    input.form-control#contact-name(type='text', name='name', placeholder='Your name' required)
                             .form-row
                                 .form-group.col
                                     label(for='contact-email') Email
-                                    input#contact-email(type='text', name='email', placeholder='Your email' required)
+                                    input.form-control#contact-email(type='text', name='email', placeholder='Your email' required)
                             .form-row
                                 .form-group.col
                                     label(for='contact-reference') Reference Number
-                                    input.no-spinner#contact-reference(type='number', name='reference', placeholder='Reference')
+                                    input.form-control.no-spinner#contact-reference(type='number', name='reference', placeholder='Reference')
                             .form-row
                                 .form-group.col
                                     label(for='contact-message') Message
-                                    textarea#contact-message(name='message', placeholder='Your message', required)
+                                    textarea.form-control#contact-message(name='message', placeholder='Your message', required)
                             .form-row
                                 .form-group.col
                                     input.btn(type='submit', value='Submit')
