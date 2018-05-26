@@ -6,12 +6,13 @@ block content
         .row
             .col
                 h1 Create an Account
-                br
+        br
         .row
             .col.col-lg-10.offset-lg-1
                 form#signup-form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-12.col-lg-6
+                            // TODO labels
                             input#forename.form-control(type='text', name='forename', placeholder='First name',
                             required, autocomplete='given-name')
                         .form-group.col-12.col-lg-6
@@ -23,7 +24,7 @@ block content
                                 .form-group.col
                                     input#email.form-control(type='email', name='email', placeholder='Email Address',
                                     required, autocomplete='email')
-                                    //small We'll never share your personal details with third parties
+                                    small We'll never share your personal details with third parties
                             .form-row
                                 .form-group.col
                                     input.form-control#password(type='password', placeholder='Password', name='password',
@@ -32,22 +33,6 @@ block content
                                 .form-group.col
                                     input.form-control(type='password', placeholder='Confirm your password',
                                     name='password-confirm', required, autocomplete='none')
-                            .form-row
-                                .form-group.col-10
-                                    select#age.form-control(name='age')
-                                        option(value='', disabled, selected) Age
-                                        option(value='1') 17 and under
-                                        option(value='2') 18 - 24
-                                        option(value='3') 25 - 34
-                                        option(value='4') 35 - 49
-                                        option(value='5') 50 - 64
-                                        option(value='6') 65+
-                                        option(value='0') Prefer not to say
-                                .form-group.col-2
-                                    .vert-center-parent
-                                        .vert-center-child.text-center
-                                            span.signup-help.oi.oi-question-mark(aria-hidden='true',
-                                            title='This helps us find better recommendations for you')
                             .form-row
                                 .form-group.col-10
                                     input.form-control(name='postcode', placeholder='Postcode')
@@ -59,7 +44,6 @@ block content
                         .form-group.col-6
                             .form-row
                                 .form-group.offset-1
-                                    // TODO: use media capture to add PP
                                     label(for='display-picture') Display Picture
                                     img#display-picture(src='/scripts/svg/person.svg')
                                     input#display-picture-upload(type='file', name='displayPicture', accept="image/*")

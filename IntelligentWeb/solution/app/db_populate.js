@@ -81,7 +81,6 @@ function populateUsers(insertPromises) {
         _id: 'copeyrufus@gmail.com',
         password: 'Caddy1',
         name: {first: 'Rufus', last: 'Cope'},
-        ageCategory: 2,
         postcode: 'S10 2DN',
         reviews: ['5aad98377888995220605d16', '5aad98377888995220605d10', '5aad98377888995220605d20', '5aad98377888995220605d14', '5aad98377888995220605d19', '5aad98377888995220605d21', '5aad98377888995220605d22', '5aad98377888995220605d25'],
         reducedID: 'copeyrufus-gmail-com',
@@ -92,7 +91,6 @@ function populateUsers(insertPromises) {
         _id: 'greta.veronika@gmail.com',
         password: 'Vodka2',
         name: {first: 'Greta', last: 'Ramaneckaite'},
-        ageCategory: 2,
         postcode: 'S10 2FL',
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d15'],
         reducedID: 'greta-veronika-gmail-com',
@@ -103,7 +101,6 @@ function populateUsers(insertPromises) {
         _id: 'worgarside@gmail.com',
         password: 'Passw3rd',
         name: {first: 'Will', last: 'Garside'},
-        ageCategory: 2,
         postcode: 'SY14 8JU',
         reviews: ['5aad98377888995220605d11', '5aad98377888995220605d12', '5aad98377888995220605d13', '5aad98377888995220605d17', '5aad98377888995220605d18', '5aad98377888995220605d23', '5aad98377888995220605d24'],
         reducedID: 'worgarside-gmail-com',
@@ -118,7 +115,6 @@ function populateUsers(insertPromises) {
         email: 'aslan@chicken-shop.com',
         password: 'Asl4n',
         name: {first: 'Aslan', last: 'Chicken'},
-        ageCategory: 2,
         postcode: 'S1 4EW',
         reviews: [],
         reducedID: 'aslan-chicken-shop-com',
@@ -132,7 +128,6 @@ function populateUsers(insertPromises) {
         _id: 'test@user.com',
         password: 'Re5taurant',
         name: {first: 'Rick', last: 'Astley'},
-        ageCategory: 3,
         postcode: 'S1 1ES',
         reviews: [],
         reducedID: 'test-user-com',
@@ -191,8 +186,6 @@ function populateRestaurants(insertPromises) {
             wifi: {value: false}
         },
         creator: {_id: 'aslan@chicken-shop.com', name: {first: 'Aslan', last: 'Chicken'}},
-        owner: 'aslan@chicken-shop.com',
-        ownerMessage: "Please come and buy my chicken, I don't want to close again!",
         reviews: ['5aad98377888995220605d09', '5aad98377888995220605d10'],
         images: ['2018-03-17 22-25-18.png', '2018-03-17 22-26-11.png', '2018-03-17 22-31-42.jpg'],
         averageRating: 3
@@ -210,8 +203,8 @@ function populateRestaurants(insertPromises) {
             longitude: -1.477221
         },
         contact: {
-            url: 'https://www.nandos.co.uk',
-            menu: 'https://www.nandos.co.uk/food/menu',
+            url: 'www.nandos.co.uk',
+            menu: 'www.nandos.co.uk/food/menu',
             phone: '01142780044'
         },
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
@@ -259,8 +252,8 @@ function populateRestaurants(insertPromises) {
             longitude: -1.473198
         },
         contact: {
-            url: 'https://www.gbk.co.uk',
-            menu: 'https://www.gbk.co.uk/menu',
+            url: 'www.gbk.co.uk',
+            menu: 'www.gbk.co.uk/menu',
             phone: '0114 275 5154'
         },
         openingTimes: [[690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320], [690, 1320]],
@@ -447,6 +440,7 @@ function populateRestaurants(insertPromises) {
             menu: 'www.millerandcarter.co.uk/food',
             phone: '01142362735'
         },
+        description: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
         openingTimes: [[690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380], [690, 1380]],
         priceRange: {lower: 14.95, upper: 46.95, band: 3},
         categories: [{name: 'Premium'}, {name: 'Steakhouse'}],
@@ -469,7 +463,6 @@ function populateRestaurants(insertPromises) {
             wifi: {value: true}
         },
         creator: {_id: 'copeyrufus@gmail.com', name: {first: 'Rufus', last: 'Cope'}},
-        ownerMessage: "From field to butcher's block to grill, we put everything into the perfect steak. Experience the finest British and Irish cuts at your local restaurant & steakhouse.",
         images: ['2018-03-25 19-24-00.jpg', '2018-03-25 19-24-01.jpg']
     }).save());
 
@@ -705,8 +698,8 @@ function populateRestaurants(insertPromises) {
             longitude: -1.480565
         },
         contact: {
-            url: 'https://www.iguanas.co.uk',
-            menu: 'https://www.iguanas.co.uk/restaurants/sheffield/menus',
+            url: 'www.iguanas.co.uk',
+            menu: 'www.iguanas.co.uk/restaurants/sheffield/menus',
             phone: '01142521010'
         },
         openingTimes: [[600, 1410], [600, 1410], [600, 1410], [600, 1410], [600, 1440], [600, 1440], [600, 1410]],
@@ -885,8 +878,8 @@ function populateRestaurants(insertPromises) {
             longitude: -1.472572
         },
         contact: {
-            url: 'https://askitalian.co.uk',
-            menu: 'https://www.askitalian.co.uk/menu/',
+            url: 'askitalian.co.uk',
+            menu: 'askitalian.co.uk/menu/',
             phone: '01142730073'
         },
         openingTimes: [[660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260], [660, 1260]],
@@ -915,7 +908,6 @@ function populateRestaurants(insertPromises) {
             wifi: {value: true}
         },
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
-        owner: 'greta.veronika@gmail.com',
         reviews: ['5aad98377888995220605d22', '5aad98377888995220605d23'],
         images: ['2018-05-23 15-57-00.jpg', '2018-05-23 15-57-01.jpg', '2018-05-23 15-57-02.jpg', '2018-05-23 15-57-03.jpg', '2018-05-23 15-57-04.jpg', '2018-05-23 15-57-05.jpeg'],
         averageRating: 5
@@ -962,7 +954,6 @@ function populateRestaurants(insertPromises) {
             wifi: {value: false}
         },
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
-        owner: 'greta.veronika@gmail.com',
         reviews: ['5aad98377888995220605d24', '5aad98377888995220605d25'],
         images: ['2018-05-24 11-57-02.jpeg', '2018-05-24 11-57-03.jpeg', '2018-05-24 11-57-04.jpeg', '2018-05-24 11-57-05.jpg', '2018-05-24 11-57-01.jpeg', '2018-05-24 11-57-00.jpeg'],
         averageRating: 4
@@ -1011,7 +1002,6 @@ function populateRestaurants(insertPromises) {
             wifi: {value: true}
         },
         creator: {_id: 'greta.veronika@gmail.com', name: {first: 'Greta', last: 'Ramaneckaite'}},
-        owner: 'greta.veronika@gmail.com',
         reviews: [],
         images: ['2018-05-24 14-09-00.jpeg', '2018-05-24 14-09-01.jpeg', '2018-05-24 14-09-02.jpg'],
         averageRating: 4

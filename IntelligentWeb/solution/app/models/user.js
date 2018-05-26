@@ -23,14 +23,12 @@ UserSchema = Schema({
         first: {type: String, required: true},
         last: {type: String, required: true}
     },
-    ageCategory: {type: Number, min: 0, max: 6},
     postcode: String,
     reviews: {type: [String], default: []},
     reducedID: {type: String, unique: true},
-    userRating: {type: Number, default: 0},
     restaurants: {
-        created: [String],
-        owned: [String]
+        created: [String]
+        // allows for addition of restaurant.owners
     },
     verified: {
         flag: {type: Boolean, default: false},
@@ -46,9 +44,9 @@ UserSchema.pre('save', function (next) {
     // Passwords are salted and hashed before saving
     this.password = generateHash(this.password);
 
-    // For user verification, a hash value is generated and email to the user for them to confirm their email legitimacy
+    // For user verification, a hash value is generated and email to the user for them to confirm email legitimacy
     if (!this.verified.flag && (this.__v === 0 || this.__v === undefined)) {
-        if (!this.verified.hash){
+        if (!this.verified.hash) {
             this.verified.hash = crypto.randomBytes(20).toString('hex');
         }
         if (!dbRegen) {
@@ -96,12 +94,11 @@ UserSchema.methods.sendVerificationEmail = function () {
     nodemailer.sendEmail(to, subject, body);
 };
 
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if(err) return cb(err);
+UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+        if (err) return cb(err);
         cb(null, isMatch);
     });
 };
-
 
 module.exports = mongoose.model('User', UserSchema);

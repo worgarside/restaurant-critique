@@ -4,23 +4,21 @@
  * @author Will Garside
  */
 
-// ================ Middleware ================ \\
+// ================================ Middleware ================================ \\
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// ================ Category Schema Definition ================ \\
+// ================================ Category Schema Definition ================================ \\
 
 CategorySchema = Schema({
     _id: {type: String},
     name: {type: String, required: true},
-    updatedAt: Date
 });
 
 CategorySchema.pre('save', function (next) {
     // The name of the Category has all special chars removed to create the _id
     this._id = this.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-    this.updatedAt = Date.now();
     next();
 });
 
