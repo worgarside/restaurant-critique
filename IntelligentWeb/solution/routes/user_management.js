@@ -9,6 +9,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const fs = require('fs');
 const User = mongoose.model('User');
 const Review = mongoose.model('Review');
 const Restaurant = mongoose.model('Restaurant');
@@ -98,21 +99,30 @@ router.post('/delete_review', (req, res) => {
         'author.reducedID': req.user.reducedID
     })
         .then((review) => {
-            const restaurantPromise = Restaurant.findByIdAndUpdate(review.restaurant._id, {
-                $pull: {
-                    images: {$in: review.images},
-                    reviews: review._id
-                }
-            }).exec();
 
-            const userPromise = User.update({reducedID: review.author.reducedID}, {
-                $pull: {
-                    images: {$in: review.images},
+            const restaurantPromise = Restaurant.findByIdAndUpdate(
+                review.restaurant._id,
+                {
+                    $pull: {
+                        images: {$in: review.images},
+                        reviews: review._id
+                    }
                 }
-            }).exec();
+            ).exec();
+
+            const userPromise = User.findOneAndUpdate(
+                {reducedID: review.author.reducedID},
+                {
+                    $pull: {
+                        reviews: review._id
+                    }
+                }
+            ).exec();
 
             Promise.all([restaurantPromise, userPromise])
                 .then(() => {
+                    deleteImages(review.restaurant._id, review.images);
+
                     review.remove()
                         .then(() => {
                             console.log('Review deleted successfully');
@@ -132,5 +142,17 @@ router.post('/delete_review', (req, res) => {
             res.send(false);
         });
 });
+
+
+// TODO jsdoc
+function deleteImages(restaurant, images){
+    const directory = `./public/images/restaurants/${restaurant}/`;
+
+    for (const image of images){
+        const imagePath = directory + image;
+        console.log(`Deleting ${imagePath}`);
+        fs.unlinkSync(imagePath);
+    }
+}
 
 module.exports = router;

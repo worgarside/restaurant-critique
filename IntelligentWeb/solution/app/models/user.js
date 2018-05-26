@@ -25,7 +25,7 @@ UserSchema = Schema({
     },
     ageCategory: {type: Number, min: 0, max: 6},
     postcode: String,
-    reviews: Array,
+    reviews: {type: [String], default: []},
     reducedID: {type: String, unique: true},
     userRating: {type: Number, default: 0},
     restaurants: {

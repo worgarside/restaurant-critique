@@ -1079,7 +1079,7 @@ function populateReviews(insertPromises) {
         images: ['2018-03-20 20-08-00.jpg'],
         restaurantRating: 5
     }).save());
-    //
+
     insertPromises.push(new Review({
         _id: mongoose.Types.ObjectId('5aad98377888995220605d13'),
         restaurant: {_id: ID["Piccolino"], name: "Piccolino"},
