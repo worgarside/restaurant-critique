@@ -1269,8 +1269,8 @@ p#current-day {
   left: 30%;
   position: absolute;
   background-color: #efefef;
-  top: 35%;
-  height: 30%;
+  top: 25%;
+  height: 50%;
   text-align: center;
 }
 #submitting-div #loading-div h3 {

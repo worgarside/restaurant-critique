@@ -1,17 +1,16 @@
 extends mixins/layout
 
 block content
-    br
-    .container
-        .row
-            .col-md-12
+    .container.mt-4
+        .row.mt-4
+            .col
                 h1 Accessibility
-                p.accessibility-text
-                    | Restaurant Critique is determined to have its website available to everyone by removing blocks that don't allow some users to experience of our pages.
-                p.accessibility-text
-                    | We follow standard guidelines of good practice. The website allows the use of keyboard shortcuts.
-                h1 Having trouble accessing content?
-                p.accessibility-text
-                    | If you have trouble experiencing some of pages, please
-                    a(href='/contact')  contact us
-                    |  .
+        .row.mt-4
+            .col
+                p.mb-0 Restaurant Critique is determined to have its website available to everyone by removing blocks that don't allow some users to experience of our pages. We follow standard guidelines of good practice.
+        .row.mt-4
+            .col
+                h3 Having trouble accessing content?
+                p If you have trouble experiencing some of pages, please&nbsp;
+                    a(href='/contact') contact us
+                    | .

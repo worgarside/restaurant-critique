@@ -14,7 +14,7 @@ const Category = mongoose.model('Category');
 const CategorySchema = Category.schema;
 const nodemailer = require(`${appRoot}/config/nodemailer`);
 
-// ================ Restaurant Schema Definition ================ \\
+// ================================ Restaurant Schema Definition ================================ \\
 
 RestaurantSchema = Schema({
     name: {type: String, required: true},
@@ -74,11 +74,6 @@ RestaurantSchema = Schema({
         _id: {type: String, required: true},
         name: {first: String, last: String},
     },
-    owner: { // These are of type User, but only some fields - db is not relational
-        _id: String,
-        name: {first: String, last: String}
-    },
-    ownerMessage: {type: String},
     reviews: {type: [String], default: []},
     images: {type: [String], default: []},
     averageRating: {type: Number, min: 0, max: 5, default: 0},
@@ -173,7 +168,6 @@ function updateDetails(restaurant) {
     }
 
     if (restaurant.name && restaurant.description && restaurant.address && restaurant.categories) {
-        // TODO add stemming and stoplist
         // Searchable data has all special characters removed
         restaurant.searchable.name = restaurant.name.replace(/[^\w\s]/, '');
         restaurant.searchable.description = restaurant.description.replace(/[^\w\s]/, '');

@@ -10,9 +10,12 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const app = express();
 const passport = require('passport');
 const flash = require('connect-flash');
+
+const app = express();
+app.io = require('socket.io')();
+
 global.appRoot = path.resolve(__dirname);
 global.dbRegen = false;
 
@@ -22,16 +25,16 @@ const database = require('./config/database');
 console.log('\033c'); //Clears terminal
 console.log('\x1b[36m%s\x1b[0m', `App Started @ ${appRoot}`);
 
-// ================ Database ================ \\
+// ================================ Database ================================ \\
 
 require('./app/models/user');
 require('./app/models/category');
 require('./app/models/restaurant');
 require('./app/models/review');
 
-database.connect();
+database.connect(null);
 
-// ================ View Engine ================ \\
+// ================================ View Engine ================================ \\
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -58,7 +61,7 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-fo
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-validation/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 
-// ================ Routes ================ \\
+// ================================ Routes ================================ \\
 
 const index = require('./routes/index');
 const signup = require('./routes/signup');
@@ -68,7 +71,7 @@ const restaurantsNearby = require('./routes/restaurants_nearby');
 const contact = require('./routes/contact');
 const search = require('./routes/search');
 const user_management = require('./routes/user_management');
-const restaurant = require('./routes/restaurant');
+const restaurant = require('./routes/restaurant')(app.io);
 
 app.use('/', index);
 app.use('/signup', signup);
@@ -79,9 +82,8 @@ app.use('/contact', contact);
 app.use('/search', search);
 app.use('/user', user_management);
 app.use('/restaurant', restaurant);
-
-// catch 404 and forward to error handler
 app.use((req, res) => {
+    // catch 404 and forward to error handler
     res.render('errors/404');
 });
 

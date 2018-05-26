@@ -20,78 +20,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================================ POST Method ================================ \\
 
-router.post('/submit_review', (req, res) => {
-    console.log(`Review:
-    Title: ${req.body.title}
-    Rating: ${req.body.rating}
-    Body: ${req.body.body}
-    Restaurant: ${req.body.restaurantId}  
-    User: ${req.user._id}
-    imageBlob.length: ${req.body['imageBlob[]'].length}
-    `);
 
-    let review = new Review({
-        restaurant: {
-            _id: req.body.restaurantId
-        },
-        title: req.body.title,
-        body: req.body.body,
-        author: {
-            forename: req.user.name.first,
-            surname: req.user.name.last,
-            reducedID: req.user.reducedID
-        },
-        restaurantRating: req.body.rating,
-    });
-
-    const reviewImages = processImages(req.body['imageBlob[]'], req.body.restaurantId);
-    review.images = reviewImages;
-
-    review.save()
-        .then(() => {
-            console.log('Review added to collection');
-
-            // Add the Restaurant ID to the User's attribute
-            User.findByIdAndUpdate(
-                req.user._id,
-                {$push: {reviews: review._id.toString()}},
-                (err) => {
-                    if (err) {
-                        console.log(`User error: ${err}`);
-                    } else {
-                        console.log('User fields updated');
-                    }
-                });
-            Restaurant.findOne({_id: req.body.restaurantId})
-                .then((restaurant) => {
-                    const reviewCount = restaurant.reviews.length;
-                    const oldRating = restaurant.averageRating;
-                    const newRating = ((oldRating * reviewCount) + review.restaurantRating) / (reviewCount + 1);
-
-                    Restaurant.findByIdAndUpdate(
-                        req.body.restaurantId,
-                        {
-                            $push: {images: {$each: reviewImages}, reviews: review._id.toString()},
-                            $set: {averageRating: newRating}
-                        },
-                        (err) => {
-                            if (err) {
-                                console.log(`Restaurant update error: ${err}`);
-                            } else {
-                                console.log('Restaurant fields updated');
-                            }
-                        });
-                    res.send({success: true});
-                })
-                .catch((err) => {
-                    console.log(`Restaurant lookup error: ${err}`);
-                });
-        })
-        .catch((err) => {
-            console.log(`Error saving review: ${err}`);
-            res.end();
-        });
-});
 
 // TODO jsdoc
 function processImages(imageArray, restaurantId) {
@@ -123,4 +52,89 @@ function processImages(imageArray, restaurantId) {
     return imageNames;
 }
 
-module.exports = router;
+ const returnFunction = function (io) {
+    // io.on('connection', (socket) => {
+    //     socket.on('chat message', (msg) => {
+    //         console.log(`Message received: ${msg}`);
+    //         io.emit('chat message', msg);
+    //     });
+    // });
+
+     router.post('/submit_review', (req, res) => {
+         console.log(`Review:
+    Title: ${req.body.title}
+    Rating: ${req.body.rating}
+    Body: ${req.body.body}
+    Restaurant: ${req.body.restaurantId}  
+    User: ${req.user._id}
+    imageBlob.length: ${req.body['imageBlob[]'].length}
+    `);
+
+         let review = new Review({
+             restaurant: {
+                 _id: req.body.restaurantId
+             },
+             title: req.body.title,
+             body: req.body.body,
+             author: {
+                 forename: req.user.name.first,
+                 surname: req.user.name.last,
+                 reducedID: req.user.reducedID
+             },
+             restaurantRating: req.body.rating,
+         });
+
+         const reviewImages = processImages(req.body['imageBlob[]'], req.body.restaurantId);
+         review.images = reviewImages;
+
+         review.save()
+             .then(() => {
+                 console.log('Review added to collection');
+
+                 // Add the Restaurant ID to the User's attribute
+                 User.findByIdAndUpdate(
+                     req.user._id,
+                     {$push: {reviews: review._id.toString()}},
+                     (err) => {
+                         if (err) {
+                             console.log(`User error: ${err}`);
+                         } else {
+                             console.log('User fields updated');
+                         }
+                     });
+                 Restaurant.findOne({_id: req.body.restaurantId})
+                     .then((restaurant) => {
+                         const reviewCount = restaurant.reviews.length;
+                         const oldRating = restaurant.averageRating;
+                         const newRating = ((oldRating * reviewCount) + review.restaurantRating) / (reviewCount + 1);
+
+                         Restaurant.findByIdAndUpdate(
+                             req.body.restaurantId,
+                             {
+                                 $push: {images: {$each: reviewImages}, reviews: review._id.toString()},
+                                 $set: {averageRating: newRating}
+                             },
+                             (err) => {
+                                 if (err) {
+                                     console.log(`Restaurant update error: ${err}`);
+                                 } else {
+                                     console.log('Restaurant fields updated');
+                                 }
+                             });
+                         io.emit('review', review);
+                         res.send({success: true});
+                     })
+                     .catch((err) => {
+                         console.log(`Restaurant lookup error: ${err}`);
+                     });
+             })
+             .catch((err) => {
+                 console.log(`Error saving review: ${err}`);
+                 res.end();
+             });
+     });
+
+    return router;
+};
+
+module.exports = returnFunction;

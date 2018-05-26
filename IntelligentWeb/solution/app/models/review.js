@@ -28,7 +28,6 @@ ReviewSchema = Schema({
     },
     images: {type: [String], default: []},
     restaurantRating: {type: Number, min: 0, max: 5, required: true},
-    reviewRating: {type: Number, default: 0},
     updatedAt: Date
 });
 

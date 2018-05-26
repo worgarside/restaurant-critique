@@ -27,7 +27,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-
 // ================================ POST Methods ================================ \\
 
 router.post('/update_name', (req, res) => {
@@ -83,9 +82,7 @@ router.post('/update_password', (req, res) => {
             console.log(`Error: ${err}`);
             res.send('0');
         });
-
-})
-;
+});
 
 router.post('/update_image', upload.single('displayImage'), (req, res) => {
     res.send('');
@@ -143,12 +140,11 @@ router.post('/delete_review', (req, res) => {
         });
 });
 
-
 // TODO jsdoc
-function deleteImages(restaurant, images){
+function deleteImages(restaurant, images) {
     const directory = `./public/images/restaurants/${restaurant}/`;
 
-    for (const image of images){
+    for (const image of images) {
         const imagePath = directory + image;
         console.log(`Deleting ${imagePath}`);
         fs.unlinkSync(imagePath);
