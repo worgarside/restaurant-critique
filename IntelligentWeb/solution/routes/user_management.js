@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-// ================================ POST Methods ================================ \\
+// ================================ User Details ================================ \\
 
 router.post('/update_name', (req, res) => {
     User.findByIdAndUpdate(req.user._id, {name: req.body.name}, {new: true})
@@ -88,6 +88,60 @@ router.post('/update_image', upload.single('displayImage'), (req, res) => {
     res.send('');
 });
 
+// ================================ Restaurant Controls ================================ \\
+
+router.post('/publish_restaurant', (req, res) => {
+    Restaurant.findByIdAndUpdate(req.body.restaurantID, {
+        published: true
+    }, {new: true})
+        .exec()
+        .then((restaurant) => {
+            const result = {
+                success: true,
+                url: `/restaurant/${restaurant.localUrl}`
+            };
+            res.send(result);
+        })
+        .catch((err) => {
+            console.log(`Error: ${err}`);
+            const result = {
+                success: false,
+                url: 'errors/500'
+            };
+
+            res.send(result);
+        });
+});
+
+router.post('/delete_restaurant', (req, res) => {
+    User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $pull: {
+                'restaurants.created': req.body.restaurantID
+            }
+        }
+    )
+        .exec()
+        .then(() => {
+            Restaurant.findByIdAndRemove(req.body.restaurantID)
+                .then(() => {
+                    res.send({success: true});
+                })
+                .catch((err) => {
+                    res.send({success: false});
+                    console.log(`Restaurant delete error: ${err}`);
+                });
+        })
+        .catch((err) => {
+            res.send({success: false});
+            console.log(`User $pull error: ${err}`);
+        });
+
+});
+
+// ================================ Review Controls ================================ \\
+
 router.post('/delete_review', (req, res) => {
     console.log(`Deleting review ${req.body.reviewID} by ${req.user.reducedID}`);
 
@@ -96,7 +150,6 @@ router.post('/delete_review', (req, res) => {
         'author.reducedID': req.user.reducedID
     })
         .then((review) => {
-
             const restaurantPromise = Restaurant.findByIdAndUpdate(
                 review.restaurant._id,
                 {

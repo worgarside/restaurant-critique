@@ -65,8 +65,8 @@ function getAllCategories() {
 // ================================ GET Statements ================================ \\
 
 router.get('/', (req, res) => {
-    // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 30s30000
-    if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 604800000)) {
+    // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 min60000
+    if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 60000)) {
         Promise.all([refreshTopRestaurants(), getAllCategories()])
             .then(() => {
                 res.render('index', {
@@ -109,14 +109,6 @@ router.get('/contact', (req, res) => {
     res.render('contact', {title: title, user: req.user});
 });
 
-//TODO: do we need these?
-router.get('/images/*', (req, res) => {
-    res.render('errors/403', {title: title, user: req.user});
-});
-router.get('/javascripts/*', (req, res) => {
-    res.render('errors/403', {title: title, user: req.user});
-});
-
 router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('back');
@@ -132,15 +124,14 @@ router.get('/restaurant/new', (req, res) => {
     if (!allCategories) {
         getAllCategories()
             .then(() => {
-                    const tempRestaurant = new Restaurant;
-                    res.render('restaurant_new', {
-                        title: title,
-                        user: req.user,
-                        categories: JSON.stringify(allCategories),
-                        features: tempRestaurant.features
-                    });
-                }
-            )
+                const tempRestaurant = new Restaurant;
+                res.render('restaurant_new', {
+                    title: title,
+                    user: req.user,
+                    categories: JSON.stringify(allCategories),
+                    features: tempRestaurant.features
+                });
+            })
             .catch((err) => {
                 console.log(err);
             })
@@ -166,38 +157,37 @@ router.get('/restaurant/edit/:_id', (req, res) => {
         .lean()
         .exec()
         .then((restaurant) => {
-                if (!allCategories) {
-                    getAllCategories()
-                        .then(() => {
-                            if (req.user && restaurant.creator._id === req.user._id) {
-                                res.render('restaurant_edit', {
-                                    title: title,
-                                    user: req.user,
-                                    restaurant: restaurant,
-                                    categories: JSON.stringify(allCategories)
-                                });
-                            } else {
-                                res.render('errors/403', {title: title, user: req.user});
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+            if (!allCategories) {
+                getAllCategories()
+                    .then(() => {
+                        if (req.user && restaurant.creator._id === req.user._id) {
+                            res.render('restaurant_edit', {
+                                title: title,
+                                user: req.user,
+                                restaurant: restaurant,
+                                categories: JSON.stringify(allCategories)
+                            });
+                        } else {
+                            res.render('errors/403', {title: title, user: req.user});
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            } else {
+                // TODO tidy duplicated code
+                if (req.user && restaurant.creator._id === req.user._id) {
+                    res.render('restaurant_edit', {
+                        title: title,
+                        user: req.user,
+                        restaurant: restaurant,
+                        categories: JSON.stringify(allCategories)
+                    });
                 } else {
-                    // TODO tidy duplicated code
-                    if (req.user && restaurant.creator._id === req.user._id) {
-                        res.render('restaurant_edit', {
-                            title: title,
-                            user: req.user,
-                            restaurant: restaurant,
-                            categories: JSON.stringify(allCategories)
-                        });
-                    } else {
-                        res.render('errors/403', {title: title, user: req.user});
-                    }
+                    res.render('errors/403', {title: title, user: req.user});
                 }
             }
-        )
+        })
         .catch((err) => {
             console.log(err);
             res.render('errors/500', {title: title, user: req.user});

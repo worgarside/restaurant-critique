@@ -874,6 +874,9 @@ p.login-helper {
   padding: 2px 5px;
   cursor: pointer;
 }
+.restaurant-category:hover {
+  background: #dbdbdb;
+}
 .restaurant-category ~ .restaurant-category {
   margin: 10px 5px;
 }

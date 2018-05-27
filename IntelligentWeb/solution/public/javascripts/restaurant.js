@@ -308,7 +308,7 @@ $('#toggle-btn').click(function () {
         hiddenCategories.css('display', 'none');
         this.text = 'View more...';
     } else {
-        hiddenCategories.css('display', 'inline');
+        hiddenCategories.css('display', 'inline-block');
         this.text = 'View less...';
     }
 });

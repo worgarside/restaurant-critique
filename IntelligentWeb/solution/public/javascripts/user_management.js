@@ -264,11 +264,65 @@ cancelImage.click(() => {
     detailsImage.find('.new').hide();
 });
 
-// ================================ Review Deletion ================================ \\
+// ================================ Review Controls ================================ \\
 
-$('.delete-review').click(function() {
+$('.publish-restaurant').click(function () {
+    const restaurantID = this.id.split('-').pop();
+    if (confirm('Are you sure you want to publish this restaurant?')) {
+        const data = JSON.stringify({restaurantID: restaurantID});
+
+        $.ajax({
+            url: '/user/publish_restaurant',
+            data: data,
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST',
+            success: (result) => {
+                if (result.success) {
+                    alert('Restaurant published successfully!');
+                } else {
+                    alert('There has been an error. please try again later');
+                }
+                window.location.href = result.url;
+            },
+            error: (err) => {
+                alert('There has been an error. please try again later');
+                console.log(`Error: ${JSON.stringify(err)}`);
+            }
+        });
+    }
+});
+
+$('.delete-restaurant').click(function () {
+    const restaurantID = this.id.split('-').pop();
+    if (confirm('Are you sure you want to delete this restaurant?')) {
+        const data = JSON.stringify({restaurantID: restaurantID});
+
+        $.ajax({
+            url: '/user/delete_restaurant',
+            data: data,
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST',
+            success: (result) => {
+                if (result.success) {
+                    alert('Restaurant deleted successfully!');
+                    $(`#row-${restaurantID}`).hide();
+                } else {
+                    alert('There has been an error. please try again later');
+                }
+            },
+            error: (err) => {
+                alert('There has been an error. please try again later');
+                console.log(`Error: ${JSON.stringify(err)}`);
+            }
+        });
+    }
+});
+
+// ================================ Review Controls ================================ \\
+
+$('.delete-review').click(function () {
     const reviewID = this.id.split('-').pop();
-    if (confirm('Are you sure you want to delete your review?')){
+    if (confirm('Are you sure you want to delete your review?')) {
         const data = JSON.stringify({reviewID: reviewID});
 
         $.ajax({
@@ -277,12 +331,13 @@ $('.delete-review').click(function() {
             contentType: 'application/json; charset=utf-8',
             type: 'POST',
             success: (result) => {
-                if (result){
+                if (result) {
                     $(`#row-${reviewID}`).hide();
                     alert('Review deleted successfully!');
                 }
             },
             error: (err) => {
+                alert('There has been an error. please try again later');
                 console.log(`Error: ${JSON.stringify(err)}`);
             }
         });

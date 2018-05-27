@@ -152,7 +152,7 @@ block content
                     #collapse-restaurants.collapse
                         .card-body
                             each restaurant, restaurantIndex in restaurants
-                                .row
+                                .row(id=`row-${restaurant._id}`)
                                     .col-8
                                         .vert-center-parent
                                             .vert-center-child
@@ -168,9 +168,9 @@ block content
                                             .vert-center-parent
                                                 .vert-center-child
                                                     .btn-group.float-right
-                                                        button.btn.btn-success(id=`publish-${restaurant._id}`) Publish
+                                                        button.btn.btn-success.publish-restaurant(id=`publish-${restaurant._id}`) Publish
                                                         a.btn.btn-info(href=`/restaurant/edit/${restaurant._id}`) Edit
-                                                        button.btn.btn-danger(id=`delete-${restaurant._id}`) Delete
+                                                        button.btn.btn-danger.delete-restaurant(id=`delete-${restaurant._id}`) Delete
 
                                 if restaurantIndex < restaurants.length - 1
                                     hr
@@ -183,7 +183,6 @@ block content
                     .collapse#collapse-reviews
                         .card-body
                             each review, reviewIndex in reviews
-                                // TODO add score
                                 .row(id=`row-${review._id}`)
                                     .col-9
                                         h5.mb-0.quote "#{review.title}"
