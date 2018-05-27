@@ -1,26 +1,13 @@
 meta(charset='UTF-8', name='viewport', content='width=device-width, initial-scale=1.0')
 title #{title}
 
-script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
-script window.jQuery || document.write('<script src="/scripts/jquery.min.js"><\/script>')
+script(src="/scripts/jquery.min.js")
 
-script(src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.js")
-//script(type="application/javascript" src="/scripts/popper.js")
+script(type="application/javascript" src="/scripts/popper.js")
 
-script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
-script.
-    if (typeof($.fn.modal) === 'undefined') {
-        document.write('<script src="/scripts/js/bootstrap.min.js"><\/script>')
-    }
+script(src="/scripts/js/bootstrap.min.js")
 
-link(href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
-.hidden#bootstrapCssTest
-script.
-    $(function () {
-        if ($('#bootstrapCssTest').is(':visible')) {
-            $('head').prepend('<link rel="stylesheet" href="/scripts/css/bootstrap.min.css">');
-        }
-    })
+link(rel="stylesheet" href="/scripts/css/bootstrap.min.css")
 
 link(href='https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css', rel='stylesheet')
 // TODO: Need a fallback to /node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css - WG
@@ -28,4 +15,4 @@ link(href='https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/ope
 link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
 link(href='https://fonts.googleapis.com/css?family=Lato|Roboto:300,400', rel='stylesheet')
 
-//script(src='/javascripts/init_service_worker.js')
+script(src='/javascripts/init_service_worker.js')
