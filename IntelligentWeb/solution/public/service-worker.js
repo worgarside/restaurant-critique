@@ -15,10 +15,13 @@
 const dataCacheName = 'restaurantData-v1';
 const cacheName = 'restaurantCritique-1';
 const filesToCache = [
-    '/',
+    '/contact',
     './javascripts/*',
     './stylesheets/style.css',
-    './scripts/*'
+    './scripts/js/bootstrap.min.js',
+    './scripts/css/bootstrap.min.css',
+    './scripts/popper.js',
+    './scripts/jquery.min.js'
 ];
 
 
@@ -60,14 +63,9 @@ self.addEventListener('activate', function (e) {
             })
     );
     /*
-     * Fixes a corner case in which the app wasn't returning the latest data.
-     * You can reproduce the corner case by commenting out the line below and
-     * then doing the following steps: 1) load app for first time so that the
-     * initial New York City data is shown 2) press the refresh button on the
-     * app 3) go offline 4) reload the app. You expect to see the newer NYC
-     * data, but you actually see the initial data. This happens because the
-     * service worker is not yet activated. The code below essentially lets
+     *  The code below essentially lets
      * you activate the service worker faster.
+     * this is because as soon as the service worker loads it "claims" control of the site
      */
     return self.clients.claim();
 });
@@ -81,6 +79,8 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('fetch', function (event) {
     event.respondWith(
+        //First fetch live data from web, if this fails fall back to cache.
+        //NOTE this is not best practice, but just trying to get it up and running
         caches.match(event.request)
             .then(function (response) {
                 // Cache hit - return response
@@ -111,10 +111,10 @@ self.addEventListener('fetch', function (event) {
                                 cache
                                     .put(event.request, responseToCache)
                                     .then(()=>{})
-                                    .catch((err)=>{console.log("EROR"+err)});
+                                    .catch((err)=>{console.log("EROR, failed to load data from cache"+err)});
                             })
                             .catch((err) => {
-                                console.log("ERoRR" + err);
+                                console.log("ERoRR + failed to open cache" + err);
                             });
 
                         return response;
@@ -122,6 +122,8 @@ self.addEventListener('fetch', function (event) {
                 );
             })
             .catch((err) => {
-                    console.log("Error22" + err);
+                    console.log("Data not in Cache - Error22" + err);
+                    //if page can't be got online, plus not in cache, serve offline page
             }));
+
 });
