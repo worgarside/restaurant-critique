@@ -6,6 +6,9 @@
 
 let lat, lng, map, userMarker;
 let markerList = [];
+let nearbyRestaurants = [];
+let distanceSlider = $('#distance-slider');
+let distanceSliderValue = $('#distance-slider-value');
 
 $('#login-warning').click(() => {
     $('#btn-login').click();
@@ -157,8 +160,6 @@ function createMap() {
     }
     manageGeolocation();
     updateList();
-
-
 }
 
 /**
@@ -174,8 +175,8 @@ function updateList() {
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
         success: (restaurants) => {
-            clearMarkers();
-            processRestaurants(restaurants);
+            nearbyRestaurants = restaurants;
+            processRestaurants();
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -189,7 +190,9 @@ function updateList() {
  * @param {Array} results
  * @see updateList()
  */
-function processRestaurants(results) {
+function processRestaurants() {
+    clearMarkers();
+
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
@@ -200,35 +203,22 @@ function processRestaurants(results) {
 
     markerList = [];
     let infoWindow = new google.maps.InfoWindow();
-    let contentList = [];
-    let htmlString = '';
+    let htmlString = '<br/>';
 
-    if (results.length > 0) {
-        htmlString += '<h2 id="restaurant-result-header">Your nearest restaurants</h2>';
-    }
-
-    for (const [index, restaurant] of results.entries()) {
-        if (restaurant.published) {
+    let resultsDisplayed = false;
+    for (const [index, restaurant] of nearbyRestaurants.entries()) {
+        if (restaurant.published && (restaurant.distance <= distanceSlider.val()*1000)) {
+            resultsDisplayed = true;
             htmlString += createRestaurantPreview(restaurant, index);
 
             const infoWindowContent = `
                 <div class='container' id='info-${index}' style='max-width: 400px;'>
                     <div class='row'>
                         <div class='col'>
-                            <table>
-                                <tr>
-                                    <td><h5 style='font-weight: 400; max-width: 200px; min-width: 130px;' class='mb-0'>${restaurant.name}</h5></td>
-                                    <td style='width: 95px; vertical-align: bottom;'><p style='font-weight: 400; float: right;' class='align-bottom mb-0'>&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2'><p class='mb-0'>${restaurant.description}</p></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col'>
-                            <a class='float-right info-window-more-info' onclick='scrollToRestaurant(${index});' href='javascript:void(0)'>More info</a>
+                            <h6 class='mb-1'><strong>${restaurant.name}</strong></h6>
+                            <p class='mb-1'>${(restaurant.distance / 1000).toFixed(2)}km away</p>
+                            <p class='mb-1'>${restaurant.description}</p>
+                            <a onclick='scrollToRestaurant(${index});' href='javascript:void(0)'>More info</a>
                         </div>
                     </div>
                 </div>
@@ -250,17 +240,25 @@ function processRestaurants(results) {
         }
     }
 
+    if (!resultsDisplayed){
+        htmlString = "<h5 class='mt-2' style='margin-left: 4rem;'>No restaurants found in the chosen area.</h5>";
+    }
+
     let resultContainer = document.createElement('div');
     resultContainer.innerHTML = htmlString;
     restaurantListDOM.appendChild(resultContainer);
 
-    //TODO scrolling back up to map from icon on each restaurant div for location and distance slider w/ jquery
-
-    for (let i = 0; i < results.length; i++) {
+    for (let i = 0; i < nearbyRestaurants.length; i++) {
         initSlideshow(i);
     }
     updateJQueryClickables();
 }
+
+distanceSlider.on('input', () => {
+    distanceSliderValue.text(`${distanceSlider.val()} km`);
+    processRestaurants();
+});
+
 
 // TODO jsdoc
 function clearMarkers() {

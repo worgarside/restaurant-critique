@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
                     "near": point,
                     "spherical": true,
                     "distanceField": "distance",
-                    "maxDistance": 10000
+                    "maxDistance": 20000
                 }
             }
         ], (err, restaurants) => {
