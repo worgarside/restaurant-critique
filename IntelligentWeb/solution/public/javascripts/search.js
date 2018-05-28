@@ -358,7 +358,7 @@ function displaySearchResults() {
     for (let i = 0; i < queryMatches.length; i++) {
         initSlideshow(i);
     }
-    updateCategoryClickables();
+    updateJQueryClickables();
 }
 
 function createPaginationLinks() {

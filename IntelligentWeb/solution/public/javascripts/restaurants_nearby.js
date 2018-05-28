@@ -58,8 +58,8 @@ function allowLocation(allowed) {
 }
 
 // TODO jsdoc
-function manageGeolocation(){
-    if (userLoggedIn)  {
+function manageGeolocation() {
+    if (userLoggedIn) {
         const locFlag = sessionStorage.getItem('allowLocation');
         console.log(typeof locFlag);
 
@@ -201,55 +201,65 @@ function processRestaurants(results) {
     markerList = [];
     let infoWindow = new google.maps.InfoWindow();
     let contentList = [];
+    let htmlString = '';
+
+    if (results.length > 0) {
+        htmlString += '<h2 id="restaurant-result-header">Your nearest restaurants</h2>';
+    }
 
     for (const [index, restaurant] of results.entries()) {
         if (restaurant.published) {
-            let restaurantContainer = document.createElement('div');
-            restaurantContainer.innerHTML = createRestaurantPreview(restaurant, index);
-            restaurantListDOM.appendChild(restaurantContainer);
-            initSlideshow(index);
-            updateCategoryClickables();
+            htmlString += createRestaurantPreview(restaurant, index);
 
             const infoWindowContent = `
-                <div class="container" id="info-${index}" style="max-width: 400px;">
-                    <div class="row">
-                        <div class="col">
+                <div class='container' id='info-${index}' style='max-width: 400px;'>
+                    <div class='row'>
+                        <div class='col'>
                             <table>
                                 <tr>
-                                    <td><h5 style="font-weight: 400; max-width: 200px; min-width: 130px;">${restaurant.name}</h5></td>
-                                    <td style="width: 95px; vertical-align: bottom;"><p style="font-weight: 400; float: right;" class="align-bottom mb-0">&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
+                                    <td><h5 style='font-weight: 400; max-width: 200px; min-width: 130px;' class='mb-0'>${restaurant.name}</h5></td>
+                                    <td style='width: 95px; vertical-align: bottom;'><p style='font-weight: 400; float: right;' class='align-bottom mb-0'>&nbsp;&nbsp;&nbsp;${(restaurant.distance / 1000).toFixed(2)}km away</p></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2"><p class="mb-0">${restaurant.description}</p></td>
+                                    <td colspan='2'><p class='mb-0'>${restaurant.description}</p></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="javascript:void(0)">More info</a>
+                    <div class='row'>
+                        <div class='col'>
+                            <a class='float-right info-window-more-info' onclick='scrollToRestaurant(${index});' href='javascript:void(0)'>More info</a>
                         </div>
                     </div>
                 </div>
             `;
 
-            contentList.push(infoWindowContent);
-
             const newMarker = new google.maps.Marker({
+                title: restaurant.name,
                 map: map,
                 position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
                 icon: icon
             });
+
+            google.maps.event.addListener(newMarker, 'click', function () {
+                infoWindow.setContent(infoWindowContent);
+                infoWindow.open(map, this);
+            });
+
             markerList.push(newMarker);
         }
     }
 
-    for (let i = 0, marker; marker = markerList[i]; i++) {
-        google.maps.event.addListener(marker, 'click', function () {
-            infoWindow.setContent(contentList[i]);
-            infoWindow.open(map, this);
-        });
+    let resultContainer = document.createElement('div');
+    resultContainer.innerHTML = htmlString;
+    restaurantListDOM.appendChild(resultContainer);
+
+    //TODO scrolling back up to map from icon on each restaurant div for location and distance slider w/ jquery
+
+    for (let i = 0; i < results.length; i++) {
+        initSlideshow(i);
     }
+    updateJQueryClickables();
 }
 
 // TODO jsdoc
@@ -269,13 +279,14 @@ function clearMarkers() {
  */
 function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
-        <div class="container restaurant-card" id="restaurant-container-${index}">
-            <div class="row">
-                <div class="col-12 col-lg-8">
-                    <div class="vert-center-parent">
-                        <div class="vert-center-child">
-                            <div class="row">
-                               <div class="col"><a href='restaurant/${restaurant.localUrl}' class="restaurant-title d-inline">${restaurant.name}</a>
+        <div class='container restaurant-card' id='restaurant-container-${index}'>
+            <div class='row'>
+                <div class='col-12 col-lg-8'>
+                    <div class='vert-center-parent'>
+                        <div class='vert-center-child'>
+                            <div class='row'>
+                                <div class='col'>
+                                    <a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}</a>
     `;
 
     let htmlStars = '';
@@ -284,38 +295,41 @@ function createRestaurantPreview(restaurant, index) {
         const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
-            <div class="restaurant-stars">
+            <div class='restaurant-stars'>
         `;
 
         for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star star-highlight"></span>`;
+            htmlStars += `<span class='oi oi-star star-highlight'></span>`;
         }
 
         for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span aria-hidden="true" class="oi oi-star"></span>`;
+            htmlStars += `<span class='oi oi-star'></span>`;
         }
 
-        htmlStars += `</div>`;
+        htmlStars += '</div>';
     }
 
     const htmlAddress = `
-          </div>
-      </div>
-      <div class="row">
-          <div class="col">
-              <p class="restaurant-address">${restaurant.address.formattedAddress}</p>
-          </div>
-      </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <a href='javascript:void(0)' class='restaurant-card-map-link restaurant-address' data-restaurant-name="${restaurant.name}">
+                    <img src='/images/site/gmaps-custom-pin-small.png'/>
+                    ${restaurant.address.formattedAddress}
+                </a>
+            </div>
+        </div>
     `;
 
     let htmlCategories = `
-        <div class="row">
-            <div class="col">
+        <div class='row'>
+            <div class='col'>
     `;
 
     if (restaurant.categories.length > 0) {
         for (const category of restaurant.categories) {
-            htmlCategories += `<p class="restaurant-category">${category.name}</p>`;
+            htmlCategories += `<p class='restaurant-category'>${category.name}</p>`;
         }
     }
 
@@ -328,9 +342,9 @@ function createRestaurantPreview(restaurant, index) {
 
     if (restaurant.description !== 'No description currently available.') {
         htmlDescription = `
-            <div class="row">
-                <div class="col">
-                    <p class="restaurant-description">${restaurant.description}</p>
+            <div class='row'>
+                <div class='col'>
+                    <p class='restaurant-description'>${restaurant.description}</p>
                 </div>
             </div>
         `;
@@ -340,36 +354,35 @@ function createRestaurantPreview(restaurant, index) {
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-4">
-                        <div class="row">
-                            <div class="col">
-                                <div class="restaurant-nearby-images">
-                                    <div class="slideshow-wrapper">
+            <div class='col-12 col-lg-4'>
+                <div class='row'>
+                    <div class='col'>
+                        <div class='restaurant-nearby-images'>
+                            <div class='slideshow-wrapper'>
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
-        htmlSlideshow += '<div class="slideshow">';
+        htmlSlideshow += "<div class='slideshow'>";
         for (const image of restaurant.images) {
-            htmlSlideshow += `<img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
+            htmlSlideshow += `<img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
             imageCount += 1;
             if (imageCount >= 3) {
                 // only show first 3 images
                 break;
             }
         }
-        htmlSlideshow += "</div>";
+        htmlSlideshow += '</div>';
     }
-
 
     if (imageCount > 1) {
         htmlSlideshow += `
-                <div id="button-prev-${index}" class="slideshow-prev">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-left"></span>
+                <div id='button-prev-${index}' class='slideshow-prev'>
+                    <span class='oi oi-chevron-left'></span>
                 </div>
-                <div id="button-next-${index}" class="slideshow-next">
-                    <span aria-hidden="true" class="oi oi-check oi-chevron-right"></span>
+                <div id='button-next-${index}' class='slideshow-next'>
+                    <span class='oi oi-chevron-right'></span>
                 </div>
         `;
     }
@@ -384,7 +397,7 @@ function createRestaurantPreview(restaurant, index) {
 /**
  * Image slideshow navigation using buttons on page
  * JQuery selectors have to be re-used due to the changing classes of the images
- * @param {integer} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * @param {number} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
  * getting mixed up
  * @author Will Garside
  */
@@ -424,16 +437,10 @@ function initSlideshow(value) {
 
 /**
  * Auto-scrolls to Restaurant preview from the link in the map infowindow
- * @param {Integer} index The index of the Restaurant
+ * @param {number} index The index of the Restaurant
  */
 function scrollToRestaurant(index) {
-    $('#nearby-map').addClass('map-shrink');
-
-    // Wait for map to shrink
-    setTimeout(() => {
-        $('html, body').animate({
-            scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
-        }, 800, () => {
-        });
-    }, 250);
+    $('html, body').animate({
+        scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
+    }, 800);
 }

@@ -13,7 +13,7 @@ $(() => {
         const user = JSON.parse(layoutUser);
         console.log(`${user.name.first} ${user.name.last} (${user._id}) logged in`);
     }
-    updateCategoryClickables();
+    updateJQueryClickables();
 });
 
 // ================================ Login Form ================================ \\
@@ -126,7 +126,7 @@ navbarSearchInput.keypress((e) => {
 
 // ================================ Categories ================================ \\
 
-function updateCategoryClickables() {
+function updateJQueryClickables() {
     $('p.restaurant-category, .restaurant-category').click(function () {
         const catName = $(this).text();
         const catID = catName.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
@@ -136,6 +136,21 @@ function updateCategoryClickables() {
         sessionStorage.setItem('query', catName);
         sessionStorage.setItem('catID', catID);
         window.location.replace('/search');
+    });
+
+    $('.restaurant-card-map-link').click(function () {
+        const restaurantID = $(this).attr('data-restaurant-name');
+        console.log(restaurantID);
+
+        for (const marker of markerList) {
+            if (marker.title === restaurantID) {
+                google.maps.event.trigger(marker, 'click');
+                break;
+            }
+        }
+        $('html, body').animate({
+            scrollTop: 0
+        }, 800);
     });
 }
 

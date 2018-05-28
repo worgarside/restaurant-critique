@@ -916,11 +916,14 @@ p.login-helper {
 
 #login-warning {
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 #nearby-map {
   width: 100%;
-  height: 725px;
+  height: 36rem;
 }
 
 .restaurant-card {
@@ -938,6 +941,13 @@ p.login-helper {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
   }
+
+  &-map-link {
+    img {
+      height: 1.5rem;
+    }
+  }
+
 }
 
 #restaurant {
@@ -977,9 +987,15 @@ p.login-helper {
   }
 }
 
+a.restaurant-address:hover{
+  text-decoration: none;
+  font-weight: 400;
+  color: black;
+}
+
 .restaurant {
   &-title {
-    font-size: 20pt;
+    font-size: 1.6rem;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     color: black;
@@ -1000,6 +1016,7 @@ p.login-helper {
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
     margin-bottom: 0;
+    color: @grey-darkest;
   }
 
   &-category {
@@ -1011,9 +1028,8 @@ p.login-helper {
     margin: 10px 5px 10px 0;
     padding: 2px 5px;
     cursor: pointer;
-    &:hover{
+    &:hover {
       background: @grey-lighter;
-
     }
   }
 
@@ -1443,17 +1459,17 @@ p.login-helper {
     }
   }
 
-  #add-photo-btn{
+  #add-photo-btn {
     width: 100%;
     height: 12rem;
     background-color: @grey-lighter;
-    button{
+    button {
       border: solid 1px @grey-darkest;
       background-color: @blue-light;
     }
   }
 
-  #webRTC-col{
+  #webRTC-col {
     display: none;
   }
 
@@ -1481,7 +1497,7 @@ p#current-day {
   top: 0;
   left: 0;
 
-  #loading-div{
+  #loading-div {
     width: 40%;
     left: 30%;
     position: absolute;
@@ -1489,7 +1505,7 @@ p#current-day {
     top: 25%;
     height: 50%;
     text-align: center;
-    h3{
+    h3 {
       padding: 1rem;
     }
     .loader {
@@ -1504,15 +1520,16 @@ p#current-day {
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
-
 
   }
 }
-
-
 
 // ================================ User Management ================================ \\
 

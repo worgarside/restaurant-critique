@@ -795,9 +795,12 @@ p.login-helper {
 #login-warning {
   cursor: pointer;
 }
+#login-warning:hover {
+  text-decoration: underline;
+}
 #nearby-map {
   width: 100%;
-  height: 725px;
+  height: 36rem;
 }
 .restaurant-card {
   width: 80%;
@@ -813,6 +816,9 @@ p.login-helper {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.restaurant-card-map-link img {
+  height: 1.5rem;
 }
 #restaurant-location-overlay {
   position: fixed;
@@ -844,8 +850,13 @@ p.login-helper {
   margin-top: 1em;
   margin-left: 2em;
 }
+a.restaurant-address:hover {
+  text-decoration: none;
+  font-weight: 400;
+  color: black;
+}
 .restaurant-title {
-  font-size: 20pt;
+  font-size: 1.6rem;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   color: black;
@@ -863,6 +874,7 @@ p.login-helper {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   margin-bottom: 0;
+  color: #222222;
 }
 .restaurant-category {
   font-size: 10pt;
