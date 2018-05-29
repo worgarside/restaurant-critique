@@ -64,8 +64,7 @@ confirmName.click(() => {
                 detailsName.find('.current').css('display', 'flex');
                 alert('Your name has been successfully updated');
             } else {
-                console.log('Unable to change postcode');
-                // TODO: name change failure handling
+                alert('We are unable to change your name at this time. Please try again later.');
             }
         },
         error: (err) => {
@@ -128,8 +127,7 @@ confirmPostcode.click(() => {
                 detailsPostcode.find('.new').hide();
                 alert('Your postcode has been successfully updated');
             } else {
-                console.log('Unable to change postcode');
-                // TODO: postcode change failure handling
+                alert('We are unable to change your postcode at this time. Please try again later.');
             }
         },
         error: (err) => {

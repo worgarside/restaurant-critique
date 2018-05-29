@@ -22,10 +22,12 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 let restaurantRefresh, topRestaurants, allCategories;
 
-
 // ================================ Helper Functions ================================ \\
 
-//TODO jsdoc
+/**
+ * Finds the top 5 Restaurants according to their average ratings and adds them to global var topRestaurants
+ * @returns {Promise} - promise object of Restaurant lookup query
+ */
 function refreshTopRestaurants() {
     restaurantRefresh = new Date();
     console.log('\x1b[33m%s\x1b[0m', 'refreshTopRestaurants()');
@@ -48,7 +50,10 @@ function refreshTopRestaurants() {
         });
 }
 
-//TODO jsdoc
+/**
+ * gets all categories in DB and adds them to array var
+ * @returns {Promise} - promise object of Category lookup query
+ */
 function getAllCategories() {
     console.log('\x1b[33m%s\x1b[0m', 'getAllCategories()');
 
@@ -69,13 +74,7 @@ router.get('/', (req, res) => {
     if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 60000)) {
         Promise.all([refreshTopRestaurants(), getAllCategories()])
             .then(() => {
-                res.render('index', {
-                    title: title,
-                    user: req.user,
-                    indexPage: true,
-                    restaurants: topRestaurants,
-                    categories: allCategories
-                });
+                renderPage();
             })
             .catch((err) => {
                 console.log(`CATCH ${err}`);
@@ -83,17 +82,21 @@ router.get('/', (req, res) => {
     } else {
         getAllCategories()
             .then(() => {
-                res.render('index', {
-                    title: title,
-                    user: req.user,
-                    indexPage: true,
-                    restaurants: topRestaurants,
-                    categories: allCategories
-                });
+                renderPage();
             })
             .catch((err) => {
                 console.log(`CATCH ${err}`);
             });
+    }
+
+    function renderPage(){
+        res.render('index', {
+            title: title,
+            user: req.user,
+            indexPage: true,
+            restaurants: topRestaurants,
+            allCategories: allCategories
+        });
     }
 });
 
@@ -124,35 +127,35 @@ router.get('/restaurant/new', (req, res) => {
     if (!allCategories) {
         getAllCategories()
             .then(() => {
-                const tempRestaurant = new Restaurant;
-                res.render('restaurant_new', {
-                    title: title,
-                    user: req.user,
-                    categories: JSON.stringify(allCategories),
-                    features: tempRestaurant.features
-                });
+                renderPage();
             })
             .catch((err) => {
+                res.render('errors/500', {title: title, user: req.user});
                 console.log(err);
             })
     } else {
+        renderPage();
+    }
+
+    function renderPage() {
         const tempRestaurant = new Restaurant;
         res.render('restaurant_new', {
             title: title,
             user: req.user,
-            categories: JSON.stringify(allCategories),
+            allCategories: JSON.stringify(allCategories),
             features: tempRestaurant.features
         });
     }
 
-
 });
 
-// TODO: jsdoc
+/**
+ * Get the Restaurant object from the DB and send all attributes to client for displaying and editing
+ * @param {Object} req The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
+ * @function loadEditRestaurantPage
+ */
 router.get('/restaurant/edit/:_id', (req, res) => {
-    /* TODO: make sure all functions of this type are unified
-     e.g. Model.findById().exec().then().catch(); vs Model.findById(id, (err, model) => {});*/
-
     Restaurant.findById(req.params._id)
         .lean()
         .exec()
@@ -160,38 +163,37 @@ router.get('/restaurant/edit/:_id', (req, res) => {
             if (!allCategories) {
                 getAllCategories()
                     .then(() => {
-                        if (req.user && restaurant.creator._id === req.user._id) {
-                            res.render('restaurant_edit', {
-                                title: title,
-                                user: req.user,
-                                restaurant: restaurant,
-                                categories: JSON.stringify(allCategories)
-                            });
-                        } else {
-                            res.render('errors/403', {title: title, user: req.user});
-                        }
+                        renderIfUser(restaurant);
                     })
                     .catch((err) => {
+                        res.render('errors/500', {title: title, user: req.user});
                         console.log(err);
                     });
             } else {
-                // TODO tidy duplicated code
-                if (req.user && restaurant.creator._id === req.user._id) {
-                    res.render('restaurant_edit', {
-                        title: title,
-                        user: req.user,
-                        restaurant: restaurant,
-                        categories: JSON.stringify(allCategories)
-                    });
-                } else {
-                    res.render('errors/403', {title: title, user: req.user});
-                }
+                renderIfUser(restaurant);
             }
         })
         .catch((err) => {
-            console.log(err);
             res.render('errors/500', {title: title, user: req.user});
+            console.log(err);
         });
+
+    /**
+     * Check the user is logged in/authorised and then render the page
+     * @param restaurant - the restaurant object being edited
+     */
+    function renderIfUser(restaurant) {
+        if (req.user && restaurant.creator._id === req.user._id) {
+            res.render('restaurant_edit', {
+                title: title,
+                user: req.user,
+                restaurant: restaurant,
+                allCategories: JSON.stringify(allCategories)
+            });
+        } else {
+            res.render('errors/403', {title: title, user: req.user});
+        }
+    }
 });
 
 /**
@@ -339,7 +341,6 @@ router.get('/verify-user/:hash', (req, res) => {
                     res.render('user_verification', {title: title, user: req.user, verified: false});
                 }
             });
-
             res.render('user_verification', {title: title, user: req.user, verified: true});
         }
     });
@@ -373,7 +374,12 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// TODO jsdoc
+/**
+ * Sends a verification email to the User when a POST request is sent to /verify_email from any page
+ * @param {Object} req  The client request object containing the body of info
+ * @param {Object} res The client response object to be sent with render info
+ * @function verifyEmail
+ */
 router.post('/verify_email', (req, res) => {
     // Check user is logged in in case session expires and then they click the link
     if (req.user) {
@@ -382,7 +388,6 @@ router.post('/verify_email', (req, res) => {
             res.send(true);
         });
     }
-
 });
 
 refreshTopRestaurants();

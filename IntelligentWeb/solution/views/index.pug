@@ -96,25 +96,25 @@ block content
         .row
             .col
                 h2 Search by Type of Cuisine
-                - var categoryCount = categories.length
+                - var categoryCount = allCategories.length
                 - var categorySection = Math.ceil(categoryCount/8)
                 .row
                     .col#res-col-1
                         - var c = 0
                         while c < categorySection
-                            p.d-block.restaurant-category= categories[c].name
+                            p.d-block.restaurant-category= allCategories[c].name
                             - c++
                     .col#res-col-2
                         while c < categorySection * 2
-                            p.d-block.restaurant-category= categories[c].name
+                            p.d-block.restaurant-category= allCategories[c].name
                             - c++
                     .col#res-col-3
                         while c < categorySection * 3
-                            p.d-block.restaurant-category= categories[c].name
+                            p.d-block.restaurant-category= allCategories[c].name
                             - c++
                     .col#res-col-4
                         while c < categorySection * 4
-                            p.d-block.restaurant-category= categories[c].name
+                            p.d-block.restaurant-category= allCategories[c].name
                             - c++
 
 

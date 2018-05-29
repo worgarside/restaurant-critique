@@ -17,7 +17,7 @@ const User = mongoose.model('User');
 
 router.use(bodyParser.urlencoded({extended: true}));
 
-//================ POST Method ================\\
+// ================================ POST Method ================================ \\
 
 /**
  * Sends the support request and a confirmation email on the Contact form submission

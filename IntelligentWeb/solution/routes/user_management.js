@@ -193,7 +193,11 @@ router.post('/delete_review', (req, res) => {
         });
 });
 
-// TODO jsdoc
+/**
+ * Delete the images from the server's directories when a review is deleted
+ * @param restaurant - the restaurant whose images re being removed
+ * @param images - the array of images to be removed
+ */
 function deleteImages(restaurant, images) {
     const directory = `./public/images/restaurants/${restaurant}/`;
 

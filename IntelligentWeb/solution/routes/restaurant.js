@@ -20,9 +20,12 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // ================================ POST Method ================================ \\
 
-
-
-// TODO jsdoc
+/**
+ * Sets image file names and saves them to the correct directory when a restaurant is added to the site
+ * @param imageArray - array of images to be processed
+ * @param restaurantId - ID of restaurant being edited
+ * @returns {Array} - array of image filenames to be added to relevant field in Review object
+ */
 function processImages(imageArray, restaurantId) {
     const now = dateFormat(new Date(), 'yyyy-mm-dd HH-MM-ss');
     const targetDirectory = `./public/images/restaurants/${restaurantId}/`;

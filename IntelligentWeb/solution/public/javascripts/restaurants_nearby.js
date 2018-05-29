@@ -14,16 +14,6 @@ $('#login-warning').click(() => {
     $('#btn-login').click();
 });
 
-$(() => {
-    $('#nearby-map-wrapper').hover(
-        () => {
-            $('#nearby-map').removeClass('map-shrink');
-        }, () => {
-            $('#nearby-map').addClass('map-shrink');
-        }
-    );
-});
-
 $('#allow-location').click(() => {
     allowLocation(true);
 });
@@ -37,7 +27,6 @@ $('#deny-location').click(() => {
  * @param {Boolean} allowed Flag to signify whether the User has allowed geolocation or not
  */
 function allowLocation(allowed) {
-    // TODO test user in washington state??
     if (allowed) {
         sessionStorage.setItem('allowLocation', true);
 
@@ -60,20 +49,22 @@ function allowLocation(allowed) {
     $('#restaurant-location-overlay').css('display', 'none');
 }
 
-// TODO jsdoc
+/**
+ * Retrieves the user's preference for being located from the session storage and passes the parameters
+ * (or asks the user) accordingly
+ */
 function manageGeolocation() {
     if (userLoggedIn) {
         const locFlag = sessionStorage.getItem('allowLocation');
-        console.log(typeof locFlag);
 
         if (locFlag === 'true') {
-            console.log('Location already allowed');
+            // console.log('Location already allowed');
             allowLocation(true);
         } else if (locFlag === 'false') {
-            console.log('Location already denied');
+            // console.log('Location already denied');
             allowLocation(false);
         } else {
-            console.log('Location permissions not set');
+            // console.log('Location permissions not set');
             $('#restaurant-location-overlay').css('display', 'block');
         }
     }
@@ -91,8 +82,8 @@ function initMap() {
             lng = results[0].geometry.location.lng();
             createMap();
         } else {
-            //TODO: remove/substitute this
-            alert("Geocode error: " + status);
+            alert(`Geocoding your location has failed. Please refresh the page or try again later.`);
+            console.log(`Geocode error: ${status}`);
         }
     });
 }
@@ -187,7 +178,6 @@ function updateList() {
 /**
  * Process the returned list of restaurants to create HTML for them and append it to the page
  * Also adds their locations to the map with markers and info windows
- * @param {Array} results
  * @see updateList()
  */
 function processRestaurants() {
@@ -207,7 +197,7 @@ function processRestaurants() {
 
     let resultsDisplayed = false;
     for (const [index, restaurant] of nearbyRestaurants.entries()) {
-        if (restaurant.published && (restaurant.distance <= distanceSlider.val()*1000)) {
+        if (restaurant.published && (restaurant.distance <= distanceSlider.val() * 1000)) {
             resultsDisplayed = true;
             htmlString += createRestaurantPreview(restaurant, index);
 
@@ -240,7 +230,7 @@ function processRestaurants() {
         }
     }
 
-    if (!resultsDisplayed){
+    if (!resultsDisplayed) {
         htmlString = "<h5 class='mt-2' style='margin-left: 4rem;'>No restaurants found in the chosen area.</h5>";
     }
 
@@ -254,17 +244,24 @@ function processRestaurants() {
     updateJQueryClickables();
 }
 
+/**
+ * Update the nearby results when the distance parameter is changed
+ * @function updateNearbyDistance
+ */
 distanceSlider.on('input', () => {
     distanceSliderValue.text(`${distanceSlider.val()} km`);
     processRestaurants();
 });
 
 
-// TODO jsdoc
+/**
+ * Remove all markers on the nearby map and clear the markerList array
+ */
 function clearMarkers() {
     for (let i = 0; i < markerList.length; i++) {
         markerList[i].setMap(null);
     }
+    markerList = [];
 }
 
 /**

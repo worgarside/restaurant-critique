@@ -12,45 +12,45 @@ block content
                 form#signup-form(action='/signup/add_user', method='post', enctype="multipart/form-data")
                     .form-row
                         .form-group.col-12.col-lg-6
-                            // TODO labels
-                            input#forename.form-control(type='text', name='forename', placeholder='First name',
-                            required, autocomplete='given-name')
+                            label.post-space(for='forename') First Name
+                            input#forename.form-control(type='text' name='forename' placeholder='First name'
+                            required='required' autocomplete='given-name')
                         .form-group.col-12.col-lg-6
-                            input#surname.form-control(type='text', name='surname', placeholder='Surname', required,
+                            label.post-space(for='surname') Last Name
+                            input#surname.form-control(type='text' name='surname' placeholder='Last name', required='required',
                             autocomplete='family-name')
                     .form-row
                         .form-group.col-12.col-lg-6
                             .form-row
                                 .form-group.col
+                                    label(for='email') Email address
                                     input#email.form-control(type='email', name='email', placeholder='Email Address',
-                                    required, autocomplete='email')
+                                    required='required' autocomplete='email')
                                     small We'll never share your personal details with third parties
                             .form-row
                                 .form-group.col
+                                    label(for='password') Password
                                     input.form-control#password(type='password', placeholder='Password', name='password',
-                                    required, autocomplete='current-password')
+                                    required='required' autocomplete='current-password')
                             .form-row
                                 .form-group.col
-                                    input.form-control(type='password', placeholder='Confirm your password',
-                                    name='password-confirm', required, autocomplete='none')
+                                    input.form-control(type='password' placeholder='Confirm your password'
+                                    name='password-confirm' required='required' autocomplete='off')
                             .form-row
-                                .form-group.col-10
-                                    input.form-control(name='postcode', placeholder='Postcode')
-                                .form-group.col-2
-                                    .vert-center-parent
-                                        .vert-center-child.text-center
-                                            span.signup-help.oi.oi-question-mark(aria-hidden='true',
-                                            title='This helps us find better recommendations for you')
+                                .form-group.col
+                                    label(for='postcode') Postcode
+                                    span.signup-help.oi.oi-question-mark.float-right(title='This helps us find better restaurants for you')
+                                    input.form-control#postcode(name='postcode' placeholder='Postcode')
                         .form-group.col-6
                             .form-row
-                                .form-group.offset-1
+                                .form-group.col
                                     label(for='display-picture') Display Picture
                                     img#display-picture(src='/scripts/svg/person.svg')
-                                    input#display-picture-upload(type='file', name='displayPicture', accept="image/*")
+                                    input#display-picture-upload(type='file' name='displayPicture' accept="image/*")
                     .form-row
                         .form-group.col
                             .float-right
                                 input.btn(type='submit')
 
-    script(type='text/javascript', src="/scripts/jquery.validate.js")
-    script(type='text/javascript', src='/javascripts/signup.js')
+    script(type='text/javascript' src='/scripts/jquery.validate.js')
+    script(type='text/javascript' src='/javascripts/signup.js')

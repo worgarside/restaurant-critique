@@ -126,12 +126,15 @@ function emailCreator(restaurant) {
     nodemailer.sendEmail(to, subject, body);
 }
 
-// TODO: jsdoc
+/**
+ * Updates all relevant details of a Restaurant when it is saved or updated
+ * @param restaurant - Restaurant object being updated
+ */
 function updateDetails(restaurant) {
     if (restaurant.address) {
         if ((restaurant.address.latitude) && (restaurant.address.longitude)) {
             restaurant.location = {
-                type: "Point",
+                type: 'Point',
                 coordinates: [restaurant.address.longitude, restaurant.address.latitude] // long THEN lat, according to geoJSON standards
             };
         }

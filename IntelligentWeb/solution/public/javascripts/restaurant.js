@@ -155,7 +155,7 @@ $('#add-photo-btn').find('button').click(() => {
     const constraints = {
         audio: false,
         video: {
-            facingMode: 'environment',// TODO change to user for front facing
+            facingMode: 'environment',
             width: {min: 960, ideal: 1920, max: 1920},
             height: {min: 540, ideal: 1080, max: 1080},
         }
@@ -255,7 +255,11 @@ function showHTML(array) {
 
 // ================================ Review Submission ================================ \\
 
-// TODO jsdoc
+/**
+ * Prevent the default action of the review submission form, serialise the webRTC canvasses and send the blobs to
+ * the server via AJAX
+ * @function submitReview
+ */
 $('form#review-form').submit((e) => {
     e.preventDefault();
     $('#submitting-div').show();
@@ -292,7 +296,7 @@ $('form#review-form').submit((e) => {
         error: (err) => {
             alert('Review submission failed. Please try again later.');
             console.log(`Review error: ${err}`);
-            // location.reload();
+            $('#submitting-div').hide();
         }
     });
 });

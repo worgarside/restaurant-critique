@@ -18,7 +18,7 @@ block content
                                     span.oi.oi-magnifying-glass
                         .card.mt-4#advanced-search-card
                             .card-header
-                                button.btn.btn-link#advanced-search-toggle(data-toggle='collapse' data-target='#advanced-search-collapsible' type='button') Advanced Search
+                                button.btn.btn-link#advanced-search-toggle(data-toggle='collapse' data-target='#advanced-search-collapsible' type='button') Advanced Search Controls
                             .collapse#advanced-search-collapsible
                                 .card-body
                                     .row
@@ -47,7 +47,7 @@ block content
                                                 .col-3
                                                     input(type='checkbox' id=`cat-check-all`)
                                                     label.pre-space(for=`cat-check-all`) (Select all)
-                                                each category in categories.sort()
+                                                each category in allCategories.sort()
                                                     .col-3
                                                         input(type='checkbox' id=`${category._id}`)
                                                         label.pre-space(for=`${category._id}`) #{category.name}
@@ -90,6 +90,6 @@ block content
                 #pagination-links
 
     script.
-        const categories = !{JSON.stringify(categories).replace(/<\//g, '<\\/')};
+        const categories = !{JSON.stringify(allCategories).replace(/<\//g, '<\\/')};
         const features = !{JSON.stringify(features).replace(/<\//g, '<\\/')};
     script(type='text/javascript', src='/javascripts/search.js')

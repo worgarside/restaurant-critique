@@ -371,7 +371,7 @@ footer a {
   color: #efefef;
 }
 footer a:hover {
-  text-decoration: none;
+  text-decoration: underline;
   color: white;
 }
 footer p {
@@ -1443,7 +1443,7 @@ p#current-day {
     margin: 0 10px;
   }
   footer ul li.list-inline-item:not(:first-child):before {
-    content: "";
+    content: '';
     margin: 0;
   }
   .restaurant-nearby-images {

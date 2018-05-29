@@ -53,8 +53,7 @@ block content
                                 .col-3
                                     input.form-control.opening-times.opening-times-form#closing-time
                                 .col-3
-                                    // TODO: no hardcoded onclick events
-                                    button.btn.btn-default.opening-times-form#add-times(onclick='addTimes();', type='button') Add
+                                    button.btn.btn-default.opening-times-form#add-times(type='button') Add
                             .form-row.form-group#selected-times-row
                                 .col
                                     #selected-opening-times
@@ -201,8 +200,8 @@ block content
 
     script const restaurantCategories = `!{JSON.stringify(restaurant.categories)}`;
     script const restaurantImages = `!{JSON.stringify(restaurant.images)}`;
-    script const categoryVar = JSON.parse(`!{categories}`);
+    script const categoryVar = JSON.parse(`!{allCategories}`);
     script const restaurantId = `!{restaurant._id}`;
     script(src='//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js')
-    // link(rel='stylesheet',  href="/scripts/jquery.timepicker.css")
     script(type='text/javascript', src='/javascripts/restaurant_edit.js')
+    script(type='text/javascript', src='/javascripts/restaurant_new_and_edit.js')

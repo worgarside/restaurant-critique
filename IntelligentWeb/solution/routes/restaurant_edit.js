@@ -153,7 +153,12 @@ router.post('/submit_edit', upload.array('images', 10), (req, res) => {
 
 });
 
-// TODO jsdoc
+/**
+ * Sets image file names and saves them to the correct directory when a restaurant is added to the site
+ * @param images - array of images to be processed
+ * @param restaurantId - ID of restaurant being edited
+ * @returns {Array} - array of new image file names to be added to relevant field in restaurant object
+ */
 function processImages(images, restaurantId) {
     const imageDir = `./public/images/restaurants/${restaurantId}`;
     if (!fs.existsSync(imageDir)) {

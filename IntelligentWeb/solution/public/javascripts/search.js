@@ -103,16 +103,23 @@ priceRangeSlider.on('input', () => {
     updateDisplayFlags();
 });
 
-// TODO jsdoc
+/**
+ * Refine the displayed search results according to the user's selection of categories.
+ * Checks the the box isn't 'all' or 'none' and then add it to/remove it from the array.
+ * Same concept used for categories and features
+ * @function updateCategoryCheckboxes
+ * @see updateFeaturesCheckboxes
+ */
 advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
     if ((this.id !== 'cat-check-all') && (this.id !== 'cat-check-none')) {
         if (this.checked) {
-            const categoryIndex = categories.map((cat) => {
+            const categoryIndex = allCategories.map((cat) => {
                 return cat._id;
             }).indexOf(this.id);
-            const objectFound = categories[categoryIndex];
+            const objectFound = allCategories[categoryIndex];
             selectedCategories.push(objectFound);
         } else {
+            // loop through to find the element and splice it out of the array
             for (let i = 0; i < selectedCategories.length; i++) {
                 if (selectedCategories[i]._id === this.id) {
                     selectedCategories.splice(i, 1);
@@ -120,10 +127,11 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
             }
         }
 
+        // Update the 'all' and 'none' boxes
         if (selectedCategories.length === 0) {
             catNoneCheckbox.prop('checked', true);
             catAllCheckbox.prop('checked', false);
-        } else if (selectedCategories.length === categories.length) {
+        } else if (selectedCategories.length === allCategories.length) {
             catNoneCheckbox.prop('checked', false);
             catAllCheckbox.prop('checked', true);
         } else {
@@ -132,17 +140,17 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
         }
     } else if (this.id === 'cat-check-all') {
         selectedCategories = [];
-        for (const category of categories) {
+        for (const category of allCategories) {
             $(`#${category._id}`).prop('checked', true);
-            const categoryIndex = categories.map((cat) => {
+            const categoryIndex = allCategories.map((cat) => {
                 return cat._id;
             }).indexOf(category._id);
-            const objectFound = categories[categoryIndex];
+            const objectFound = allCategories[categoryIndex];
             selectedCategories.push(objectFound);
         }
         catNoneCheckbox.prop('checked', false);
     } else if (this.id === 'cat-check-none') {
-        for (const category of categories) {
+        for (const category of allCategories) {
             $(`#${category._id}`).prop('checked', false);
         }
         selectedCategories = [];
@@ -151,7 +159,13 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
     updateDisplayFlags();
 });
 
-// TODO jsdoc
+/**
+ * Refine the displayed search results according to the user's selection of features.
+ * Checks the the box isn't 'all' or 'none' and then add it to/remove it from the array
+ * Same concept used for categories and features
+ * @function updateFeaturesCheckboxes
+ * @see updateCategoriesCheckboxes
+ */
 advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
     if ((this.id !== 'feature-check-all') && (this.id !== 'feature-check-none')) {
         if (this.checked) {
@@ -207,7 +221,10 @@ resultSortOrder.change(() => {
     sortResults();
 });
 
-// TODO jsdoc
+/**
+ * When the user updates the sorting inputs, change the order of the result array.
+ * Uses nested switch statements to cross compare the values in both inputs
+ */
 function sortResults() {
     switch (resultSortOrder.find("option:selected").attr('value')) {
         case 'descending':
@@ -253,17 +270,24 @@ function sortResults() {
             }
             break;
     }
+    // Reset the pagination links
     $('#page-link-1').find('a.page-link').click();
     displaySearchResults();
 }
 
 // ================================ Results HTML Management ================================ \\
 
-// TODO jsdoc
+/**
+ * Called when any user parameters are displayed, and updates the displayFlags array according to whether or not the
+ * corresponding restaurant matches the chosen params.
+ * Matches categories, features, rating, priceRange
+ */
 function updateDisplayFlags() {
+    // loop through all restaurant which match the initial search query
     for (const [index, restaurant] of queryMatches.entries()) {
         let categoryMatch = true;
         if (!catNoneCheckbox.is(':checked')) {
+            // loop through the user-selected categories and the categories of the current restaurant
             for (const category of selectedCategories) {
                 for (const restaurantCategory of restaurant.categories) {
                     categoryMatch = (category._id === restaurantCategory._id);
@@ -279,17 +303,18 @@ function updateDisplayFlags() {
             }
         }
 
+        // Checks that categoryMatch is true so no wasted processing if we already know the final result will be false
         let featureMatch = true;
-        if (!featureNoneCheckbox.is(':checked')) {
+        if (!featureNoneCheckbox.is(':checked') && categoryMatch) {
             for (const feature of selectedFeatures) {
                 featureMatch = (restaurant.features[feature.id].value);
                 if (!featureMatch) {
+                    // break loop if any of the features don't match
                     break;
                 }
             }
         }
 
-        // noinspection EqualityComparisonWithCoercionJS
         displayFlags[index] = (
             (restaurant.averageRating >= ratingSlider.val() / 10) &&
             (restaurant.priceRange.band <= priceRangeSlider.val()) &&

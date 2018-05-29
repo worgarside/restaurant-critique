@@ -128,7 +128,7 @@ function populateUsers(insertPromises) {
         _id: 'test@user.com',
         password: 'Re5taurant',
         name: {first: 'Rick', last: 'Astley'},
-        postcode: 'S1 1ES',
+        postcode: 'S3 7HQ',
         reviews: [],
         reducedID: 'test-user-com',
         verified: {

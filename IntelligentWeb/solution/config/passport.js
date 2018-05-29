@@ -76,7 +76,7 @@ module.exports = function (passport) {
                         } else {
                             const newUser = new User();
 
-                            if (req.file.originalname){
+                            if (req.file.originalname) {
                                 newUser.reducedID = req.body.email.toLowerCase().replace(/[^a-zA-Z0-9]/g, "-");
                             }
 
