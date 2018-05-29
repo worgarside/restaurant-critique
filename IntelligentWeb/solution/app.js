@@ -61,6 +61,7 @@ app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-fo
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/jquery-validation/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/open-iconic/')));
 
+
 // ================================ Routes ================================ \\
 
 const index = require('./routes/index');

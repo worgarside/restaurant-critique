@@ -6,11 +6,13 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker
-            .register('./service-worker.js')
+            .register(`${window.location.origin}/service-worker.js`)
             .then(function () {
                 console.log('Service Worker Registered');
             })
             .catch((err) => {
+                    console.log(`${window.location.origin}`);
+                    console.log("hiya");
                     console.log(err);
                 }
             );

@@ -260,7 +260,7 @@ router.get('/search', (req, res) => {
     res.render('search', {
         title: title,
         user: req.user,
-        categories: allCategories,
+        allCategories: allCategories,
         features: featureArray,
         searchPage: true
     });

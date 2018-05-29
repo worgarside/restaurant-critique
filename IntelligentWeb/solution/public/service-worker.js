@@ -87,12 +87,12 @@ self.addEventListener('fetch', function (e) {
                 let responseClone = response.clone();
                 caches.open(cacheName).then(function(cache) {
                     cache.put(e.request, responseClone);
-                    console.log(e.request);
                     console.log("it's been added to the cache as it wasn't there before");
                 });
                 return response;
             });
         }).catch(function() {
+            console.log("offline");
             return caches.match('/offline.html');
         })
     );
