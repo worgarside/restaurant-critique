@@ -15,13 +15,16 @@
 const dataCacheName = 'restaurantData-v1';
 const cacheName = 'restaurantCritique-1';
 const filesToCache = [
-    '/contact',
-    './javascripts/*',
+    '/',
     './stylesheets/style.css',
     './scripts/js/bootstrap.min.js',
     './scripts/css/bootstrap.min.css',
+    './scripts/font/css/open-iconic-bootstrap.min.css',
     './scripts/popper.js',
-    './scripts/jquery.min.js'
+    './scripts/jquery.min.js',
+    './javascripts/index.js',
+    './javascripts/contact.js',
+    './javascripts/signup.js'
 ];
 
 
@@ -84,7 +87,8 @@ self.addEventListener('fetch', function (e) {
                 let responseClone = response.clone();
                 caches.open(cacheName).then(function(cache) {
                     cache.put(e.request, responseClone);
-                    console.log("it's in the cache");
+                    console.log(e.request);
+                    console.log("it's been added to the cache as it wasn't there before");
                 });
                 return response;
             });
