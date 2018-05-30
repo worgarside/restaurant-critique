@@ -98,8 +98,6 @@ self.addEventListener('fetch', (e) => {
 
                     caches.open(cacheName).then((cache) => {
                         cache.put(e.request, responseClone);
-                        console.log(e.request);
-                        console.log("trying to cache this");
                     });
 
                     return response;
