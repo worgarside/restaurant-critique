@@ -14,19 +14,27 @@
 
 const dataCacheName = 'restaurantData-v1';
 const cacheName = 'restaurantCritique-1';
-const filesToCache = [
-    '/',
-    './stylesheets/style.css',
-    './scripts/js/bootstrap.min.js',
-    './scripts/css/bootstrap.min.css',
-    './scripts/font/css/open-iconic-bootstrap.min.css',
-    './scripts/popper.js',
-    './scripts/jquery.min.js',
-    './javascripts/index.js',
-    './javascripts/contact.js',
-    './javascripts/signup.js'
-];
 
+
+/*
+filesToCache commented out as trying to cache files always caused an error TypeError in fetch statements.
+In light of this we have opted for a Network First, Then Cache Service Worker.
+TypeError: Failed to fetch URL: {"message":"Failed to fetch","name":"TypeError"}
+ */
+const filesToCache = [
+    // './contact',
+    '/stylesheets/'
+    // '/scripts/js/bootstrap.min.js'
+    // './scripts/css/bootstrap.min.css',
+    // './scripts/font/css/open-iconic-bootstrap.min.css',
+    // './scripts/popper.js',
+    // './scripts/jquery.min.js',
+    // './javascripts/index.js',
+    // './javascripts/contact.js',
+    // './javascripts/signup.js',
+    // './search'
+
+];
 
 /**
  * installation event: it adds all the files to be cached
@@ -36,11 +44,11 @@ self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open(cacheName)
             .then((cache) => {
-                console.log('[ServiceWorker] Caching app shell');
+                console.log('[ServiceWorker] Cacing app shell');
                 return cache.addAll(filesToCache);
             })
             .catch((err) => {
-                console.log(`Service Worker Error1: ${err} URL: ${JSON.stringify(e)}`);
+                console.log(`Service Worker Error1: ${err} URL: ${JSON.stringify(err, ["message", "arguments", "type", "name"])}`);
             })
     );
 });
@@ -49,11 +57,11 @@ self.addEventListener('install', (e) => {
 /**
  * activation of service worker: it removes all cashed files if necessary
  */
-self.addEventListener('activate', function (e) {
+self.addEventListener('activate', (e) => {
     console.log('[ServiceWorker] Activate');
     e.waitUntil(
         caches.keys()
-            .then(function (keyList) {
+            .then((keyList) => {
                 return Promise.all(keyList.map(function (key) {
                     if (key !== cacheName && key !== dataCacheName) {
                         console.log('[ServiceWorker] Removing old cache', key);
@@ -80,20 +88,25 @@ self.addEventListener('activate', function (e) {
  * all the other pages are searched for in the cache. If not found, they are returned
  */
 
-self.addEventListener('fetch', function (e) {
+self.addEventListener('fetch', (e) => {
+    let searchURL = '/search';
+    let socketURL = 'socket';
+    let mapsURL = 'maps.';
     e.respondWith(
-        caches.match(e.request).then(function(resp) {
-            return resp || fetch(e.request).then(function(response) {
-                let responseClone = response.clone();
-                caches.open(cacheName).then(function(cache) {
-                    cache.put(e.request, responseClone);
-                    console.log("it's been added to the cache as it wasn't there before");
-                });
-                return response;
+        caches.match(e.request).then((resp) => {return resp || fetch(e.request).then((response) => {
+                    let responseClone = response.clone();
+
+                    caches.open(cacheName).then((cache) => {
+                        cache.put(e.request, responseClone);
+                        console.log(e.request);
+                        console.log("trying to cache this");
+                    });
+
+                    return response;
+
             });
         }).catch(function() {
-            console.log("offline");
-            return caches.match('/offline.html');
+            return caches.match('/offline');
         })
     );
 });

@@ -108,6 +108,10 @@ router.get('/accessibility', (req, res) => {
     res.render('accessibility', {title: title, user: req.user});
 });
 
+router.get('/offline', (req, res) => {
+    res.render('errors/offline', {title: title, user: req.user});
+});
+
 router.get('/contact', (req, res) => {
     res.render('contact', {title: title, user: req.user});
 });
