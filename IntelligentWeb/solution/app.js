@@ -52,11 +52,6 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/')));
 app.use('/scripts', express.static(path.join(__dirname, '/node_modules/popper.js/dist/umd/')));

@@ -320,117 +320,115 @@ $('#toggle-btn').click(function () {
 // ================================ Socket IO ================================ \\
 
 const socket = io();
-if (navigator.onLine){
-    socket.on('review', (review) => {
-        console.log(review);
+socket.on('review', (review) => {
+    console.log(review);
 
-        const reviewDate = new Date(review.updatedAt);
-        const month = reviewDate.getMonth() + 1;
-        const day = (reviewDate.getDate() < 10) ? '0' + reviewDate.getDate() : reviewDate.getDate();
-        const year = reviewDate.getFullYear();
+    const reviewDate = new Date(review.updatedAt);
+    const month = reviewDate.getMonth() + 1;
+    const day = (reviewDate.getDate() < 10) ? '0' + reviewDate.getDate() : reviewDate.getDate();
+    const year = reviewDate.getFullYear();
 
-        const starRating = Math.round(review.restaurantRating);
-        let starCount = 0;
+    const starRating = Math.round(review.restaurantRating);
+    let starCount = 0;
 
-        let starHTML = '';
+    let starHTML = '';
 
-        while (starCount < starRating) {
-            starHTML += "<span class='oi oi-star star-highlight'></span>";
-            starCount++;
-        }
-        while (starCount < 5) {
-            starHTML += "<span class='oi oi-star '></span>";
-            starCount++;
-        }
+    while (starCount < starRating) {
+        starHTML += "<span class='oi oi-star star-highlight'></span>";
+        starCount++;
+    }
+    while (starCount < 5) {
+        starHTML += "<span class='oi oi-star '></span>";
+        starCount++;
+    }
 
-        let imageHTML = '';
+    let imageHTML = '';
 
-        if (review.images.length === 1) {
-            imageHTML = `
-                <div class='review-image-main vert-center-parent'>
-                    <div class='vert-center-child'>
-                        <img src='/images/restaurants/${review.restaurant._id}/${review.images[0]}'/>
-                    </div>
-                </div>
-            `;
-        } else if (review.images.length > 1) {
-            imageHTML = `
-                <tr>
-                    <td rowspan='2'>
-                        <div class='review-image-main'>
-                            <img src='/images/restaurants/${review.restaurant._id}/${review.images[0]}'/>
-                        </div>
-                    </td>
-                    <td>
-                        <div class='review-image-secondary'>
-                            <img src='/images/restaurants/${review.restaurant._id}/${review.images[1]}'/>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-            `;
-
-            if (review.images[2]) {
-                imageHTML += `
-                <div style="margin-top: 1px;" class='review-image-secondary'>
-                    <img src='/images/restaurants/${review.restaurant._id}/${review.images[2]}'/>
-                </div>
-            `;
-            } else {
-                imageHTML += `
-                    <div style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);' class='review-image-secondary'>
-                    </div>
-                `;
-            }
-        }
-
-        imageHTML += `
-            </td>
-        </tr>
-        `;
-
-        const newReviewHTML = `
-            <br/>
-            <div class='row no-gutters'>
-                <div class='col-lg-2 col-md-12'>
-                    <div class='vert-center-parent'>
-                        <div class='vert-center-child'>
-                            <div class='text-center'>
-                                <img src='/images/userImages/${review.author.reducedID}' class='mb-2 review-author-image'/>
-                                <h5 class='mb-0'>${review.author.forename} ${review.author.surname}</h5>
-                                <p class='mt-1 review-date'>${month}/${day}/${year}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-6 col-md-8'>
-                    <div class='vert-center-parent'>
-                        <div class='vert-center-child'>
-                            <div class='row mb-2'>
-                                <div class='col'>
-                                    ${starHTML}
-                                    <h5 id=${review._id} class='d-inline ml-2'>${review.title}</h5>
-                                </div>
-                            </div>
-                            <div class='row'>
-                                <div class='col-lg-12'>
-                                    <p class='mb-0'>${review.body}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-4 col-md-4'>
-                    <div id='review-image-container'>
-                        ${imageHTML}
-                    </div>
+    if (review.images.length === 1) {
+        imageHTML = `
+            <div class='review-image-main vert-center-parent'>
+                <div class='vert-center-child'>
+                    <img src='/images/restaurants/${review.restaurant._id}/${review.images[0]}'/>
                 </div>
             </div>
         `;
+    } else if (review.images.length > 1) {
+        imageHTML = `
+            <tr>
+                <td rowspan='2'>
+                    <div class='review-image-main'>
+                        <img src='/images/restaurants/${review.restaurant._id}/${review.images[0]}'/>
+                    </div>
+                </td>
+                <td>
+                    <div class='review-image-secondary'>
+                        <img src='/images/restaurants/${review.restaurant._id}/${review.images[1]}'/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        `;
 
-        $('#reviews').append(newReviewHTML);
-    });
-}
+        if (review.images[2]) {
+            imageHTML += `
+            <div style="margin-top: 1px;" class='review-image-secondary'>
+                <img src='/images/restaurants/${review.restaurant._id}/${review.images[2]}'/>
+            </div>
+        `;
+        } else {
+            imageHTML += `
+                <div style='margin-top: 1px; background-color: rgba(0, 0, 0, 0);' class='review-image-secondary'>
+                </div>
+            `;
+        }
+    }
+
+    imageHTML += `
+        </td>
+    </tr>
+    `;
+
+    const newReviewHTML = `
+        <br/>
+        <div class='row no-gutters'>
+            <div class='col-lg-2 col-md-12'>
+                <div class='vert-center-parent'>
+                    <div class='vert-center-child'>
+                        <div class='text-center'>
+                            <img src='/images/userImages/${review.author.reducedID}' class='mb-2 review-author-image'/>
+                            <h5 class='mb-0'>${review.author.forename} ${review.author.surname}</h5>
+                            <p class='mt-1 review-date'>${month}/${day}/${year}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-lg-6 col-md-8'>
+                <div class='vert-center-parent'>
+                    <div class='vert-center-child'>
+                        <div class='row mb-2'>
+                            <div class='col'>
+                                ${starHTML}
+                                <h5 id=${review._id} class='d-inline ml-2'>${review.title}</h5>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <p class='mb-0'>${review.body}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-lg-4 col-md-4'>
+                <div id='review-image-container'>
+                    ${imageHTML}
+                </div>
+            </div>
+        </div>
+    `;
+
+    $('#reviews').append(newReviewHTML);
+});
 
 console.log('Loaded restaurant.js');
