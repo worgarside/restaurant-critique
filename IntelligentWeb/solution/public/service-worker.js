@@ -25,7 +25,6 @@ const filesToCache = [
     '/',
     './stylesheets/roboto.css',
     './stylesheets/style.css',
-    './scripts/js/bootstrap.min.js',
     './stylesheets/KFOlCnqEu92Fr1MmSU5fBBc4.woff2',
     './stylesheets/KFOmCnqEu92Fr1Mu4mxK.woff2',
     './stylesheets/S6uyw4BMUTPHjx4wXg.woff2',
@@ -33,13 +32,18 @@ const filesToCache = [
     './scripts/font/css/open-iconic-bootstrap.min.css',
     './scripts/popper.js',
     './scripts/jquery.min.js',
+    './scripts/js/bootstrap.min.js',
+    './scripts/font/fonts/open-iconic.woff',
     './javascripts/index.js',
     './javascripts/contact.js',
     './javascripts/signup.js',
+    './javascripts/layout.js',
+    './javascripts/init_service_worker.js',
     './offline',
     './accessibility',
     './about',
-    './images/site/*',
+    './images/site/BG1.jpg',
+    './images/site/logo-square-white.png'
 ];
 
 /**
@@ -99,8 +103,21 @@ self.addEventListener('activate', (e) => {
  */
 
 self.addEventListener('fetch', (e) => {
-    //console.log(e.request.method);
-    if (e.request.clone().method === "GET"){
+    let searchURL = "/search"
+    let contactURL = "/contact"
+
+    if (e.request.url.indexOf(searchURL) > -1 || e.request.url.indexOf(contactURL) > -1) {
+        e.respondWith(
+            //Note this is a Network then offline approach, for form submission pages like Search or Contact
+            fetch(e.request).then((response) => {
+                return response;
+            }).catch((err) => {
+                return caches.match('/offline');
+            })
+        )
+    }
+
+    else if (e.request.clone().method === "GET"){
         e.respondWith(
             //if GET or POST needed to filter out requests
             //Note this is a Cache, then Network approach. A copy is first looked for in the cache
@@ -122,6 +139,7 @@ self.addEventListener('fetch', (e) => {
                 return caches.match('/offline');
             })
         );
+
     } else if (e.request.clone().method === "POST"){
         //console.log("oh a POST");
         fetch(e.request).then((response) => {
@@ -138,15 +156,6 @@ self.addEventListener('fetch', (e) => {
     }
 });
 
-// self.addEventListener('fetch', (e) => {
-//     e.respondWith(
-//         fetch(e.request).then((response) => {
-//             return response;
-//         }).catch(function() {
-//             return caches.match('/offline.html');
-//         })
-//     );
-// });
 
 // self.addEventListener('sync', function(event) {
 //     if (event.tag === 'syncData') {

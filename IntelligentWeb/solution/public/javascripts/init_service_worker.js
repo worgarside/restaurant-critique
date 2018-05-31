@@ -3,7 +3,7 @@
  * Declaring the service worker
  */
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && navigator.onLine) {
     window.addEventListener('load', function() {
         navigator.serviceWorker
             .register(`${window.location.origin}/service-worker.js`)
@@ -16,6 +16,8 @@ if ('serviceWorker' in navigator) {
                     console.log(err);
                 }
             );
+
+
         // navigator.serviceWorker.ready.then(function(swRegistration) {
         //     return swRegistration.sync.register('syncData');
         // });
