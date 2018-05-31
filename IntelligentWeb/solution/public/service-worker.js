@@ -23,8 +23,12 @@ TypeError: Failed to fetch URL: {"message":"Failed to fetch","name":"TypeError"}
  */
 const filesToCache = [
     '/',
+    './stylesheets/roboto.css',
     './stylesheets/style.css',
-    '/scripts/js/bootstrap.min.js',
+    './scripts/js/bootstrap.min.js',
+    './stylesheets/KFOlCnqEu92Fr1MmSU5fBBc4.woff2',
+    './stylesheets/KFOmCnqEu92Fr1Mu4mxK.woff2',
+    './stylesheets/S6uyw4BMUTPHjx4wXg.woff2',
     './scripts/css/bootstrap.min.css',
     './scripts/font/css/open-iconic-bootstrap.min.css',
     './scripts/popper.js',
@@ -32,7 +36,10 @@ const filesToCache = [
     './javascripts/index.js',
     './javascripts/contact.js',
     './javascripts/signup.js',
-    './offline'
+    './offline',
+    './accessibility',
+    './about',
+    './images/site/*',
 ];
 
 /**
@@ -90,23 +97,6 @@ self.addEventListener('activate', (e) => {
  * called every time a page is fetched by the browser
  * all the other pages are searched for in the cache. If not found, they are returned
  */
-
-// self.addEventListener('fetch', function (e) {
-//     e.respondWith(
-//         caches.match(e.request).then(function (response) {
-//             return response
-//                 || fetch(e.request)
-//                     .then(function (response) {
-//                         return response
-//                     })
-//                     .catch(function (e) {
-//                         console.log("error: " + e);
-//                     })
-//         }).catch(function (e) {
-//             console.log("error: " + e);
-//         })
-//     );
-// });
 
 self.addEventListener('fetch', (e) => {
     //console.log(e.request.method);
