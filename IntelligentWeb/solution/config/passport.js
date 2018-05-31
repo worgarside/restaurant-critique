@@ -41,7 +41,7 @@ module.exports = function (passport) {
 
                     if (!user.validPassword(password)) {
                         console.log("Invalid password");
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                        return done(null, false, req.flash('loginMessage', 'Incorrect password'));
                     }
 
                     console.log(`User verified and logging in at ${new Date()}`);
@@ -72,7 +72,7 @@ module.exports = function (passport) {
                         }
 
                         if (user) {
-                            return done(null, false, req.flash('signupMessage', 'That email is already taken.')); // TODO implement this
+                            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                         } else {
                             const newUser = new User();
 

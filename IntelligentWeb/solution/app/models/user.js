@@ -18,7 +18,6 @@ const crypto = require('crypto');
 UserSchema = Schema({
     _id: {type: String},
     password: {type: String, required: true},
-    privilegeLevel: {type: Number, default: 0},
     name: {
         first: {type: String, required: true},
         last: {type: String, required: true}

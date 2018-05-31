@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/javascripts/search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/javascripts/search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * search.js
  * Client-side JS
  * @author Rufus Cope, Will Garside
@@ -31,19 +59,19 @@ const featureNoneCheckbox = $('#feature-check-none');
 const featureAllCheckbox = $('#feature-check-all');
 
 const notFoundRestaurantHTML = `
-            <div class='row'>
-                <div class='col offset-1'>
-                    <small>If you have not found the restaurant you are searching for, click <a href='/restaurant/new'>here</a> to add it to the site.</small>
-                </div>
-            </div>
+            &lt;div class='row'>
+                &lt;div class='col offset-1'>
+                    &lt;small>If you have not found the restaurant you are searching for, click &lt;a href='/restaurant/new'>here&lt;/a> to add it to the site.&lt;/small>
+                &lt;/div>
+            &lt;/div>
         `;
 const noResultsHTML = `
-            <div class='row'>
-                <div class='col-10 offset-1'>
-                    <h4> No results found, please search again</h4>
-                    <p>If you would like to add a new restaurant to the site, click <a href='/restaurant/new'>here</a>.</p>
-                </div>
-            </div>
+            &lt;div class='row'>
+                &lt;div class='col-10 offset-1'>
+                    &lt;h4> No results found, please search again&lt;/h4>
+                    &lt;p>If you would like to add a new restaurant to the site, click &lt;a href='/restaurant/new'>here&lt;/a>.&lt;/p>
+                &lt;/div>
+            &lt;/div>
         `;
 
 searchButton.click((e) => {
@@ -111,7 +139,7 @@ priceRangeSlider.on('input', () => {
  * @see updateFeaturesCheckboxes
  */
 advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
-    if ((this.id !== 'cat-check-all') && (this.id !== 'cat-check-none')) {
+    if ((this.id !== 'cat-check-all') &amp;&amp; (this.id !== 'cat-check-none')) {
         if (this.checked) {
             const categoryIndex = allCategories.map((cat) => {
                 return cat._id;
@@ -120,7 +148,7 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
             selectedCategories.push(objectFound);
         } else {
             // loop through to find the element and splice it out of the array
-            for (let i = 0; i < selectedCategories.length; i++) {
+            for (let i = 0; i &lt; selectedCategories.length; i++) {
                 if (selectedCategories[i]._id === this.id) {
                     selectedCategories.splice(i, 1);
                 }
@@ -167,7 +195,7 @@ advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
  * @see updateCategoriesCheckboxes
  */
 advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
-    if ((this.id !== 'feature-check-all') && (this.id !== 'feature-check-none')) {
+    if ((this.id !== 'feature-check-all') &amp;&amp; (this.id !== 'feature-check-none')) {
         if (this.checked) {
             const featureIndex = features.map((feature) => {
                 return feature.id;
@@ -175,7 +203,7 @@ advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
             const objectFound = features[featureIndex];
             selectedFeatures.push(objectFound);
         } else {
-            for (let i = 0; i < selectedFeatures.length; i++) {
+            for (let i = 0; i &lt; selectedFeatures.length; i++) {
                 if (selectedFeatures[i].id === this.id) {
                     selectedFeatures.splice(i, 1);
                 }
@@ -231,7 +259,7 @@ function sortResults() {
             switch (resultSortField.find("option:selected").attr('value')) {
                 case 'name':
                     queryMatches.sort((a, b) => {
-                        if (a.name < b.name) return -1;
+                        if (a.name &lt; b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;
                     });
@@ -252,7 +280,7 @@ function sortResults() {
             switch (resultSortField.find("option:selected").attr('value')) {
                 case 'name':
                     queryMatches.sort((a, b) => {
-                        if (a.name < b.name) return 1;
+                        if (a.name &lt; b.name) return 1;
                         if (a.name > b.name) return -1;
                         return 0;
                     });
@@ -305,7 +333,7 @@ function updateDisplayFlags() {
 
         // Checks that categoryMatch is true so no wasted processing if we already know the final result will be false
         let featureMatch = true;
-        if (!featureNoneCheckbox.is(':checked') && categoryMatch) {
+        if (!featureNoneCheckbox.is(':checked') &amp;&amp; categoryMatch) {
             for (const feature of selectedFeatures) {
                 featureMatch = (restaurant.features[feature.id].value);
                 if (!featureMatch) {
@@ -316,9 +344,9 @@ function updateDisplayFlags() {
         }
 
         displayFlags[index] = (
-            (restaurant.averageRating >= ratingSlider.val() / 10) &&
-            (restaurant.priceRange.band <= priceRangeSlider.val()) &&
-            categoryMatch &&
+            (restaurant.averageRating >= ratingSlider.val() / 10) &amp;&amp;
+            (restaurant.priceRange.band &lt;= priceRangeSlider.val()) &amp;&amp;
+            categoryMatch &amp;&amp;
             featureMatch);
     }
     displaySearchResults();
@@ -341,12 +369,12 @@ function displaySearchResults() {
                 if (displayCount % pageLength === 0) {
                     if (pageCount === 0) {
                         searchResultsHTML += `
-                       <div class='search-results-page' id='search-results-page-${pageCount + 1}'>
+                       &lt;div class='search-results-page' id='search-results-page-${pageCount + 1}'>
                    `;
                     } else {
                         // hide other pages
                         searchResultsHTML += `
-                           <div class='search-results-page' id='search-results-page-${pageCount + 1}' style='display: none;'>
+                           &lt;div class='search-results-page' id='search-results-page-${pageCount + 1}' style='display: none;'>
                        `;
                     }
                     pageCount++;
@@ -355,14 +383,14 @@ function displaySearchResults() {
                 searchResultsHTML += getRestaurantDiv(restaurant, index);
 
                 if ((displayCount + 1) % pageLength === 0) {
-                    searchResultsHTML += '</div>';
+                    searchResultsHTML += '&lt;/div>';
                 }
                 displayCount++;
             }
 
             // If the page hasn't already been ended, end it here
-            if (((displayCount + 1) % pageLength !== 0) && (index === queryMatches.length)) {
-                searchResultsHTML += '</div>';
+            if (((displayCount + 1) % pageLength !== 0) &amp;&amp; (index === queryMatches.length)) {
+                searchResultsHTML += '&lt;/div>';
             }
         }
         searchResultsHTML += notFoundRestaurantHTML;
@@ -380,7 +408,7 @@ function displaySearchResults() {
     searchResultsDiv.appendChild(searchResultContent);
 
     // JS functionality must be added AFTER the content is added to the page
-    for (let i = 0; i < queryMatches.length; i++) {
+    for (let i = 0; i &lt; queryMatches.length; i++) {
         initSlideshow(i);
     }
     updateJQueryClickables();
@@ -392,19 +420,19 @@ function createPaginationLinks() {
 
     if (pageCount > 1) {
         paginationHTML = `
-            <nav>
-                <ul class='pagination justify-content-center'>
-                    <li class='page-item disabled' id='page-link-prev'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-left'></span></a></li>
+            &lt;nav>
+                &lt;ul class='pagination justify-content-center'>
+                    &lt;li class='page-item disabled' id='page-link-prev'>&lt;a href='javascript:void(0)' class='page-link'>&lt;span class='oi oi-caret-left'>&lt;/span>&lt;/a>&lt;/li>
         `;
 
-        for (let p = 1; p < pageCount + 1; p++) {
-            paginationHTML += `<li class='page-item' id='page-link-${p}'><a href='javascript:void(0)' class='page-link'>${p}</a></li>`;
+        for (let p = 1; p &lt; pageCount + 1; p++) {
+            paginationHTML += `&lt;li class='page-item' id='page-link-${p}'>&lt;a href='javascript:void(0)' class='page-link'>${p}&lt;/a>&lt;/li>`;
         }
 
         paginationHTML += `
-                    <li class='page-item' id='page-link-next'><a href='javascript:void(0)' class='page-link'><span class='oi oi-caret-right'></span></a></li>
-                </ul>
-            </nav>
+                    &lt;li class='page-item' id='page-link-next'>&lt;a href='javascript:void(0)' class='page-link'>&lt;span class='oi oi-caret-right'>&lt;/span>&lt;/a>&lt;/li>
+                &lt;/ul>
+            &lt;/nav>
         `;
     }
 
@@ -471,13 +499,13 @@ function createPaginationLinks() {
  */
 function getRestaurantDiv(restaurant, index) {
     const htmlStart = `
-        <div class='container restaurant-card' id='restaurant-container-${index}'>
-            <div class='row'>
-                <div class='col-12 col-lg-8'>
-                    <div class='vert-center-parent'>
-                        <div class='vert-center-child'>
-                            <div class='row'>
-                               <div class='col'><a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}</a>
+        &lt;div class='container restaurant-card' id='restaurant-container-${index}'>
+            &lt;div class='row'>
+                &lt;div class='col-12 col-lg-8'>
+                    &lt;div class='vert-center-parent'>
+                        &lt;div class='vert-center-child'>
+                            &lt;div class='row'>
+                               &lt;div class='col'>&lt;a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}&lt;/a>
     `;
 
     let htmlStars = '';
@@ -486,39 +514,39 @@ function getRestaurantDiv(restaurant, index) {
         const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
-            <div class='restaurant-stars'>
+            &lt;div class='restaurant-stars'>
         `;
 
-        for (let i = 0; i < starRating; i++) {
-            htmlStars += `<span class='oi oi-star star-highlight'></span>`;
+        for (let i = 0; i &lt; starRating; i++) {
+            htmlStars += `&lt;span class='oi oi-star star-highlight'>&lt;/span>`;
         }
 
-        for (let i = 0; i < (5 - starRating); i++) {
-            htmlStars += `<span class='oi oi-star'></span>`;
+        for (let i = 0; i &lt; (5 - starRating); i++) {
+            htmlStars += `&lt;span class='oi oi-star'>&lt;/span>`;
         }
 
-        htmlStars += `</div>`;
+        htmlStars += `&lt;/div>`;
     }
 
     const htmlAddress = `
-          </div>
-      </div>
-      <div class='row'>
-          <div class='col'>
-              <p class='restaurant-address'>${restaurant.address.formattedAddress}</p>
-          </div>
-      </div>
+          &lt;/div>
+      &lt;/div>
+      &lt;div class='row'>
+          &lt;div class='col'>
+              &lt;p class='restaurant-address'>${restaurant.address.formattedAddress}&lt;/p>
+          &lt;/div>
+      &lt;/div>
     `;
 
     let htmlCategories = `
-        <div class='row'>
-            <div class='col'>
+        &lt;div class='row'>
+            &lt;div class='col'>
     `;
 
     if (restaurant.categories.length > 0) {
         let catCount = 0;
         for (const category of restaurant.categories) {
-            htmlCategories += `<p class='restaurant-category'>${category.name}</p>`;
+            htmlCategories += `&lt;p class='restaurant-category'>${category.name}&lt;/p>`;
             catCount++;
             if (catCount > 6) {
                 break;
@@ -527,61 +555,61 @@ function getRestaurantDiv(restaurant, index) {
     }
 
     htmlCategories += `     
-            </div>
-        </div>
+            &lt;/div>
+        &lt;/div>
     `;
 
     let htmlDescription = '';
 
     if (restaurant.description !== 'No description currently available.') {
         htmlDescription = `
-            <div class='row'>
-                <div class='col'>
-                    <p class='restaurant-description'>${restaurant.description}</p>
-                </div>
-            </div>
+            &lt;div class='row'>
+                &lt;div class='col'>
+                    &lt;p class='restaurant-description'>${restaurant.description}&lt;/p>
+                &lt;/div>
+            &lt;/div>
         `;
     }
 
     let htmlSlideshow = `
-                    </div>
-                </div>
-            </div>
-            <div class='col-12 col-lg-4'>
-                <div class='row'>
-                    <div class='col'>
-                        <div class='restaurant-nearby-images'>
-                            <div class='slideshow-wrapper'>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+            &lt;div class='col-12 col-lg-4'>
+                &lt;div class='row'>
+                    &lt;div class='col'>
+                        &lt;div class='restaurant-nearby-images'>
+                            &lt;div class='slideshow-wrapper'>
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
-        htmlSlideshow += "<div class='slideshow'>";
+        htmlSlideshow += "&lt;div class='slideshow'>";
         for (const image of restaurant.images) {
-            htmlSlideshow += `<img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
+            htmlSlideshow += `&lt;img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
             imageCount += 1;
             if (imageCount >= 3) {
                 // only show first 3 images
                 break;
             }
         }
-        htmlSlideshow += '</div>';
+        htmlSlideshow += '&lt;/div>';
     }
 
     if (imageCount > 1) {
         htmlSlideshow += `
-                <div id='button-prev-${index}' class='slideshow-prev'>
-                    <span class='oi oi-chevron-left'></span>
-                </div>
-                <div id='button-next-${index}' class='slideshow-next'>
-                    <span class='oi oi-chevron-right'></span>
-                </div>
+                &lt;div id='button-prev-${index}' class='slideshow-prev'>
+                    &lt;span class='oi oi-chevron-left'>&lt;/span>
+                &lt;/div>
+                &lt;div id='button-next-${index}' class='slideshow-next'>
+                    &lt;span class='oi oi-chevron-right'>&lt;/span>
+                &lt;/div>
         `;
     }
-    htmlSlideshow += '</div>';
+    htmlSlideshow += '&lt;/div>';
 
-    const htmlEnd = '</div></div></div></div></div></div>';
+    const htmlEnd = '&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
     return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
 }
 
@@ -637,4 +665,26 @@ function initSlideshow(value) {
     });
 }
 
-console.log('Loaded search.js');
+console.log('Loaded search.js');</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 16:05:40 GMT+0100 (GMT Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
