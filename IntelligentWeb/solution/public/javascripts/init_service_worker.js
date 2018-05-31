@@ -4,6 +4,17 @@
  */
 
 if ('serviceWorker' in navigator && navigator.onLine) {
+    if (!('indexedDB' in window)) {
+        console.log('This browser doesn\'t support IndexedDB');
+    } else {
+        let open = indexedDB.open("cachePOSTs", 1);
+        open.onupgradeneeded = function () {
+            let db = open.result;
+            let store = db.createObjectStore("reviews", {keyPath: "restaurantId"});
+            console.log("IndexedDB created");
+        };
+    }
+
     window.addEventListener('load', function() {
         navigator.serviceWorker
             .register(`${window.location.origin}/service-worker.js`)
@@ -12,14 +23,15 @@ if ('serviceWorker' in navigator && navigator.onLine) {
             })
             .catch((err) => {
                     console.log(`${window.location.origin}`);
-                    console.log("hiya");
                     console.log(err);
                 }
             );
 
 
-        // navigator.serviceWorker.ready.then(function(swRegistration) {
-        //     return swRegistration.sync.register('syncData');
-        // });
+        navigator.serviceWorker.ready.then(function(swRegistration) {
+            return swRegistration.sync.register('syncData');
+        });
     });
+
+
 }

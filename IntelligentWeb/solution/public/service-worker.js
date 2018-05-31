@@ -108,7 +108,9 @@ self.addEventListener('fetch', (e) => {
 
     if (e.request.url.indexOf(searchURL) > -1 || e.request.url.indexOf(contactURL) > -1) {
         e.respondWith(
-            //Note this is a Network then offline approach, for form submission pages like Search or Contact
+            //Firstly if the page is reliant on a POST,
+            //a Network then offline approach is used.
+            // e.g. Search or Contact
             fetch(e.request).then((response) => {
                 return response;
             }).catch((err) => {
@@ -119,8 +121,7 @@ self.addEventListener('fetch', (e) => {
 
     else if (e.request.clone().method === "GET"){
         e.respondWith(
-            //if GET or POST needed to filter out requests
-            //Note this is a Cache, then Network approach. A copy is first looked for in the cache
+            //This is a Cache, then Network approach for plain site pages. A copy is first looked for in the cache
             //If there is not a copy in the cache, then a fetch event is called, and
             //the result is cached before being displayed.
             caches.match(e.request).then((res) => {
@@ -140,25 +141,48 @@ self.addEventListener('fetch', (e) => {
             })
         );
 
-    } else if (e.request.clone().method === "POST"){
-        //console.log("oh a POST");
-        fetch(e.request).then((response) => {
-                if (!response.ok) {
-                    console.log("response not ok, going offline");
-                    return caches.match('/offline');
-                }else{
-                    return response;
-                }
-            }).catch((err) => {
-                return caches.match('/offline');
-            });
-
     }
 });
 
 
-// self.addEventListener('sync', function(event) {
-//     if (event.tag === 'syncData') {
-//         event.waitUntil(true);
-//     }
-// });
+self.addEventListener('sync', function(event) {
+    console.log("potential sync");
+    // if (event.tag === 'syncData') {
+    //     event.waitUntil(
+    //
+    //         // let open = indexedDB.open("cachePOSTs");
+    //         // console.log("opening DB");
+    //         // open.onsuccess = function() {
+    //         //     let db = open.result;
+    //         //     let tx = db.transaction("reviews", "readwrite");
+    //         //     let store = tx.objectStore("reviews");
+    //         //     console.log("Getting reviews from IndexedDB");
+    //         //     let requesting = store.getAll();
+    //         //
+    //         //     requesting.forEach(function(POSTrequest) {
+    //         //         ajax({
+    //         //             url: '/restaurant/submit_review',
+    //         //             type: 'POST',
+    //         //             method: 'POST',
+    //         //             dataType: 'json',
+    //         //             data: POSTrequest,
+    //         //             success: (result) => {
+    //         //                 console.log(JSON.stringify(result));
+    //         //                 if (result.success) {
+    //         //                     store.delete(POSTrequest.restaurantId);
+    //         //                 }
+    //         //             },
+    //         //             error: (err) => {
+    //         //                 console.log(err);
+    //         //             }
+    //         //         })
+    //         //     })
+    //         //     // Close the db when the transaction is done
+    //         //     tx.oncomplete = function() {
+    //         //         db.close();
+    //         //     };
+    //         // }
+    //     )
+    //
+    // }
+});
