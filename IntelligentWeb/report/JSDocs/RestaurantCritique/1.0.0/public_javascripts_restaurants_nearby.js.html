@@ -33,21 +33,23 @@
  */
 
 let lat, lng, map, userMarker;
-let markerList = [];
-let nearbyRestaurants = [];
-let distanceSlider = $('#distance-slider');
-let distanceSliderValue = $('#distance-slider-value');
 
-$('#login-warning').click(() => {
-    $('#btn-login').click();
-});
+$(() => {
+    $('#nearby-map-wrapper').hover(
+        () => {
+            $('#nearby-map').removeClass('map-shrink');
+        }, () => {
+            $('#nearby-map').addClass('map-shrink');
+        }
+    );
 
-$('#allow-location').click(() => {
-    allowLocation(true);
-});
-
-$('#deny-location').click(() => {
-    allowLocation(false);
+    if (!userLoggedIn) {
+        $('#login-warning').click(() => {
+            $('#btn-login').click();
+        });
+    } else {
+        $('#restaurant-overlay').css('display', 'block');
+    }
 });
 
 /**
@@ -56,9 +58,8 @@ $('#deny-location').click(() => {
  */
 function allowLocation(allowed) {
     if (allowed) {
-        sessionStorage.setItem('allowLocation', true);
-
         const options = {enableHighAccuracy: true, timeout: 10000, maximumAge: 750000};
+
         navigator.geolocation.getCurrentPosition((position) => {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
@@ -70,32 +71,9 @@ function allowLocation(allowed) {
         }, () => {
             console.log('Geolocation failed :(');
         }, options)
-    } else {
-        sessionStorage.setItem('allowLocation', false);
     }
 
-    $('#restaurant-location-overlay').css('display', 'none');
-}
-
-/**
- * Retrieves the user's preference for being located from the session storage and passes the parameters
- * (or asks the user) accordingly
- */
-function manageGeolocation() {
-    if (userLoggedIn) {
-        const locFlag = sessionStorage.getItem('allowLocation');
-
-        if (locFlag === 'true') {
-            // console.log('Location already allowed');
-            allowLocation(true);
-        } else if (locFlag === 'false') {
-            // console.log('Location already denied');
-            allowLocation(false);
-        } else {
-            // console.log('Location permissions not set');
-            $('#restaurant-location-overlay').css('display', 'block');
-        }
-    }
+    $('#restaurant-overlay').css('display', 'none');
 }
 
 /**
@@ -104,14 +82,14 @@ function manageGeolocation() {
  */
 function initMap() {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address': `${postcode}, UK`}, (results, status) => {
+    geocoder.geocode({'address': postcode}, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
             lat = results[0].geometry.location.lat();
             lng = results[0].geometry.location.lng();
             createMap();
         } else {
-            alert(`Geocoding your location has failed. Please refresh the page or try again later.`);
-            console.log(`Geocode error: ${status}`);
+            //TODO: remove/substitute this
+            alert("Geocode error: " + status);
         }
     });
 }
@@ -153,13 +131,15 @@ function createMap() {
         google.maps.event.addListener(userMarker, 'dragend', () => {
             lat = userMarker.getPosition().lat();
             lng = userMarker.getPosition().lng();
+            // TODO: think about this
+            // map.setCenter({lat: lat, lng: lng});
             updateList();
         });
     } else {
         map = new google.maps.Map($('#nearby-map')[0], {
             zoom: 14,
             center: currentLocation,
-            draggable: true,
+            draggable: false,
             styles: styles,
             zoomControl: true,
             mapTypeControl: false,
@@ -176,12 +156,7 @@ function createMap() {
         google.maps.event.addListener(userMarker, 'click', () => {
             $('#btn-login').click();
         });
-
-        google.maps.event.addListener(userMarker, 'dragstart', () => {
-            $('#btn-login').click();
-        });
     }
-    manageGeolocation();
     updateList();
 }
 
@@ -191,15 +166,16 @@ function createMap() {
  */
 function updateList() {
     const coordinates = JSON.stringify({lat: lat, lng: lng});
+    console.log(`Sending ${coordinates} to AJAX POST`);
 
     $.ajax({
         url: '/restaurants-nearby',
         data: coordinates,
         contentType: 'application/json; charset=utf-8',
         type: 'POST',
-        success: (restaurants) => {
-            nearbyRestaurants = restaurants;
-            processRestaurants();
+        success: (result) => {
+            console.log('AJAX Succeeded');
+            processRestaurants(result);
         },
         error: (err) => {
             console.log(`Error: ${JSON.stringify(err)}`);
@@ -210,11 +186,10 @@ function updateList() {
 /**
  * Process the returned list of restaurants to create HTML for them and append it to the page
  * Also adds their locations to the map with markers and info windows
+ * @param {Array} results
  * @see updateList()
  */
-function processRestaurants() {
-    clearMarkers();
-
+function processRestaurants(results) {
     const restaurantListDOM = $('#restaurant-list')[0];
     restaurantListDOM.innerHTML = null;
 
@@ -223,97 +198,64 @@ function processRestaurants() {
         scaledSize: new google.maps.Size(25, 42)
     };
 
-    markerList = [];
-    let infoWindow = new google.maps.InfoWindow();
-    let htmlString = '&lt;br/>';
-
-    let resultsDisplayed = false;
-    for (const [index, restaurant] of nearbyRestaurants.entries()) {
-        if (restaurant.published &amp;&amp; (restaurant.distance &lt;= distanceSlider.val() * 1000)) {
-            resultsDisplayed = true;
-            htmlString += createRestaurantPreview(restaurant, index);
+    for (const [index, restaurant] of results.entries()) {
+        if (restaurant.published) {
+            let restaurantContainer = document.createElement('div');
+            restaurantContainer.innerHTML = createRestaurantPreview(restaurant, index);
+            restaurantListDOM.appendChild(restaurantContainer);
+            initSlideshow(index);
 
             const infoWindowContent = `
-                &lt;div class='container' id='info-${index}' style='max-width: 400px;'>
-                    &lt;div class='row'>
-                        &lt;div class='col'>
-                            &lt;h6 class='mb-1'>&lt;strong>${restaurant.name}&lt;/strong>&lt;/h6>
-                            &lt;p class='mb-1'>${(restaurant.distance / 1000).toFixed(2)}km away&lt;/p>
-                            &lt;p class='mb-1'>${restaurant.description}&lt;/p>
-                            &lt;a onclick='scrollToRestaurant(${index});' href='javascript:void(0)'>More info&lt;/a>
-                        &lt;/div>
+            &lt;div class="container" id="info-${index}" style="max-width: 400px;">
+                &lt;div class="row">
+                    &lt;div class="col">
+                        &lt;h5 style="font-weight: 400;" class="d-inline">${restaurant.name}&lt;/h5>
+                        &lt;p style="font-weight: 400;" class="d-inline">&amp;nbsp;&amp;nbsp;&amp;nbsp;${(restaurant.distance / 1000).toFixed(2)}km away&lt;/p>
+                        &lt;p style="margin-bottom: 0;">${restaurant.description}&lt;/p>
                     &lt;/div>
                 &lt;/div>
-            `;
+                &lt;div class="row">
+                    &lt;div class="col">
+                        &lt;a class="float-right info-window-more-info" onclick="scrollToRestaurant(${index});" href="javascript:void(0)">More info&lt;/a>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        `;
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: infoWindowContent
+            });
 
             const newMarker = new google.maps.Marker({
-                title: restaurant.name,
                 map: map,
                 position: {lat: restaurant.address.latitude, lng: restaurant.address.longitude},
                 icon: icon
             });
 
-            google.maps.event.addListener(newMarker, 'click', function () {
-                infoWindow.setContent(infoWindowContent);
-                infoWindow.open(map, this);
+            newMarker.addListener('click', () => {
+                infoWindow.open(map, newMarker);
             });
-
-            markerList.push(newMarker);
         }
     }
-
-    if (!resultsDisplayed) {
-        htmlString = "&lt;h5 class='mt-2' style='margin-left: 4rem;'>No restaurants found in the chosen area.&lt;/h5>";
-    }
-
-    let resultContainer = document.createElement('div');
-    resultContainer.innerHTML = htmlString;
-    restaurantListDOM.appendChild(resultContainer);
-
-    for (let i = 0; i &lt; nearbyRestaurants.length; i++) {
-        initSlideshow(i);
-    }
-    updateJQueryClickables();
-}
-
-/**
- * Update the nearby results when the distance parameter is changed
- * @function updateNearbyDistance
- */
-distanceSlider.on('input', () => {
-    distanceSliderValue.text(`${distanceSlider.val()} km`);
-    processRestaurants();
-});
-
-
-/**
- * Remove all markers on the nearby map and clear the markerList array
- */
-function clearMarkers() {
-    for (let i = 0; i &lt; markerList.length; i++) {
-        markerList[i].setMap(null);
-    }
-    markerList = [];
 }
 
 /**
  * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
  * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
  * @param {Restaurant} restaurant The Restaurant being previewed
- * @param {number} index The number the Restaurant is on the page, used for setting button IDs
+ * @param {Integer} index The number the Restaurant is on the page, used for setting button IDs
  * @returns {string} The generated HTML to be appended to the page
  * @author Will Garside
  */
 function createRestaurantPreview(restaurant, index) {
     const htmlStart = `
-        &lt;div class='container restaurant-card' id='restaurant-container-${index}'>
-            &lt;div class='row'>
-                &lt;div class='col-12 col-lg-8'>
-                    &lt;div class='vert-center-parent'>
-                        &lt;div class='vert-center-child'>
-                            &lt;div class='row'>
-                                &lt;div class='col'>
-                                    &lt;a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}&lt;/a>
+        &lt;div class="container nearby-restaurant" id="restaurant-container-${index}">
+            &lt;div class="row">
+                &lt;div class="col-8">
+                    &lt;div class="vert-center-parent">
+                        &lt;div class="vert-center-child">
+                            &lt;div class="row">
+                               &lt;div class="col">&lt;a href='restaurant/${restaurant.localUrl}' class="restaurant-title d-inline">${restaurant.name}&lt;/a>
     `;
 
     let htmlStars = '';
@@ -322,41 +264,38 @@ function createRestaurantPreview(restaurant, index) {
         const starRating = Math.round(restaurant.averageRating);
 
         htmlStars = `
-            &lt;div class='restaurant-stars'>
+            &lt;div class="restaurant-stars">
         `;
 
         for (let i = 0; i &lt; starRating; i++) {
-            htmlStars += `&lt;span class='oi oi-star star-highlight'>&lt;/span>`;
+            htmlStars += `&lt;span aria-hidden="true" style="color: #e69200;" class="oi oi-check oi-star">&lt;/span>`;
         }
 
         for (let i = 0; i &lt; (5 - starRating); i++) {
-            htmlStars += `&lt;span class='oi oi-star'>&lt;/span>`;
+            htmlStars += `&lt;span aria-hidden="true" class="oi oi-check oi-star">&lt;/span>`;
         }
 
-        htmlStars += '&lt;/div>';
+        htmlStars += `&lt;/div>`;
     }
 
     const htmlAddress = `
-            &lt;/div>
-        &lt;/div>
-        &lt;div class='row'>
-            &lt;div class='col'>
-                &lt;a href='javascript:void(0)' class='restaurant-card-map-link restaurant-address' data-restaurant-name="${restaurant.name}">
-                    &lt;img src='/images/site/gmaps-custom-pin-small.png'/>
-                    ${restaurant.address.formattedAddress}
-                &lt;/a>
-            &lt;/div>
-        &lt;/div>
+          &lt;/div>
+      &lt;/div>
+      &lt;div class="row">
+          &lt;div class="col">
+              &lt;p class="restaurant-address">${restaurant.address.formattedAddress}&lt;/p>
+          &lt;/div>
+      &lt;/div>
     `;
 
     let htmlCategories = `
-        &lt;div class='row'>
-            &lt;div class='col'>
+        &lt;div class="row">
+            &lt;div style="margin: -5px" class="col">
     `;
 
     if (restaurant.categories.length > 0) {
         for (const category of restaurant.categories) {
-            htmlCategories += `&lt;p class='restaurant-category'>${category.name}&lt;/p>`;
+            htmlCategories += `&lt;p class="restaurant-category">${category.name}&lt;/p>`;
         }
     }
 
@@ -369,47 +308,45 @@ function createRestaurantPreview(restaurant, index) {
 
     if (restaurant.description !== 'No description currently available.') {
         htmlDescription = `
-            &lt;div class='row'>
-                &lt;div class='col'>
-                    &lt;p class='restaurant-description'>${restaurant.description}&lt;/p>
+            &lt;div class="row">
+                &lt;div class="col">
+                    &lt;p class="restaurant-description">${restaurant.description}&lt;/p>
                 &lt;/div>
             &lt;/div>
         `;
     }
 
+    //TODO: only show top 5 images on nearby page?
     let htmlSlideshow = `
                     &lt;/div>
                 &lt;/div>
             &lt;/div>
-            &lt;div class='col-12 col-lg-4'>
-                &lt;div class='row'>
-                    &lt;div class='col'>
-                        &lt;div class='restaurant-nearby-images'>
-                            &lt;div class='slideshow-wrapper'>
+            &lt;div class="col-4">
+                        &lt;div class="row">
+                            &lt;div class="col">
+                                &lt;div class="float-right">
+                                    &lt;div class="slideshow-wrapper">
         `;
 
     let imageCount = 0;
 
     if (restaurant.images.length > 0) {
-        htmlSlideshow += "&lt;div class='slideshow'>";
+        htmlSlideshow += '&lt;div class="slideshow">';
         for (const image of restaurant.images) {
-            htmlSlideshow += `&lt;img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
+            htmlSlideshow += `&lt;img src="images/restaurants/${restaurant._id}/${image}" class="slide-${index}"/>`;
             imageCount += 1;
-            if (imageCount >= 3) {
-                // only show first 3 images
-                break;
-            }
         }
-        htmlSlideshow += '&lt;/div>';
+        htmlSlideshow += "&lt;/div>";
     }
+
 
     if (imageCount > 1) {
         htmlSlideshow += `
-                &lt;div id='button-prev-${index}' class='slideshow-prev'>
-                    &lt;span class='oi oi-chevron-left'>&lt;/span>
+                &lt;div id="button-prev-${index}" class="slideshow-prev">
+                    &lt;span aria-hidden="true" class="oi oi-check oi-chevron-left">&lt;/span>
                 &lt;/div>
-                &lt;div id='button-next-${index}' class='slideshow-next'>
-                    &lt;span class='oi oi-chevron-right'>&lt;/span>
+                &lt;div id="button-next-${index}" class="slideshow-next">
+                    &lt;span aria-hidden="true" class="oi oi-check oi-chevron-right">&lt;/span>
                 &lt;/div>
         `;
     }
@@ -424,7 +361,7 @@ function createRestaurantPreview(restaurant, index) {
 /**
  * Image slideshow navigation using buttons on page
  * JQuery selectors have to be re-used due to the changing classes of the images
- * @param {number} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * @param {integer} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
  * getting mixed up
  * @author Will Garside
  */
@@ -464,12 +401,18 @@ function initSlideshow(value) {
 
 /**
  * Auto-scrolls to Restaurant preview from the link in the map infowindow
- * @param {number} index The index of the Restaurant
+ * @param {Integer} index The index of the Restaurant
  */
 function scrollToRestaurant(index) {
-    $('html, body').animate({
-        scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
-    }, 800);
+    $('#nearby-map').addClass('map-shrink');
+
+    // Wait for map to shrink
+    setTimeout(() => {
+        $('html, body').animate({
+            scrollTop: $(`#restaurant-container-${index}`).offset().top - 60
+        }, 800, () => {
+        });
+    }, 250);
 }</code></pre>
         </article>
     </section>
@@ -480,13 +423,13 @@ function scrollToRestaurant(index) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#colorPriceRangeInput">colorPriceRangeInput</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#displayNoResultsFound">displayNoResultsFound</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMainSlideshow">initMainSlideshow</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCategories">populateCategories</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#sendVerificationEmail">sendVerificationEmail</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 11:32:56 GMT+0100 (GMT Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Apr 15 2018 20:24:36 GMT+0100 (GMT Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

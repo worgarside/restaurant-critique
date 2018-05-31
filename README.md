@@ -10,7 +10,6 @@
 - [x] Restaurant Object
 - [x] User creation/signup
 - [x] Login management
-- [ ] Administrator privileges
 - [x] Dynamic restaurant view page
 - [x] Review input and structure
 - [x] Restaurant search (keywords, tags, distance)
@@ -20,8 +19,7 @@
 - [x] webRTC Camera integration
 - [x] Basic pages (home, contact, about, accessibility)
 - [x] Site navigation/UML model
-- [ ] 'Owner level' users & verification
-- [ ] Category page, categorisation of restaurants
+- [x] Category linking, categorisation of restaurants
 
 ### Installation & Running
 

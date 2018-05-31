@@ -30,7 +30,7 @@ block content
                                     .col
                                         label(for='restaurantName') Restaurant Name
                                         input.form-control#restaurantName(type='text', name='restaurantName',
-                                        placeholder="Tom's Bistro", required, autocomplete='none')
+                                        placeholder="Tom's Bistro", required, autocomplete='off')
 
                                 #address-input-choice
                                     .form-row.form-group
@@ -43,10 +43,10 @@ block content
                                     .form-row.form-group
                                         .col.col-lg-5
                                             label(for='search-address') Address Line 1
-                                            input.title-case.form-control#search-address(type='text', placeholder='221b', autocomplete='none')
+                                            input.title-case.form-control#search-address(type='text', placeholder='221b', autocomplete='off')
                                         .form-group.col-lg-3
                                             label(for='search-postcode') Post Code
-                                            input.upper-case.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='none')
+                                            input.upper-case.form-control#search-postcode(type='text', placeholder='SW1A 1AA', autocomplete='off')
                                         .form-group.col
                                             label.invisible-label(for='lookup-btn')
                                             button.btn#lookup-btn(type='button') Find address
@@ -66,17 +66,17 @@ block content
                                     .form-row.form-group
                                         .col-lg-6
                                             label(for='address1') Address Line 1
-                                            input.title-case.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='none')
+                                            input.title-case.no-enter-submit.form-control#address1(type='text', name='address1', placeholder='221b', autocomplete='off' required='required')
                                         .form-group.col-lg-6
                                             label(for='address2') Address Line 2
-                                            input.title-case.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='none')
+                                            input.title-case.no-enter-submit.form-control#address2(type='text', name='address2', placeholder='Baker Street', autocomplete='off' required='required')
                                     .form-row.form-group
                                         .col-lg-6
                                             label(for='city') City
-                                            input.title-case.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='none')
+                                            input.title-case.no-enter-submit.form-control#city(type='text', name='city', placeholder='London', autocomplete='off' required='required')
                                         .form-group.col-lg-6
                                             label(for='postcode') Postcode
-                                            input.upper-case.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', required, autocomplete='none')
+                                            input.upper-case.no-enter-submit.form-control#postcode(type='text', name='postcode', placeholder='NW1 6XE', autocomplete='off' required='required')
 
                                 #address-map-text
                                     .form-row.form-group
@@ -93,14 +93,14 @@ block content
                                 .form-row
                                     .form-group.col-lg-8
                                         label(for='url') Restaurant Website
-                                        input.form-control#url(type='text', name='url', placeholder='www.toms-bistro.pawnee', autocomplete='none')
+                                        input.form-control#url(type='text', name='url', placeholder='www.toms-bistro.pawnee', autocomplete='off')
                                     .form-group.col-lg-4
                                         label(for='phone') Phone
-                                        input.form-control.no-spinner#phone(style="padding-left: 9px; padding-right: 9px;", type='number', name='phone', placeholder='07700 900461', autocomplete='none')
+                                        input.form-control.no-spinner#phone(style="padding-left: 9px; padding-right: 9px;", type='number', name='phone', placeholder='07700 900461', autocomplete='off')
                                 .form-row
                                     .form-group.col
                                         label(for='menu') Menu Link
-                                        input.form-control#menu(type='text', name='menu', placeholder='www.toms-bistro.pawnee/menu', autocomplete='none')
+                                        input.form-control#menu(type='text', name='menu', placeholder='www.toms-bistro.pawnee/menu', autocomplete='off')
                                 label(for='days-of-week') Opening Times
                                 .form-row.opening-times-form
                                     .form-group.col-3
@@ -151,7 +151,7 @@ block content
                                         label(for='category') Category
                                         #category-selector
                                             #category-selected
-                                            input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='none')
+                                            input.form-control#category(placeholder='Start typing to choose the categories', autocomplete='off')
                                             #category-dropdown
 
                             .col.col-lg-5.offset-lg-1
@@ -193,11 +193,11 @@ block content
                         .row.d-none
                             .col
                                 each day in daysOfWeek
-                                    input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='none', readonly)
-                                    input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='none', readonly)
+                                    input(type="number", name=`${day.toLowerCase()}Open`, autocomplete='off', readonly)
+                                    input(type="number", name=`${day.toLowerCase()}Close`, autocomplete='off', readonly)
 
-                                input#lat(type="number", name='lat', autocomplete='none', readonly)
-                                input#lng(type="number", name='lng', autocomplete='none', readonly)
+                                input#lat(type="number", name='lat', autocomplete='off', readonly)
+                                input#lng(type="number", name='lng', autocomplete='off', readonly)
                                 input#category-body(name='categories', readonly)
                                 input#publish-flag(type='checkbox', name='published')
                                 input#submit(type='submit')

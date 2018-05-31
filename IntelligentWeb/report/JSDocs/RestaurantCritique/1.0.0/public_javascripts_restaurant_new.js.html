@@ -33,21 +33,119 @@
  * @param {Array} categoryVar Array of categories passed from server
  */
 
+
 $(() => {
-    allCategories = categoryVar;
+    $('#opening-time').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        maxTime: '23:30',
+        defaultTime: '09',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: false,
+        scrollbar: false
+    });
+
+    $('#closing-time').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        maxTime: '23:30',
+        defaultTime: '23',
+        startTime: '00:00',
+        dynamic: false,
+        dropdown: false,
+        scrollbar: false
+    });
+
+    categories = categoryVar;
+
 });
 
-$('#new-restaurant-form').on('keyup keypress', function (e) {
-    const keyCode = e.keyCode || e.which;
-    if (keyCode === 13) {
-        e.preventDefault();
-        return false;
-    }
+// ================ Opening Times ================ \\
+
+// Forces time input to resolve prior to submission
+$("#add-times").mouseenter(() => {
+    $("#opening-time").blur();
+    $("#closing-time").blur();
 });
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * Displays the selected opening hours on the page when the User clicks the 'Add Times' button
+ * Appends a form-row with html to display times and 'remove' button
+ * Also updates the values of hidden inputs for submission to the server
+ */
+function addTimes() {
+    const openTimeString = $("#opening-time").val();
+    const closeTimeString = $("#closing-time").val();
+
+    if ((openTimeString !== "") &amp;&amp; (closeTimeString !== "")) {
+        const openTimeInt = (openTimeString.split(':')[0] * 60) + parseInt(openTimeString.split(':')[1]);
+        const closeTimeInt = (closeTimeString.split(':')[0] * 60) + parseInt(closeTimeString.split(':')[1]);
+
+        if (openTimeInt &lt; closeTimeInt) {
+            const dayInput = $("#days-of-week");
+            const dayString = dayInput.children("option").filter(":selected").text();
+            const dayValue = dayInput.val();
+            const selectedTimes = $("#selected-opening-times");
+
+            const newHTML = `
+                &lt;div class='form-row' id='selected-day-${dayString}'>
+                    &lt;div class='col-3 text-center'>
+                        &lt;p style='margin-bottom:5px'>${dayString}&lt;/p>
+                    &lt;/div>
+                    &lt;div class='col-6 text-center'>
+                        &lt;p style='margin-bottom:5px'>${openTimeString} - ${closeTimeString} &lt;/p>
+                    &lt;/div>
+                    &lt;div class='col-3 text-center'>
+                        &lt;a onclick='removeSelectedDay(this);' href='javascript:void(0);' id=${dayString} style='padding:4px'>Remove&lt;/a> 
+                    &lt;/div>
+               &lt;/div>
+                `;
+
+            dayInput.find(`option[value=${dayValue}]`).remove();
+            $("#selected-times-row").prop({hidden: false});
+            if (dayInput.children('option').length === 0) {
+                $(".opening-times-form").prop({"disabled": true, hidden: true});
+            }
+            selectedTimes.append(newHTML);
+            $(`input[name='${dayString.toLowerCase()}Open']`).val(openTimeInt);
+            $(`input[name='${dayString.toLowerCase()}Close']`).val(closeTimeInt);
+
+        } else {
+            console.log("Invalid time choice");
+        }
+    } else {
+        console.log("Empty time(s)");
+    }
+}
+
+/**
+ * Removes the selected times to allow the User to edit them or leave them out completely
+ * Also removes the values of the hidden inputs to avoid incorrect submission
+ * @param {button} button The button used to trigger the function, containing the ID of the day to be moved
+ */
+function removeSelectedDay(button) {
+    const dayInput = $("#days-of-week");
+    const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const day = button.id;
+
+    $(`#selected-day-${day}`).remove();
+    $(`input[name='${day.toLowerCase()}Open']`).val(null);
+    $(`input[name='${day.toLowerCase()}Close']`).val(null);
+    $(".opening-times-form").attr({"disabled": false, hidden: false});
+    dayInput.append($("&lt;option>&lt;/option>").attr("value", daysOfWeek.indexOf(day)).text(day));
+
+    if (dayInput.children('option').length === 7) {
+        $("#selected-times-row").prop({hidden: true});
+    }
+}
 
 // ================ Address Lookup ================ \\
 
-let geocoder, allCategories;
+let geocoder, categories;
 let formattedAddress = '';
 let currentLocation = {lat: 53.380450, lng: -1.472233};
 let selectedCategories = [];
@@ -69,6 +167,7 @@ const searchPostcode = $('#search-postcode');
 $('#address-lookup-button').click(() => {
     $('#address-lookup-button').addClass('active');
     $('#address-map-button').removeClass('active');
+
 
     showHTML([$('#address-lookup-search')]);
     hideHTML([
@@ -129,11 +228,39 @@ $('#address-lookup-search').find('input').keypress((e) => {
 });
 
 /**
+ * Class to stop accidental submission with Enter key
+ */
+$('.no-enter-submit').keypress((e) => {
+    if (e.which === 13) e.preventDefault();
+});
+
+/**
+ * Automatically applies Title Case to inputs with the class '.title-case'
+ * @function autoTitleCase
+ */
+$('.title-case').keyup(function () {
+    const inputString = $(this).val().split(" ");
+    for (let i = 0; i &lt; inputString.length; i++) {
+        const j = inputString[i].charAt(0).toUpperCase();
+        inputString[i] = j + inputString[i].substr(1);
+    }
+    $(this).val(inputString.join(' '));
+});
+
+/**
+ * Automatically changes input value to uppercase
+ * @function autoCapitalise
+ */
+$('.upper-case').keyup(function () {
+    $(this).val($(this).val().toUpperCase());
+});
+
+// noinspection JSUnusedGlobalSymbols
+/**
  * Uses Google Geolocation to find an address from the postcode
  * @returns {HTML} sets the HTML to show the found address
- * @function findAddress
  */
-$('#lookup-btn').click(() => {
+function findAddress() {
     const submittedAddress1 = searchAddress.val();
     const submittedPostcode = searchPostcode.val();
     formattedAddress = '';
@@ -192,15 +319,14 @@ $('#lookup-btn').click(() => {
             }
         });
     }
-});
+}
 
 // noinspection JSUnusedGlobalSymbols
 /**
  * Toggles some HTML components to allow the user to edit their address
  * @returns {HTML} changes HTML
- * @function editAddress
  */
-$('#address-lookup-found-edit-control').click(() => {
+function editAddress() {
     showHTML([
         $('#address-input-choice'),
         $('#address-lookup-found-edit'),
@@ -209,15 +335,14 @@ $('#address-lookup-found-edit-control').click(() => {
     hideHTML([
         $('#address-lookup-found-edit-control')
     ]);
-});
+}
 
 // noinspection JSUnusedGlobalSymbols
 /**
  * Confirms a User's to their address information
  * @returns {HTML} changes HTML
- * @function confirmEdit
  */
-$('#confirm-edit').click(() => {
+function confirmEdit() {
     const oldPostcode = searchPostcode.val().toLowerCase().replace(/ /g, '');
     const newPostcode = inputPostcode.val().toLowerCase().replace(/ /g, '');
 
@@ -235,7 +360,7 @@ $('#confirm-edit').click(() => {
     } else {
         confirmEditHTMLMod()
     }
-});
+}
 
 /**
  * Simply modifies the HTML when the User confirms an address edit to keep the page from being cluttered
@@ -258,19 +383,39 @@ function confirmEditHTMLMod() {
 /**
  * Toggles HTML components for the User to edit their address after using the map to find it
  * @returns {HTML} changes HTML
- * @function editMapAddress
  */
-$('#address-map-edit-control').click(() => {
+function editMapAddress() {
     showHTML([
         $('#address-input-choice'),
     ]);
     hideHTML([
         $('#address-map-edit-control')
     ]);
-});
+}
 
+/**
+ * Helper function to iterate over an array of HTML elements and show them all on the page
+ * @param {Array} iterable Array of HTML elements to be displayed
+ */
+function showHTML(iterable) {
+    for (const element of iterable) {
+        element.show(400);
+        element.prop('readonly', false);
+    }
+}
 
-// ================================ Google Maps ================================ \\
+/**
+ * Helper function to iterate over an array of HTML elements and hide them all on the page
+ * @param {Array} iterable Array of HTML elements to be hidden
+ */
+function hideHTML(iterable) {
+    for (const element of iterable) {
+        element.hide(400);
+        element.prop('readonly', true);
+    }
+}
+
+// ================ Google Maps ================ \\
 
 // noinspection JSUnusedGlobalSymbols
 /**
@@ -348,7 +493,108 @@ function initMap() {
     });
 }
 
-// ================================ Category Picker ================================ \\
+// ================ Category Picker ================ \\
+
+const categorySelector = $('#category-selector');
+const categorySelected = $('#category-selected');
+const categoryPicker = $('#category');
+const categoryDropdown = $('#category-dropdown');
+const categoryBodyInput = $('#category-body');
+
+/**
+ * Changes some HTML elements styling and attributes when the Category picker is deselected when the user clicks off it
+ * @function hideCategoryPicker
+ */
+$(document).mousedown((e) => {
+    if (!categorySelector.is(e.target) &amp;&amp; !categoryPicker.is(e.target) &amp;&amp;
+        !categoryDropdown.is(e.target) &amp;&amp; categorySelector.has(e.target).length === 0) {
+        categoryPicker.blur();
+        categorySelected.css('border-color', '#ced4da');
+        categoryPicker.css('border-color', '#ced4da');
+        hideCategoryDropdown();
+    }
+});
+
+categoryPicker.focus(() => {
+    categoryPicker.css('border-color', '#818181');
+    categorySelected.css('border-color', '#818181');
+    checkCategoryPicker();
+});
+
+categoryPicker.keyup(() => {
+    checkCategoryPicker();
+});
+
+/**
+ * Checks the Category picker's contents to determine if it should be shown or not
+ */
+function checkCategoryPicker() {
+    if (categoryPicker.val().length > 0) {
+        const matchedCategories = matchCategories(categoryPicker.val());
+
+        if (matchedCategories.length > 0) {
+            showCategoryDropdown(matchedCategories);
+        } else {
+            hideCategoryDropdown();
+        }
+    } else {
+        hideCategoryDropdown();
+    }
+
+    if (selectedCategories.length > 0) {
+        categorySelected.show();
+    } else {
+        hideCategorySelected();
+    }
+
+}
+
+/**
+ * Matches categories to a User search query
+ * @param {String} categorySearch The User's query
+ * @returns {Array} An array of Category names
+ */
+function matchCategories(categorySearch) {
+    let matchList = [];
+
+    for (const category of categories) {
+        if (category.name.toLowerCase().startsWith(categorySearch.toLowerCase())) {
+            matchList.push(category);
+        }
+    }
+
+    return matchList
+}
+
+/**
+ * Displays the Category dropdown to the User with the matched Categories as its contents
+ * @param {Array} matchedCategories An array of Category names
+ */
+function showCategoryDropdown(matchedCategories) {
+    categoryPicker.css('border-bottom-left-radius', '0');
+    categoryPicker.css('border-bottom-right-radius', '0');
+    categoryDropdown.show();
+
+    $('.category-matched').remove();
+    for (category of matchedCategories) {
+        // Need to have single quotes around the onclick function!
+
+        categoryDropdown.append(`
+            &lt;div class="category-matched" onclick='selectCategory(${JSON.stringify(category)});'>
+                &lt;p>${category.name}&lt;/p>
+            &lt;/div>
+        `);
+    }
+}
+
+/**
+ * Modifies the HTML to hide the Category dropdown and its contents
+ */
+function hideCategoryDropdown() {
+    categoryPicker.css('border-bottom-left-radius', '4px');
+    categoryPicker.css('border-bottom-right-radius', '4px');
+    categoryDropdown.hide();
+}
 
 /**
  * When a User clicks on a Category in the picker, it is selected and added to a list for submission
@@ -360,9 +606,9 @@ function selectCategory(category) {
 
     selectedCategories.push(category);
 
-    for (const [index, object] of allCategories.entries()) {
+    for (const [index, object] of categories.entries()) {
         if (object._id === category._id) {
-            allCategories.splice(index, 1);
+            categories.splice(index, 1);
             break
         }
     }
@@ -378,63 +624,89 @@ function selectCategory(category) {
         &lt;/div>
     `);
 
-    categoryPicker.focus();
+    checkCategoryPicker();
 }
 
-// ================================ Image Upload ================================ \\
+/**
+ * The User can remove a Category from the selection box if they decided against it or have selected it by mistake.
+ * This function removes it from a hidden input and updates the Category picker HTML
+ * @param {String} category The Category name to be removed
+ */
+function removeCategory(category) {
+    $(`#selected-${category._id}`).remove();
 
-const imageInput = $('#image-upload');
-const imageList = $('#uploaded-images');
-const imageClicker = $('#image-upload-link');
-const fileCountInput = $('#file-count');
 
-imageClicker.click(() => {
-    imageInput.click();
+    for (const [index, object] of selectedCategories.entries()) {
+        if (object._id === category._id) {
+            selectedCategories.splice(index, 1);
+            break
+        }
+    }
+
+    categories.push(category);
+    categoryBodyInput.val(JSON.stringify(selectedCategories));
+
+    checkCategoryPicker();
+}
+
+/**
+ * Hides the selected Category HTML and changes styling for consistency
+ */
+function hideCategorySelected() {
+    categorySelected.hide();
+    categoryPicker.css('border-top-left-radius', '4px');
+    categoryPicker.css('border-top-right-radius', '4px');
+}
+
+// ================ Price Range ================ \\
+
+const priceRangeBody = $('#price-range');
+const increaseButton = $('#price-range-increase');
+const decreaseButton = $('#price-range-decrease');
+
+increaseButton.click((e) => {
+    e.preventDefault();
+
+    if (priceRangeBody.val()) {
+        if (priceRangeBody.val() &lt; 4) {
+            priceRangeBody.val(parseInt(priceRangeBody.val()) + 1);
+        }
+    } else {
+        priceRangeBody.val(1);
+    }
+
+    colorPriceRangeInput();
+});
+
+decreaseButton.click((e) => {
+    e.preventDefault();
+
+    if (priceRangeBody.val()) {
+        if (priceRangeBody.val() > 1) {
+            priceRangeBody.val(parseInt(priceRangeBody.val()) - 1);
+        }
+    } else {
+        priceRangeBody.val(1);
+
+    }
+
+    colorPriceRangeInput();
 });
 
 /**
- * Updates the HTML to allow previews of the uploaded images
- * @function updateImagePreviews
+ * Applies colours to the Price Range input when the value is set/changed
  */
-imageInput.change(function () {
-    imageList.empty();
-
-    for (let i = 0; i &lt; this.files.length; i++) {
-        let newFile = {
-            name: this.files[i].name,
-            url: window.URL.createObjectURL(this.files[i])
-        };
-
-        imageList.append(`
-            &lt;div class='row'>
-                &lt;div class='col-10'>
-                    &lt;div class='vert-center-parent'>
-                        &lt;div class='vert-center-child'>
-                        &lt;p class='mb-0'>${newFile.name}&lt;/p>
-                        &lt;/div>
-                    &lt;/div>
-                &lt;/div>
-                &lt;div class='col-2'>
-                    &lt;div class='vert-center-parent'>
-                        &lt;div class='vert-center-child'>
-                            &lt;span class='oi oi-image d-inline'>&lt;img src='${newFile.url}'/>&lt;/span>
-                        &lt;/div>
-                    &lt;/div>
-                &lt;/div>
-            &lt;/div>
-        `);
+function colorPriceRangeInput() {
+    for (let i = 0; i &lt; 5; i++) {
+        if (i &lt; priceRangeBody.val()) {
+            $(`#price-range-selector-${i + 1}`).css('color', 'black');
+        } else {
+            $(`#price-range-selector-${i + 1}`).css('color', '#919191');
+        }
     }
+}
 
-    if (this.files.length === 0) {
-        fileCountInput.val('Click here to upload images');
-    } else if (this.files.length === 1) {
-        fileCountInput.val('1 File Added');
-    } else {
-        fileCountInput.val(`${this.files.length} Files Added`);
-    }
-});
-
-// ================================ Create Restaurant ================================ \\
+// ================ Create Restaurant ================ \\
 
 /**
  * Submits the Restaurant immediately after setting the verification and publish flag to False on button click
@@ -444,6 +716,7 @@ $('#save-restaurant').click(() => {
     $('#verified-flag').prop('checked', false);
     $('#publish-flag').prop('checked', false);
     $('#submit').click();
+
 });
 
 /**
@@ -456,8 +729,8 @@ $('#publish-restaurant').click(() => {
     $('#submit').click();
 });
 
-
-console.log('Loaded restaurant_new.js');</code></pre>
+console.log('Loaded restaurant_new.js');
+</code></pre>
         </article>
     </section>
 
@@ -467,13 +740,13 @@ console.log('Loaded restaurant_new.js');</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#colorPriceRangeInput">colorPriceRangeInput</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#displayNoResultsFound">displayNoResultsFound</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMainSlideshow">initMainSlideshow</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCategories">populateCategories</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#sendVerificationEmail">sendVerificationEmail</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 11:32:56 GMT+0100 (GMT Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Apr 15 2018 20:24:36 GMT+0100 (GMT Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

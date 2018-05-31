@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/javascripts/search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/javascripts/search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * search.js
+ * Client-side JS
+ * @author Rufus Cope, Will Garside
+ */
+
+let pageCount = 0;
+let queryMatches = [];
+let selectedCategories = [];
+let selectedFeatures = [];
+let displayFlags = [];
+let resultSortField = $('#sort-by');
+let resultSortOrder = $('#sort-order');
+let currentPage = 1;
+const searchResultsDiv = $('#search-results')[0];
+const paginationLinksDiv = $('#pagination-links')[0];
+const advancedSearchDiv = $('#advanced-search-collapsible');
+const searchResultsHeader = $('#search-results-header');
+const searchInput = $('#search-input');
+const searchButton = $("#search-button");
+const ratingSlider = $('#rating-slider');
+const ratingSliderValue = $('#rating-slider-value');
+const distanceSlider = $('#distance-slider');
+const distanceSliderValue = $('#distance-slider-value');
+const priceRangeSlider = $('#price-range-slider');
+const priceRangeSliderValue = $('#price-range-slider-value');
+const priceRanges = ['Inexpensive', 'Medium', 'Above Average', 'Premium'];
+const catNoneCheckbox = $('#cat-check-none');
+const catAllCheckbox = $('#cat-check-all');
+const featureNoneCheckbox = $('#feature-check-none');
+const featureAllCheckbox = $('#feature-check-all');
+
+const notFoundRestaurantHTML = `
+            &lt;div class='row'>
+                &lt;div class='col offset-1'>
+                    &lt;small>If you have not found the restaurant you are searching for, click &lt;a href='/restaurant/new'>here&lt;/a> to add it to the site.&lt;/small>
+                &lt;/div>
+            &lt;/div>
+        `;
+const noResultsHTML = `
+            &lt;div class='row'>
+                &lt;div class='col-10 offset-1'>
+                    &lt;h4> No results found, please search again&lt;/h4>
+                    &lt;p>If you would like to add a new restaurant to the site, click &lt;a href='/restaurant/new'>here&lt;/a>.&lt;/p>
+                &lt;/div>
+            &lt;/div>
+        `;
+
+searchButton.click((e) => {
+    e.preventDefault();
+    search(searchInput.val());
+});
+
+$(() => {
+    const query = sessionStorage.getItem('query');
+    if (query) {
+        search(query);
+        searchInput.val(query);
+        sessionStorage.removeItem('query');
+    }
+    const catID = sessionStorage.getItem('catID');
+    if (catID) {
+        $(`#${catID}`).click();
+        sessionStorage.removeItem('catID');
+    }
+});
+
+/**
+ * Sends an AJAX POST request to the server to get the User's search results
+ * @param {String} query The User's search query
+ * @see routes/search.js
+ */
+function search(query) {
+    const searchQueryData = JSON.stringify({searchQueryData: query});
+    $.ajax({
+        url: '/search',
+        data: searchQueryData,
+        contentType: 'application/json; charset=utf-8',
+        type: 'POST',
+        success: (restaurants) => {
+            queryMatches = restaurants;
+            displayFlags = Array(queryMatches.length).fill(true);
+            updateDisplayFlags();
+        },
+        error: (err) => {
+            console.log(`Error: ${JSON.stringify(err)}`);
+        }
+    });
+}
+
+ratingSlider.on('input', () => {
+    ratingSliderValue.text((ratingSlider.val() / 10).toString().padEnd(3, '.0'));
+    updateDisplayFlags();
+});
+
+distanceSlider.on('input', () => {
+    distanceSliderValue.text(`${distanceSlider.val()}km`);
+    updateDisplayFlags();
+});
+
+priceRangeSlider.on('input', () => {
+    priceRangeSliderValue.text(priceRanges[priceRangeSlider.val()]);
+    updateDisplayFlags();
+});
+
+/**
+ * Refine the displayed search results according to the user's selection of categories.
+ * Checks the the box isn't 'all' or 'none' and then add it to/remove it from the array.
+ * Same concept used for categories and features
+ * @function updateCategoryCheckboxes
+ * @see updateFeaturesCheckboxes
+ */
+advancedSearchDiv.find('#categories input[type=checkbox]').change(function () {
+    if ((this.id !== 'cat-check-all') &amp;&amp; (this.id !== 'cat-check-none')) {
+        if (this.checked) {
+            const categoryIndex = allCategories.map((cat) => {
+                return cat._id;
+            }).indexOf(this.id);
+            const objectFound = allCategories[categoryIndex];
+            selectedCategories.push(objectFound);
+        } else {
+            // loop through to find the element and splice it out of the array
+            for (let i = 0; i &lt; selectedCategories.length; i++) {
+                if (selectedCategories[i]._id === this.id) {
+                    selectedCategories.splice(i, 1);
+                }
+            }
+        }
+
+        // Update the 'all' and 'none' boxes
+        if (selectedCategories.length === 0) {
+            catNoneCheckbox.prop('checked', true);
+            catAllCheckbox.prop('checked', false);
+        } else if (selectedCategories.length === allCategories.length) {
+            catNoneCheckbox.prop('checked', false);
+            catAllCheckbox.prop('checked', true);
+        } else {
+            catNoneCheckbox.prop('checked', false);
+            catAllCheckbox.prop('checked', false);
+        }
+    } else if (this.id === 'cat-check-all') {
+        selectedCategories = [];
+        for (const category of allCategories) {
+            $(`#${category._id}`).prop('checked', true);
+            const categoryIndex = allCategories.map((cat) => {
+                return cat._id;
+            }).indexOf(category._id);
+            const objectFound = allCategories[categoryIndex];
+            selectedCategories.push(objectFound);
+        }
+        catNoneCheckbox.prop('checked', false);
+    } else if (this.id === 'cat-check-none') {
+        for (const category of allCategories) {
+            $(`#${category._id}`).prop('checked', false);
+        }
+        selectedCategories = [];
+        catAllCheckbox.prop('checked', false);
+    }
+    updateDisplayFlags();
+});
+
+/**
+ * Refine the displayed search results according to the user's selection of features.
+ * Checks the the box isn't 'all' or 'none' and then add it to/remove it from the array
+ * Same concept used for categories and features
+ * @function updateFeaturesCheckboxes
+ * @see updateCategoriesCheckboxes
+ */
+advancedSearchDiv.find('#features input[type=checkbox]').change(function () {
+    if ((this.id !== 'feature-check-all') &amp;&amp; (this.id !== 'feature-check-none')) {
+        if (this.checked) {
+            const featureIndex = features.map((feature) => {
+                return feature.id;
+            }).indexOf(this.id);
+            const objectFound = features[featureIndex];
+            selectedFeatures.push(objectFound);
+        } else {
+            for (let i = 0; i &lt; selectedFeatures.length; i++) {
+                if (selectedFeatures[i].id === this.id) {
+                    selectedFeatures.splice(i, 1);
+                }
+            }
+        }
+
+        if (selectedFeatures.length === 0) {
+            featureNoneCheckbox.prop('checked', true);
+            featureAllCheckbox.prop('checked', false);
+        } else if (selectedFeatures.length === features.length) {
+            featureNoneCheckbox.prop('checked', false);
+            featureAllCheckbox.prop('checked', true);
+        } else {
+            featureNoneCheckbox.prop('checked', false);
+            featureAllCheckbox.prop('checked', false);
+        }
+    } else if (this.id === 'feature-check-all') {
+        selectedFeatures = [];
+        for (const feature of features) {
+            $(`#${feature.id}`).prop('checked', true);
+            const featureIndex = features.map((feature) => {
+                return feature.id;
+            }).indexOf(feature.id);
+            const objectFound = features[featureIndex];
+            selectedFeatures.push(objectFound);
+        }
+        featureNoneCheckbox.prop('checked', false);
+    } else if (this.id === 'feature-check-none') {
+        for (const feature of features) {
+            $(`#${feature.id}`).prop('checked', false);
+        }
+        selectedFeatures = [];
+        featureAllCheckbox.prop('checked', false);
+    }
+    updateDisplayFlags();
+});
+
+resultSortField.change(() => {
+    sortResults();
+});
+
+resultSortOrder.change(() => {
+    sortResults();
+});
+
+/**
+ * When the user updates the sorting inputs, change the order of the result array.
+ * Uses nested switch statements to cross compare the values in both inputs
+ */
+function sortResults() {
+    switch (resultSortOrder.find("option:selected").attr('value')) {
+        case 'descending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    queryMatches.sort((a, b) => {
+                        if (a.name &lt; b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    queryMatches.sort((a, b) => {
+                        return b.averageRating - a.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    queryMatches.sort((a, b) => {
+                        return b.weight - a.weight;
+                    });
+                    break;
+            }
+            break;
+        case 'ascending':
+            switch (resultSortField.find("option:selected").attr('value')) {
+                case 'name':
+                    queryMatches.sort((a, b) => {
+                        if (a.name &lt; b.name) return 1;
+                        if (a.name > b.name) return -1;
+                        return 0;
+                    });
+                    break;
+                case 'rating':
+                    queryMatches.sort((a, b) => {
+                        return a.averageRating - b.averageRating;
+                    });
+                    break;
+                case 'relevance':
+                    queryMatches.sort((a, b) => {
+                        return a.weight - b.weight;
+                    });
+                    break;
+            }
+            break;
+    }
+    // Reset the pagination links
+    $('#page-link-1').find('a.page-link').click();
+    displaySearchResults();
+}
+
+// ================================ Results HTML Management ================================ \\
+
+/**
+ * Called when any user parameters are displayed, and updates the displayFlags array according to whether or not the
+ * corresponding restaurant matches the chosen params.
+ * Matches categories, features, rating, priceRange
+ */
+function updateDisplayFlags() {
+    // loop through all restaurant which match the initial search query
+    for (const [index, restaurant] of queryMatches.entries()) {
+        let categoryMatch = true;
+        if (!catNoneCheckbox.is(':checked')) {
+            // loop through the user-selected categories and the categories of the current restaurant
+            for (const category of selectedCategories) {
+                for (const restaurantCategory of restaurant.categories) {
+                    categoryMatch = (category._id === restaurantCategory._id);
+                    if (categoryMatch) {
+                        // selected category has been found in restaurant, so move on to next selected category
+                        break;
+                    }
+                }
+                if (!categoryMatch) {
+                    // selected category hasn't been found, so break the loop and the restaurant will be hidden
+                    break;
+                }
+            }
+        }
+
+        // Checks that categoryMatch is true so no wasted processing if we already know the final result will be false
+        let featureMatch = true;
+        if (!featureNoneCheckbox.is(':checked') &amp;&amp; categoryMatch) {
+            for (const feature of selectedFeatures) {
+                featureMatch = (restaurant.features[feature.id].value);
+                if (!featureMatch) {
+                    // break loop if any of the features don't match
+                    break;
+                }
+            }
+        }
+
+        displayFlags[index] = (
+            (restaurant.averageRating >= ratingSlider.val() / 10) &amp;&amp;
+            (restaurant.priceRange.band &lt;= priceRangeSlider.val()) &amp;&amp;
+            categoryMatch &amp;&amp;
+            featureMatch);
+    }
+    displaySearchResults();
+}
+
+/**
+ * Displays the list of search results on the page
+ */
+function displaySearchResults() {
+    searchResultsDiv.innerHTML = null;
+    let searchResultsHTML = '';
+    const pageLength = 10;
+    let displayCount = 0;
+    pageCount = 0;
+
+    if (queryMatches.length > 0) {
+        searchResultsHeader.css('display', 'block');
+        for (const [index, restaurant] of queryMatches.entries()) {
+            if (displayFlags[index]) {
+                if (displayCount % pageLength === 0) {
+                    if (pageCount === 0) {
+                        searchResultsHTML += `
+                       &lt;div class='search-results-page' id='search-results-page-${pageCount + 1}'>
+                   `;
+                    } else {
+                        // hide other pages
+                        searchResultsHTML += `
+                           &lt;div class='search-results-page' id='search-results-page-${pageCount + 1}' style='display: none;'>
+                       `;
+                    }
+                    pageCount++;
+                }
+
+                searchResultsHTML += getRestaurantDiv(restaurant, index);
+
+                if ((displayCount + 1) % pageLength === 0) {
+                    searchResultsHTML += '&lt;/div>';
+                }
+                displayCount++;
+            }
+
+            // If the page hasn't already been ended, end it here
+            if (((displayCount + 1) % pageLength !== 0) &amp;&amp; (index === queryMatches.length)) {
+                searchResultsHTML += '&lt;/div>';
+            }
+        }
+        searchResultsHTML += notFoundRestaurantHTML;
+
+        searchResultsHeader.find('h4').text(`Search Results - ${displayCount} found`);
+
+        createPaginationLinks();
+    } else {
+        searchResultsHeader.css('display', 'none');
+        searchResultsHTML = noResultsHTML;
+    }
+
+    let searchResultContent = document.createElement('div');
+    searchResultContent.innerHTML = searchResultsHTML;
+    searchResultsDiv.appendChild(searchResultContent);
+
+    // JS functionality must be added AFTER the content is added to the page
+    for (let i = 0; i &lt; queryMatches.length; i++) {
+        initSlideshow(i);
+    }
+    updateJQueryClickables();
+}
+
+function createPaginationLinks() {
+    paginationLinksDiv.innerHTML = null;
+    let paginationHTML = '';
+
+    if (pageCount > 1) {
+        paginationHTML = `
+            &lt;nav>
+                &lt;ul class='pagination justify-content-center'>
+                    &lt;li class='page-item disabled' id='page-link-prev'>&lt;a href='javascript:void(0)' class='page-link'>&lt;span class='oi oi-caret-left'>&lt;/span>&lt;/a>&lt;/li>
+        `;
+
+        for (let p = 1; p &lt; pageCount + 1; p++) {
+            paginationHTML += `&lt;li class='page-item' id='page-link-${p}'>&lt;a href='javascript:void(0)' class='page-link'>${p}&lt;/a>&lt;/li>`;
+        }
+
+        paginationHTML += `
+                    &lt;li class='page-item' id='page-link-next'>&lt;a href='javascript:void(0)' class='page-link'>&lt;span class='oi oi-caret-right'>&lt;/span>&lt;/a>&lt;/li>
+                &lt;/ul>
+            &lt;/nav>
+        `;
+    }
+
+    let paginationDivContent = document.createElement('div');
+    paginationDivContent.innerHTML = paginationHTML;
+    paginationLinksDiv.appendChild(paginationDivContent);
+
+    $(`#page-link-${currentPage}`).addClass('active');
+
+    $('.page-link').click(function () {
+        let page = $(this).parent().attr('id').split('-').pop();
+
+        let currentPageLink = $(`#page-link-${currentPage}`);
+        let newPageLink = $(`#page-link-${page}`);
+        let currentPageDiv = $(`#search-results-page-${currentPage}`);
+        let newPageDiv = $(`#search-results-page-${page}`);
+
+        switch (page) {
+            case 'prev':
+                currentPageLink.removeClass('active');
+                $(`#page-link-${currentPage - 1}`).addClass('active');
+                currentPageDiv.css('display', 'none');
+                $(`#search-results-page-${currentPage - 1}`).css('display', 'block');
+                currentPage -= 1;
+                break;
+            case 'next':
+                currentPageLink.removeClass('active');
+                $(`#page-link-${currentPage + 1}`).addClass('active');
+                currentPageDiv.css('display', 'none');
+                $(`#search-results-page-${currentPage + 1}`).css('display', 'block');
+                currentPage += 1;
+                break;
+            default:
+                currentPageLink.removeClass('active');
+                newPageLink.addClass('active');
+                currentPageDiv.css('display', 'none');
+                newPageDiv.css('display', 'block');
+                currentPage = parseInt(page);
+                break;
+        }
+
+        if (currentPage === 1) {
+            $('#page-link-prev').addClass('disabled');
+            $('#page-link-next').removeClass('disabled');
+        } else if (currentPage === pageCount) {
+            $('#page-link-prev').removeClass('disabled');
+            $('#page-link-next').addClass('disabled');
+        } else {
+            $('#page-link-prev').removeClass('disabled');
+            $('#page-link-next').removeClass('disabled');
+        }
+    });
+    console.log('Created pagination links');
+}
+
+
+/**
+ * Dynamically creates a Restaurant preview 'card' to add to the page from the Restaurant info
+ * It checks each of the relevant Restaurant attributes and uses them to fill out a HTML template
+ * @param {Restaurant} restaurant The Restaurant being previewed
+ * @param {Number} index The number the Restaurant is on the page, used for setting button IDs
+ * @returns {string} The generated HTML to be appended to the page
+ * @author Will Garside
+ */
+function getRestaurantDiv(restaurant, index) {
+    const htmlStart = `
+        &lt;div class='container restaurant-card' id='restaurant-container-${index}'>
+            &lt;div class='row'>
+                &lt;div class='col-12 col-lg-8'>
+                    &lt;div class='vert-center-parent'>
+                        &lt;div class='vert-center-child'>
+                            &lt;div class='row'>
+                               &lt;div class='col'>&lt;a href='restaurant/${restaurant.localUrl}' class='restaurant-title d-inline'>${restaurant.name}&lt;/a>
+    `;
+
+    let htmlStars = '';
+
+    if (restaurant.reviews.length > 0) {
+        const starRating = Math.round(restaurant.averageRating);
+
+        htmlStars = `
+            &lt;div class='restaurant-stars'>
+        `;
+
+        for (let i = 0; i &lt; starRating; i++) {
+            htmlStars += `&lt;span class='oi oi-star star-highlight'>&lt;/span>`;
+        }
+
+        for (let i = 0; i &lt; (5 - starRating); i++) {
+            htmlStars += `&lt;span class='oi oi-star'>&lt;/span>`;
+        }
+
+        htmlStars += `&lt;/div>`;
+    }
+
+    const htmlAddress = `
+          &lt;/div>
+      &lt;/div>
+      &lt;div class='row'>
+          &lt;div class='col'>
+              &lt;p class='restaurant-address'>${restaurant.address.formattedAddress}&lt;/p>
+          &lt;/div>
+      &lt;/div>
+    `;
+
+    let htmlCategories = `
+        &lt;div class='row'>
+            &lt;div class='col'>
+    `;
+
+    if (restaurant.categories.length > 0) {
+        let catCount = 0;
+        for (const category of restaurant.categories) {
+            htmlCategories += `&lt;p class='restaurant-category'>${category.name}&lt;/p>`;
+            catCount++;
+            if (catCount > 6) {
+                break;
+            }
+        }
+    }
+
+    htmlCategories += `     
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    let htmlDescription = '';
+
+    if (restaurant.description !== 'No description currently available.') {
+        htmlDescription = `
+            &lt;div class='row'>
+                &lt;div class='col'>
+                    &lt;p class='restaurant-description'>${restaurant.description}&lt;/p>
+                &lt;/div>
+            &lt;/div>
+        `;
+    }
+
+    let htmlSlideshow = `
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+            &lt;div class='col-12 col-lg-4'>
+                &lt;div class='row'>
+                    &lt;div class='col'>
+                        &lt;div class='restaurant-nearby-images'>
+                            &lt;div class='slideshow-wrapper'>
+        `;
+
+    let imageCount = 0;
+
+    if (restaurant.images.length > 0) {
+        htmlSlideshow += "&lt;div class='slideshow'>";
+        for (const image of restaurant.images) {
+            htmlSlideshow += `&lt;img src='images/restaurants/${restaurant._id}/${image}' class='slide-${index}'/>`;
+            imageCount += 1;
+            if (imageCount >= 3) {
+                // only show first 3 images
+                break;
+            }
+        }
+        htmlSlideshow += '&lt;/div>';
+    }
+
+    if (imageCount > 1) {
+        htmlSlideshow += `
+                &lt;div id='button-prev-${index}' class='slideshow-prev'>
+                    &lt;span class='oi oi-chevron-left'>&lt;/span>
+                &lt;/div>
+                &lt;div id='button-next-${index}' class='slideshow-next'>
+                    &lt;span class='oi oi-chevron-right'>&lt;/span>
+                &lt;/div>
+        `;
+    }
+    htmlSlideshow += '&lt;/div>';
+
+    const htmlEnd = '&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>&lt;/div>';
+    return htmlStart + htmlStars + htmlAddress + htmlCategories + htmlDescription + htmlSlideshow + htmlEnd;
+}
+
+/**
+ * Image slideshow navigation using buttons on page
+ * JQuery selectors have to be re-used due to the changing classes of the images
+ * @param {Number} value The index value of the slideshow, so multiple ones can be on the page simultaneously without controls
+ * getting mixed up
+ * @author Will Garside
+ */
+function initSlideshow(value) {
+    const btnNext = $(`#button-next-${value}`);
+    const btnPrev = $(`#button-prev-${value}`);
+
+    // noinspection JSJQueryEfficiency
+    $(`.slide-${value}`).first().addClass(`current-${value}`);
+    // noinspection JSJQueryEfficiency
+    $(`.slide-${value}`).hide();
+    $(`.current-${value}`).show();
+
+    btnNext.click(() => {
+        // noinspection JSJQueryEfficiency
+        $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
+        if ($(`.previous-${value}`).is(':last-child')) {
+            $(`.slide-${value}`).first().addClass(`current-${value}`);
+        } else {
+            $(`.previous-${value}`).next().addClass(`current-${value}`);
+        }
+        // noinspection JSJQueryEfficiency
+        $(`.previous-${value}`).removeClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
+        $(`.slide-${value}`).fadeOut();
+        // noinspection JSJQueryEfficiency
+        $(`.current-${value}`).fadeIn();
+    });
+
+    btnPrev.click(() => {
+        // noinspection JSJQueryEfficiency
+        $(`.current-${value}`).removeClass(`current-${value}`).addClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
+        if ($(`.previous-${value}`).is(':first-child')) {
+            $(`.slide-${value}`).last().addClass(`current-${value}`);
+        } else {
+            $(`.previous-${value}`).prev().addClass(`current-${value}`);
+        }
+        // noinspection JSJQueryEfficiency
+        $(`.previous-${value}`).removeClass(`previous-${value}`);
+        // noinspection JSJQueryEfficiency
+        $(`.slide-${value}`).fadeOut();
+        // noinspection JSJQueryEfficiency
+        $(`.current-${value}`).fadeIn();
+    });
+}
+
+console.log('Loaded search.js');</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 16:05:40 GMT+0100 (GMT Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
