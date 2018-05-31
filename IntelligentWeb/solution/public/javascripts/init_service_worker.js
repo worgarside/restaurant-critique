@@ -16,5 +16,8 @@ if ('serviceWorker' in navigator) {
                     console.log(err);
                 }
             );
+        // navigator.serviceWorker.ready.then(function(swRegistration) {
+        //     return swRegistration.sync.register('syncData');
+        // });
     });
 }
