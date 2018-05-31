@@ -17,8 +17,6 @@ block navbar
                         img(src="/images/site/logo-square-white.png")
                 li.nav-item(style='margin-left: 60px;')
                     a.nav-link.nav-wide(href='/restaurants-nearby') Restaurants near Me
-            li.nav-item
-                a.nav-link.nav-wide(href='https://www.sheffield.ac.uk/polopoly_fs/1.662638!/image/TonyCWeb.jpg') ANOTHER LINK
             if !indexPage && !searchPage
                 li
                     .vert-center-parent
@@ -68,12 +66,6 @@ block navbar
                 hr
                 li
                     a.nav-link(href='/restaurants-nearby') Restaurants near Me
-                hr
-                li
-                    a.nav-link(href='#') Write a Review
-                hr
-                li
-                    a.nav-link(href='/restaurant/new') Add a Restaurant
                 hr
                 if (!user)
                     li.nav-item

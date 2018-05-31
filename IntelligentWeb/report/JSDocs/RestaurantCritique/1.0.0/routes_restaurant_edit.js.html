@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/restaurant_edit.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/restaurant_edit.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Routing file for new Restaurants
+ * Manages the insertion of a new Restaurant to the database, as well as saving any images to the correct
+ * directory
+ * @author Will Garside, Rufus Cope
+ * @param req.body.restaurantName the name of the Restaurant added, used in setting the name of the image
+ */
+
+// ================ Middleware ================ \\
+
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const Restaurant = mongoose.model('Restaurant');
+const User = mongoose.model('User');
+const fs = require('fs');
+const dateFormat = require('dateformat');
+const title = 'Restaurant Critique';
+const googleMapsClient = require('@google/maps').createClient({
+    key: 'AIzaSyDlmGXTAyXPQy1GX02s8UDm1OLBNz6zia0',
+    Promise: Promise
+});
+
+const multer = require('multer');
+router.use(bodyParser.urlencoded({extended: true}));
+
+/**
+ * Use multer middleware to save the Restaurant's images to the correct directory
+ * Also sets the images' filenames
+ */
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, './public/images/temp_images');
+    },
+    filename: (req, file, callback) => {
+        const re = /(?:\.([^.]+))?$/;
+        const extension = `.${re.exec(file.originalname)[1]}`;
+        const filename = crypto.randomBytes(20).toString('hex');
+        callback(null, filename + extension);
+    }
+});
+
+const upload = multer({storage: storage});
+
+// ================ POST Method ================ \\
+
+
+/**
+ * Configures and adds a new Restaurant object to the database when a form is submitted
+ * Also adds the Restaurant ID to the creator's restaurants attribute
+ *
+ * @param {{monOpen:int, tueOpen:int, wedOpen:int, thuOpen:int, friOpen:int, satOpen:int, sunOpen:int, monClose:int,
+  * tueClose:int, wedClose:int, thuClose:int, friClose:int, satClose:int, sunClose:int, restaurantName: string,
+  * priceRange: string, address1:String, address2:String, priceLower:int, priceUpper:int, priceBand:int
+  * }} body The values from the input form used in setting the attributes of the Restaurant
+ * @function addNewRestaurant
+ */
+router.post('/submit_edit', upload.array('images', 10), (req, res) => {
+    const body = req.body;
+
+    let published = false;
+
+    if (body.verified) {
+        published = !!body.published;
+    }
+
+    const openingTimes = [
+        [body.monOpen, body.monClose],
+        [body.tueOpen, body.tueClose],
+        [body.wedOpen, body.wedClose],
+        [body.thuOpen, body.thuClose],
+        [body.friOpen, body.friClose],
+        [body.satOpen, body.satClose],
+        [body.sunOpen, body.sunClose]
+    ];
+
+    let categoryList = [];
+
+    if (body.categories) {
+        for (const category of JSON.parse(body.categories)) {
+            categoryList.push(category);
+        }
+    }
+
+    const tempRestaurant = new Restaurant;
+
+    let features = tempRestaurant.features;
+    for (let key of Object.keys(tempRestaurant.features)) {
+        if (parseInt(body[key]) !== 1) {
+            features[key].value = parseInt(body[key]) === 2;
+        }
+    }
+
+    const newImageArray = processImages(req.files, req.body.restaurantId);
+    const totalImageArray = JSON.parse(body.restaurantImages);
+    totalImageArray.push(...newImageArray);
+
+    let latitude = 0;
+    let longitude = 0;
+
+    googleMapsClient.geocode({'address': `${body.postcode}, UK`})
+        .asPromise()
+        .then((response) => {
+            latitude = response.json.results[0].geometry.location.lat;
+            longitude = response.json.results[0].geometry.location.lng;
+            console.log(`Lat: ${latitude} &amp; Lng: ${longitude}`);
+
+            Restaurant.findByIdAndUpdate(req.body.restaurantId, {
+                name: body.restaurantName,
+                address: {
+                    line1: body.address1,
+                    line2: body.address2,
+                    city: body.city,
+                    postcode: body.postcode,
+                    latitude: latitude,
+                    longitude: longitude,
+                },
+                contact: {
+                    url: body.url,
+                    menu: body.menu,
+                    phone: body.phone
+                },
+                openingTimes: openingTimes,
+                description: body.description,
+                priceRange: {lower: body.priceLower, upper: body.priceUpper, band: body.priceBand},
+                features: features,
+                images: totalImageArray,
+                categories: categoryList,
+                searchable: {},
+                published: published
+            }, {new: true})
+                .exec()
+                .then((restaurant) => {
+                    if (published) {
+                        res.redirect(`/restaurant/${restaurant.localUrl}`);
+                    } else {
+                        res.redirect(`/user/${req.user.reducedID}`);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                    res.render('errors/500', {title: title, user: req.user});
+                });
+
+
+        })
+        .catch((err) => {
+            console.log(`Geocode error: ${err}`);
+        });
+
+
+});
+
+/**
+ * Sets image file names and saves them to the correct directory when a restaurant is added to the site
+ * @param images - array of images to be processed
+ * @param restaurantId - ID of restaurant being edited
+ * @returns {Array} - array of new image file names to be added to relevant field in restaurant object
+ */
+function processImages(images, restaurantId) {
+    const imageDir = `./public/images/restaurants/${restaurantId}`;
+    if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir);
+    }
+
+    const re = /(?:\.([^.]+))?$/;
+    const now = dateFormat(new Date(), "yyyy-mm-dd HH-MM-ss");
+    let imageCount = 0;
+    let imageArray = [];
+
+    images.forEach((image) => {
+        const extension = `.${re.exec(image.path)[1]}`;
+        const filename = `${now}_${imageCount}${extension}`;
+        const destination = `${imageDir}/${filename}`;
+        fs.rename(image.path, destination);
+        imageCount++;
+        imageArray.push(filename);
+    });
+
+    return imageArray;
+}
+
+module.exports = router;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 11:32:55 GMT+0100 (GMT Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

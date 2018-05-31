@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/search.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/search.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Adds search functionality to site by aggregating Restaurant objects
+ * @author Will Garside, Rufus Cope
+ */
+
+// ================ Middleware ================ \\
+
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const Restaurant = mongoose.model('Restaurant');
+router.use(bodyParser.urlencoded({extended: true}));
+
+// ================ POST Method ================ \\
+
+/**
+ * Uses regex to search the Restaurants' 'searchable' attribute objects
+ * Once matches have been found, the usable fields are projected to the client
+ * Also adds a weight attribute for useful ordering
+ * @param {object} req Client request object with body of info
+ * @param {object} res Client response object to be sent with array of restaurants
+ * @function submitSearchQuery
+ */
+router.post('/', (req, res) => {
+    const searchQueryData = req.body.searchQueryData.replace(/[^\w\\S ]/, ''); // remove special chars
+    const regexQuery = `^(?=.*${searchQueryData.replace(new RegExp(' ', 'g'), ')(?=.*')}).*$`; // split for regex AND
+    const re = new RegExp(regexQuery, 'i'); // turn to regex, case insensitive
+    console.log(`Searching with ${re}`);
+
+    Restaurant.aggregate(
+        [
+            {
+                "$match": {'published': true, 'searchable.all': {$regex: re}},
+            },
+            {
+                "$project": {
+                    'name': 1,
+                    'address': {'formattedAddress': 1},
+                    'location.coordinates': 1,
+                    'description': 1,
+                    'priceRange.band': 1,
+                    'categories._id': 1,
+                    'categories.name': 1,
+                    'features': 1,
+                    'reviews': 1,
+                    'images': 1,
+                    'averageRating': 1,
+                    'localUrl': 1,
+                    'searchable': 1,
+                    'weight': 1
+                }
+            }
+        ], (err, restaurants) => {
+            if (err) {
+                console.log(`Error: ${err}`);
+            }
+            res.send(applyWeightings(restaurants, searchQueryData));
+        }
+    )
+        .then(() => {
+            console.log('Return successful');
+        })
+        .catch((err) => {
+            console.log(`Restaurant aggregation failed: ${err}`);
+        });
+});
+
+/**
+ * Applies a weighting to each Restaurant by evaluating the similarity between the search query and the Restaurant data
+ * Weight is added as such: Query word in the name +8; word in the description +4; Matched category +2; In Address +1
+ * @param {Array} restaurants Returned list of search-matched restaurants
+ * @param {String} query The User's search query
+ */
+function applyWeightings(restaurants, query) {
+    for (let restaurant of restaurants) {
+        let weight = 0;
+        for (let word of query.split(' ')) {
+            // The split function returns empty strings if there are leading/trailing spaces
+            if (word === '') continue;
+
+            if (restaurant.searchable.name.toLowerCase().includes(word.toLowerCase())) weight += 8;
+
+            if (restaurant.searchable.description.toLowerCase().includes(word.toLowerCase())) weight += 4;
+
+            // Evaluate each Category in turn
+            for (const category of restaurant.categories) {
+                if (category.name.toLowerCase().includes(word.toLowerCase())) weight += 2;
+            }
+
+            if (restaurant.searchable.formattedAddress.toLowerCase().includes(word.toLowerCase())) weight += 1;
+        }
+
+        restaurant.weight = weight;
+    }
+    return restaurants.sort(compareRestaurants);
+}
+
+/**
+ * Comparison method for the restaurants, called by the sort method
+ * @param a {Restaurant} The first Restaurant to be compared
+ * @param b {Restaurant} The second Restaurant to be compared
+ * @returns {number} An integer indicative of the comparison, allows correct sorting
+ */
+function compareRestaurants(a, b) {
+    const weightA = a.weight;
+    const weightB = b.weight;
+
+    if (weightA &lt; weightB) {
+        return 1;
+    } else if (weightA > weightB) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+
+module.exports = router;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addNewRestaurant">addNewRestaurant</a></li><li><a href="global.html#addTimes">addTimes</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#allCategories">allCategories</a></li><li><a href="global.html#allowLocation">allowLocation</a></li><li><a href="global.html#applyWeightings">applyWeightings</a></li><li><a href="global.html#autoCapitalise">autoCapitalise</a></li><li><a href="global.html#autoTitleCase">autoTitleCase</a></li><li><a href="global.html#checkCategoryPicker">checkCategoryPicker</a></li><li><a href="global.html#checkNavPos">checkNavPos</a></li><li><a href="global.html#clearMarkers">clearMarkers</a></li><li><a href="global.html#compareRestaurants">compareRestaurants</a></li><li><a href="global.html#confirmEdit">confirmEdit</a></li><li><a href="global.html#confirmEditHTMLMod">confirmEditHTMLMod</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createMap">createMap</a></li><li><a href="global.html#createRestaurantPreview">createRestaurantPreview</a></li><li><a href="global.html#deleteImages">deleteImages</a></li><li><a href="global.html#displaySearchResults">displaySearchResults</a></li><li><a href="global.html#editAddress">editAddress</a></li><li><a href="global.html#editFoundAddress">editFoundAddress</a></li><li><a href="global.html#editMapAddress">editMapAddress</a></li><li><a href="global.html#emailCreator">emailCreator</a></li><li><a href="global.html#exitIfDBConnectionFailed">exitIfDBConnectionFailed</a></li><li><a href="global.html#findAddress">findAddress</a></li><li><a href="global.html#generateHash">generateHash</a></li><li><a href="global.html#getAllCategories">getAllCategories</a></li><li><a href="global.html#getNearbyRestaurants">getNearbyRestaurants</a></li><li><a href="global.html#getRestaurantDiv">getRestaurantDiv</a></li><li><a href="global.html#hideCategoryDropdown">hideCategoryDropdown</a></li><li><a href="global.html#hideCategoryPicker">hideCategoryPicker</a></li><li><a href="global.html#hideCategorySelected">hideCategorySelected</a></li><li><a href="global.html#hideHTML">hideHTML</a></li><li><a href="global.html#initialiseDatabase">initialiseDatabase</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initSlideshow">initSlideshow</a></li><li><a href="global.html#lat">lat</a></li><li><a href="global.html#loadEditRestaurantPage">loadEditRestaurantPage</a></li><li><a href="global.html#loadNewRestaurantPage">loadNewRestaurantPage</a></li><li><a href="global.html#loadRestaurantPage">loadRestaurantPage</a></li><li><a href="global.html#lookupAddressToggle">lookupAddressToggle</a></li><li><a href="global.html#lookupMapToggle">lookupMapToggle</a></li><li><a href="global.html#manageGeolocation">manageGeolocation</a></li><li><a href="global.html#matchCategories">matchCategories</a></li><li><a href="global.html#pageCount">pageCount</a></li><li><a href="global.html#passportLogin">passportLogin</a></li><li><a href="global.html#passportSignUp">passportSignUp</a></li><li><a href="global.html#populateCollections">populateCollections</a></li><li><a href="global.html#populateFunction">populateFunction</a></li><li><a href="global.html#populateRestaurants">populateRestaurants</a></li><li><a href="global.html#populateReviews">populateReviews</a></li><li><a href="global.html#populateUsers">populateUsers</a></li><li><a href="global.html#postContactForm">postContactForm</a></li><li><a href="global.html#previewImage">previewImage</a></li><li><a href="global.html#processImages">processImages</a></li><li><a href="global.html#processRestaurants">processRestaurants</a></li><li><a href="global.html#publishRestaurant">publishRestaurant</a></li><li><a href="global.html#redirectAfterVerified">redirectAfterVerified</a></li><li><a href="global.html#refreshTopRestaurants">refreshTopRestaurants</a></li><li><a href="global.html#removeCategory">removeCategory</a></li><li><a href="global.html#removeSelectedDay">removeSelectedDay</a></li><li><a href="global.html#saveRestaurant">saveRestaurant</a></li><li><a href="global.html#scrollToRestaurant">scrollToRestaurant</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#selectCategory">selectCategory</a></li><li><a href="global.html#sendConfirmationEmail">sendConfirmationEmail</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#sendSupportRequest">sendSupportRequest</a></li><li><a href="global.html#setLoginFormPosition">setLoginFormPosition</a></li><li><a href="global.html#showCategoryDropdown">showCategoryDropdown</a></li><li><a href="global.html#showHTML">showHTML</a></li><li><a href="global.html#sortResults">sortResults</a></li><li><a href="global.html#storage">storage</a></li><li><a href="global.html#submitReview">submitReview</a></li><li><a href="global.html#submitSearchQuery">submitSearchQuery</a></li><li><a href="global.html#updateCategoryCheckboxes">updateCategoryCheckboxes</a></li><li><a href="global.html#updateDetails">updateDetails</a></li><li><a href="global.html#updateDisplayFlags">updateDisplayFlags</a></li><li><a href="global.html#updateFeaturesCheckboxes">updateFeaturesCheckboxes</a></li><li><a href="global.html#updateImagePreviews">updateImagePreviews</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateNearbyDistance">updateNearbyDistance</a></li><li><a href="global.html#userLogin">userLogin</a></li><li><a href="global.html#validateSignUpForm">validateSignUpForm</a></li><li><a href="global.html#validPassword">validPassword</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyUser">verifyUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 31 2018 11:32:56 GMT+0100 (GMT Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
