@@ -69,6 +69,9 @@ function getAllCategories() {
 
 // ================================ GET Statements ================================ \\
 
+
+
+
 router.get('/', (req, res) => {
     // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 min60000
     if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 60000)) {
@@ -89,13 +92,45 @@ router.get('/', (req, res) => {
             });
     }
 
-    function renderPage(){
+    function renderPage() {
         res.render('index', {
             title: title,
             user: req.user,
             indexPage: true,
             restaurants: topRestaurants,
             allCategories: allCategories
+        });
+    }
+});
+
+router.get('/no-login', (req, res) => {
+    // If the list hasn't been initialised or it's over a week old, refresh it  w604800000 d86400000 min60000
+    if ((!restaurantRefresh) || (new Date() - restaurantRefresh > 60000)) {
+        Promise.all([refreshTopRestaurants(), getAllCategories()])
+            .then(() => {
+                renderPage();
+            })
+            .catch((err) => {
+                console.log(`CATCH ${err}`);
+            });
+    } else {
+        getAllCategories()
+            .then(() => {
+                renderPage();
+            })
+            .catch((err) => {
+                console.log(`CATCH ${err}`);
+            });
+    }
+
+    function renderPage() {
+        res.render('index', {
+            title: title,
+            user: req.user,
+            indexPage: true,
+            restaurants: topRestaurants,
+            allCategories: allCategories,
+            denied: true
         });
     }
 });
@@ -367,7 +402,7 @@ router.post('/login', (req, res, next) => {
             next();
         }
         if (!user) {
-            return res.redirect('/');
+            return res.redirect('/no-login');
         }
         req.logIn(user, (err) => {
             if (err) {
@@ -394,7 +429,11 @@ router.post('/verify_email', (req, res) => {
     }
 });
 
-refreshTopRestaurants();
-getAllCategories();
+refreshTopRestaurants().catch((err) => {
+    console.log(err);
+});
+getAllCategories().catch((err) => {
+    console.log(err);
+});
 
 module.exports = router;

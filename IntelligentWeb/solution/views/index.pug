@@ -117,5 +117,7 @@ block content
                             p.d-block.restaurant-category= allCategories[c].name
                             - c++
 
-
+    // Super basic login rejection
+    if (denied && !user)
+        script alert('Login details incorrect');
     script(type='text/javascript', src='/javascripts/index.js')

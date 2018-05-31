@@ -131,7 +131,7 @@ function createMap() {
         map = new google.maps.Map($('#nearby-map')[0], {
             zoom: 14,
             center: currentLocation,
-            draggable: false,
+            draggable: true,
             styles: styles,
             zoomControl: true,
             mapTypeControl: false,
@@ -146,6 +146,10 @@ function createMap() {
         });
 
         google.maps.event.addListener(userMarker, 'click', () => {
+            $('#btn-login').click();
+        });
+
+        google.maps.event.addListener(userMarker, 'dragstart', () => {
             $('#btn-login').click();
         });
     }

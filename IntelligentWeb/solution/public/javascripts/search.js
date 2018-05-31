@@ -330,7 +330,7 @@ function updateDisplayFlags() {
 function displaySearchResults() {
     searchResultsDiv.innerHTML = null;
     let searchResultsHTML = '';
-    const pageLength = 4;
+    const pageLength = 10;
     let displayCount = 0;
     pageCount = 0;
 
