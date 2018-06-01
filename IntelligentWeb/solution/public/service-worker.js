@@ -177,66 +177,18 @@ self.addEventListener('sync', (event) => {
                         if (event.target.result.length > 0) {
                             results.forEach(function (review) {
                                 console.log(review);
-
-                                const url = '/restaurant/submit_review';
-
-
-                                /*
-                                $.ajax({
-                                    url: url,
-                                    type: 'POST',
-                                    method: 'POST',
-                                    dataType: 'json',
-                                    data: review,
-                                    success: (result) => {
-                                        console.log(JSON.stringify(result));
-                                        if (result.success) {
-                                            store.delete(POSTrequest.restaurantId);
-                                            resolve();
-                                        }
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                        reject();
-                                    }
-                                });
-                                */
-                                /*
-                                const xhr = new XMLHttpRequest();
-                                xhr.open('POST', '/restaurant/submit_review');
-                                xhr.setRequestHeader('Content-Type', 'application/json');
-                                xhr.onload = function () {
-                                    if (xhr.status === 200) {
-                                        // Maybe success here? or successful connection?
-                                    }
-                                };
-
-                                xhr.addEventListener('success', (result) => {
-                                    console.log(JSON.stringify(result));
-                                    if (result.success) {
-                                        store.delete(POSTrequest.restaurantId);
-                                        resolve();
-                                    }
-                                });
-
-                                xhr.addEventListener('error', (err) => {
-                                    console.log(err);
-                                    reject();
-                                });
-
-                                xhr.send(review);
-                                */
-
-                                fetch(url, {
-                                    method: 'POST',
-                                    body: JSON.stringify(review),
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    }
-                                })
-                                    .then(res => res.json())
-                                    .catch(error => console.error('Error:', error))
-                                    .then(response => console.log('Success:', response));
+                                // const url = '/restaurant/submit_review';
+                                //
+                                // fetch(url, {
+                                //     method: 'POST',
+                                //     body: JSON.stringify(review),
+                                //     headers: {
+                                //         'Content-Type': 'application/json'
+                                //     }
+                                // })
+                                //     .then(res => res.json())
+                                //     .catch(error => console.error('Error:', error))
+                                //     .then(response => console.log('Success:', response));
 
                             })
 
