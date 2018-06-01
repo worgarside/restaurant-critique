@@ -289,14 +289,32 @@ $('form#review-form').submit((e) => {
         dataType: 'json',
         data: data,
         success: (result) => {
+            console.log(JSON.stringify(result));
             if (result.success) {
                 $('.row#review-submission-div').hide();
             }
         },
         error: (err) => {
-            alert('Review submission failed. Please try again later.');
-            console.log(`Review error: ${err}`);
-            $('#submitting-div').hide();
+            alert('You are currently offline, so the review has been cached for submission later.');
+
+            let open = indexedDB.open("cachePOSTs");
+            console.log("opening DB");
+            open.onsuccess = function() {
+                let db = open.result;
+                let tx = db.transaction("reviews", "readwrite");
+                let store = tx.objectStore("reviews");
+                console.log("adding review to store");
+                let requesting = store.add(data);
+                requesting.onerror = function(e) {
+                    console.log('Error', e.target.error.name);
+                };
+
+                // Close the db when the transaction is done
+                tx.oncomplete = function() {
+                    db.close();
+                };
+            }
+            $('.row#review-submission-div').hide();
         }
     });
 });
