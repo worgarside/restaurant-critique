@@ -160,7 +160,7 @@ self.addEventListener('sync', (event) => {
     console.log('potential sync');
     if (event.tag === 'syncData') {
         event.waitUntil(
-        // Might want to declare it as a variable (e.g. const ajaxPromise = new Promise...)
+            // Might want to declare it as a variable (e.g. const ajaxPromise = new Promise...)
             new Promise((resolve, reject) => {
                 let open = indexedDB.open('cachePOSTs');
                 console.log('opening DB');
@@ -172,11 +172,13 @@ self.addEventListener('sync', (event) => {
                     console.log('Getting reviews from IndexedDB');
                     let requesting = store.getAll();
 
-                    requesting.onsuccess = function(event) {
+                    requesting.onsuccess = function (event) {
                         let results = event.target.result;
                         if (event.target.result.length > 0) {
                             results.forEach(function (review) {
                                 console.log(review);
+
+                                /*
                                 $.ajax({
                                     url: '/restaurant/submit_review',
                                     type: 'POST',
@@ -194,18 +196,44 @@ self.addEventListener('sync', (event) => {
                                         console.log(err);
                                         reject();
                                     }
-                                })
+                                });
+                                */
+
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', '/restaurant/submit_review');
+                                xhr.setRequestHeader('Content-Type', 'application/json');
+                                xhr.onload = function () {
+                                    if (xhr.status === 200) {
+                                        // Maybe success here? or successful connection?
+                                    }
+                                };
+
+                                xhr.addEventListener('success', (result) => {
+                                    console.log(JSON.stringify(result));
+                                    if (result.success) {
+                                        store.delete(POSTrequest.restaurantId);
+                                        resolve();
+                                    }
+                                });
+
+                                xhr.addEventListener('error', (err) => {
+                                    console.log(err);
+                                    reject();
+                                });
+
+                                xhr.send(review);
+
                             })
 
                         }
-                    }
+                    };
                     // Close the db when the transaction is done
                     tx.oncomplete = function () {
                         db.close();
                     };
                 }
             })
-    )
+        )
 
     }
 });
