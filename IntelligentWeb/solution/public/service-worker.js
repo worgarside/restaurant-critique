@@ -103,8 +103,8 @@ self.addEventListener('activate', (e) => {
  */
 
 self.addEventListener('fetch', (e) => {
-    let searchURL = "/search"
-    let contactURL = "/contact"
+    let searchURL = "/search";
+    let contactURL = "/contact";
 
     if (e.request.url.indexOf(searchURL) > -1 || e.request.url.indexOf(contactURL) > -1) {
         e.respondWith(
@@ -156,46 +156,51 @@ self.addEventListener('sync', (event) => {
     console.log('potential sync');
     if (event.tag === 'syncData') {
         event.waitUntil(
-
         // Might want to declare it as a variable (e.g. const ajaxPromise = new Promise...)
-        new Promise((resolve, reject) => {
-            let open = indexedDB.open('cachePOSTs');
-            console.log('opening DB');
+            new Promise((resolve, reject) => {
+                let open = indexedDB.open('cachePOSTs');
+                console.log('opening DB');
 
-            open.onsuccess = function () {
-                let db = open.result;
-                let tx = db.transaction('reviews', 'readwrite');
-                let store = tx.objectStore('reviews');
-                console.log('Getting reviews from IndexedDB');
-                let requesting = store.getAll();
+                open.onsuccess = function () {
+                    let db = open.result;
+                    let tx = db.transaction('reviews', 'readwrite');
+                    let store = tx.objectStore('reviews');
+                    console.log('Getting reviews from IndexedDB');
+                    let requesting = store.getAll();
 
-                requesting.forEach((POSTrequest) => {
-                    $.ajax({
-                        url: '/restaurant/submit_review',
-                        type: 'POST',
-                        method: 'POST',
-                        dataType: 'json',
-                        data: POSTrequest,
-                        success: (result) => {
-                            console.log(JSON.stringify(result));
-                            if (result.success) {
-                                store.delete(POSTrequest.restaurantId);
-                                resolve();
-                            }
-                        },
-                        error: (err) => {
-                            console.log(err);
-                            reject();
+                    requesting.onsuccess = function(event) {
+                        let results = event.target.result;
+                        if (event.target.result.length > 0) {
+                            results.forEach(function (review) {
+                                console.log(review);
+                                $.ajax({
+                                    url: '/restaurant/submit_review',
+                                    type: 'POST',
+                                    method: 'POST',
+                                    dataType: 'json',
+                                    data: review,
+                                    success: (result) => {
+                                        console.log(JSON.stringify(result));
+                                        if (result.success) {
+                                            store.delete(POSTrequest.restaurantId);
+                                            resolve();
+                                        }
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                        reject();
+                                    }
+                                })
+                            })
+
                         }
-                    })
-                });
-
-                // Close the db when the transaction is done
-                tx.oncomplete = function () {
-                    db.close();
-                };
-            }
-        })
+                    }
+                    // Close the db when the transaction is done
+                    tx.oncomplete = function () {
+                        db.close();
+                    };
+                }
+            })
     )
 
     }
