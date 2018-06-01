@@ -178,9 +178,12 @@ self.addEventListener('sync', (event) => {
                             results.forEach(function (review) {
                                 console.log(review);
 
+                                const url = '/restaurant/submit_review';
+
+
                                 /*
                                 $.ajax({
-                                    url: '/restaurant/submit_review',
+                                    url: url,
                                     type: 'POST',
                                     method: 'POST',
                                     dataType: 'json',
@@ -198,7 +201,7 @@ self.addEventListener('sync', (event) => {
                                     }
                                 });
                                 */
-
+                                /*
                                 const xhr = new XMLHttpRequest();
                                 xhr.open('POST', '/restaurant/submit_review');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
@@ -222,6 +225,18 @@ self.addEventListener('sync', (event) => {
                                 });
 
                                 xhr.send(review);
+                                */
+
+                                fetch(url, {
+                                    method: 'POST',
+                                    body: JSON.stringify(review),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                })
+                                    .then(res => res.json())
+                                    .catch(error => console.error('Error:', error))
+                                    .then(response => console.log('Success:', response));
 
                             })
 
