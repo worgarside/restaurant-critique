@@ -57,7 +57,7 @@ self.addEventListener('install', (e) => {
                 console.log('[ServiceWorker] Caching app shell');
                 try {
                     cache.addAll(filesToCache);
-                } catch (e){
+                } catch (e) {
                     console.log(JSON.stringify(e))
                 }
             })
@@ -152,44 +152,51 @@ self.addEventListener('fetch', (e) => {
 });
 
 
-self.addEventListener('sync', function(event) {
-    console.log("potential sync");
-    // if (event.tag === 'syncData') {
-    //     event.waitUntil(
-    //
-    //         // let open = indexedDB.open("cachePOSTs");
-    //         // console.log("opening DB");
-    //         // open.onsuccess = function() {
-    //         //     let db = open.result;
-    //         //     let tx = db.transaction("reviews", "readwrite");
-    //         //     let store = tx.objectStore("reviews");
-    //         //     console.log("Getting reviews from IndexedDB");
-    //         //     let requesting = store.getAll();
-    //         //
-    //         //     requesting.forEach(function(POSTrequest) {
-    //         //         ajax({
-    //         //             url: '/restaurant/submit_review',
-    //         //             type: 'POST',
-    //         //             method: 'POST',
-    //         //             dataType: 'json',
-    //         //             data: POSTrequest,
-    //         //             success: (result) => {
-    //         //                 console.log(JSON.stringify(result));
-    //         //                 if (result.success) {
-    //         //                     store.delete(POSTrequest.restaurantId);
-    //         //                 }
-    //         //             },
-    //         //             error: (err) => {
-    //         //                 console.log(err);
-    //         //             }
-    //         //         })
-    //         //     })
-    //         //     // Close the db when the transaction is done
-    //         //     tx.oncomplete = function() {
-    //         //         db.close();
-    //         //     };
-    //         // }
-    //     )
-    //
-    // }
+self.addEventListener('sync', (event) => {
+    console.log('potential sync');
+    if (event.tag === 'syncData') {
+        event.waitUntil(
+
+        // Might want to declare it as a variable (e.g. const ajaxPromise = new Promise...)
+        new Promise((resolve, reject) => {
+            let open = indexedDB.open('cachePOSTs');
+            console.log('opening DB');
+
+            open.onsuccess = function () {
+                let db = open.result;
+                let tx = db.transaction('reviews', 'readwrite');
+                let store = tx.objectStore('reviews');
+                console.log('Getting reviews from IndexedDB');
+                let requesting = store.getAll();
+
+                requesting.forEach((POSTrequest) => {
+                    $.ajax({
+                        url: '/restaurant/submit_review',
+                        type: 'POST',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: POSTrequest,
+                        success: (result) => {
+                            console.log(JSON.stringify(result));
+                            if (result.success) {
+                                store.delete(POSTrequest.restaurantId);
+                                resolve();
+                            }
+                        },
+                        error: (err) => {
+                            console.log(err);
+                            reject();
+                        }
+                    })
+                });
+
+                // Close the db when the transaction is done
+                tx.oncomplete = function () {
+                    db.close();
+                };
+            }
+        })
+    )
+
+    }
 });
