@@ -1,25 +1,27 @@
 /**
+ * init_service_worker.js
  * called by the HTML onload
  * Declaring the service worker
+ * @author Rufus Cope
  */
 
 if ('serviceWorker' in navigator && navigator.onLine) {
     if (!('indexedDB' in window)) {
-        console.log('This browser doesn\'t support IndexedDB');
+        console.log("This browser doesn't support IndexedDB");
     } else {
-        let open = indexedDB.open("cachePOSTs", 1);
+        let open = indexedDB.open('cachePOSTs', 1);
         open.onupgradeneeded = function () {
             let db = open.result;
-            let store = db.createObjectStore("reviews", {keyPath: "restaurantId"});
+            const store = db.createObjectStore("reviews", {keyPath: "restaurantId"});
             console.log("IndexedDB created");
         };
     }
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         navigator.serviceWorker
             .register(`${window.location.origin}/service-worker.js`)
-            .then(function () {
-                console.log('Service Worker Registered');
+            .then(() => {
+                console.log('[Service Worker] Registered');
             })
             .catch((err) => {
                     console.log(`${window.location.origin}`);
@@ -27,11 +29,9 @@ if ('serviceWorker' in navigator && navigator.onLine) {
                 }
             );
 
-
-        navigator.serviceWorker.ready.then(function(swRegistration) {
+        navigator.serviceWorker.ready
+            .then((swRegistration) => {
             return swRegistration.sync.register('syncData');
         });
     });
-
-
 }

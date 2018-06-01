@@ -139,12 +139,10 @@ $(document)
 
 const maxImageCount = 5;
 
-
 let liveVideo, liveVideoContent, newImgCanvas, newImgCanvasContent, origVidWidth, origVidHeight;
 const takePhotoButton = $('#take-photo');
 const confirmPhotoButton = $('#confirm-photo');
 const cancelPhotoButton = $('#cancel-photo');
-const reviewSubmitBtn = $('#submit-review');
 let canvasContents = new Array(maxImageCount).fill(false);
 
 let canvasArr = [];
@@ -296,9 +294,10 @@ $('form#review-form').submit((e) => {
         },
         error: (err) => {
             alert('You are currently offline, so the review has been cached for submission later.');
+            console.log(`Review submission error: ${err}`);
 
             let open = indexedDB.open("cachePOSTs");
-            console.log("opening DB");
+
             open.onsuccess = function() {
                 let db = open.result;
                 let tx = db.transaction("reviews", "readwrite");
@@ -306,14 +305,14 @@ $('form#review-form').submit((e) => {
                 console.log("adding review to store");
                 let requesting = store.add(data);
                 requesting.onerror = function(e) {
-                    console.log('Error', e.target.error.name);
+                    console.log(`Error ${e.target.error.name}`);
                 };
 
                 // Close the db when the transaction is done
                 tx.oncomplete = function() {
                     db.close();
                 };
-            }
+            };
             $('.row#review-submission-div').hide();
         }
     });

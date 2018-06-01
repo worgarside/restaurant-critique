@@ -1,26 +1,12 @@
-// Copyright 2016 Google Inc.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//      http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * service-worker.js
+ * Service Worker management functions.
+ * Copyright 2016 Google Inc.
+ * @author Rufus Cope, Will Garside
+ */
 
 const dataCacheName = 'restaurantData-v2';
 const cacheName = 'restaurantCritique-2';
-
-
-/*
-filesToCache commented out as trying to cache files always caused an error TypeError in fetch statements.
-In light of this we have opted for a Network First, Then Cache Service Worker.
-TypeError: Failed to fetch URL: {"message":"Failed to fetch","name":"TypeError"}
- */
 const filesToCache = [
     '/',
     './stylesheets/roboto.css',
@@ -53,6 +39,7 @@ const filesToCache = [
 
 /**
  * Service Worker Installation, caching filesToCache
+ * @function installServiceWorker
  */
 self.addEventListener('install', (e) => {
     console.log('[ServiceWorker] Install');
@@ -67,21 +54,21 @@ self.addEventListener('install', (e) => {
                 }
             })
             .catch((err) => {
-                console.log(`Service Worker Error1: ${err} URL: ${JSON.stringify(err, ["message", "arguments", "type", "name"])}`);
+                console.log(`[Service Worker] ${err} URL: ${JSON.stringify(err, ['message', 'arguments', 'type', 'name'])}`);
             })
     );
 });
 
-
 /**
  * activation of service worker: it removes all cached files if necessary
+ * @function activateServiceWorker
  */
 self.addEventListener('activate', (e) => {
     console.log('[ServiceWorker] Activate');
     e.waitUntil(
         caches.keys()
             .then((keyList) => {
-                return Promise.all(keyList.map(function (key) {
+                return Promise.all(keyList.map((key) => {
                     if (key !== cacheName && key !== dataCacheName) {
                         console.log('[ServiceWorker] Removing old cache', key);
                         return caches.delete(key);
@@ -100,31 +87,27 @@ self.addEventListener('activate', (e) => {
     return self.clients.claim();
 });
 
-
 /**
  * this is called every time a file is fetched. This is a middleware, i.e. this method is
  * called every time a page is fetched by the browser
  * all the other pages are searched for in the cache. If not found, they are returned
+ * @function fetchServiceWorker
  */
-
 self.addEventListener('fetch', (e) => {
-    let searchURL = "/search";
-    let contactURL = "/contact";
+    const searchURL = '/search';
+    const contactURL = '/contact';
 
     if (e.request.url.indexOf(searchURL) > -1 || e.request.url.indexOf(contactURL) > -1) {
         e.respondWith(
-            //Firstly if the page is reliant on a POST,
-            //a Network then offline approach is used.
+            // Firstly if the page is reliant on a POST, a Network then offline approach is used.
             // e.g. Search or Contact
             fetch(e.request).then((response) => {
                 return response;
-            }).catch((err) => {
+            }).catch(() => {
                 return caches.match('/offline');
             })
         )
-    }
-
-    else if (e.request.clone().method === "GET") {
+    } else if (e.request.clone().method === "GET") {
         e.respondWith(
             //This is a Cache, then Network approach for plain site pages. A copy is first looked for in the cache
             //If there is not a copy in the cache, then a fetch event is called, and
@@ -141,28 +124,32 @@ self.addEventListener('fetch', (e) => {
                     return response;
 
                 });
-            }).catch(function () {
+            }).catch(() => {
                 return caches.match('/offline');
             })
         );
-
-    } else if (e.request.clone().method === "POST") {
-        fetch(e.request).then((response) => {
-            return response;
-        }).catch((err) => {
-            console.log("[Service Worker] Failed to POST as offline");
-        });
-
+    } else if (e.request.clone().method === 'POST') {
+        fetch(e.request)
+            .then((response) => {
+                return response;
+            })
+            .catch((err) => {
+                console.log(`[Service Worker] Failed to POST: ${err}`);
+            });
     }
 });
 
+/**
+ * Synchronises service worker to upload content previously added offline
+ * @function syncServiceWorker
+ */
 self.addEventListener('sync', (event) => {
-    console.log('potential sync');
+    console.log('Synchronising service worker');
+
     if (event.tag === 'syncData') {
         event.waitUntil(
-            // Might want to declare it as a variable (e.g. const ajaxPromise = new Promise...)
-            new Promise((resolve, reject) => {
-                let open = indexedDB.open('cachePOSTs');
+            new Promise((resolve) => {
+                const open = indexedDB.open('cachePOSTs');
                 console.log('opening DB');
 
                 open.onsuccess = function () {
@@ -175,23 +162,24 @@ self.addEventListener('sync', (event) => {
                     requesting.onsuccess = function (event) {
                         let results = event.target.result;
                         if (event.target.result.length > 0) {
-                            results.forEach(function (review) {
+                            results.forEach((review) => {
                                 console.log(review);
-                                // const url = '/restaurant/submit_review';
-                                //
-                                // fetch(url, {
-                                //     method: 'POST',
-                                //     body: JSON.stringify(review),
-                                //     headers: {
-                                //         'Content-Type': 'application/json'
-                                //     }
-                                // })
-                                //     .then(res => res.json())
-                                //     .catch(error => console.error('Error:', error))
-                                //     .then(response => console.log('Success:', response));
 
+                                fetch('/restaurant/submit_review', {
+                                    method: 'POST',
+                                    body: review,
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                })
+                                    .catch((error) => {
+                                        console.error(`Error: ${error}`);
+                                    })
+                                    .then((response) => {
+                                        console.log(`Success: ${response}`);
+                                        resolve();
+                                    });
                             })
-
                         }
                     };
                     // Close the db when the transaction is done
