@@ -10,22 +10,21 @@
 - [x] Restaurant Object
 - [x] User creation/signup
 - [x] Login management
-- [ ] Administrator privileges
 - [x] Dynamic restaurant view page
-- [ ] Review input and structure
+- [x] Review input and structure
 - [x] Restaurant search (keywords, tags, distance)
 - [x] Map page
-- [ ] Progressive App/Responsive Design?
-- [ ] Camera integration
+- [ ] Progressive App
+- [x] Responsive Design
+- [x] webRTC Camera integration
 - [x] Basic pages (home, contact, about, accessibility)
 - [x] Site navigation/UML model
-- [ ] 'Owner level' users & verification
-- [ ] Category page, categorisation of restaurants
+- [x] Category linking, categorisation of restaurants
 
 ### Installation & Running
 
-Install the app by running `npm i` in the root (solution) directory. This will install the necessary `node_modules`.
-To run the app, either run `bin/www` or use `nodemon` in the root (solution) directory
+Install the app by running `npm i` in the `solution` directory. This will install the necessary `node_modules`.
+To run the app, either run `bin/www` or use `nodemon` in the `solution` directory
 
 There is a User account created for testing without having to verify it:
 - Email: test@user.com
