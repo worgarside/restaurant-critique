@@ -60,7 +60,7 @@ self.addEventListener('install', (e) => {
 });
 
 /**
- * activation of service worker: it removes all cached files if necessary
+ * activation of service worker: it removes all cached files if necessary, due to a new version.
  * @function activateServiceWorker
  */
 self.addEventListener('activate', (e) => {
@@ -89,8 +89,7 @@ self.addEventListener('activate', (e) => {
 
 /**
  * this is called every time a file is fetched. This is a middleware, i.e. this method is
- * called every time a page is fetched by the browser
- * all the other pages are searched for in the cache. If not found, they are returned
+ * called every time a page is fetched by the browser. Different requests are handled by different approaches.
  * @function fetchServiceWorker
  */
 self.addEventListener('fetch', (e) => {
@@ -129,6 +128,7 @@ self.addEventListener('fetch', (e) => {
             })
         );
     } else if (e.request.clone().method === 'POST') {
+        //Finally POST requests are network only, else fail. Failure is then handled where it occurs.
         fetch(e.request)
             .then((response) => {
                 return response;
@@ -151,6 +151,7 @@ self.addEventListener('sync', (event) => {
             new Promise((resolve) => {
                 const open = indexedDB.open('cachePOSTs');
 
+                //Connect to DB
                 open.onsuccess = function () {
                     const db = open.result;
                     const tx = db.transaction('reviews', 'readwrite');
@@ -159,10 +160,12 @@ self.addEventListener('sync', (event) => {
 
                     requesting.onsuccess = function (event) {
                         let results = event.target.result;
+                        //If there is any entry in the reviews IndexedDB
                         if (event.target.result.length > 0) {
                             results.forEach((review) => {
                                 console.log(review);
 
+                                //POST review by AJAX to server side Javascript
                                 fetch('/restaurant/submit_review', {
                                     method: 'POST',
                                     body: review,
@@ -175,6 +178,11 @@ self.addEventListener('sync', (event) => {
                                     })
                                     .then((response) => {
                                         console.log(`Success: ${response}`);
+                                        //IF Success remove review from IndexedDB so not resent
+                                        store.delete(review.restaurantId)
+                                            .catch((error) => {
+                                                console.error(`Error: ${error}`);
+                                        });
                                         resolve();
                                     });
                             })
