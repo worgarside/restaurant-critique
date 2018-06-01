@@ -119,27 +119,34 @@ self.addEventListener('fetch', (e) => {
         )
     }
 
-    else if (e.request.clone().method === "GET"){
+    else if (e.request.clone().method === "GET") {
         e.respondWith(
             //This is a Cache, then Network approach for plain site pages. A copy is first looked for in the cache
             //If there is not a copy in the cache, then a fetch event is called, and
             //the result is cached before being displayed.
             caches.match(e.request).then((res) => {
                 return res || fetch(e.request).then((response) => {
-                        //Response cloned as they are consumed
-                        let responseClone = response.clone();
-                        caches.open(cacheName).then((cache) => {
-                            cache.put(e.request, responseClone);
-                        }).catch((err) => {
-                            console.log(`Service Worker Error2: ${err}`)
-                        });
-                        return response;
+                    //Response cloned as they are consumed
+                    let responseClone = response.clone();
+                    caches.open(cacheName).then((cache) => {
+                        cache.put(e.request, responseClone);
+                    }).catch((err) => {
+                        console.log(`Service Worker Error2: ${err}`)
+                    });
+                    return response;
 
                 });
-            }).catch(function() {
+            }).catch(function () {
                 return caches.match('/offline');
             })
         );
+
+    } else if (e.request.clone().method === "POST") {
+        fetch(e.request).then((response) => {
+            return response;
+        }).catch((err) => {
+            console.log("[Service Worker] Failed to POST as offline");
+        });
 
     }
 });
