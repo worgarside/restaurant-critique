@@ -90,6 +90,6 @@ block content
                 #pagination-links
 
     script.
-        const categories = !{JSON.stringify(allCategories).replace(/<\//g, '<\\/')};
+        const allCategories = !{JSON.stringify(allCategories).replace(/<\//g, '<\\/')};
         const features = !{JSON.stringify(features).replace(/<\//g, '<\\/')};
     script(type='text/javascript', src='/javascripts/search.js')

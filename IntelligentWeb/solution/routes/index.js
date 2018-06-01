@@ -55,8 +55,11 @@ function refreshTopRestaurants() {
  * @returns {Promise} - promise object of Category lookup query
  */
 function getAllCategories() {
-    console.log('\x1b[33m%s\x1b[0m', 'getAllCategories()');
+    if (allCategories){
+        return Promise.resolve();
+    }
 
+    console.log('\x1b[33m%s\x1b[0m', 'getAllCategories()');
     return Category.find({})
         .select('name _id')
         .then((categories) => {
