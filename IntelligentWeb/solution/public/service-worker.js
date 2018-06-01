@@ -150,14 +150,12 @@ self.addEventListener('sync', (event) => {
         event.waitUntil(
             new Promise((resolve) => {
                 const open = indexedDB.open('cachePOSTs');
-                console.log('opening DB');
 
                 open.onsuccess = function () {
-                    let db = open.result;
-                    let tx = db.transaction('reviews', 'readwrite');
-                    let store = tx.objectStore('reviews');
-                    console.log('Getting reviews from IndexedDB');
-                    let requesting = store.getAll();
+                    const db = open.result;
+                    const tx = db.transaction('reviews', 'readwrite');
+                    const store = tx.objectStore('reviews');
+                    const requesting = store.getAll();
 
                     requesting.onsuccess = function (event) {
                         let results = event.target.result;
