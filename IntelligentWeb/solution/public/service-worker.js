@@ -43,7 +43,12 @@ const filesToCache = [
     './accessibility',
     './about',
     './images/site/BG1.jpg',
-    './images/site/logo-square-white.png'
+    './images/site/gmaps-custom-pin-small.png',
+    './images/site/index-image-1.jpg',
+    './images/site/index-image-2.jpg',
+    './images/site/index-image-3.jpg',
+    './images/site/logo-square-white.png',
+    './images/site/logo-wide-white.png'
 ];
 
 /**
@@ -150,7 +155,6 @@ self.addEventListener('fetch', (e) => {
 
     }
 });
-
 
 self.addEventListener('sync', (event) => {
     console.log('potential sync');
