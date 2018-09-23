@@ -7,16 +7,17 @@
 
 // ================ Middleware ================ \\
 
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const restaurantCritiqueAccount = {
-    email: 'worgarside.dev@gmail.com',
-    password: 'mfdobnadqxkrxnch'
+    email: process.env.EMAIL_USERNAME,
+    password: process.env.EMAIL_PASSWORD
 };
 
 // ================ Email Manager ================ \\
 
 /**
- * Send an email with nodemailer and Gmail from the accouet defined above
+ * Send an email with nodemailer and Gmail from the account defined above
  * @param {String} to The recipient of the email
  * @param {String} subject Email subject content
  * @param {String} body The main body of the email

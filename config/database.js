@@ -6,14 +6,15 @@
 
 // ================ Middleware ================ \\
 
+require('dotenv').config();
 const mongoose = require('mongoose');
 const nodemailer = require('./nodemailer');
 const os = require('os');
 const database = {
-    username: 'worgarside',
-    password: 'V9hG0P3a025bnbTY',
-    name: 'restaurant_critique',
-    url: 'restaurant-critique-gct1h.mongodb.net'
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    name: process.env.DATABASE_NAME,
+    url: process.env.DATABASE_URL
 };
 
 // ================ Database Manager ================ \\
@@ -21,7 +22,7 @@ const database = {
 /**
  * Connects to the remote database with login information and returns the database connection
  * @param {function} nextFunction A function to be run after the database has been connected to
- * @returns {mongoose.connection} Mongoose connection Promise, with DB connection object after fulfillment
+ * @returns {mongoose.connection | Promise} Mongoose connection Promise, with DB connection object after fulfillment
  */
 function connect(nextFunction) {
     // noinspection JSUnresolvedFunction - Parameters are correct for Mongoose connection
