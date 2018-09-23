@@ -2,8 +2,7 @@
 
 const app = require('../app');
 const debug = require('debug')('code:server');
-const https = require('https');
-const fs = require('fs-extra');
+const https = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -14,12 +13,7 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-const options = {
-    key: fs.readFileSync(`${appRoot}/private_access/ca.key`),
-    cert: fs.readFileSync(`${appRoot}/private_access/ca.crt`)
-};
-
-const server = https.createServer(options, app);
+const server = https.createServer( app);
 app.io.attach(server);
 
 /**
