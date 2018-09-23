@@ -298,3 +298,5 @@ compile_commands.json
 database
 
 restaurant-critique.iml
+.env
+*.env
