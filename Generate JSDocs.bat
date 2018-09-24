@@ -1,1 +1,1 @@
- jsdoc IntelligentWeb/solution -c IntelligentWeb/solution/config/jsdoc.json -r -R README.md -P IntelligentWeb/solution/package.json -d IntelligentWeb/report/JSDocs --verbose
+jsdoc IntelligentWeb/solution -c IntelligentWeb/solution/config/jsdoc.json -r -R README.md -P IntelligentWeb/solution/package.json -d IntelligentWeb/report/JSDocs --verbose
