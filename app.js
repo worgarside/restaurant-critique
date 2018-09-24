@@ -16,6 +16,20 @@ const flash = require('connect-flash');
 const app = express();
 app.io = require('socket.io')();
 
+const https_redirect = function(req, res, next) {
+    if (process.env.NODE_ENV === 'production') {
+        if (req.headers['x-forwarded-proto'] != 'https') {
+            return res.redirect('https://' + req.headers.host + req.url);
+        } else {
+            return next();
+        }
+    } else {
+        return next();
+    }
+};
+
+app.use(https_redirect);
+
 global.appRoot = path.resolve(__dirname);
 global.dbRegen = false;
 
