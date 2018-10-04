@@ -2,7 +2,7 @@
 
 ### Team Members:
 - Will Garside - worgarside@gmail.com
-- Greta Ramaneckaite - gramaneckaite1@sheffield.ac.uk
+- Greta Ramaneckaite - greta.ramaneckaite@gmail.com
 - Rufus Cope - rcope2@sheffield.ac.uk
 
 ### Task List
