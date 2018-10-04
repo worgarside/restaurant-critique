@@ -3,7 +3,7 @@
 ### Team Members:
 - Will Garside - worgarside@gmail.com
 - Greta Ramaneckaite - greta.ramaneckaite@gmail.com
-- Rufus Cope - rcope2@sheffield.ac.uk
+- Rufus Cope - copeyrufus@gmail.com
 
 ### Task List
 - [x] Database creation 
