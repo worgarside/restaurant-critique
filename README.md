@@ -3,7 +3,7 @@
 ### Team Members:
 - Will Garside - worgarside@gmail.com
 - Greta Ramaneckaite - greta.ramaneckaite@gmail.com
-- Rufus Cope - copeyrufus@gmail.com
+- Rufus Cope - rufusacope@gmail.com
 
 ### Task List
 - [x] Database creation 
